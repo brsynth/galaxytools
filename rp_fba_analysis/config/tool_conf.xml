@@ -1,0 +1,3 @@
+  <section id="sbc-pa" name="SynBioCAD Pathway Analysis">
+    <tool file="synbiocad-galaxy-wrappers/rp_fba_analysis/wrap.xml" />
+  </section>

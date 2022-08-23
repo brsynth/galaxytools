@@ -1,0 +1,11 @@
+name: rp_fba_analysis
+owner: ggricourt
+description: Run OptGene, OptKnock with an heterologous pathway
+homepage_url: https://github.com/brsynth/rpFbaAnalysis
+long_description: Run OptGene, OptKnock with an heterologous pathway
+remote_repository_url: https://github.com/brsynth/rpFbaAnalysis
+type: unrestricted
+categories:
+  - Systems Biology
+exclude:
+  - README.md
