@@ -1,0 +1,46 @@
+<tool id="sbol_converter_genbanktosbol3" name="SBOL Converter: GENBANK TO SBOL3" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Convert GENBANK to SBOL3</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">1.0a16</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">sbol-utilities</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        ln -sv '$genbank_input' 'input.$genbank_input.ext' &&
+        genbank2sbol -o '$output' 'input.$genbank_input.ext' --namespace '$namespace'
+    ]]></command>
+    <inputs>
+        <param name="genbank_input" type="data" format="gb" label="Genbank input" help="Genbank file in GB format"/>
+        <param argument="--namespace" type="text" value="https://synbiohub.org/public/igem" label="Namespace URL" help="Namespace URL, required for conversions from GenBank. Default=https://synbiohub.org/public/igem" />
+    </inputs>
+    <outputs>
+        <data name="output" format="nt" label="${tool.name} on ${on_string}" />
+    </outputs>
+    <help><![CDATA[
+SBOL Converter: GENBANK to SBOL3
+================================
+
+Convert GENBANK file to SBOL3.
+
+Input
+-----
+Required:
+
+* **INPUT_FILE**\ : GENBANK input file in GB format.
+* **Namespace URL**\ : Namespace URL, required for conversions from GenBank. Default=https://synbiohub.org/public/igem"
+
+Output
+------
+* **OUTPUT_FILE**\ : SBOL3 output file in NT format.
+
+Project Links
+------------------
+* `GitHub <https://github.com/SynBioDex/SBOL-utilities>`_
+
+License
+-------
+* `MIT <https://github.com/SynBioDex/SBOL-utilities/blob/develop/LICENSE.txt>`_
+    ]]></help>
+</tool>

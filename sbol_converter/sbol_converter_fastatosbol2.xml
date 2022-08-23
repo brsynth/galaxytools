@@ -1,0 +1,46 @@
+<tool id="sbol_converter_fastatosbol2" name="SBOL Converter: FASTA to SBOL2" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Convert FASTA to SBOL2</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">1.0a16</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">sbol-utilities</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        ln -sv '$fasta_input' 'input.$fasta_input.ext' &&
+        sbol-converter FASTA SBOL2 -o '$output' 'input.$fasta_input.ext' --namespace '$namespace'
+    ]]></command>
+    <inputs>
+        <param name="fasta_input" type="data" format="fasta" label="FASTA input" help="FASTA input file"/>
+        <param argument="--namespace" type="text" value="https://synbiohub.org/public/igem" label="Namespace URL" help="Namespace URL, required for conversions from FASTA. Default=https://synbiohub.org/public/igem" />
+    </inputs>
+    <outputs>
+        <data name="output" format="nt" label="${tool.name} on ${on_string}" />
+    </outputs>
+    <help><![CDATA[
+SBOL Converter: FASTA TO SBOL2
+================================
+
+Convert FASTA file to SBOL2.
+
+Input
+-----
+Required:
+
+* **INPUT_FILE**\ : FASTA input file.
+* **Namespace URL**\ : Namespace URL, required for conversions from Fasta. Default=https://synbiohub.org/public/igem"
+
+Output
+------
+* **OUTPUT_FILE**\ : SBOL2 output file in NT format.
+
+Project Links
+------------------
+* `GitHub <https://github.com/SynBioDex/SBOL-utilities>`_
+
+License
+-------
+* `MIT <https://github.com/SynBioDex/SBOL-utilities/blob/develop/LICENSE.txt>`_
+    ]]></help>
+</tool>
