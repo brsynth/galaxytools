@@ -1,0 +1,111 @@
+<tool id="sbol_converter" name="SBOL Converter" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Convert between SBOL3 and other genetic design formats</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">1.0a16</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">sbol-utilities</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        #if str($convert_type.type) == "SBOL2 to SBOL3"
+            ln -sv '$sbol2_input' 'input.$sbol2_input.ext' &&
+            sbol2to3 -o '$output' 'input.$sbol2_input.ext'
+        #elif str($convert_type.type) == "SBOL3 to SBOL2"
+            ln -sv '$sbol3_input' 'input.$sbol3_input.ext' &&
+            sbol3to2 -o '$output' 'input.$sbol3_input.ext'
+        #elif str($convert_type.type) == "SBOL3 to GENBANK"
+            ln -sv '$sbol3_input' 'input.$sbol3_input.ext' &&
+            sbol2genbank -o '$output' 'input.$sbol3_input.ext'
+        #elif str($convert_type.type) == "GENBANK to SBOL3"
+            ln -sv '$genbank_input' 'input.$genbank_input.ext' &&
+            genbank2sbol -o '$output' 'input.$genbank_input.ext' --namespace '$convert_type.namespace'
+        #elif str($convert_type.type) == "SBOL3 to FASTA"
+            ln -sv '$sbol3_input' 'input.$sbol3_input.ext' &&
+            sbol2fasta -o '$output' 'input.$sbol3_input.ext'
+        #elif str($convert_type.type) == "FASTA to SBOL3"
+            ln -sv '$fasta_input' 'input.$fasta_input.ext' &&
+            fasta2sbol -o '$output' 'input.$fasta_input.ext' --namespace '$convert_type.namespace'
+        #elif str($convert_type.type) == "SBOL2 to FASTA"
+            ln -sv '$sbol2_input' 'input.$sbol2_input.ext' &&
+            sbol-converter SBOL2 FASTA -o '$output' 'input.$sbol2_input.ext'
+        #elif str($convert_type.type) == "FASTA to SBOL2"
+            ln -sv '$fasta_input' 'input.$fasta_input.ext' &&
+            sbol-converter FASTA SBOL2 -o '$output' 'input.$fasta_input.ext' --namespace '$convert_type.namespace'
+        #end if
+    ]]></command>
+    <inputs>
+        <conditional name="convert_type">
+            <param name="type" type="select" label="Converting type" help="Choose the format (input/ouput) for SBOL conversion">
+                <option value="SBOL2 to SBOL3" selected="True">From SBOL2 to SBOL3</option>
+                <option value="SBOL3 to SBOL2" >From SBOL3 to SBOL2</option>
+                <option value="SBOL3 to GENBANK" >From SBOL3 to GENBANK</option>
+                <option value="GENBANK to SBOL3" >From GENBANK to SBOL3</option>
+                <option value="SBOL3 to FASTA" >From SBOL3 to FASTA</option>
+                <option value="FASTA to SBOL3" >From FASTA to SBOL3</option>
+                <option value="SBOL2 to FASTA" >From SBOL2 to FASTA</option>
+                <option value="FASTA to SBOL2" >From FASTA to SBOL2</option>
+            </param>
+            <when value="SBOL2 to SBOL3">
+                <param name="sbol2_input" type="data" format="xml,rdf,nt" label="SBOL2 input" help="SBOL2 file in XML or RDF or NT format"/>
+            </when>
+            <when value="SBOL3 to SBOL2">
+                <param name="sbol3_input" type="data" format="xml,rdf,nt" label="SBOL3 input" help="SBOL3 file in XML or RDF or NT format"/>
+            </when>
+            <when value="SBOL3 to GENBANK">
+                <param name="sbol3_input" type="data" format="xml,rdf,nt" label="SBOL3 input" help="SBOL3 file in XML or RDF or NT format"/>
+            </when>
+            <when value="GENBANK to SBOL3">
+                <param name="genbank_input" type="data" format="gb" label="Genbank input" help="Genbank file in GB format"/>
+                <param argument="--namespace" type="text" value="https://synbiohub.org/public/igem" label="Namespace URL" help="Namespace URL, required for conversions from GenBank. Default=https://synbiohub.org/public/igem" />
+            </when>
+            <when value="SBOL3 to FASTA">
+                <param name="sbol3_input" type="data" format="xml,rdf,nt" label="SBOL3 input" help="SBOL3 file in XML or RDF or NT format"/>
+            </when>
+            <when value="FASTA to SBOL3">
+                <param name="fasta_input" type="data" format="fasta" label="FASTA input" help="FASTA input file"/>
+                <param argument="--namespace" type="text" value="https://synbiohub.org/public/igem" label="Namespace URL" help="Namespace URL, required for conversions from FASTA. Default=https://synbiohub.org/public/igem" />
+            </when>
+            <when value="SBOL2 to FASTA">
+                <param name="sbol2_input" type="data" format="xml,rdf,nt" label="SBOL2 input" help="SBOL2 file in XML or RDF or NT format" />
+            </when>
+            <when value="FASTA to SBOL2">
+                <param name="fasta_input" type="data" format="fasta" label="FASTA input" help="FASTA input file"/>
+                <param argument="--namespace" type="text" value="https://synbiohub.org/public/igem" label="Namespace URL" help="Namespace URL, required for conversions from FASTA. Default=https://synbiohub.org/public/igem" />
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="output" format="nt" label="${tool.name} on ${on_string}: ${convert_type.type}" >
+            <change_format>
+                <when input="convert_type.type" value="SBOL3 to GENBANK" format="gb" />
+                <when input="convert_type.type" value="SBOL3 to FASTA" format="fasta" />
+                <when input="convert_type.type" value="SBOL2 to FASTA" format="fasta" />
+            </change_format>
+        </data>
+    </outputs>
+    <help><![CDATA[
+SBOL Converter
+================
+
+Convert between SBOL3 and other genetic design formats
+
+Input
+-----
+Required:
+* **INPUT_FILE**\ : SBOL2 or SBOL3 or GENBANK or FASTA output file.
+* **Namespace URL**\ : Namespace URL, required for conversions from GenBank or from Fasta. Default=https://synbiohub.org/public/igem"
+
+Output
+------
+* **OUTPUT_FILE**\ : SBOL2 or SBOL3 or GENBANK or FASTA output file.
+
+Project Links
+------------------
+* `GitHub <https://github.com/SynBioDex/SBOL-utilities>`_
+
+License
+-------
+* `MIT <https://github.com/SynBioDex/SBOL-utilities/blob/develop/LICENSE.txt>`_
+    ]]></help>
+</tool>
