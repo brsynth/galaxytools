@@ -84,16 +84,49 @@
             </change_format>
         </data>
     </outputs>
+    <tests>
+        <test>
+        <!-- test 1: check if identical outputs are produced sbol2 to sbol3-->
+        <conditional name="convert_type">
+            <param name="type" value="SBOL2 to SBOL3"/>
+        </conditional>
+        <param name="sbol2_input" value="BASIC_construct_A1_sbol2_input.xml" />
+        <output name="output" file="BASIC_construct_A1_sbol3_output.nt" ftype="nt" compare="diff"/>
+        </test>
+        
+        <test>
+        <!-- test 2: check if identical outputs are produced sbol3 to genbank-->
+        <conditional name="convert_type">
+            <param name="type" value="SBOL3 to GENBANK"/>
+        </conditional>
+        <param name="sbol3_input" value="BBa_J23101.nt" />
+        <output name="output" file="BBa_J23101.gb" ftype="gb" compare="diff"/>
+        </test>
+
+        <test>
+        <!-- test 2: check if identical outputs are produced sbol3 to fasta-->
+        <conditional name="convert_type">
+            <param name="type" value="SBOL3 to FASTA"/>
+        </conditional>
+        <param name="sbol3_input" value="BBa_J23101.nt" />
+        <output name="output" >
+            <assert_contents>
+            <has_text text=">BBa_J23101 constitutive promoter family member" />
+            <has_text text="tttacagctagctcagtcctaggtattatgctagc" />
+            </assert_contents>
+        </output>
+        </test>
+    </tests>
     <help><![CDATA[
 SBOL Converter
 ================
 
-Convert between SBOL3 and other genetic design formats
+Convert between SBOL3 and other genetic design formats.
 
 Input
 -----
 Required:
-* **INPUT_FILE**\ : SBOL2 or SBOL3 or GENBANK or FASTA output file.
+* **INPUT_FILE**\ : SBOL2 or SBOL3 or GENBANK or FASTA input file.
 * **Namespace URL**\ : Namespace URL, required for conversions from GenBank or from Fasta. Default=https://synbiohub.org/public/igem"
 
 Output
