@@ -38,12 +38,12 @@
         <conditional name="convert_type">
             <param name="type" type="select" label="Converting type" help="Choose the format (input/ouput) for SBOL conversion">
                 <option value="SBOL2 to SBOL3" selected="True">From SBOL2 to SBOL3</option>
+                <option value="SBOL2 to FASTA" >From SBOL2 to FASTA</option>
                 <option value="SBOL3 to SBOL2" >From SBOL3 to SBOL2</option>
+                <option value="SBOL3 to FASTA" >From SBOL3 to FASTA</option>
                 <option value="SBOL3 to GENBANK" >From SBOL3 to GENBANK</option>
                 <option value="GENBANK to SBOL3" >From GENBANK to SBOL3</option>
-                <option value="SBOL3 to FASTA" >From SBOL3 to FASTA</option>
                 <option value="FASTA to SBOL3" >From FASTA to SBOL3</option>
-                <option value="SBOL2 to FASTA" >From SBOL2 to FASTA</option>
                 <option value="FASTA to SBOL2" >From FASTA to SBOL2</option>
             </param>
             <when value="SBOL2 to SBOL3">
