@@ -1,4 +1,4 @@
-<tool id="rpcompletion" name="Complete Reactions" version="@TOOL_VERSION@" profile="19.09">
+<tool id="rpcompletion" name="Complete Reactions" version="@TOOL_VERSION@" profile="21.09">
     <description>From the output of RP2Paths and RetroPath2.0, generate SBML unique and complete (with cofactors) pathways with mono-component reactions</description>
     <macros>
         <token name="@TOOL_VERSION@">5.12.3</token>
