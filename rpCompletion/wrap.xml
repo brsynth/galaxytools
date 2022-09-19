@@ -1,7 +1,7 @@
 <tool id="rpcompletion" name="Complete Reactions" version="@TOOL_VERSION@" profile="21.09">
     <description>From the output of RP2Paths and RetroPath2.0, generate SBML unique and complete (with cofactors) pathways with mono-component reactions</description>
     <macros>
-        <token name="@TOOL_VERSION@">5.12.3</token>
+        <token name="@TOOL_VERSION@">5.13.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rptools</requirement>
@@ -27,9 +27,9 @@
         <param name="rp2_pathways" type="data" format="csv" label="RetroPath2.0 metabolic network" />
         <param name="sink" type="data" format="csv" label="Sink from SBML" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="max_subpaths_filter" type="integer" value="10" label="Max subpaths generated per pathway" />
-            <param name="upper_flux_bound" type="integer" value="999999" label="Upper flux bound" />
-            <param name="lower_flux_bound" type="integer" value="0" label="Lower flux bound" />
+            <param argument="max_subpaths_filter" type="integer" value="10" label="Max subpaths generated per pathway" help="Define the topX pathways to keep" />
+            <param argument="upper_flux_bound" type="integer" value="999999" label="Upper flux bound" />
+            <param argument="lower_flux_bound" type="integer" value="0" label="Lower flux bound" />
         </section>
     </inputs>
     <outputs>
@@ -61,24 +61,28 @@
 rpCompletion
 ============
 
-Completes mono-component reactions output by RetroPath2.0 with the appropriate cofactors. Creates sub-paths when multiple reaction rules are associated with a single reaction. Input is a single pathways file produced by RP2Paths. It stands on rpCache which store pre-computed data.
+Completes mono-component reactions output by `RetroPath2.0 <https://www.sciencedirect.com/science/article/pii/S1096717617301337>`_ with the appropriate cofactors. Creates sub-paths when multiple reaction rules are associated with a single reaction. Input is a single pathways file produced by RP2Paths. It stands on rpCache which store pre-computed data.
 
 Input
 -----
 
 Required:
 
-* **rp2_pathways**: (string) Path to the RetroPath2.0 pathways file
-* **rp2_sink**: (string) Path to the rpextractsink file containing infos on molecules in the sink
-* **rp2paths_compounds**: (string) Path to the rp2paths compounds file
-* **rp2paths_pathways**: (string) Path to the rp2paths pathways file
-* **outdir**: (string) Path to the output directory containing sbml completed pathways
+* **RetroPath2.0 metabolic network**: RetroPath2.0 pathways file
+* **Sink from SBML**: rpextractsink file containing infos on molecules in the sink
+* **RP2paths compounds**: rp2paths compounds file
+* **RP2paths pathways**: rp2paths pathways file
 
 Advanced options:
 
-* **-upper_flux_bound**: (integer, default=9999) Upper flux bound value
-* **-lower_flux_bound**: (integer, default=0) Lower flux bound value
-* **-max_subpaths_filter**: (integer, default=10, 0=nofilter) Number of subpaths per path
+* **Upper flux bound**: (integer, default=9999) Upper flux bound value
+* **Lower flux bound**: (integer, default=0) Lower flux bound value
+* **Max subpaths generated per pathway**: (integer, default=10, 0=nofilter) Number of subpaths per path
+
+Output
+------
+
+* **pathways**: SBML completed pathways
 
 Project Links
 ---------------------
@@ -87,7 +91,7 @@ Project Links
 Version
 ----------
 
-5.12.1
+5.13.1
 
 Authors
 -------
