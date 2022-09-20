@@ -27,9 +27,9 @@
         <param name="rp2_pathways" type="data" format="csv" label="RetroPath2.0 metabolic network" />
         <param name="sink" type="data" format="csv" label="Sink from SBML" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="max_subpaths_filter" type="integer" value="10" label="Max subpaths generated per pathway" help="Define the topX pathways to keep" />
-            <param argument="upper_flux_bound" type="integer" value="999999" label="Upper flux bound" />
-            <param argument="lower_flux_bound" type="integer" value="0" label="Lower flux bound" />
+            <param argument="max_subpaths_filter" type="integer" value="10" min="1" max="1000" label="Max subpaths generated per pathway" help="Maximal number of subpaths to be created per master pathway." />
+            <param argument="upper_flux_bound" type="integer" value="10000" min="-10000" max="10000" label="Upper flux bound" help="Upper flux bound value to be used in outputted SBML models (fbc SBML package) for new reactions created." />
+            <param argument="lower_flux_bound" type="integer" value="0" min="-10000" max="10000" label="Lower flux bound" help="Lower flux bound value to be used in outputted SBML models (fbc SBML package) for new reactions created." />
         </section>
     </inputs>
     <outputs>
@@ -75,9 +75,9 @@ Required:
 
 Advanced options:
 
-* **Upper flux bound**: (integer, default=9999) Upper flux bound value
-* **Lower flux bound**: (integer, default=0) Lower flux bound value
-* **Max subpaths generated per pathway**: (integer, default=10, 0=nofilter) Number of subpaths per path
+* **Upper flux bound**: (integer, default=9999) Upper flux bound value to be used in outputted SBML models (fbc SBML package) for new reactions created.
+* **Lower flux bound**: (integer, default=0) Lower flux bound value to be used in outputted SBML models (fbc SBML package) for new reactions created.
+* **Max subpaths generated per pathway**: (integer, default=10, 0=nofilter) Maximal number of subpaths to be created per master pathway.
 
 Output
 ------
