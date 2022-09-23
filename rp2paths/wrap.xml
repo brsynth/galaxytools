@@ -17,8 +17,8 @@
         '$rp2_pathways'
         --outdir out
         --timeout '$adv.timeout' &&
-        if test -f 'out/compounds.txt'; then
-            cp out/compounds.txt '$compounds';
+        cp out/compounds.txt '$compounds' &&
+        if test -f 'out/out_paths.csv'; then
             cp out/out_paths.csv '$master_pathways';
         fi
     ]]></command>
