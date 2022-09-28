@@ -8,13 +8,9 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         python -m sbml2sbol
-            --input '$sbml_single_input'
-            --outfile '$sbol_outfile'
-        #if str($adv.rbs) == "true"
-            --rbs True
-        #else
-            --rbs False
-        #end if
+        --input '$sbml_single_input'
+        --outfile '$sbol_outfile'
+        $adv.rbs
         --max_prot_per_react '$adv.max_prot_per_react'
         #if $adv.tirs 
             --tirs '$adv.tirs'
@@ -25,7 +21,7 @@
     <inputs>
         <param name="sbml_single_input" type="data" format="sbml" label="Pathway (SBML)" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="rbs" type="boolean" label="Calculate the RBS strength?" checked="true" />
+            <param argument="--rbs" type="boolean" truevalue="--rbs True" falsevalue="--rbs False" label="Calculate the RBS strength?" checked="true" />
             <param name="max_prot_per_react" type="integer" value="3" min="1" max="20" label="The maximum number of proteins per reaction" />
             <param name="tirs" type="text" optional="true" label="Space separated RBS strength values" />
             <param name="pathway_id" type="text" value="rp_pathway" label="Group ID of the heterologous pathway" >
