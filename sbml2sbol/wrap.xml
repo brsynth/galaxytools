@@ -22,7 +22,7 @@
     <inputs>
         <param name="sbml_single_input" type="data" format="sbml" label="Pathway (SBML)" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="--rbs" type="boolean" truevalue="--rbs True" falsevalue="--rbs False" label="Calculate the RBS strength?" checked="true" />
+            <param argument="--rbs" type="boolean" truevalue="--rbs True" falsevalue="--rbs False" label="Calculate the RBS strength?" checked="true" help="Calculate or not the RBS (Ribosome Binding Site) strength (default: True)"/>
             <param name="max_prot_per_react" type="integer" value="3" min="1" max="20" label="The maximum number of proteins per reaction" />
             <param name="tirs" type="text" optional="true" label="Space separated RBS strength values" />
             <param name="pathway_id" type="text" value="rp_pathway" label="Group ID of the heterologous pathway" >
@@ -47,36 +47,32 @@
 SBML to SBOL
 ================
 
-Convert a single or multiple SBML files to SBOL.
+This tool takes a pathway model (encoded in SBML) as input and returns a collection of placeholders for the subsequent design of the synthetic DNA that is required to encode the enzymes defined in the pathway model (encoded in SBOL).
 
 Input
 -----
 
 Required:
 
-* **input**\ : (string) path to folder(s) containing rpSBML files and/or rpSBML file path(s).
+* **Pathway (SBML)**\ : Pathway file in SBML format.
 
 Advanced options:
 
-* **rbs**\ : (boolean) Calculate or not the RBS strength (default: True).
-* **max_prot_per_react**\ : (int) The maximum number of proteins per reaction (default: 3).
-* **tirs**\ : (int) The RBS strength values (default: None)
-* **pathway_id**\ : (string) Group ID of the heterologous pathway (default: rp_pathway)
-* **uniprotID_key**\ : (string) Group ID of the heterologous pathway (default: selenzy)
+* **Calculate the RBS strength?**\ : (boolean) Calculate or not the RBS (Ribosome Binding Site) strength (default: True).
+* **The maximum number of proteins per reaction**\ : (int) The maximum number of proteins per reaction (default: 3).
+* **Space separated RBS strength values**\ : (int) The RBS (Ribosome Binding Site) strength values (default: None)
+* **Group ID of the heterologous pathway**\ : (string) Group ID of the heterologous pathway (default: rp_pathway)
+* **Uniprot ID**\ : (string) Uniprot ID of the heterologous pathway (default: selenzy)
 
 Output
 ------
 
-* **outfile**\ : (string) specify output (SBOL) file.
+* **sbol outfile**\ : output (SBOL) file.
 
 Project Links
 ------------------
 
 * `GitHub <https://github.com/neilswainston/SbmlToSbol>`_
-
-Version
-----------
-0.1.13
 
 License
 -------
