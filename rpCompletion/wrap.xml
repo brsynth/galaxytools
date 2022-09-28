@@ -23,7 +23,7 @@
     ]]></command>
     <inputs>
         <param name="rp2paths_pathways" type="data" format="csv" label="RP2paths pathways" />
-        <param name="rp2paths_compounds" type="data" format="tsv" label="RP2paths compounds" />
+        <param name="rp2paths_compounds" type="data" format="tabular" label="RP2paths compounds" />
         <param name="rp2_pathways" type="data" format="csv" label="RetroPath2.0 metabolic network" />
         <param name="sink" type="data" format="csv" label="Sink from SBML" />
         <section name="adv" title="Advanced Options" expanded="false">
