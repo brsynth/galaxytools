@@ -1,0 +1,136 @@
+<tool id="rpfbagr" name="rpfbagr" version="@TOOL_VERSION@" license="MIT">
+    <description>Interface to predict gene knockout targets with an heterologous pathway</description>
+    <macros>
+        <token name="@TOOL_VERSION@">2.2.1</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">rpfbagr</requirement>
+    </requirements>
+    <stdio>
+        <regex match="WARNING" level="warning" />
+        <regex match="ERROR" level="fatal" />
+    </stdio>
+    <command detect_errors="exit_code"><![CDATA[
+        printenv;
+        python -m rpfbagr
+            --input-model-file '$model'
+            #if $pathway:
+                --input-pathway-file '$pathway'
+            #end if
+            #if $medium:
+                --input-medium-file '$medium'
+            #end if
+            --biomass-rxn-id '$biomass_rxn_id'
+            --target-rxn-id '$target_rxn_id'
+            --strategy '$input_strategy.strategy'
+            #if str($input_strategy.strategy) == "ko":
+                --substrate-rxn-id '$input_strategy.substrate_rxn_id'
+            #end if
+            #if str($max_time_cond.max_time_param) == "yes":
+                --max-time '$max_time_cond.max_time'
+            #end if
+            --max-knockouts '$max_knockouts'
+            --email "$__user_email__"
+            --log-level ERROR
+            --output-file-tsv '$output_tsv'
+    ]]></command>
+    <inputs>
+        <param name="model" type="data" format="sbml" label="Chassis model file"/>
+        <param name="pathway" type="data" format="sbml" optional="True" label="Pathway file"/>
+        <param name="medium" type="data" format="tsv" optional="True" label="Medium file"/>
+        <param name="biomass_rxn_id" type="text" value="" label="Biomass reaction ID">
+            <validator type="empty_field" message="Biomass reaction ID is required"/>
+            <validator type="regex" message="No special characters allowed">^(?:[a-zA-Z_])(?:[\w.-])*$</validator>
+        </param>
+        <param name="target_rxn_id" type="text" value="" label="Target reaction ID">
+            <validator type="empty_field" message="Target reaction ID is required"/>
+            <validator type="regex" message="No special characters allowed">^(?:[a-zA-Z_])(?:[\w.-])*$</validator>
+        </param>
+        <conditional name="input_strategy">
+            <param name="strategy" type="select" label="Strategy">
+                <option value="ko" selected="True">Gene knockouts</option>
+                <option value="ou" >Reaction knockouts</option>
+            </param>
+            <when value="ko">
+                <param name="substrate_rxn_id" type="text" value="" label="Substrate reaction ID">
+                    <validator type="empty_field" message="Substrate reaction ID is required"/>
+                    <validator type="regex" message="No special characters allowed">^(?:[a-zA-Z_])(?:[\w.-])*$</validator>
+                </param>
+            </when>
+            <when value="ou">
+            </when>
+        </conditional>
+        <param name="max_knockouts" type="integer" min="1" max="10" value="3" label="Number of items deleted to consider"/>
+        <conditional name="max_time_cond">
+            <param name="max_time_param" type="select" label="Time out">
+                <option value="yes">yes</option>
+                <option value="no" selected="true">No</option>
+            </param>
+            <when value="yes">
+                <param name="max_time" type="integer" min="5" max="120" value="10" label="Time out (minutes)"/>
+            </when>
+            <when value="no">
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="output_tsv" format="tsv" label="${tool.name}(${input_strategy.strategy})" />
+    </outputs>
+    <tests>
+        <test>
+        <!-- test 1: check if identical outputs are produced with R_BIOMASS__3 biomass name ID and BiGG model (iCN718)  -->
+            <param name="model" ftype="sbml" value="iAF1260.xml.gz" />
+            <param name="pathway" ftype="sbml" value="butanol.xml" />
+            <param name="medium" ftype="tabular" value="butanol.tsv" />
+            <param name="biomass_rxn_id" value="BIOMASS_Ec_iAF1260_core_59p81M" />
+            <param name="target_rxn_id" value="EX_1btol_e" />
+            <param name="substrate_rxn_id" value="EX_glc__D_e" />
+            <param name="max_time_param" value="yes"/>
+            <param name="max_time" value="5"/>
+            <output name="output_tsv" ftype="tsv">
+                <assert_contents>
+                    <has_line_matching expression="^reactions\tgenes\tsize\tfva_min\tfva_max\ttarget_flux\tbiomass_flux\tyield\tfitness\tgenes_annotation$"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+rpfbagr
+=======
+
+Interface to predict gene knockout targets with an heterologous pathway.
+
+Input
+-----
+
+Required:
+
+* **model**\: An SBML file.
+* **pathway**\: An SBML file. It represents an heterologous pathway.
+* **biomass_rxn_id**\: Biomass reaction id.
+* **target_rxn_id**\: Reaction id to maximize.
+
+Strategy:
+
+* **strategy**\: Strategy to apply: knockout genes or reactions (default: ko, choices: {ko,ou}).
+
+If the strategy is to knockout genes:
+
+* **substrate_rxn_id**: Substrate reaction id to use.
+
+Optional:
+
+* **medium**\: TSV file, without header, that contains medium configuration "Reaction id, lower_bound, upper_bound".
+* **Max knockouts**\: Number of items to delete in the same time (default: 3).
+* **Time out**\: Restrict time of the analyse (minutes).
+
+Project Links
+---------------------
+
+* `rpfbagr <https://github.com/brsynth/rpfbagr>`_
+* `cameo <https://github.com/biosustain/cameo>`_
+    ]]></help>
+    <creator>
+        <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
+    </creator>
+</tool>

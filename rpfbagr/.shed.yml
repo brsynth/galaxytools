@@ -1,0 +1,8 @@
+name: rpfbagr
+owner: ggricourt
+description: Cli interface to predict gene knockout targets with an heterologous pathway
+long_description: Cli interface to predict gene knockout targets with an heterologous pathway
+homepage_url: https://github.com/brsynth/rpfbagr
+remote_repository_url: https://github.com/brsynth/rpfbagr
+categories:
+  - Systems Biology
