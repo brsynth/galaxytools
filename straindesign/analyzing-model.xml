@@ -1,5 +1,5 @@
-<tool id="analyzing-model" name="analyzing-model" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
-    <description>Produce a pareto plot for a model.</description>
+<tool id="straindesign_analyzing_model" name="StrainDesign analyzing-model" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
+    <description>Produce a pareto plot for a biological model</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -13,7 +13,7 @@
             @CMD_BIOMASS_RXN_ID@
             @CMD_TARGET_RXN_ID@
             @CMD_INPUT_PATHWAY@
-            #if str('$substrate_cond.substrate_param') == 'yes':
+            #if str('$substrate_cond.substrate_param') == 'yes'
                 --substrate-rxn-id '$substrate_cond.substrate_rxn_id'
             #end if
             --output-pareto-png '$output_png'
@@ -26,15 +26,14 @@
         <expand macro="input_target_rxn_id"/>
         <expand macro="input_pathway_sbml"/>
         <conditional name="substrate_cond">
-            <param name="substrate_param" type="select" label="Provide a substrate reaction">
+            <param name="substrate_param" type="select" label="Provide a substrate reaction" help="Choose yourself a carbon source or it will be detected automatically">
                 <option value="yes">yes</option>
                 <option value="no" selected="true">No</option>
             </param>
             <when value="yes">
                 <expand macro="input_substrate_rxn_id"/>
             </when>
-            <when value="no">
-            </when>
+            <when value="no"/>
         </conditional>
     </inputs>
     <outputs>

@@ -37,12 +37,12 @@
 --input-model-file '$model'
 ]]></token>
 <token name="@CMD_INPUT_PATHWAY@"><![CDATA[
-#if $pathway:
+#if $pathway
 --input-pathway-file '$pathway'
 #end if
 ]]></token>
 <token name="@CMD_INPUT_MEDIUM@"><![CDATA[
-#if $medium:
+#if $medium
     --input-medium-file '$medium'
 #end if
 ]]></token>
@@ -55,36 +55,31 @@
 
     <!--  INPUT  -->
     <xml name="input_model_sbml">
-        <param name="model" type="data" format="sbml" label="Chassis model file"/>
+        <param name="model" type="data" format="sbml" label="Model" help="SBML input file, model"/>
     </xml>
     <xml name="input_pathway_sbml">
-        <param name="pathway" type="data" format="sbml" optional="True" label="Pathway file"/>
+        <param name="pathway" type="data" format="sbml" optional="True" label="Pathway" help="SBML input file, containing heterologous pathway"/>
     </xml>
     <xml name="input_medium_tsv">
-        <param name="medium" type="data" format="tsv" optional="True" label="Medium file"/>
+        <param name="medium" type="data" format="tabular" optional="True" label="Medium file" help="TSV input file, no header, with three columns: reaction_id, lower_bound, upper_bound"/>
     </xml>
     <xml name="input_biomass_rxn_id">
-        <param name="biomass_rxn_id" type="text" value="" label="Biomass reaction ID">
+        <param name="biomass_rxn_id" type="text" value="" label="Biomass reaction ID" help="Reaction ID contains no special characters">
             <validator type="empty_field" message="Biomass reaction ID is required"/>
             <validator type="regex" message="No special characters allowed">^(?:[a-zA-Z_])(?:[\w.-])*$</validator>
         </param>
     </xml>
     <xml name="input_target_rxn_id">
-        <param name="target_rxn_id" type="text" value="" label="Target reaction ID">
+        <param name="target_rxn_id" type="text" value="" label="Target reaction ID" help="Reaction ID contains no special characters">
             <validator type="empty_field" message="Target reaction ID is required"/>
             <validator type="regex" message="No special characters allowed">^(?:[a-zA-Z_])(?:[\w.-])*$</validator>
         </param>
     </xml>
     <xml name="input_substrate_rxn_id">
-        <param name="substrate_rxn_id" type="text" value="" label="Substrate reaction ID">
+        <param name="substrate_rxn_id" type="text" value="" label="Substrate reaction ID" help="Reaction ID contains no special characters">
             <validator type="empty_field" message="Target reaction ID is required"/>
             <validator type="regex" message="No special characters allowed">^(?:[a-zA-Z_])(?:[\w.-])*$</validator>
         </param>
-    </xml>
-
-    <!--  OUTPUT  -->
-    <xml name="output_simulate_deletion">
-        <data name="output_tsv" format="tsv" label="${tool.name}(${input_strategy.strategy})" />
     </xml>
 
     <!--  HELP -->
