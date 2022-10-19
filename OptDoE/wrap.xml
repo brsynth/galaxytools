@@ -17,8 +17,8 @@
                 --ref_parts_file '$adv.ref_parts_file'
             #end if
             --libsize '$adv.libsize'
-            --get_sequences '$adv.get_sequences'
-            --backtranslate '$adv.backtranslate'
+            $adv.get_sequences
+            $adv.backtranslate
             --codon_table '$adv.codon_table'
             '$genes_file'
             '$constructs'
@@ -27,11 +27,11 @@
         <param name="genes_file" type="data" format="csv" label="Genes" />
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="genes_sbol_file" type="data" format="xml" optional="true" label="Optimised Genes" />
-            <param name="ref_parts_file" type="data" format="csv" value="None" optional="true" label="Ref Parts (default: E. coli compliant)"/>
-            <param name="libsize" type="integer" value="32" min="32" label="Maximal library size" />
-            <param name="get_sequences" type="boolean" checked="true" label="Get sequences" />
-            <param name="backtranslate" type="boolean" checked="true" label="Back translate" />
-            <param name="codon_table" type="select" label="Codon Table">
+            <param argument="--ref_parts_file" type="data" format="csv" value="None" optional="true" label="Ref Parts (default: E. coli compliant)"/>
+            <param argument="--libsize" type="integer" value="32" min="32" label="Maximal library size" />
+            <param argument="--get_sequences" type="boolean" truevalue="--get_sequences true" falsevalue="--get_sequences false" checked="true" label="Get sequences" />
+            <param argument="--backtranslate" type="boolean" truevalue="--backtranslate true" falsevalue="--backtranslate false" checked="true" label="Back translate" />
+            <param argument="--codon_table" type="select" label="Codon Table">
                 <option value="Eecoli.cut">Escherichia coli K12</option>
                 <option value="Ehuman.cut">Homo sapiens</option>
                 <option value="Eacica.cut">Acinetobacter calcoaceticus</option>
