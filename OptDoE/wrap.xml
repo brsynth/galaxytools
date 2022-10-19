@@ -224,21 +224,21 @@ Input
 
 Required:
 
-* **genes_file**\ : (string) Genes File (csv).
+* **Genes**\ : Genes File (csv).
 
 Advanced options:
 
-* **genes_sbol_file**\ : (string) SBOL file containing optimised versions of the genes (RBS, etc)
-* **ref_parts_file**\ : (string) CSV with the genetic parts. Default (if left empty) is the above table. To generate a new compatible CSV file, please use the "OptDoE Parts Reference Generator" tool
-* **libsize**\ : (integer, default: 32) Maximal library size 
-* **get_sequences**\ : (boolean, default: True)
-* **backtranslate**\ : (boolean, default: True)
-* **codon_table**\ : (text, default: Eecoli.cut) Codon Usage Table. See `codon_table <https://www.ebi.ac.uk/seqdb/confluence/display/JDSAT/EMBOSS+backtranseq+Help+and+Documentation#EMBOSSbacktranseqHelpandDocumentation-WebServices>`_ for more codons.
+* **Optimised Genes**\ : SBOL file containing optimised versions of the genes (RBS, etc)
+* **Ref Parts**\ : CSV with the genetic parts. Default (if left empty) is the above table. To generate a new compatible CSV file, please use the "OptDoE Parts Reference Generator" tool
+* **Maximal library size**\ : (integer, default: 32) Maximal library size 
+* **Get sequences**\ : (boolean, default: True)
+* **Back translate**\ : (boolean, default: True)
+* **Codon Table**\ : (text, default: Eecoli.cut) Codon Usage Table. See `codon_table <https://www.ebi.ac.uk/seqdb/confluence/display/JDSAT/EMBOSS+backtranseq+Help+and+Documentation#EMBOSSbacktranseqHelpandDocumentation-WebServices>`_ for more codons.
 
 Output
 ------
 
-* **constructs**\ : (string) Path to the output SBOL file
+* **Constructs**\ : (string) Path to the output SBOL file
 
 Project Link
 ------------
