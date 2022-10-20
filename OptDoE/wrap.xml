@@ -245,11 +245,6 @@ Project Link
 
 * `Original Project <https://github.com/pablocarb/doebase>`_
 
-Authors
--------
-
-* **Pablo Carbonell**
-
 License
 -------
 
@@ -261,4 +256,7 @@ Acknowledgments
 * Joan Hérisson
 * Thomas Duigou
     ]]></help>
+    <creator>
+        <person givenName="Pablo" familyName="Carbonell" email="pablo.carbonell@upv.es" identifier="https://orcid.org/0000-0002-0993-5625" />
+    </creator>
 </tool>
