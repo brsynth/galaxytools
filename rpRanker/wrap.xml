@@ -55,32 +55,22 @@ Input
 
 Required:
 
-* **pathways**\ : (list of string) Paths to pathway (rpSBML) files
+* **Pathways**\ : List of pathway files (rpSBML)
 
 Output
 ------
 
-* **output**\ : (string) Sorted names and scores of pathways
+* **Ranked Pathways**\ : Sorted names and scores of pathways
 
 Project Links
 ------------------
 
 * `GitHub <https://github.com/brsynth/rptools/tree/master/rptools/rprank>`_
 
-Version
-----------
-
-5.12.1
-
 License
 -------
 
 * `MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
-
-Authors
--------
-
-* **Joan Hérisson**
 
 Acknowledgments
 ---------------
@@ -88,4 +78,7 @@ Acknowledgments
 * Thomas Duigou
 
     ]]></help>
+    <creator>
+        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
+    </creator>
 </tool>
