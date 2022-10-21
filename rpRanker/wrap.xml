@@ -20,7 +20,7 @@
         > '$sorted_pathways'
     ]]></command>
     <inputs>
-        <param name="pathway_collection" type="data_collection" format="xml" collection_type="list" label="Pathways" />
+        <param name="pathway_collection" type="data_collection" format="sbml" collection_type="list" label="Pathways" />
     </inputs>
     <outputs>
         <data name="sorted_pathways" format="csv" label="Ranked Pathways" />
