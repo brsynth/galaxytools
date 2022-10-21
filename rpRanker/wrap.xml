@@ -1,4 +1,4 @@
-<tool id="rpranker" name="Rank Pathways" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
+<tool id="rpranker" name="Rank Pathways" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Rank heterologous pathways according to their global score</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
