@@ -14,13 +14,12 @@
     <command detect_errors="exit_code"><![CDATA[
         python -m rptools.rprank
         --pathways
-        #for $input in $pathway_collection
-            '$input'
-        #end for
+        #set files = '" "'.join([str($file) for $file in $pathway_collection])
+        "${files}"
         > '$sorted_pathways'
     ]]></command>
     <inputs>
-        <param name="pathway_collection" type="data_collection" format="sbml" collection_type="list" label="Pathways" />
+        <param name="pathway_collection" type="data" format="sbml" multiple="true" min="2" label="Pathways" />
     </inputs>
     <outputs>
         <data name="sorted_pathways" format="csv" label="Ranked Pathways" />
