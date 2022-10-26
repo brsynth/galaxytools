@@ -1,5 +1,5 @@
-<tool id="lcrgenie" name="LCR Genie" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
-    <description>Ligase Chain Reaction</description>
+<tool id="lcrgenie" name="Ligase Chain Reaction Genie" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Web-based tool for supporting the design of bridging oligos</description>
     <macros>
         <token name="@TOOL_VERSION@">1.0.2</token>
     </macros>
@@ -19,9 +19,9 @@
         && cp 'out.xlsx' '$LCR_output'
     ]]></command>
     <inputs>
-        <param name="LCR_input" type="data" format="xml" label="Constructs" />
+        <param name="LCR_input" type="data" format="xml" label="Constructs" help="SBOL file containing constructs designs and sequences" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="melting_temp" value="60.0" type="float" label="Target melting temperature for the bridging oligos" />
+            <param name="melting_temp" value="60.0" type="float" label="Melting temperature" help="Target melting temperature for the bridging oligos"/>
         </section>
     </inputs>
     <outputs>
@@ -42,41 +42,37 @@
 LCRGenie
 ========
 
-LCR Genie is a web-based tool for supporting the design of bridging oligos, which are required for annealing together individual synthetic DNA parts (designed by PartsGenie) into multi-gene plasmid assemblies, designed by OptDoE. 
+LCR Genie is a web-based tool for supporting the design of bridging oligos, which are required for annealing together individual synthetic DNA parts (designed by PartsGenie) into multi-gene plasmid assemblies, designed by OptDoE.
+
+Enzyme identifiers are randomly chosen and combined with the aforementioned parts to explore the combinatorics of possible constructs.
+
+LCR Genie takes as input an SBOL (Synthetic Biology Open Language) document containing numerous combinatorial plasmid assemblies, and designing bridging oligos necessary for assembly via the ligase cycling reaction method. The LCR Genie node performs analogous functionality to the DNA weaver node (supporting multi-part assembly but by a different experimental method) and as such, its output format matches that of DNA Weaver.
 
 
 Input
 -----
 
-* **input**\ : (string) is the path to an .xml SBOL file containing constructs designs and sequences
-* **melting_temp**\ : (float) is the target melting temperature for the bridging oligos (default=60.0)
+* **Constructs**\ : SBOL (Synthetic Biology Open Language) file containing constructs designs and sequences
+* **Melting temperature**\ : (float) is the target melting temperature for the bridging oligos (default=60.0)
 
 Output
 ------
 
-* **output**\ : (string) is the path to the output spreadsheet
+* **Assembly Plan**\ : Output spreadsheet
 
 Project Links
 ---------------------
 
 * `GitHub <https://github.com/neilswainston/LCRGenie/>`_
 
-Version
-----------
-
-1.0.2
-
-Authors
--------
-
-* **Neil Swainston**
-* **Joan Hérisson**
-
 License
 -------
 
 `MIT <https://github.com/neilswainston/LCRGenie/blob/master/LICENSE>`_
 
-
     ]]></help>
+    <creator>
+        <person givenName="Neil" familyName="Swainston" identifier="https://orcid.org/0000-0001-7020-1236" />
+        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
+    </creator>
 </tool>
