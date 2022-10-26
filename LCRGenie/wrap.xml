@@ -1,9 +1,10 @@
-<tool id="LCRGenie" name="LCR Genie" version="@TOOL_VERSION@" profile="19.09">
+<tool id="lcrgenie" name="LCR Genie" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Ligase Chain Reaction</description>
     <macros>
         <token name="@TOOL_VERSION@">1.0.2</token>
     </macros>
     <requirements>
+        <token name="@VERSION_SUFFIX@">0</token>
         <requirement type="package" version="@TOOL_VERSION@">lcr_genie</requirement>
     </requirements>
     <stdio>
