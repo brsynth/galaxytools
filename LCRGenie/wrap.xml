@@ -2,9 +2,9 @@
     <description>Web-based tool for supporting the design of bridging oligos</description>
     <macros>
         <token name="@TOOL_VERSION@">1.0.2</token>
+        <token name="@VERSION_SUFFIX@">0</token>
     </macros>
     <requirements>
-        <token name="@VERSION_SUFFIX@">0</token>
         <requirement type="package" version="@TOOL_VERSION@">lcr_genie</requirement>
     </requirements>
     <stdio>
