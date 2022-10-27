@@ -48,32 +48,32 @@
 DNAWeaver
 ==========================
 
-This tool uses a multi-objective algorithm to predict the best synthesis and assembling strategy for the previously designed plasmid using either Golden gate assembly, or Gibson assembly, or a mix of both. Given a set of designs (one design is a construct name and list of its parts), it finds a valid and efficient assembly plan to build all the designs. The designs and sequences of parts are provided as an SBOL file (see test.xml for an example).
+This tool uses a multi-objective algorithm to predict the best synthesis and assembling strategy for the previously designed plasmid using either Golden gate assembly, or Gibson assembly, or a mix of both. Given a set of designs (one design is a construct name and list of its parts), it finds a valid and efficient assembly plan to build all the designs. The designs and sequences of parts are provided as an SBOL file.
 
 Input
 -----
 
 Required:
 
-* **input**\ : (string) Path to the sbol file(s)
-* **method**\ : (string) Assembly method (valid options: golden_gate, gibson, any_method)
+* **Constructs**\ : SBOL construct file(s)
+* **Assembly method**\ : Assembly method (valid options: golden_gate, gibson, any_method)
 
 Advanced options:
 
+* **Maximal number of constructs**\ : (integer, default=-1) Maximal number of constructs to use. The default -1 corresponds to all.
 
-* **--max_constructs**\ : (integer, default=-1) Maximal number of constructs to use. The default -1 corresponds to all.
 
 Output
 ------
 
-
-* **output**\ : (string) Path to the output Excel file
+* **Assembly Plan**\ : output Excel spreadsheet
 
 
 Project Links
 ---------------------
 
 * `GitHub <https://edinburgh-genome-foundry.github.io/DnaWeaver>`_
+
 
 Method
 --------
@@ -101,32 +101,24 @@ The output Excel spreadsheet contains the following sub-sheets:
       - assembly_plan: for each design, the list of PCR fragments to use.
       - errors: list of errors to help troubleshooting assemblies for which no valid assembly plan was found.
 
+
 Limitations
 --------------
 
-
 For constructs with repeated parts and other homologies (such as, in the example, the designs with several "Ter" in a row, ), Gibson assembly (and probably LCR assembly too) may create mis-annealed constructs and more clones will need to be picked. This is not taken into account by the script at the moment. This could be fixed by buying custom fragments from a commercial vendor for extreme cases (i.e. by amending the current implementation to forbid Gibson cuts in regions with homologies elsewhere and add a DNA vendor in the supply network).
 
-Version
--------
-
-1.0.2
-
-Authors
--------
-
-* **Valentin Zulkower**
-* Melchior du Lac
 
 License
 -------
 
 `MIT <https://raw.githubusercontent.com/Edinburgh-Genome-Foundry/DnaWeaver-online/master/LICENCE.txt>`_
 
+
 References
 ---------------
 
 `DNA Weaver: optimal DNA assembly strategies via supply networks and shortest-path algorithms <https://www.iwbdaconf.org/2019/docs/IWBDA19Proceedings.pdf>`_
+
 
 Acknowledgments
 ---------------
@@ -135,4 +127,8 @@ Acknowledgments
 * Joan Hérisson
 
     ]]></help>
+    <creator>
+        <person givenName="Valentin" familyName="Zulkower" />
+        <person givenName="Melchior" familyName="du Lac" />
+    </creator>
 </tool>
