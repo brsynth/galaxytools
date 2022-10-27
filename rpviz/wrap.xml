@@ -1,7 +1,11 @@
-<tool id="rpviz" name="Visualize pathways" version="5.10.0">
+<tool id="rpviz" name="Visualize pathways" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Visualize pathways from the RetroPath Suite</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">5.13.1</token>
+    </macros>
     <requirements>
-        <requirement type="package" version="5.10.0">rptools</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">rptools</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #set input_folder="input_folder"
