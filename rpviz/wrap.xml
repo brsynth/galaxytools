@@ -39,10 +39,10 @@
                 <param name="input_tar" type="data" format="tar" label="Source SBML" />
             </when>
             <when value="sbml">
-                <param name="input_sbml" type="data_collection" format="xml" collection_type="list" label="Source SBML" />
+                <param name="input_sbml" type="data_collection" format="sbml" collection_type="list" label="Source SBML" />
             </when>
             <when value="single_sbml">
-                <param name="input_single_sbml" type="data" format="xml" label="Source SBML" />
+                <param name="input_single_sbml" type="data" format="sbml" label="Source SBML" />
             </when>
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
@@ -78,23 +78,17 @@ Visualize pathways from the RetroPath Suite
 Input
 -----
 
-* **input_rpSBMLs**\ : (string) Input file containing rpSBML files in a tar archive or a folder.
+* **Source SBML**\ : Input file containing rpSBML files in a tar archive, collection or single file.
                              
 Output
 ------
 
-* **output_folder**\ : (string) Output folder to be used. If it does not exist, an attempt will be made to create it.It the creation of the folder fails, IOError will be raised.
-* **autonomous_html**\ : (string) Optional file path, if provided will output an autonomous HTML containing all dependancies.
+* **Pathways Visualization**\ : 
 
 Project Links
 ------------------
 
 * `GitHub <https://github.com/brsynth/rptools/tree/master/rptools/rpviz>`_
-
-Version
-----------
-
-5.10.0
 
 License
 -------
@@ -102,4 +96,7 @@ License
 * `MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
 
     ]]></help>
+    <creator>
+        <person givenName="Thomas" familyName="Duigou" email="thomas.duigou@inrae.fr" identifier="https://orcid.org/" />
+    </creator>
 </tool>
