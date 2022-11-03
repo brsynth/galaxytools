@@ -1,6 +1,5 @@
 <tool id="rpreport" name="Pathways HTML Report" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
-    <description>Generates HTML report to explore the main characteristics of pathways
-predicted with RetroPath suite</description>
+    <description>Explore the main characteristics of pathways predicted with RetroPath suite</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
         <token name="@TOOL_VERSION@">5.13.1</token>
@@ -13,7 +12,7 @@ predicted with RetroPath suite</description>
             #set input_folder="tmp_folder"
             mkdir -p '$input_folder' &&
             #for $input in $input_type_conditional.input_sbml.keys():
-                ln -sfn $input_type_conditional.input_sbml[$input] '$input_folder/$input';
+                ln -sfn $input_type_conditional.input_sbml[$input] '$input_folder/$input' &&
             #end for
             python -m rptools.rpreport -d '$input_folder'
         #elif str($input_type_conditional.input_type) == "tar":
@@ -29,10 +28,10 @@ predicted with RetroPath suite</description>
                 <option value="sbml">Collection</option>
             </param>
             <when value="tar">
-                <param name="input_tar" type="data" format="tar" label="Source SBML" />
+                <param name="input_tar" type="data" format="tar" label="Source SBML" help="rpSBML file(s) containing pathways predicted with RetroPath suite in TAR format"/>
             </when>
             <when value="sbml">
-                <param name="input_sbml" type="data_collection" format="xml" collection_type="list" label="Source SBML" />
+                <param name="input_sbml" type="data_collection" format="sbml" collection_type="list" label="Source SBML" help="Collection of rpSBML files containing pathways predicted with RetroPath suite"/>
             </when>
         </conditional>
     </inputs>
@@ -41,7 +40,7 @@ predicted with RetroPath suite</description>
     </outputs>
     <tests>
         <test>
-        <!-- test 2: check if identical html output is produced (tar input) --> 
+        <!-- test 1: check if identical html output is produced (tar input) --> 
             <conditional name="input_type_conditional">
                 <param name="input_type" value="tar"/>
                 <param name="input_tar" value="input_rpSBML.tar" />
@@ -55,7 +54,7 @@ rpReport
 
 Generates HTML pages to explore the main characteristics (thermodynamics,
 fluxes, number of metabolic steps, reaction rule score) of pathways predicted
-with RetroPath suite
+with `RetroPath suite <https://www.sciencedirect.com/science/article/pii/S1096717617301337>`_.
 
 
 Input
@@ -63,25 +62,17 @@ Input
 
 Required:
 
-* **source_path**: (string) Path to a tar archive (default) or folder (using '-d' option) containing rpSBML file(s).
+* **Source SBML**: rpSBML file(s) containing pathways predicted with RetroPath suite.
 
 Output
 ------
-* **output_folder**: (string) Output folder where report file(s) will be generated.
+
+* **Pathways HTML Report**: Pathways HTML Report
 
 Project Links
 ---------------------
+
 * `GitHub <https://github.com/brsynth/rptools>`_
-
-Version
-----------
-
-5.12.1
-
-Authors
--------
-
-* **Olivier Telle**
 
 Acknowledgments
 ---------------
@@ -94,4 +85,7 @@ Licence
 
 `MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
     ]]></help>
+    <creator>
+        <person givenName="Olivier" familyName="Telle" email="olivier.telle@inrae.fr" />
+    </creator>
 </tool>
