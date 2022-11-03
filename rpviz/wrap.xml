@@ -12,7 +12,7 @@
         mkdir -p '$input_folder';
         #if str($input_type_conditional.input_type) == "sbml":
             #for $input in $input_type_conditional.input_sbml.keys():
-                ln -sf $input_type_conditional.input_sbml[$input] '$input_folder/${input}.xml';
+                ln -sf $input_type_conditional.input_sbml[$input] '$input_folder/${input}.xml' &&
             #end for
             python -m rptools.rpviz '$input_folder'
         #elif str($input_type_conditional.input_type) == "tar":
@@ -25,8 +25,8 @@
         #if $adv.cofactor_file
             --cofactor '$adv.cofactor_file'
         #end if
-        --autonomous_html '$html_file';
-        rm -fr '$input_folder';
+        --autonomous_html '$html_file' &&
+        rm -fr '$input_folder'
     ]]></command>
     <inputs>
         <conditional name="input_type_conditional">
