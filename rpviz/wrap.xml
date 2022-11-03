@@ -9,7 +9,7 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #set input_folder="input_folder"
-        mkdir -p '$input_folder';
+        mkdir -p '$input_folder' &&
         #if str($input_type_conditional.input_type) == "sbml":
             #for $input in $input_type_conditional.input_sbml.keys():
                 ln -sf $input_type_conditional.input_sbml[$input] '$input_folder/${input}.xml' &&
@@ -18,7 +18,7 @@
         #elif str($input_type_conditional.input_type) == "tar":
             python -m rptools.rpviz '${input_type_conditional.input_tar}'
         #elif str($input_type_conditional.input_type) == "single_sbml":
-            ln -sf '$input_type_conditional.input_single_sbml' '$input_folder/${input_type_conditional.input_single_sbml.name}';
+            ln -sf '$input_type_conditional.input_single_sbml' '$input_folder/${input_type_conditional.input_single_sbml.name}' &&
             python -m rptools.rpviz '$input_folder'
         #end if
         'out'
@@ -46,7 +46,7 @@
             </when>
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="cofactor_file" type="data" format="tsv" optional="true" label="cofactor file" />
+            <param name="cofactor_file" type="data" format="tsv" optional="true" label="Cofactor file" help="File listing structures to consider as cofactors."/>
         </section>
     </inputs>
     <outputs>
@@ -81,12 +81,19 @@
     <help><![CDATA[
 RPVIZ
 ================
+
 Visualize pathways from the `RetroPath Suite <https://www.sciencedirect.com/science/article/pii/S1096717617301337>`_.
 
 Input
 -----
 
+Required:
+
 * **Source SBML**\ : Input file containing rpSBML files in a tar archive, collection or single file.
+
+Optional:
+
+* **Cofactor file**\ : File listing structures to consider as cofactors.
 
 Output
 ------
