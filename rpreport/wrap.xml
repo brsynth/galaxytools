@@ -1,8 +1,9 @@
-<tool id="rpreport" name="Pathways HTML Report" version="@TOOL_VERSION@" profile="19.09">
+<tool id="rpreport" name="Pathways HTML Report" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Generates HTML report to explore the main characteristics of pathways
 predicted with RetroPath suite</description>
     <macros>
-        <token name="@TOOL_VERSION@">5.12.1</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">5.13.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rptools</requirement>
