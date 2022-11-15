@@ -35,10 +35,10 @@
         <param name="compartment_id" type="text" label="SBML compartment ID" value="c" >
             <validator type="empty_field" message="A compartment ID is required"/>
         </param>
-        <param name="objective_rxn_id" type="text" value="rxn_target" label="reaction ID to optimise" >
+        <param name="objective_rxn_id" type="text" value="rxn_target" label="Reaction ID to optimise" >
             <validator type="empty_field" message="Reaction ID is required"/>
         </param>
-        <param name="biomass_rxn_id" type="text" label="biomass reaction ID" value="" >
+        <param name="biomass_rxn_id" type="text" label="Biomass reaction ID" value="" >
             <validator type="empty_field" message="Biomass reaction ID is required"/>
         </param>
         <conditional name="input_sim_type">
@@ -151,22 +151,21 @@ Input
 
 Required:
 
+* **Pathway (rpSBML)**\ : SBML file that contains an heterologous pathway
+* **Model (SBML)**\ : GEM SBML model file
+* **Biomass reaction ID**\ : (string) biomass reaction ID that will be restricted in the "fraction" simulation type. This parameter is ignored for "fba" and "pfba"
 
-* **pathway_file**\ : (string) SBML file that contains an heterologous pathway
-* **model_filel**\ : (string) Path to the GEM SBML model
-* **compartment_id**\ : (string) Model compartment id (e.g. 'c' or 'MNXC3')
-* **outfile**\ : (string) Path to the output file
+Optional:
+
+* **SBML compartment ID**\ : (string, default='c') Model compartment id (e.g. 'c' or 'MNXC3')
+* **reaction ID to optimise**\ : (string, default=rxn_target) reaction ID to optimise. This parameters is required in all simulation type
+* **Constraint based simulation type**\ : (string, default=Fraction of Reaction) The type of constraint based modelling method. Valid options include: Fraction of Reaction, FBA, Parsimonious FBA.
+* **Fraction of the optimum**\ : (float, default=0.75) Portion of the maximal flux used to set the maximal and minimal bounds for the source reaction of the "fraction" simulation type.
 
 Advanced options:
 
-
-* **--sim**\ : (string, default=fraction) Valid options include: fraction, fba, pfba. The type of constraint based modelling method
-* **--biomass_rxn_id**\ : (string, default=biomass) biomass reaction ID that will be restricted in the "fraction" simulation type. This parameter is ignored for "fba" and "pfba"
-* **--objective_rxn_id**\ : (string, default=rxn_target) reaction ID to optimise. This parameters is required in all simulation type
-* **--fraction_of**\ : (float, default=0.75) Portion of the maximal flux used to set the maximal and minimal bounds for the source reaction of the "fraction" simulation type
-* **--merge**\ : (boolean, default=False) output the full merged model instead of heterologous pathway only
-* **--ignore_orphan_species**\ : (boolean, default=True) ignore metabolites that are only consumed or produced
-* **--log**: (string, default=error) Set the log level, choices are 'debug', 'info', 'warning', 'error', 'critical'
+* **Output the merged model?**\ : (boolean, default=False) output the full merged model instead of heterologous pathway only
+* **Ignore Orphan Species?**\ : (boolean, default=True) ignore metabolites that are only consumed or produced
 
 
 Project Links
@@ -174,27 +173,20 @@ Project Links
 
 * `GitHub <https://github.com/brsynth/rptools/tree/master/rptools/rpfba>`_
 
-Version
-----------
-
-5.12.1
-
-Authors
--------
-
-* **Melchior du Lac**
-* **Joan Hérisson**
-
 License
 -------
 
-`MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
+* `MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
 
 Acknowledgments
 ---------------
 
 * Thomas Duigou
     ]]></help>
+    <creator>
+        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
+        <person givenName="Melchior" familyName="du Lac" identifier="https://orcid.org/0000-0002-9984-4689" />
+    </creator>
     <citations>
         <citation type="doi">10.1186/1752-0509-7-74</citation>
         <citation type="doi">10.1515/jib-2016-290 </citation>    
