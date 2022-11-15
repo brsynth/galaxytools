@@ -2,7 +2,7 @@
     <description>Generate the RetroPath2.0 sink file from an SBML input</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">5.13.0</token>
+        <token name="@TOOL_VERSION@">5.13.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rptools</requirement>
@@ -63,23 +63,12 @@ Advanced options:
 Output
 ------
 
-* **Sink**\ : (string) CSV file containing a collection of chemical species used by the restrosynthesis algorithm of `RetroPath2.0 <https://doi.org/10.1016/j.ymben.2017.12.002>`_.
+* **Sink**\ : CSV file containing a collection of chemical species used by the restrosynthesis algorithm of `RetroPath2.0 <https://doi.org/10.1016/j.ymben.2017.12.002>`_.
 
 Project Links
 ---------------------
 
 * `GitHub <https://github.com/brsynth/rptools>`_
-
-Version
-----------
-
-5.13.0
-
-Authors
--------
-
-* **Melchior du Lac**
-* Joan Hérisson
 
 License
 -------
@@ -92,6 +81,10 @@ Acknowledgments
 * Thomas Duigou
 
     ]]></help>
+    <creator>
+        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
+        <person givenName="Melchior" familyName="du Lac" identifier="https://orcid.org/0000-0002-9984-4689" />
+    </creator>
     <citations>
         <citation type="doi">10.1038/nbt1156</citation>
         <citation type="doi">10.1016/j.ymben.2017.12.002</citation>
