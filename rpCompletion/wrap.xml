@@ -21,6 +21,7 @@
         --upper_flux_bound '$adv.upper_flux_bound'
         --lower_flux_bound '$adv.lower_flux_bound'
         --max_subpaths_filter '$adv.max_subpaths_filter'
+        --cache-dir "\${TMPDIR:-.}"
     ]]></command>
     <inputs>
         <param name="rp2paths_pathways" type="data" format="csv" label="RP2paths pathways" />
