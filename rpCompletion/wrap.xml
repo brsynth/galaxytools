@@ -89,17 +89,6 @@ Project Links
 ---------------------
 * `GitHub <https://github.com/brsynth/rptools>`_
 
-Version
-----------
-
-5.13.1
-
-Authors
--------
-
-* **Melchior du Lac**
-* **Joan Hérisson**
-
 Acknowledgments
 ---------------
 
@@ -111,4 +100,8 @@ Licence
 `MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
 
     ]]></help>
+    <creator>
+        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
+        <person givenName="Melchior" familyName="du Lac" identifier="https://orcid.org/0000-0002-9984-4689" />
+    </creator>
 </tool>
