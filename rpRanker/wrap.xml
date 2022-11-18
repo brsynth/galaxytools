@@ -12,10 +12,17 @@
         <regex match="ERROR" level="fatal" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
+        #for $file in $pathway_collection
+            ln -s $file $file.name &&
+        #end for
+
         python -m rptools.rprank
         --pathways
-        #set files = ' '.join([ '\'%s\'' % $file for $file in $pathway_collection])
-        $files
+
+        #for $file in $pathway_collection
+            $file.name
+        #end for
+
         > '$sorted_pathways'
     ]]></command>
     <inputs>
