@@ -1,7 +1,8 @@
-<tool id="rpcompletion" name="Complete Reactions" version="@TOOL_VERSION@" profile="21.09">
-    <description>From the output of RP2Paths and RetroPath2.0, generate SBML unique and complete (with cofactors) pathways with mono-component reactions</description>
+<tool id="rpcompletion" name="Complete Reactions" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Completes mono-component reactions output by RetroPath2.0 with the appropriate cofactors</description>
     <macros>
-        <token name="@TOOL_VERSION@">5.13.1</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">6.0.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rptools</requirement>
@@ -20,6 +21,7 @@
         --upper_flux_bound '$adv.upper_flux_bound'
         --lower_flux_bound '$adv.lower_flux_bound'
         --max_subpaths_filter '$adv.max_subpaths_filter'
+        --cache-dir "\${TMPDIR:-.}"
     ]]></command>
     <inputs>
         <param name="rp2paths_pathways" type="data" format="csv" label="RP2paths pathways" />
@@ -88,17 +90,6 @@ Project Links
 ---------------------
 * `GitHub <https://github.com/brsynth/rptools>`_
 
-Version
-----------
-
-5.13.1
-
-Authors
--------
-
-* **Melchior du Lac**
-* **Joan Hérisson**
-
 Acknowledgments
 ---------------
 
@@ -110,4 +101,8 @@ Licence
 `MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
 
     ]]></help>
+    <creator>
+        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
+        <person givenName="Melchior" familyName="du Lac" identifier="https://orcid.org/0000-0002-9984-4689" />
+    </creator>
 </tool>

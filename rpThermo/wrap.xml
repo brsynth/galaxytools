@@ -1,7 +1,7 @@
-<tool id="rpthermo" name="Thermo" version="@TOOL_VERSION@" profile="19.09">
+<tool id="rpthermo" name="Thermo" version="@TOOL_VERSION@" profile="21.09">
     <description>Calculate the formation energy of chemical species and the Gibbs free energy of their reactions and pathways in an SBML</description>
     <macros>
-        <token name="@TOOL_VERSION@">5.12.1</token>
+        <token name="@TOOL_VERSION@">6.0.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rptools</requirement>
@@ -20,11 +20,11 @@
         --pMg '$adv.pMg'
     ]]></command>
     <inputs>
-        <param name="input" type="data" format="xml" label="Input File" />
+        <param name="input" type="data" format="sbml" label="SBML Input File" help="Pathways in SBML format" />
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="ph" type="float" value="7.5" min="0" max="14" label="Compartment pH of the pathway" />
             <param name="ionic_strength" type="float" value="0.25" min="0" max="500" label="Compartment ionic strength of the pathway" />
-            <param name="pMg" type="float" value="3.0" label="Compartment pMg of the pathway" />
+            <param name="pMg" type="float" value="3.0" label="Compartment pMg (Magnesium vapor pressure) of the pathway" />
         </section>
     </inputs>
     <outputs>
@@ -52,6 +52,8 @@ Thermodynamics
 ===============
 Calculate the formation energy of chemical species either using an internal database or estimate it by decomposing them using the `component contribution <https://gitlab.com/elad.noor/component-contribution>`_ method. Thereafter this tool predicts the Gibbs free energy of reactions and of the whole heterologous pathway by combining the formation energy of each individual compound.
 
+The goal of the thermodynamic analysis is to estimate the feasibility of the predicted pathways toward target production, in physiological conditions (PH, ionic strength). 
+
 .. image:: https://raw.githubusercontent.com/Galaxy-SynBioCAD/rpThermo/standalone/galaxy/img/rpThermo.png 
 	:width: 80 %
 	:align: center
@@ -64,29 +66,26 @@ Above is an illustration of the Gibbs free energy calculation using the componen
 
 Required:
 
-* **input**\ : (string) Path to the input file
-* **output**\ : (string) Path to the output file 
+Inputs
+------
+
+* **SBML Input File**\ : Pathways in SBML format
 
 Advanced Options:
 
-* **--ph**\ :(float) Compartment PH of the pathway
-* **--ionic_strength**\ :(float) Compartment ionic strength of the pathway
-* **--pMg**\ :(float) Compartment pMg of the pathway
+* **PH**\ :(float) Compartment PH of the pathway
+* **Ionic strength**\ :(float) Compartment ionic strength of the pathway
+* **pMg**\ :(float) Compartment pMg (Magnesium vapor pressure) of the pathway
+
+Output
+------
+
+* **Pathway with thermo**\ : annotated pathways (with thermodynamics information for each reaction) in SBML(Systems Biology Markup Language) format.
 
 Project Links
 ---------------------
 
 * `GitHub <https://github.com/brsynth/rptools/tree/master/rptools/rpthermo>`_
-
-Version
-----------
-
-v5.12.1
-
-Authors
--------
-
-* **Melchior du Lac** 
 
 Acknowledgments
 ---------------
@@ -98,4 +97,7 @@ Acknowledgments
     <citations>
         <citation type="doi">10.1371/journal.pcbi.1003098</citation>
     </citations>
+    <creator>
+        <person givenName="Melchior" familyName="du Lac" identifier="https://orcid.org/0000-0002-9984-4689" />
+    </creator>
 </tool>
