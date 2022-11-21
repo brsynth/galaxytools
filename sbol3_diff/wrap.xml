@@ -33,25 +33,31 @@ Input
 
 Required:
 
-* ** **\ : 
+* **First input SBOL3**\ :
+* **Second input SBOL3**\ : 
 
 Output
 ------
 
-* ** **\ : 
+* **Output**\ : Output with differences between two SBOL3 files.
 
 Project Links
 ------------------
 
-* `GitHub <https://github.com/brsynth/rptools/tree/master/>`_
+* `GitHub <https://github.com/SynBioDex/SBOL-utilities>`_
 
 License
 -------
 
-* `MIT <https://github.com/brsynth/>`_
+* `MIT <https://github.com/SynBioDex/SBOL-utilities/blob/develop/LICENSE.txt>`_
+
+Acknowledgments
+---------------
+
+* Kenza BAZI-KABBAJ
 
     ]]></help>
     <creator>
-        <person givenName="" familyName="" email="" identifier="" />
+        <person givenName="Jacob" familyName="Beal" identifier="https://orcid.org/0000-0002-1663-5102" />
     </creator>
 </tool>
