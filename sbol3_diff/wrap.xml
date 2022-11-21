@@ -8,7 +8,7 @@
         <requirement type="package" version="@TOOL_VERSION@">sbol-utilities</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        sbol-diff '&sbol3_in_1' '&sbol3_in_2' > '&diff_out'
+        sbol-diff '$sbol3_in_1' '$sbol3_in_2' > '$diff_out'
     ]]></command>
     <inputs>
         <param name="sbol3_in_1" type="data" format="nt" label="First input SBOL3" />
