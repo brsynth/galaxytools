@@ -20,8 +20,9 @@
     <tests>
         <test>
         <!-- test 1: check if identical output is produced -->
-            <param name="sbol3_in_1" value="rp_001_0001_rpfba_in.xml" />
-            <param name="sbol3_in_2" value="rp_001_0001_rpfba_in.xml" />
+            <param name="sbol3_in_1" value="simple_library.nt" />
+            <param name="sbol3_in_2" value="expanded_simple_library.nt" />
+            <output name="diff_out" file="sbol3_diff_out.txt" ftype="txt" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[
