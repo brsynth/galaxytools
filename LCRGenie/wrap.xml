@@ -46,7 +46,7 @@ LCR Genie is a web-based tool for supporting the design of bridging oligos, whic
 
 Enzyme identifiers are randomly chosen and combined with the aforementioned parts to explore the combinatorics of possible constructs.
 
-LCR Genie takes as input an SBOL (Synthetic Biology Open Language) document containing numerous combinatorial plasmid assemblies, and designing bridging oligos necessary for assembly via the ligase cycling reaction method. The LCR Genie node performs analogous functionality to the DNA weaver node (supporting multi-part assembly but by a different experimental method) and as such, its output format matches that of DNA Weaver.
+LCR Genie takes as input an SBOL (Synthetic Biology Open Language) document containing numerous combinatorial plasmid assemblies, and designing bridging oligos necessary for assembly via the ligase cycling reaction method. The LCR Genie node performs analogous functionality to the `DNA weaver <https://github.com/Edinburgh-Genome-Foundry/DnaWeaver>`_ node (supporting multi-part assembly but by a different experimental method) and as such, its output format matches that of DNA Weaver.
 
 
 Input
