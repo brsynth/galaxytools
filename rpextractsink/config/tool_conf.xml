@@ -1,0 +1,3 @@
+  <section id="sbc-util" name="SynBioCAD Utilities">
+    <tool file="synbiocad-galaxy-wrappers/rpextractsink/rpextractsink.xml" />
+  </section>

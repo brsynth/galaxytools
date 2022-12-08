@@ -1,3 +1,3 @@
   <section id="sbc-util" name="SynBioCAD Utilities">
-    <tool file="synbiocad-galaxy-wrappers/inchi_to_sink/wrap.xml" />
+    <tool file="synbiocad-galaxy-wrappers/inchi_to_sink/inchi_to_sink.xml" />
   </section>

@@ -1,3 +1,3 @@
   <section id="sbc-util" name="SynBioCAD Utilities">
-    <tool file="synbiocad-galaxy-wrappers/rp2biosensor/wrap.xml" />
+    <tool file="synbiocad-galaxy-wrappers/rp2biosensor/rp2biosensor.xml" />
   </section>
