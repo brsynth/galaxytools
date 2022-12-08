@@ -1,0 +1,10 @@
+categories:
+- Synthetic Biology
+description: Ligase Chain Reaction Genie
+long_description: 'LCR Genie is a web-based tool for supporting the design of bridging
+  oligos, which are required for annealing together individual synthetic DNA parts
+  (designed by PartsGenie: https://github.com/neilswainston/PartsGenieClient/) into
+  multi-gene plasmid assemblies, designed by OptDoE (https://github.com/pablocarb/doebase).
+  Source code may be found at the following location: https://github.com/neilswainston/LCRGenie'
+name: lcrgenie
+owner: tduigou

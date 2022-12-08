@@ -1,0 +1,10 @@
+categories:
+- Synthetic Biology
+description: 'rpbasicdesign extracts enzyme IDs from rpSBML files -- produced by the
+  RP suite available in the SynBioCAD Galaxy platform -- to generate genetic constructs
+  compliant with the BASIC assembly approach. CSV files produced are ready to be used
+  with DNA-Bot to generate instructions for automated build of the genetic constructs
+  using OpenTrons liquid handling robots. Source code may be found at the following
+  location: https://github.com/brsynth/rpbasicdesign'
+name: rpbasicdesign
+owner: tduigou

@@ -1,0 +1,7 @@
+categories:
+- Synthetic Biology
+description: Convert sbml to sbol format
+long_description: 'Convert an SBML file into a single SBOL file. Source code may be
+  found at the following location: https://github.com/neilswainston/SbmlToSbol'
+name: sbml2sbol
+owner: tduigou

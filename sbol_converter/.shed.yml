@@ -1,0 +1,7 @@
+categories:
+- Synthetic Biology
+description: Convert between SBOL3 and other genetic design formats
+homepage_url: https://github.com/SynBioDex/SBOL-utilities
+long_description: Convert between SBOL3 and other genetic design formats
+name: sbol_converter
+owner: tduigou

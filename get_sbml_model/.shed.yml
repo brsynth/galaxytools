@@ -1,0 +1,6 @@
+categories:
+- Synthetic Biology
+description: Pick an SBML model among a list
+long_description: Download the selected SBML model fromg BiGG database.
+name: get_sbml_model
+owner: tduigou

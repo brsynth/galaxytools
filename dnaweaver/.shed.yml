@@ -1,0 +1,11 @@
+categories:
+- Synthetic Biology
+description: Given a SBOL input, calculate assembly parts for Gibson or Golden Gate.
+long_description: 'This tool uses a multi-objective algorithm to predict the best
+  synthesis and assembling strategy for the previously designed plasmid using either
+  Golden gate assembly, or Gibson assembly, or a mix of both. Given a set of designs
+  (one design is a construct name and list of its parts), it finds a valid and efficient
+  assembly plan to build all the designs. The designs and sequences of parts are provided
+  as an SBOL file. Source code may be found at the following location: https://github.com/Edinburgh-Genome-Foundry/DnaWeaver'
+name: dnaweaver
+owner: tduigou

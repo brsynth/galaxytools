@@ -1,0 +1,7 @@
+categories:
+- Synthetic Biology
+description: Reaction Rules Parser
+long_description: 'RRParser (Reaction Rules Parser) retrieves the reaction rules from
+  https://retrorules.org/. Source code may be found at the following location: https://github.com/brsynth/RRParser.'
+name: rrparser
+owner: tduigou
