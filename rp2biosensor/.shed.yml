@@ -1,0 +1,12 @@
+categories:
+- Synthetic Biology
+description: Build Sensing-Enabling Metabolic Pathways from RetroPath2.0 output
+long_description: 'rp2biosensor extracts metabolic paths linking undetectable compounds
+  into a detectable one using biochemical reactions. This concept is known as "Sensing-Enabling
+  Metabolic Pathways". See: https://pubs.acs.org/doi/10.1021/acssynbio.5b00225 for
+  more. In short, rp2bionsensor converts the output of RetroPath2.0 (https://www.myexperiment.org/workflows/4987.html)
+  into a HTML page showing the possible metabolic paths linking the compound to be
+  detected to the detectable ones. Source code may be found at the following location:
+  https://github.com/brsynth/rp2biosensor'
+name: rp2biosensor
+owner: tduigou

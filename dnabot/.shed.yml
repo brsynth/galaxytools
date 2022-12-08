@@ -1,0 +1,9 @@
+categories:
+- Synthetic Biology
+description: DNA assembly using BASIC on OpenTrons
+long_description: 'DNA-Bot software takes as input the CSV files describing the construct
+  (such as those produced by BASICDesign) and generates instructions for the automated
+  build of the genetic constructs using OpenTrons liquid handling robots.  Source
+  code may be found at the following location: https://github.com/brsynth/DNA-BOT/tree/DNA-BOT-APIv2'
+name: dnabot
+owner: tduigou

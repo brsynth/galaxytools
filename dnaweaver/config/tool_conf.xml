@@ -1,0 +1,3 @@
+  <section id="sbc-gd" name="SynBioCAD Genetic Design">
+    <tool file="synbiocad-galaxy-wrappers/dnaweaver/dnaweaver.xml" />
+  </section>

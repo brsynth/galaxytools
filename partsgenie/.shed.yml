@@ -1,0 +1,7 @@
+categories:
+- Synthetic Biology
+description: An integrated tool for optimizing and sharing synthetic biology parts
+long_description: 'PartsGenie allows for the design and optimisation of novel, reusable
+  synthetic biology parts. Source code may be found at the following location: https://github.com/neilswainston/PartsGenieClient/'
+name: partsgenie
+owner: tduigou

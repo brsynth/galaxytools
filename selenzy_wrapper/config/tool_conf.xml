@@ -1,0 +1,3 @@
+  <section id="sbc-util" name="SynBioCAD Utilities">
+    <tool file="synbiocad-galaxy-wrappers/selenzy_wrapper/selenzy_wrapper.xml" />
+  </section>

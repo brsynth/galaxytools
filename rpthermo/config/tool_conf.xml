@@ -1,3 +1,3 @@
   <section id="sbc-pa" name="SynBioCAD Pathway Analysis">
-    <tool file="synbiocad-galaxy-wrappers/rpscore/rpscore.xml" />
+    <tool file="synbiocad-galaxy-wrappers/rpthermo/rpthermo.xml" />
   </section>

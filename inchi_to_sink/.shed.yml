@@ -1,0 +1,6 @@
+categories:
+- Synthetic Biology
+description: Convert InChI input to CSV sink
+long_description: Convert Inchi string to CSV sink file for Retropath2.0 Input.
+name: inchi_to_sink
+owner: tduigou

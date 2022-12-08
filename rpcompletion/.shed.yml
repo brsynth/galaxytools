@@ -1,0 +1,11 @@
+categories:
+- Synthetic Biology
+description: Galaxy tool that reads the output of RP2paths, parses it, and generates
+  SBML for each complete (cofactors) and unique pathway.
+long_description: 'Completes mono-component reactions output by RetroPath2.0 with
+  the appropriate cofactors. Creates sub-paths when multiple reaction rules are associated
+  with a single reaction. Input is a single pathways file produced by RP2Paths (https://github.com/brsynth/rp2paths).
+  It stands on rrCache which store pre-computed data. Source code may be found at
+  the following location: https://github.com/brsynth/rptools/blob/master/rptools/rpcompletion/README.md'
+name: rpcompletion
+owner: tduigou
