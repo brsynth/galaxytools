@@ -1,3 +1,3 @@
   <section id="sbc-util" name="SynBioCAD Utilities">
-    <tool file="synbiocad-galaxy-wrappers/get_sbml_model/wrap.xml" />
+    <tool file="synbiocad-galaxy-wrappers/get_sbml_model/get_sbml_model.xml" />
   </section>
