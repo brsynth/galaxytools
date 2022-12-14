@@ -34,7 +34,6 @@
         <test>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
             <param name="input" value="rp_013_0001.xml" />
-            <param name="model" value="e_coli_iML1515.sbml" />
             <output name="pathway_with_thermo" file="rp_013_0001_with_thermo.xml" ftype="sbml" compare="diff" sort="true" >
                 <assert_contents>
                     <is_valid_xml />
