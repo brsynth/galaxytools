@@ -7,9 +7,12 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">sbol-utilities</requirement>
     </requirements>
-    <command detect_errors="exit_code"><![CDATA[
+    <stdio>
+        <exit_code range="2:" level="fatal" />
+    </stdio>
+    <command><![CDATA[
         ln -s $sbol3_in_1 $sbol3_in_1.name &&
-        ln -s $sbol3_in_2 $sbol3_in_2.name &&
+        ln -s $sbol3_in_2 $sbol3_in_2.name ;
         sbol-diff $sbol3_in_1.name $sbol3_in_2.name > '$diff_out'
     ]]></command>
     <inputs>
