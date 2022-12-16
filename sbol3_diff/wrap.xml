@@ -9,11 +9,13 @@
     </requirements>
     <stdio>
         <exit_code range="2:" level="fatal" />
+        <exit_code range="0" level="warning" description="No differences detected" />
+        <exit_code range="1" level="warning" description="Differences detected" />
     </stdio>
     <command><![CDATA[
-        ln -s $sbol3_in_1 $sbol3_in_1.name &&
-        ln -s $sbol3_in_2 $sbol3_in_2.name ;
-        sbol-diff $sbol3_in_1.name $sbol3_in_2.name > '$diff_out'
+        ln -s '$sbol3_in_1' '$sbol3_in_1.name' &&
+        ln -s '$sbol3_in_2' '$sbol3_in_2.name' ;
+        sbol-diff '$sbol3_in_1.name' '$sbol3_in_2.name' > '$diff_out'
     ]]></command>
     <inputs>
         <param name="sbol3_in_1" type="data" format="nt" label="First input SBOL3" />
