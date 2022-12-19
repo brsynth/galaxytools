@@ -14,7 +14,7 @@
     </stdio>
     <command><![CDATA[
         ln -s '$sbol3_in_1' '$sbol3_in_1.name' &&
-        ln -s '$sbol3_in_2' '$sbol3_in_2.name' ;
+        ln -s '$sbol3_in_2' '$sbol3_in_2.name' &&
         sbol-diff '$sbol3_in_1.name' '$sbol3_in_2.name' > '$diff_out'
     ]]></command>
     <inputs>
@@ -29,7 +29,7 @@
         <!-- test 1: check if identical output is produced -->
             <param name="sbol3_in_1" value="simple_library.nt" />
             <param name="sbol3_in_2" value="expanded_simple_library.nt" />
-            <output name="diff_out" file="sbol3_diff_out.txt" ftype="txt" compare="diff" />
+            <output name="diff_out" file="sbol3_diff_out.txt" ftype="txt" compare="diff" sort="true"/>
         </test>
     </tests>
     <help><![CDATA[
@@ -41,8 +41,8 @@ Input
 
 Required:
 
-* **First input SBOL3**\ :
-* **Second input SBOL3**\ : 
+* **First input SBOL3**\
+* **Second input SBOL3**\
 
 Output
 ------
