@@ -1,0 +1,7 @@
+categories:
+- Synthetic Biology
+description: Computes the difference between two SBOL3 documents
+homepage_url: https://github.com/SynBioDex/SBOL-utilities
+long_description: 'Computes the difference between two SBOL3 documents'
+name: sbol3_diff
+owner: tduigou
