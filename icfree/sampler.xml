@@ -1,0 +1,79 @@
+<tool id="icfree_sampler" name="iCFree sampler module" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Generate data points using latin hypercube sampling (lhs)</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <stdio>
+        <regex match="WARNING" level="warning" />
+        <regex match="ERROR" level="fatal" />
+    </stdio>
+    <command detect_errors="exit_code"><![CDATA[
+        python -m icfree.sampler
+            '$cfps_parameters_file'
+            --nb-sampling-steps '$adv.nb-sampling-steps'
+            --sampling-ratios '$adv.sampling_ratios'
+            --nb-samples '$adv.nb-samples'
+            --seed '$adv.seed'
+            --output-format '$adv.output-format'
+    ]]></command>
+    <inputs>
+        <param name="cfps_parameters_file" type="data" format="tabular" label="Cell-Free System Pameters" />
+    </inputs>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param argument="nb-sampling-steps" type="integer" value="5" label="Number of values for all factors when performing the sampling" />
+            <param argument="sampling-ratios" type="integer" label="Ratios for all factors" />
+            <param argument="nb-samples" type="integer" value="99" label="Number of samples to generate" />
+            <param argument="seed" type="integer" label="Seed to reproduce results" />
+            <param argument="output-format" type="data" format="csv" label="Format of output file" />
+        </section>
+    <outputs>
+        <data name="sampling_file" format="csv" label="Lhs sampling values" />
+    </outputs>
+    <tests>
+        <tests>
+            <!-- test 1: check if identical outputs are produced with default parameters  -->
+        </tests>
+    </tests>
+    <help><![CDATA[
+Sampler
+=====
+The sampler generates a list of values for all parameters given in the input file. The values are generated using a Latin Hypercube Sampling (LHS) method. The number of values generated is given by the user and the values are saved in csv or tsv file.
+The LHS values are generated using the lhs function from the pyDOE package and binned into bins to reduce the combinatorial space.
+
+Input
+-----
+Required:
+* ** CFPS Parameters File **\ : The first column is the parameter (or factor) names.
+The second column is the maxValue of the parameter that will be used in the sampling.
+The third column is the concnetration of the stock.
+The fourth column is the deadVolume of the parameter. This is used to calculate the volume of the parameter that will not be pipetted by the robot (because of viscosity).
+The fifth column is the specific ratios we want to have for this parameter. If nothing defined, then take ratios given in program options. If one single number is given, then take this number as a const value.
+
+Advanced options:
+* ** Number of sampling steps **\: Number of values for all factors when performing the sampling (default: 5)
+* ** Sampling ratios **\: Ratios for all factors when performing the sampling
+* ** Number of samples **\: Number of samples to generate for all factors when performing the sampling (default: 99)
+* ** Seed **\: Seed to reproduce results (same seed number = same results)
+* ** Output format **\: Format of output file (default: csv)
+
+Output
+------
+TBD
+
+Project Links
+---------------------
+* `GitHub <https://github.com/brsynth/icfree-ml/tree/main/icfree/sampler>`_
+
+License
+-------
+* `MIT <https://github.com/brsynth/icfree-ml/blob/main/LICENSE>`_
+
+    ]]></help>
+    <creator>
+        <person givenName="Yorgo" familyName="El Moubayed" email="yorgo.el-moubayed@inrae.fr" />
+        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
+    </creator>
+    <citations>
+    </citations>
+</tool>

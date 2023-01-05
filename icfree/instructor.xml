@@ -1,0 +1,69 @@
+<tool id="icfree_instructor" name="iCFree instructor module" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Generates a list of Echo-compatible instructions to prepare samples</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <stdio>
+        <regex match="WARNING" level="warning" />
+        <regex match="ERROR" level="fatal" />
+    </stdio>
+    <command detect_errors="exit_code"><![CDATA[
+        python -m icfree.instructor
+            '$source_plates'
+            '$dest_plates'
+            --robot '$adv.robot'
+            --source_plates '$adv.source_plates'
+            --dest_plates '$adv.dest_plates'
+    ]]></command>
+    <inputs>
+        <param name="cfps_parameters_file" type="data" format="tabular" label="Cell-Free System Pameters" />
+        <param name="sampling_file" type="data" format="csv" label="Cell-Free System Pameters Concentrations" />
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param argument="robot" type="text" value="echo" label="Robot name" />
+            <param argument="source_plates" type="data" format="json" label="Source plates files"/>
+            <param argument="dest_plates" type="data" value="json" label="Destination plates files"/>
+        </section>
+    </inputs>
+    <outputs>
+        <data name="instructions_file" format="csv" label="Instructions to perform the experiment" />
+        <data name="volumes_warnings" format="csv" label="Volumes that may cause issues with the choosen robot" />
+    </outputs>
+    <tests>
+        <tests>
+            <!-- test 1: check if identical outputs are produced with default parameters  -->
+        </tests>
+    </tests>
+    <help><![CDATA[
+Instructor
+=====
+The module generates a list of instructions to perform the experiment.
+
+Input
+-----
+Required:
+TBD
+
+Advanced options:
+TBD
+
+Output
+------
+TBD
+
+Project Links
+---------------------
+* `GitHub <https://github.com/brsynth/icfree-ml/tree/main/icfree/instructor>`_
+
+License
+-------
+* `MIT <https://github.com/brsynth/icfree-ml/blob/main/LICENSE>`_
+
+    ]]></help>
+    <creator>
+        <person givenName="Yorgo" familyName="El Moubayed" email="yorgo.el-moubayed@inrae.fr" />
+        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
+    </creator>
+    <citations>
+    </citations>
+</tool>
