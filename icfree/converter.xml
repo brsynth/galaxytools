@@ -31,28 +31,27 @@
     </tests>
     <help><![CDATA[
 Converter
-=====
+==========
 This converter module converts concentration values into volume values, these will be used as input for the plates_generator module. 
 
 Input
 -----
-Required:
-* ** CFPS Parameters File **\ : The first column is the parameter (or factor) names.
+* **CFPS Parameters File**\ : The first column is the parameter (or factor) names.
 The second column is the maxValue of the parameter that will be used in the sampling.
 The third column is the concnetration of the stock.
 The fourth column is the deadVolume of the parameter. This is used to calculate the volume of the parameter that will not be pipetted by the robot (because of viscosity).
 The fifth column is the specific ratios we want to have for this parameter. If nothing defined, then take ratios given in program options. If one single number is given, then take this number as a const value.
-* ** CFPS Parameters Concentrations File **\ : Concentration values for each cell-free parameter.
+* **CFPS Parameters Concentrations File**\ : Concentration values for each cell-free parameter.
 
 Advanced options:
-* ** Sample Volume **\ : Final sample volume in each well in nL (default: 1000)
+* **Sample Volume**\ : Final sample volume in each well in nL (default: 1000)
 
 Output
 ------
-TBD
+* **volumes.csv**\ : CSV file with the volume values for each parameter.
 
 Project Links
----------------------
+-------------
 * `GitHub <https://github.com/brsynth/icfree-ml/tree/main/icfree/converter>`_
 
 License
@@ -62,7 +61,6 @@ License
     ]]></help>
     <creator>
         <person givenName="Yorgo" familyName="El Moubayed" email="yorgo.el-moubayed@inrae.fr" />
-        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
     </creator>
     <citations>
     </citations>

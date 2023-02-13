@@ -55,23 +55,42 @@
     </tests>
     <help><![CDATA[
 Plates Generator
-=====
+=================
 This module generates a list of source and destination plates according to the set of samples to test.
 
 Input
 -----
-Required:
-TBD
+* **CFPS Parameters File**\ : The first column is the parameter (or factor) names.
+The second column is the maxValue of the parameter that will be used in the sampling.
+The third column is the concnetration of the stock.
+The fourth column is the deadVolume of the parameter. This is used to calculate the volume of the parameter that will not be pipetted by the robot (because of viscosity).
+The fifth column is the specific ratios we want to have for this parameter. If nothing defined, then take ratios given in program options. If one single number is given, then take this number as a const value.
 
-Advanced options:
-TBD
+* Sampling File**\ : CSV file with the sampling values for each parameter
+
+Advanced Options:
+-----------------
+* **Sample Volume**\ : Final sample volume in each well in nL (default: 10000)
+* **Source Plate Dead Volume**\ : dead volume to add in the source plate in nL (default: 15000)
+* **Destination Plate Dead Volume**\ : dead volume to add in the dest plate in nL (default: 15000)
+* **Destination Starting Well**\ : starter well of destination plate to begin filling the 384 well-plate. (default: A1)
+* **Source Starting Well**\ : starter well of source plate to begin filling the 384 well-plate. (default: A1)
+* **Output Format**\ : Output file format for wells file (default: csv)
+* **Number of replicate**\ : Numbers of copies of volume sets (default: 3)
+* **Keep nil volumes**\ : Keep nil volumes in instructions or not (default: yes)
+* **Source Plate Well Capacity**\ : Maximum volume capacity of the source plate in nL (default: 60000)
+* **Destiantion Plate Well Capacity**\ : Maximum volume capacity of the dest plate in nL (default: 60000)
+* **Optimize Well Volumes**\ : Save volumes in source plate for all factors. It may trigger more volume pipetting warnings. If list of factors is given (separated by blanks), save: only for these ones (default: []).
+* **Plate Dimensions**\ : Dimensions of plate separated by a 'x', e.g. nb_rows x nb_cols (default: 16x24).
 
 Output
 ------
-TBD
+* **source_plate.json**\ : describe the source plate(s)
+* **destination_plate.json**\ : describe the destination plate(s)
+* **volumes_summary.tsv**\ : contains the summary of parameters volumes
 
 Project Links
----------------------
+-------------
 * `GitHub <https://github.com/brsynth/icfree-ml/tree/main/icfree/plates_generator>`_
 
 License
@@ -81,7 +100,6 @@ License
     ]]></help>
     <creator>
         <person givenName="Yorgo" familyName="El Moubayed" email="yorgo.el-moubayed@inrae.fr" />
-        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
     </creator>
     <citations>
     </citations>

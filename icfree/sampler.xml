@@ -37,29 +37,37 @@
     </tests>
     <help><![CDATA[
 Sampler
-=====
-The sampler generates a list of values for all parameters given in the input file. The values are generated using a Latin Hypercube Sampling (LHS) method. The number of values generated is given by the user and the values are saved in csv or tsv file.
-The LHS values are generated using the lhs function from the pyDOE package and binned into bins to reduce the combinatorial space.
+========
+This module generates a list of values for all parameters given in the input file. 
+The values are generated using a Latin Hypercube Sampling (LHS) method (lhs function from the pyDOE package).
+The number of values generated is given by the user and the values are saved in csv or tsv file.
+
+It is important to note that the user can pass some values that he whishes to combine. In this case, we are dealing with discrete space, and because LHS is working on continuous space the result sampling can contain duplicates. 
+To avoid this, we have set some filters to select the appropriate sampling method:
+
+* If the result sampling contain duplicates, then we replace them by random samples.
+* Proceed with full random sampling.
+* Generate all the combinations.
 
 Input
 -----
-Required:
-* ** CFPS Parameters File **\ : The first column is the parameter (or factor) names.
+* **CFPS Parameters File**\ : The first column is the parameter (or factor) names.
 The second column is the maxValue of the parameter that will be used in the sampling.
 The third column is the concnetration of the stock.
 The fourth column is the deadVolume of the parameter. This is used to calculate the volume of the parameter that will not be pipetted by the robot (because of viscosity).
 The fifth column is the specific ratios we want to have for this parameter. If nothing defined, then take ratios given in program options. If one single number is given, then take this number as a const value.
 
 Advanced options:
-* ** Number of sampling steps **\: Number of values for all factors when performing the sampling (default: 5)
-* ** Sampling ratios **\: Ratios for all factors when performing the sampling
-* ** Number of samples **\: Number of samples to generate for all factors when performing the sampling (default: 99)
-* ** Seed **\: Seed to reproduce results (same seed number = same results)
-* ** Output format **\: Format of output file (default: csv)
+-----------------
+* **Number of sampling steps**\ : Number of values for all factors when performing the sampling (default: 5)
+* **Sampling ratios**\ : Ratios for all factors when performing the sampling
+* **Number of samples**\ : Number of samples to generate for all factors when performing the sampling (default: 99)
+* **Seed**\ : Seed to reproduce results (same seed number = same results)
+* **Output format**\ : Format of output file (default: csv)
 
 Output
 ------
-TBD
+* **sampling.csv**\: CSV file with the sampling values for each parameter
 
 Project Links
 ---------------------
@@ -72,7 +80,6 @@ License
     ]]></help>
     <creator>
         <person givenName="Yorgo" familyName="El Moubayed" email="yorgo.el-moubayed@inrae.fr" />
-        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
     </creator>
     <citations>
     </citations>
