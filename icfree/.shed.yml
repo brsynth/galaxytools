@@ -2,9 +2,10 @@ name: icfree
 owner: tduigou
 description: Suite of tools for the iCFree project
 long_description: |
-  Suite of tools for the iCFree project: Design of experiments (DoE) and machine learning packages for the iCFree project
-homepage_url: https://github.com/brsynth/icfree
+  "Suite of tools for the iCFree project: Design of experiments (DoE) and machine learning packages for the iCFree project"
+homepage_url: https://github.com/brsynth/icfree-ml
 categories:
+  - Systems Biology
   - Synthetic Biology
 type: unrestricted
 auto_tool_repositories:
@@ -14,5 +15,4 @@ suite:
   name: suite_icfree
   description: Suite of tools for the iCFree project
   long_description: |
-    Suite of tools for the iCFree project: Design of experiments (DoE) and machine learning packages for the iCFree project
-  type: repository_suite_definition
+    "Suite of tools for the iCFree project: Design of experiments (DoE) and machine learning packages for the iCFree project"

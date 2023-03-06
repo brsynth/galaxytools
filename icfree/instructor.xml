@@ -1,67 +1,182 @@
-<tool id="icfree_instructor" name="iCFree instructor module" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+<tool id="icfree_instructor" name="iCFree instructor" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
     <description>Generates a list of Echo-compatible instructions to prepare samples</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements"/>
-    <stdio>
-        <regex match="WARNING" level="warning" />
-        <regex match="ERROR" level="fatal" />
-    </stdio>
+    <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
+        #if str($conditional_source_json.type) == "collection":
+            #for $input in $conditional_source_json.collection.keys():
+                ln -sfn $conditional_source_json.collection[$input] '.' &&
+            #end for
+            #set input_source_json = '" "'.join([str($file) for $file in $conditional_source_json.collection[$input]])
+        #elif str($conditional_source_json.type) == "files":
+            #set input_source_json = '" "'.join([str($file) for $file in $conditional_source_json.files])
+        #end if
+
+        #if str($conditional_source_tsv.type) == "collection":
+            #for $input in $conditional_source_tsv.collection.keys():
+                ln -sfn $conditional_source_tsv.collection[$input] '.' &&
+            #end for
+            #set input_source_tsv = '" "'.join([str($file) for $file in $conditional_source_tsv.collection[$input]])
+        #elif str($conditional_source_tsv.type) == "files":
+            #set input_source_tsv = []
+            #for $f in $conditional_source_tsv.files
+                ln -sfn '$f' '$f.element_identifier' &&
+                #silent input_source_tsv.append(str($f.element_identifier))
+            #end for
+            #set inputs_source_tsv = '" "'.join(input_source_tsv)
+        #end if
+
+
+        #if str($conditional_destination_json.type) == "collection":
+            #for $input in $conditional_destination_json.collection.keys():
+                ln -sfn $conditional_destination_json.collection[$input] '.' &&
+            #end for
+            #set input_destination_json = '" "'.join([str($file) for $file in $conditional_destination_json.collection[$input]])
+        #elif str($conditional_destination_json.type) == "files":
+            #set input_destination_json = '" "'.join([str($file) for $file in $conditional_destination_json.files])
+        #end if
+
+        #if str($conditional_destination_tsv.type) == "collection":
+            #for $input in $conditional_destination_tsv.collection.keys():
+                ln -sfn $conditional_destination_tsv.collection[$input] '.' &&
+            #end for
+            #set input_destination_tsv = '" "'.join([str($file) for $file in $conditional_destination_tsv.collection[$input]])
+        #elif str($conditional_destination_tsv.type) == "files":
+            #set input_destination_tsv = []
+            #for $f in $conditional_destination_tsv.files
+                ln -sfn '$f' '$f.element_identifier' &&
+                #silent input_destination_tsv.append(str($f.element_identifier))
+            #end for
+            #set inputs_destination_tsv = '" "'.join(input_destination_tsv)
+        #end if
+
+
         python -m icfree.instructor
-            '$source_plates'
-            '$dest_plates'
+            --source_plates "${input_source_json}"
+            --source_wells "${inputs_source_tsv}"
+            --dest_plates "${input_destination_json}"
+            --dest_wells "${inputs_destination_tsv}"
             --robot '$adv.robot'
+            --output-folder out
     ]]></command>
     <inputs>
-        <param argument="source_plates" type="data" format="json" label="Source plates files"/>
-        <param argument="dest_plates" type="data" value="json" label="Destination plates files"/>
+        <conditional name="conditional_source_json">
+            <param name="type" type="select" label="Source plate (json)">
+                <option value="files" selected="True">File(s)</option>
+                <option value="collection">Collection</option>
+            </param>
+            <when value="files">
+                <param name="files" type="data" format="json" multiple="true" label="Source plates information (json)" />
+            </when>
+            <when value="collection">
+                <param name="collection" type="data_collection" collection_type="list" format="json" label="Source plates information (json)" />
+            </when>
+        </conditional>
+        <conditional name="conditional_source_tsv">
+            <param name="type" type="select" label="Source plate (tsv)">
+                <option value="files" selected="True">File(s)</option>
+                <option value="collection">Collection</option>
+            </param>
+            <when value="files">
+                <param name="files" type="data" format="tabular" multiple="true" label="Source plates information (tsv)" />
+            </when>
+            <when value="collection">
+                <param name="collection" type="data_collection" collection_type="list" format="tabular" label="Source plates information (tsv)" />
+            </when>
+        </conditional>
+        <conditional name="conditional_destination_json">
+            <param name="type" type="select" label="Source plate (json)">
+                <option value="files" selected="True">File(s)</option>
+                <option value="collection">Collection</option>
+            </param>
+            <when value="files">
+                <param name="files" type="data" format="json" multiple="true" label="Destination plates information (json)" />
+            </when>
+            <when value="collection">
+                <param name="collection" type="data_collection" collection_type="list" format="json" label="Destination plates information (json)" />
+            </when>
+        </conditional>
+        <conditional name="conditional_destination_tsv">
+            <param name="type" type="select" label="Source plate (tsv)">
+                <option value="files" selected="True">File(s)</option>
+                <option value="collection">Collection</option>
+            </param>
+            <when value="files">
+                <param name="files" type="data" format="tabular" multiple="true" label="Destination plates information (tsv)" />
+            </when>
+            <when value="collection">
+                <param name="collection" type="data_collection" collection_type="list" format="tabular" label="Destination plates information (tsv)" />
+            </when>
+        </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
             <param argument="robot" type="text" value="echo" label="Robot name" />
         </section>
     </inputs>
     <outputs>
-        <data name="instructions_file" format="csv" label="Instructions to perform the experiment" />
-        <data name="volumes_warnings" format="csv" label="Volumes that may cause issues with the choosen robot" />
+        <data name="tabulars" format="tabular">
+            <discover_datasets pattern="__designation__" ext="tabular" directory="out" />
+        </data>
     </outputs>
     <tests>
-        <tests>
+        <test>
             <!-- test 1: check if identical outputs are produced with default parameters  -->
-        </tests>
+            <conditional name="conditional_source_json">
+                <param name="type" value="files"/>
+                <param name="files" value="plates_generator_source_plate_1.json" />
+            </conditional>
+            <conditional name="conditional_source_tsv">
+                <param name="type" value="files"/>
+                <param name="files" value="plates_generator_source_plate_1.tsv" />
+            </conditional>
+            <conditional name="conditional_destination_json">
+                <param name="type" value="files"/>
+                <param name="files" value="plates_generator_destination_plate_1.json" />
+            </conditional>
+            <conditional name="conditional_destination_tsv">
+                <param name="type" value="files"/>
+                <param name="files" value="plates_generator_destination_plate_1.tsv" />
+            </conditional>
+            <output name="tabulars" ftype="tabular">
+                <discovered_dataset designation="volumes_warnings.tsv" ftype="tabular">
+                    <assert_contents>
+                        <has_n_lines n="12"/>
+                        <has_line_matching expression="^Parameter\tMin\tMax\tPlate$"/>
+                    </assert_contents>
+                </discovered_dataset>
+                <discovered_dataset designation="instructions.csv" ftype="tabular">
+                    <assert_contents>
+                        <has_line_matching expression="^Source Plate Name,Source Plate Type,Source Well,Destination Plate Name,Destination Well,Transfer Volume,Sample ID$"/>
+                        <has_n_lines n="1701"/>
+                    </assert_contents>
+
+                </discovered_dataset>
+            </output>
+        </test>
     </tests>
     <help><![CDATA[
 Instructor
-===========
+==========
+
 The module generates a list of instructions to perform the experiment.
 
 Input
 -----
 Required:
-* **Source plates file(s)**\ : JSON file(s) with configuration description of the source plates (source well name, source well volume...).
-* **Destination plates file(s)**\ : JSON file(s) with configuration description of the destination plates (destination well name, destination well volume...).
+* **Source plates file**: description of the source plates (source well name, source well volume...) (JSON format)
+* **Destination plates file**: description of the destination plates (destination well name, destination well volume...) (JSON format)
 
 Advanced options:
 -----------------
-* **Robot name**\ : Name of the robot to generate instructions for (By default, it's Echo)
+* **Robot name**: name of the robot to generate instructions for (default: "echo")
 
 Output
 ------
-* **instructions.csv**\ : contains the instructions to perform the experiment
-* **volumes_warning.csv**\ : contains the volumes that may cause issues with the chosen robot
-
-Project Links
--------------
-* `GitHub <https://github.com/brsynth/icfree-ml/tree/main/icfree/instructor>`_
-
-License
--------
-* `MIT <https://github.com/brsynth/icfree-ml/blob/main/LICENSE>`_
-
+* **instructions**: contains the instructions to perform the experiment
+* **volumes_warning**: contains the volumes that may cause issues with the chosen robot
     ]]></help>
-    <creator>
-        <person givenName="Yorgo" familyName="El Moubayed" email="yorgo.el-moubayed@inrae.fr" />
-    </creator>
-    <citations>
-    </citations>
+    <expand macro="creator"/>
+    <expand macro="citation"/>
 </tool>

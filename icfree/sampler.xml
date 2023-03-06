@@ -1,48 +1,66 @@
-<tool id="icfree_sampler" name="iCFree sampler module" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
-    <description>Generate data points using latin hypercube sampling (lhs)</description>
+<tool id="icfree_sampler" name="iCFree sampler" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
+    <description>Generate data points using latin hypercube sampling (LHS)</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements"/>
-    <stdio>
-        <regex match="WARNING" level="warning" />
-        <regex match="ERROR" level="fatal" />
-    </stdio>
+    <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
+        #set ratios = []
+        #for $x in $adv.rep
+            #silent ratios.append($x.ratio)
+        #end for
+        #set sratios = ' '.join($ratios)
+        echo "${sratios}" &&
         python -m icfree.sampler
-            '$cfps_parameters_file'
-            --nb-sampling-steps '$adv.nb-sampling-steps'
-            --sampling-ratios '$adv.sampling_ratios'
-            --nb-samples '$adv.nb-samples'
-            --seed '$adv.seed'
-            --output-format '$adv.output-format'
+            '$cfps_file'
+            #if len(ratios) >0
+                --sampling-ratios "${sratios}"
+            #end if
+            --nb-sampling-steps '$adv.nb_sampling_steps'
+            --nb-samples '$adv.nb_samples'
+            --seed '0'
+            --output-format 'tsv'
+            --output-folder . && ls
     ]]></command>
     <inputs>
-        <param name="cfps_parameters_file" type="data" format="tabular" label="Cell-Free System Pameters" />
-    </inputs>
+        <param name="cfps_file" type="data" format="tabular" label="CFPS parameters and features" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="nb-sampling-steps" type="integer" value="5" label="Number of values for all factors when performing the sampling" />
-            <param argument="sampling-ratios" type="integer" label="Ratios for all factors" />
-            <param argument="nb-samples" type="integer" value="99" label="Number of samples to generate" />
-            <param argument="seed" type="integer" label="Seed to reproduce results" />
-            <param argument="output-format" type="data" format="csv" label="Format of output file" />
+            <param argument="nb_sampling_steps" type="integer" value="5" min="1" max="10" label="Number of values for all factors when performing the sampling" />
+            <param argument="nb_samples" type="integer" value="99" min="1" max="198" label="Number of samples to generate" />
+            <repeat name="rep" title="Sampling ratios" min="0">
+                <param name="ratio" type="float" value="0.1" min="0.0" max="1.0" label="Ratio associated to each factor" />
+            </repeat>
         </section>
+    </inputs>
     <outputs>
-        <data name="sampling_file" format="csv" label="Lhs sampling values" />
+        <data name="sampling" format="tabular">
+            <discover_datasets pattern="__designation__" ext="tabular"/>
+        </data>
     </outputs>
     <tests>
-        <tests>
-            <!-- test 1: check if identical outputs are produced with default parameters  -->
-        </tests>
+        <!-- test 1: check if identical outputs are produced with default parameters  -->
+        <test>
+            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
+            <output name="sampling" ftype="tabular">
+                <discovered_dataset designation="sampling.tsv" ftype="tabular">
+                    <assert_contents>
+                        <has_n_lines n="100"/>
+                        <has_line_matching expression="^Mg-glutamate\tk-glutamate\tCoA\t3-PGA\tNTP\tNAD\tFolinic acid\tSpermidine\ttRNA\tAmino acids\tCAMP\tExtract\tHEPES\tPEG\tPromoter\tRBS$"/>
+                    </assert_contents>
+                </discovered_dataset>
+            </output>
+        </test>
     </tests>
     <help><![CDATA[
 Sampler
-========
-This module generates a list of values for all parameters given in the input file. 
+=======
+
+This module generates a list of values for all parameters given in the input file.
 The values are generated using a Latin Hypercube Sampling (LHS) method (lhs function from the pyDOE package).
 The number of values generated is given by the user and the values are saved in csv or tsv file.
 
-It is important to note that the user can pass some values that he whishes to combine. In this case, we are dealing with discrete space, and because LHS is working on continuous space the result sampling can contain duplicates. 
+It is important to note that the user can pass some values that he whishes to combine. In this case, we are dealing with discrete space, and because LHS is working on continuous space the result sampling can contain duplicates.
 To avoid this, we have set some filters to select the appropriate sampling method:
 
 * If the result sampling contain duplicates, then we replace them by random samples.
@@ -51,36 +69,18 @@ To avoid this, we have set some filters to select the appropriate sampling metho
 
 Input
 -----
-* **CFPS Parameters File**\ : The first column is the parameter (or factor) names.
-The second column is the maxValue of the parameter that will be used in the sampling.
-The third column is the concnetration of the stock.
-The fourth column is the deadVolume of the parameter. This is used to calculate the volume of the parameter that will not be pipetted by the robot (because of viscosity).
-The fifth column is the specific ratios we want to have for this parameter. If nothing defined, then take ratios given in program options. If one single number is given, then take this number as a const value.
+* **CFPS Parameters File**: The first column is the parameter (or factor) names. The second column is the maxValue of the parameter that will be used in the sampling. The third column is the concnetration of the stock. The fourth column is the deadVolume of the parameter. This is used to calculate the volume of the parameter that will not be pipetted by the robot (because of viscosity). The fifth column is the specific ratios we want to have for this parameter. If nothing defined, then take ratios given in program options. If one single number is given, then take this number as a const value.
 
 Advanced options:
 -----------------
-* **Number of sampling steps**\ : Number of values for all factors when performing the sampling (default: 5)
-* **Sampling ratios**\ : Ratios for all factors when performing the sampling
-* **Number of samples**\ : Number of samples to generate for all factors when performing the sampling (default: 99)
-* **Seed**\ : Seed to reproduce results (same seed number = same results)
-* **Output format**\ : Format of output file (default: csv)
+* **Number of sampling steps**: Number of values for all factors when performing the sampling (default: 5)
+* **Sampling ratios**: Ratios for all factors when performing the sampling
+* **Number of samples**: Number of samples to generate for all factors when performing the sampling (default: 99)
 
 Output
 ------
-* **sampling.csv**\: CSV file with the sampling values for each parameter
-
-Project Links
----------------------
-* `GitHub <https://github.com/brsynth/icfree-ml/tree/main/icfree/sampler>`_
-
-License
--------
-* `MIT <https://github.com/brsynth/icfree-ml/blob/main/LICENSE>`_
-
+* a TSV file with the sampling values for each parameter
     ]]></help>
-    <creator>
-        <person givenName="Yorgo" familyName="El Moubayed" email="yorgo.el-moubayed@inrae.fr" />
-    </creator>
-    <citations>
-    </citations>
+    <expand macro="creator"/>
+    <expand macro="citation"/>
 </tool>
