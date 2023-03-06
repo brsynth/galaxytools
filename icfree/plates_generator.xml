@@ -6,6 +6,11 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
+        #set factors = []
+        #for $x in $adv.rep
+            #silent factors.append($x.optimize_well_volumes)
+        #end for
+        #set sfactors = ' '.join($factors)
         python -m icfree.plates_generator
             '$cfps_file'
             '$volume_file'
@@ -18,8 +23,8 @@
             --keep-nil-vol '$adv.keep_nil_vol'
             --source_plate_well_capacity '$adv.source_plate_well_capacity'
             --dest_plate_well_capacity '$adv.dest_plate_well_capacity'
-            #if str('$adv.optimize-well-volumes')
-                --optimize-well-volumes '$adv.optimize_well_volumes'
+            #if len(factors) > 0
+                --optimize-well-volumes "${sfactors}"
             #end if
             --plate-dimensions '$adv.plate_dimensions'
             --output-folder '.'
@@ -31,20 +36,34 @@
 
         <section name="adv" title="Advanced Options" expanded="false">
 
-            <param argument="sample_volume" type="integer" value="1000" label="Final sample volume in each well in nL" />
-            <param argument="source_plate_dead_volume" type="integer" value="15000" label="Dead volume to add in the source plate in nL"/>
-            <param argument="dest_plate_dead_volume" type="integer" value="15000" label="Dead volume to add in the destination plate in nL"/>
+            <param name="sample_volume" type="integer" value="1000" label="Final sample volume in each well in nL" />
+            <param name="source_plate_dead_volume" type="integer" value="15000" label="Dead volume to add in the source plate in nL"/>
+            <param name="dest_plate_dead_volume" type="integer" value="15000" label="Dead volume to add in the destination plate in nL"/>
 
-            <param argument="dest_starting_well" type="text" value="A1" label="Starter well of destination plate to begin filling the 384 well-plate"/>
-            <param argument="src_starting_well" type="text" value="A1" label="Starter well of source plate to begin filling the 384 well-plate" />
+            <param name="dest_starting_well" type="text" value="A1" label="Starter well of destination plate to begin filling the 384 well-plate">
+                <validator type="empty_field" message="Not empty"/>
+                <validator type="regex" message="Some letters followed by a number">^(?:\w+\d+)$</validator>
+            </param>
+            <param name="src_starting_well" type="text" value="A1" label="Starter well of source plate to begin filling the 384 well-plate">
+                <validator type="empty_field" message="Not empty"/>
+                <validator type="regex" message="Some letters followed by a number">^(?:\w+\d+)$</validator>
+            </param>
 
-            <param argument="nplicate" type="integer" value="3" min="1" max="12" label="Numbers of copies of volume sets"/>
-            <param argument="keep_nil_vol" type="boolean" truevalue="True" falsevalue="False" checked="true" display="checkboxes" label="Keep nil volumes in instructions or not"/>
+            <param name="nplicate" type="integer" value="3" min="1" max="12" label="Numbers of copies of volume sets"/>
+            <param name="keep_nil_vol" type="boolean" truevalue="True" falsevalue="False" checked="true" display="checkboxes" label="Keep nil volumes in instructions or not"/>
 
-            <param argument="source_plate_well_capacity" type="integer" value="60000" label="Maximum volume capacity of the source plate in nL" />
-            <param argument="dest_plate_well_capacity" type="integer" value="60000" label="Maximum volume capacity of the dest plate in nL" />
-            <param argument="optimize_well_volumes" type="text" value="" label="Save volumes in source plate for all factors"/>
-            <param argument="plate_dimensions" type="text" value="16x24" label="Dimensions of plate separated by a 'x'"/>
+            <param name="source_plate_well_capacity" type="integer" value="60000" label="Maximum volume capacity of the source plate in nL" />
+            <param name="dest_plate_well_capacity" type="integer" value="60000" label="Maximum volume capacity of the dest plate in nL" />
+            <param name="plate_dimensions" type="text" value="16x24" label="Dimensions of plate separated by a 'x'">
+                <validator type="empty_field" message="Not empty"/>
+                <validator type="regex" message="An 'x' separator is expected">^(?:\d+x\d+)$</validator>
+            </param>
+            <repeat name="rep" title="Optimize well volumes" min="0">
+                <param name="optimize_well_volumes" type="text" value="" label="Save volumes in source plate for all factors">
+                    <validator type="empty_field" message="Not empty"/>
+                </param>
+            </repeat>
+
         </section>
     </inputs>
     <outputs>

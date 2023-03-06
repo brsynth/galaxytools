@@ -112,7 +112,9 @@
             </when>
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="robot" type="text" value="echo" label="Robot name" />
+            <param name="robot" type="text" value="echo" label="Robot name">
+                <validator type="empty_field" message="Not empty"/>
+            </param>
         </section>
     </inputs>
     <outputs>

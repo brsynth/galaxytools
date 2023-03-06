@@ -11,10 +11,9 @@
             #silent ratios.append($x.ratio)
         #end for
         #set sratios = ' '.join($ratios)
-        echo "${sratios}" &&
         python -m icfree.sampler
             '$cfps_file'
-            #if len(ratios) >0
+            #if len(ratios) > 0
                 --sampling-ratios "${sratios}"
             #end if
             --nb-sampling-steps '$adv.nb_sampling_steps'
@@ -26,9 +25,9 @@
     <inputs>
         <param name="cfps_file" type="data" format="tabular" label="CFPS parameters and features" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="nb_sampling_steps" type="integer" value="5" min="1" max="10" label="Number of values for all factors when performing the sampling" />
-            <param argument="nb_samples" type="integer" value="99" min="1" max="198" label="Number of samples to generate" />
-            <repeat name="rep" title="Sampling ratios" min="0">
+            <param name="nb_sampling_steps" type="integer" value="5" min="1" max="10" label="Number of values for all factors when performing the sampling" />
+            <param name="nb_samples" type="integer" value="99" min="1" max="198" label="Number of samples to generate" />
+            <repeat name="rep" title="Sampling ratio" min="0">
                 <param name="ratio" type="float" value="0.1" min="0.0" max="1.0" label="Ratio associated to each factor" />
             </repeat>
         </section>

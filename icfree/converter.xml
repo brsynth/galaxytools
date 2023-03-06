@@ -16,7 +16,7 @@
         <param name="cfps_file" type="data" format="tabular" label="CFPS parameters and features" />
         <param name="concentrations_file" type="data" format="tabular" label="Concentrations to convert" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="sample_volume" type="integer" value="1000" min="1" max="100000" label="Final sample volume in each well in nL" />
+            <param name="sample_volume" type="integer" value="1000" min="1" max="100000" label="Final sample volume in each well in nL" />
         </section>
     </inputs>
     <outputs>
