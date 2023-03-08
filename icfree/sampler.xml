@@ -8,19 +8,20 @@
     <command detect_errors="exit_code"><![CDATA[
         #set ratios = []
         #for $x in $adv.rep
-            #silent ratios.append($x.ratio)
+            #silent $ratios.append(str($x.ratio))
         #end for
-        #set sratios = ' '.join($ratios)
+        #set sratios = ' '.join(['"' + $x + '"' for $x in $ratios])
+        echo "${sratios}" &&
         python -m icfree.sampler
             '$cfps_file'
             #if len(ratios) > 0
-                --sampling-ratios "${sratios}"
+                --sampling-ratios ${sratios}
             #end if
             --nb-sampling-steps '$adv.nb_sampling_steps'
             --nb-samples '$adv.nb_samples'
             --seed '0'
             --output-format 'tsv'
-            --output-folder . && ls
+            --output-folder .
     ]]></command>
     <inputs>
         <param name="cfps_file" type="data" format="tabular" label="CFPS parameters and features" />
@@ -45,6 +46,30 @@
                 <discovered_dataset designation="sampling.tsv" ftype="tabular">
                     <assert_contents>
                         <has_n_lines n="100"/>
+                        <has_line_matching expression="^Mg-glutamate\tk-glutamate\tCoA\t3-PGA\tNTP\tNAD\tFolinic acid\tSpermidine\ttRNA\tAmino acids\tCAMP\tExtract\tHEPES\tPEG\tPromoter\tRBS$"/>
+                    </assert_contents>
+                </discovered_dataset>
+            </output>
+        </test>
+        <!-- test 2: advanced arguments -->
+        <test>
+            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
+            <param name="nb_sampling_steps" value="3" />
+            <param name="nb_samples" value="100" />
+            <repeat name="rep">
+                <param name="ratio" value="0.4" />
+            </repeat>
+            <repeat name="rep">
+                <param name="ratio" value="0.2" />
+            </repeat>
+            <repeat name="rep">
+                <param name="ratio" value="0.3" />
+            </repeat>
+            <param name="nb_samples" value="100" />
+            <output name="sampling" ftype="tabular">
+                <discovered_dataset designation="sampling.tsv" ftype="tabular">
+                    <assert_contents>
+                        <has_n_lines n="101"/>
                         <has_line_matching expression="^Mg-glutamate\tk-glutamate\tCoA\t3-PGA\tNTP\tNAD\tFolinic acid\tSpermidine\ttRNA\tAmino acids\tCAMP\tExtract\tHEPES\tPEG\tPromoter\tRBS$"/>
                     </assert_contents>
                 </discovered_dataset>
