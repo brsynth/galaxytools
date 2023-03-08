@@ -88,7 +88,7 @@
         <test>
             <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
             <param name="volume_file" value="converter_sampling_concentrations.tsv" />
-            <output name="volumes_summary" file="plates_generator_volumes_summary.tsv" ftype="tabular" compare="diff" />
+            <output name="volumes_summary" file="plates_generator_volumes_summary.test-1.tsv" ftype="tabular" compare="diff" />
             <output_collection name="source_plate_json" type="list" count="1">
                 <element name="source_plate_1" ftype="json">
                     <assert_contents>
@@ -97,7 +97,7 @@
                 </element>
             </output_collection>
             <output_collection name="source_plate_tsv" type="list" count="1">
-                <element name="source_plate_1" file="plates_generator_source_plate_1.tsv" ftype="tabular" compare="diff" />
+                <element name="source_plate_1" file="plates_generator_source_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
             </output_collection>
             <output_collection name="destination_plate_json" type="list" count="1">
                 <element name="destination_plate_1" ftype="json">
@@ -107,7 +107,7 @@
                 </element>
             </output_collection>
             <output_collection name="destination_plate_tsv" type="list" count="1">
-                <element name="destination_plate_1" file="plates_generator_destination_plate_1.tsv" ftype="tabular" compare="diff" />
+                <element name="destination_plate_1" file="plates_generator_destination_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
             </output_collection>
         </test>
         <!-- test 2: advance arguments -->
