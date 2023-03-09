@@ -21,14 +21,13 @@
             #end for
             #set input_source_tsv = '" "'.join([str($file) for $file in $conditional_source_tsv.collection[$input]])
         #elif str($conditional_source_tsv.type) == "files":
-            #set input_source_tsv = []
+            #set inputs_source_tsv = []
             #for $f in $conditional_source_tsv.files
                 ln -sfn '$f' '$f.element_identifier' &&
-                #silent input_source_tsv.append(str($f.element_identifier))
+                #silent inputs_source_tsv.append(str($f.element_identifier))
             #end for
-            #set inputs_source_tsv = '" "'.join(input_source_tsv)
+            #set input_source_tsv = '" "'.join(inputs_source_tsv)
         #end if
-
 
         #if str($conditional_destination_json.type) == "collection":
             #for $input in $conditional_destination_json.collection.keys():
@@ -45,22 +44,23 @@
             #end for
             #set input_destination_tsv = '" "'.join([str($file) for $file in $conditional_destination_tsv.collection[$input]])
         #elif str($conditional_destination_tsv.type) == "files":
-            #set input_destination_tsv = []
+            #set inputs_destination_tsv = []
             #for $f in $conditional_destination_tsv.files
                 ln -sfn '$f' '$f.element_identifier' &&
-                #silent input_destination_tsv.append(str($f.element_identifier))
+                #silent inputs_destination_tsv.append(str($f.element_identifier))
             #end for
-            #set inputs_destination_tsv = '" "'.join(input_destination_tsv)
+            #set input_destination_tsv = '" "'.join(inputs_destination_tsv)
         #end if
-
 
         python -m icfree.instructor
             --source_plates "${input_source_json}"
-            --source_wells "${inputs_source_tsv}"
+            --source_wells "${input_source_tsv}"
             --dest_plates "${input_destination_json}"
-            --dest_wells "${inputs_destination_tsv}"
+            --dest_wells "${input_destination_tsv}"
             --robot '$adv.robot'
-            --output-folder out
+            --output-folder '.' &&
+            mv volumes_warnings.tsv '$output_warning' &&
+            mv instructions.csv '$output_instruction'
     ]]></command>
     <inputs>
         <conditional name="conditional_source_json">
@@ -118,44 +118,35 @@
         </section>
     </inputs>
     <outputs>
-        <data name="tabulars" format="tabular">
-            <discover_datasets pattern="__designation__" ext="tabular" directory="out" />
-        </data>
+        <data name="output_warning" format="tabular" label="${tool.name} - Warning" />
+        <data name="output_instruction" format="csv" label="${tool.name} - Instruction" />
     </outputs>
     <tests>
         <test>
             <!-- test 1: check if identical outputs are produced with default parameters  -->
             <conditional name="conditional_source_json">
                 <param name="type" value="files"/>
-                <param name="files" value="plates_generator_source_plate_1.json" />
+                <param name="files" value="plates_generator_source_plate_1.test-1.json" />
             </conditional>
             <conditional name="conditional_source_tsv">
                 <param name="type" value="files"/>
-                <param name="files" value="plates_generator_source_plate_1.tsv" />
+                <param name="files" value="plates_generator_source_plate_1.test-1.tsv" />
             </conditional>
             <conditional name="conditional_destination_json">
                 <param name="type" value="files"/>
-                <param name="files" value="plates_generator_destination_plate_1.json" />
+                <param name="files" value="plates_generator_destination_plate_1.test-1.json" />
             </conditional>
             <conditional name="conditional_destination_tsv">
                 <param name="type" value="files"/>
-                <param name="files" value="plates_generator_destination_plate_1.tsv" />
+                <param name="files" value="plates_generator_destination_plate_1.test-1.tsv" />
             </conditional>
-            <output name="tabulars" ftype="tabular">
-                <discovered_dataset designation="volumes_warnings.tsv" ftype="tabular">
-                    <assert_contents>
-                        <has_n_lines n="12"/>
-                        <has_line_matching expression="^Parameter\tMin\tMax\tPlate$"/>
-                    </assert_contents>
-                </discovered_dataset>
-                <discovered_dataset designation="instructions.csv" ftype="tabular">
-                    <assert_contents>
-                        <has_line_matching expression="^Source Plate Name,Source Plate Type,Source Well,Destination Plate Name,Destination Well,Transfer Volume,Sample ID$"/>
-                        <has_n_lines n="1701"/>
-                    </assert_contents>
-
-                </discovered_dataset>
+            <output name="output_warning" ftype="tabular">
+                <assert_contents>
+                    <has_n_lines n="12"/>
+                    <has_line_matching expression="^Parameter\tMin\tMax\tPlate$"/>
+                </assert_contents>
             </output>
+            <output name="output_instruction" file="instructor_instructions.csv" ftype="csv" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[
