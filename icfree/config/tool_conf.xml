@@ -1,0 +1,6 @@
+  <section id="sbc-pa" name="SynBioCAD Pathway Analysis">
+    <tool file="synbiocad-galaxy-wrappers/icfree/converter.xml" />
+    <tool file="synbiocad-galaxy-wrappers/icfree/instructor.xml" />
+    <tool file="synbiocad-galaxy-wrappers/icfree/plates_generator.xml" />
+    <tool file="synbiocad-galaxy-wrappers/icfree/sampler.xml" />
+  </section>
