@@ -21,7 +21,8 @@
             --nb-samples '$adv.nb_samples'
             --seed '0'
             --output-format 'tsv'
-            --output-folder .
+            --output-folder . &&
+            mv sampling.tsv '$output_sampling'
     ]]></command>
     <inputs>
         <param name="cfps_file" type="data" format="tabular" label="CFPS parameters and features" />
@@ -34,22 +35,13 @@
         </section>
     </inputs>
     <outputs>
-        <data name="sampling" format="tabular">
-            <discover_datasets pattern="__designation__" ext="tabular"/>
-        </data>
+        <data name="output_sampling" format="tabular" label="${tool.name}" />
     </outputs>
     <tests>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
         <test>
             <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
-            <output name="sampling" ftype="tabular">
-                <discovered_dataset designation="sampling.tsv" ftype="tabular">
-                    <assert_contents>
-                        <has_n_lines n="100"/>
-                        <has_line_matching expression="^Mg-glutamate\tk-glutamate\tCoA\t3-PGA\tNTP\tNAD\tFolinic acid\tSpermidine\ttRNA\tAmino acids\tCAMP\tExtract\tHEPES\tPEG\tPromoter\tRBS$"/>
-                    </assert_contents>
-                </discovered_dataset>
-            </output>
+            <output name="sampling" file="sampler_sampling.test-1.tsv" ftype="tabular" compare="diff" />
         </test>
         <!-- test 2: advanced arguments -->
         <test>
@@ -66,14 +58,7 @@
                 <param name="ratio" value="0.3" />
             </repeat>
             <param name="nb_samples" value="100" />
-            <output name="sampling" ftype="tabular">
-                <discovered_dataset designation="sampling.tsv" ftype="tabular">
-                    <assert_contents>
-                        <has_n_lines n="101"/>
-                        <has_line_matching expression="^Mg-glutamate\tk-glutamate\tCoA\t3-PGA\tNTP\tNAD\tFolinic acid\tSpermidine\ttRNA\tAmino acids\tCAMP\tExtract\tHEPES\tPEG\tPromoter\tRBS$"/>
-                    </assert_contents>
-                </discovered_dataset>
-            </output>
+            <output name="sampling" file="sampler_sampling.test-2.tsv" ftype="tabular" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[
