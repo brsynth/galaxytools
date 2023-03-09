@@ -28,7 +28,8 @@
             #end if
             --plate-dimensions '$adv.plate_dimensions'
             --output-folder '.'
-            --output-format 'tsv'
+            --output-format 'tsv' &&
+            mv volumes_summary.tsv '$volumes_summary'
     ]]></command>
     <inputs>
         <param name="cfps_file" type="data" format="tabular"  label="CFPS parameters and features" />
@@ -67,9 +68,7 @@
         </section>
     </inputs>
     <outputs>
-        <data name="volumes_summary" format="tabular" label="${tool.name} - Volumes">
-            <discover_datasets pattern="volumes_summary" ext="tabular" assign_primary_output="true" />
-        </data>
+        <data name="volumes_summary" format="tabular" label="${tool.name} - Volumes" />
         <collection name="source_plate_json" type="list" label="${tool.name} - Source Plate (json)">
             <discover_datasets pattern="(?P&lt;name&gt;source_plate_\d+)\.json$" format="json" />
         </collection>
