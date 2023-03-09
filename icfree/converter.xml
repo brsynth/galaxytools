@@ -10,7 +10,8 @@
             '$cfps_file'
             '$concentrations_file'
             --sample_volume '$adv.sample_volume'
-            --output-folder .
+            --output-folder . &&
+            mv sampling_volumes.tsv '$output_sampling'
     ]]></command>
     <inputs>
         <param name="cfps_file" type="data" format="tabular" label="CFPS parameters and features" />
@@ -20,23 +21,21 @@
         </section>
     </inputs>
     <outputs>
-        <data name="sampling_volumes" format="tabular" label="${tool.name}">
-            <discover_datasets pattern="__designation__" ext="tabular" assign_primary_output="true" />
-        </data>
+        <data name="output_sampling" format="tabular" label="${tool.name}" />
     </outputs>
     <tests>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
         <test>
             <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
             <param name="concentrations_file" value="converter_sampling_concentrations.tsv" />
-            <output name="sampling_volumes" file="converter_sampling_volumes.test-1.tsv" ftype="tabular" compare="diff" />
+            <output name="output_sampling" file="converter_sampling_volumes.test-1.tsv" ftype="tabular" compare="diff" />
         </test>
         <!-- test 2: advanced options -->
         <test>
             <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
             <param name="concentrations_file" value="converter_sampling_concentrations.tsv" />
             <param name="sample_volume" value="100" />
-            <output name="sampling_volumes" file="converter_sampling_volumes.test-2.tsv" ftype="tabular" compare="diff" />
+            <output name="output_sampling" file="converter_sampling_volumes.test-2.tsv" ftype="tabular" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[
