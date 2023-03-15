@@ -41,8 +41,11 @@
             --dest_plates '$s_dps'
             --dest_wells '$s_dws'
             --output-folder '.' &&
-            mv volume_warning.tsv '$output_warning' &&
-            mv instructions.csv '$output_instruction'
+        mv instructions.csv '$output_instruction' &&
+        #if os.path.isfile('volume_warning.tsv')
+            touch volume_warning.tsv &&
+        #end if
+        mv volume_warning.tsv '$output_warning'
     ]]></command>
     <inputs>
         <param name="source_plates" type="data_collection" collection_type="list" format="json" label="Source plates information (json)" />
