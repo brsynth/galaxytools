@@ -7,27 +7,27 @@
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
         #set sps = []
-        #for $x in $source_plates.keys():
-            ln -sfn $source_plates[$x] '.' &&
-            #silent sps.append(str($x))
+        #for $x in $source_plates:
+            ln -sfn '$x' '$x.element_identifier' &&
+            #silent sps.append(str($x.element_identifier))
         #end for
         #set s_sps = '" "'.join(sps)
         #set sws = []
-        #for $x in $source_wells.keys():
-            ln -sfn $source_wells[$x] '.' &&
-            #silent sws.append(str($x))
+        #for $x in $source_wells:
+            ln -sfn '$x' '$x.element_identifier' &&
+            #silent sws.append(str($x.element_identifier))
         #end for
         #set s_sws = '" "'.join(sws)
         #set dps = []
-        #for $x in $dest_plates.keys():
-            ln -sfn $dest_plates[$x] '.' &&
-            #silent dps.append(str($x))
+        #for $x in $dest_plates:
+            ln -sfn '$x' '$x.element_identifier' &&
+            #silent dps.append(str($x.element_identifier))
         #end for
         #set s_dps = '" "'.join(dps)
         #set dws = []
-        #for $x in $dest_wells.keys():
-            ln -sfn $dest_wells[$x] '.' &&
-            #silent dws.append(str($x))
+        #for $x in $dest_wells:
+            ln -sfn '$x' '$x.element_identifier' &&
+            #silent dws.append(str($x.element_identifier))
         #end for
         #set s_dws = '" "'.join(dws)
         python -m icfree.instructor
