@@ -42,7 +42,7 @@
             --dest_wells '$s_dws'
             --output-folder '.' &&
         mv instructions.csv '$output_instruction' &&
-        #if os.path.isfile('volume_warning.tsv')
+        #if not s.path.isfile('volume_warning.tsv')
             touch volume_warning.tsv &&
         #end if
         mv volume_warning.tsv '$output_warning'
