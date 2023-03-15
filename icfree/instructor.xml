@@ -6,140 +6,72 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
-        #if str($conditional_source_json.type) == "collection":
-            #for $input in $conditional_source_json.collection.keys():
-                ln -sfn $conditional_source_json.collection[$input] '.' &&
-            #end for
-            #set input_source_json = '" "'.join([str($file) for $file in $conditional_source_json.collection[$input]])
-        #elif str($conditional_source_json.type) == "files":
-            #set input_source_json = '" "'.join([str($file) for $file in $conditional_source_json.files])
-        #end if
-
-        #if str($conditional_source_tsv.type) == "collection":
-            #for $input in $conditional_source_tsv.collection.keys():
-                ln -sfn $conditional_source_tsv.collection[$input] '.' &&
-            #end for
-            #set input_source_tsv = '" "'.join([str($file) for $file in $conditional_source_tsv.collection[$input]])
-        #elif str($conditional_source_tsv.type) == "files":
-            #set inputs_source_tsv = []
-            #for $f in $conditional_source_tsv.files
-                ln -sfn '$f' '$f.element_identifier' &&
-                #silent inputs_source_tsv.append(str($f.element_identifier))
-            #end for
-            #set input_source_tsv = '" "'.join(inputs_source_tsv)
-        #end if
-
-        #if str($conditional_destination_json.type) == "collection":
-            #for $input in $conditional_destination_json.collection.keys():
-                ln -sfn $conditional_destination_json.collection[$input] '.' &&
-            #end for
-            #set input_destination_json = '" "'.join([str($file) for $file in $conditional_destination_json.collection[$input]])
-        #elif str($conditional_destination_json.type) == "files":
-            #set input_destination_json = '" "'.join([str($file) for $file in $conditional_destination_json.files])
-        #end if
-
-        #if str($conditional_destination_tsv.type) == "collection":
-            #for $input in $conditional_destination_tsv.collection.keys():
-                ln -sfn $conditional_destination_tsv.collection[$input] '.' &&
-            #end for
-            #set input_destination_tsv = '" "'.join([str($file) for $file in $conditional_destination_tsv.collection[$input]])
-        #elif str($conditional_destination_tsv.type) == "files":
-            #set inputs_destination_tsv = []
-            #for $f in $conditional_destination_tsv.files
-                ln -sfn '$f' '$f.element_identifier' &&
-                #silent inputs_destination_tsv.append(str($f.element_identifier))
-            #end for
-            #set input_destination_tsv = '" "'.join(inputs_destination_tsv)
-        #end if
-
+        #set sps = []
+        #for $x in $source_plates.keys():
+            ln -sfn $source_plates[$x] '.' &&
+            #silent sps.append(str($x))
+        #end for
+        #set s_sps = '" "'.join(sps)
+        #set sws = []
+        #for $x in $source_wells.keys():
+            ln -sfn $source_wells[$x] '.' &&
+            #silent sws.append(str($x))
+        #end for
+        #set s_sws = '" "'.join(sws)
+        #set dps = []
+        #for $x in $dest_plates.keys():
+            ln -sfn $dest_plates[$x] '.' &&
+            #silent dps.append(str($x))
+        #end for
+        #set s_dps = '" "'.join(dps)
+        #set dws = []
+        #for $x in $dest_wells.keys():
+            ln -sfn $dest_wells[$x] '.' &&
+            #silent dws.append(str($x))
+        #end for
+        #set s_dws = '" "'.join(dws)
         python -m icfree.instructor
-            --source_plates "${input_source_json}"
-            --source_wells "${input_source_tsv}"
-            --dest_plates "${input_destination_json}"
-            --dest_wells "${input_destination_tsv}"
-            --robot '$adv.robot'
+            --source_plates '$s_sps'
+            --source_wells '$s_sws'
+            --dest_plates '$s_dps'
+            --dest_wells '$s_dws'
             --output-folder '.' &&
-            mv volumes_warnings.tsv '$output_warning' &&
+            mv volume_warning.tsv '$output_warning' &&
             mv instructions.csv '$output_instruction'
     ]]></command>
     <inputs>
-        <conditional name="conditional_source_json">
-            <param name="type" type="select" label="Source plate (json)">
-                <option value="files" selected="True">File(s)</option>
-                <option value="collection">Collection</option>
-            </param>
-            <when value="files">
-                <param name="files" type="data" format="json" multiple="true" label="Source plates information (json)" />
-            </when>
-            <when value="collection">
-                <param name="collection" type="data_collection" collection_type="list" format="json" label="Source plates information (json)" />
-            </when>
-        </conditional>
-        <conditional name="conditional_source_tsv">
-            <param name="type" type="select" label="Source plate (tsv)">
-                <option value="files" selected="True">File(s)</option>
-                <option value="collection">Collection</option>
-            </param>
-            <when value="files">
-                <param name="files" type="data" format="tabular" multiple="true" label="Source plates information (tsv)" />
-            </when>
-            <when value="collection">
-                <param name="collection" type="data_collection" collection_type="list" format="tabular" label="Source plates information (tsv)" />
-            </when>
-        </conditional>
-        <conditional name="conditional_destination_json">
-            <param name="type" type="select" label="Source plate (json)">
-                <option value="files" selected="True">File(s)</option>
-                <option value="collection">Collection</option>
-            </param>
-            <when value="files">
-                <param name="files" type="data" format="json" multiple="true" label="Destination plates information (json)" />
-            </when>
-            <when value="collection">
-                <param name="collection" type="data_collection" collection_type="list" format="json" label="Destination plates information (json)" />
-            </when>
-        </conditional>
-        <conditional name="conditional_destination_tsv">
-            <param name="type" type="select" label="Source plate (tsv)">
-                <option value="files" selected="True">File(s)</option>
-                <option value="collection">Collection</option>
-            </param>
-            <when value="files">
-                <param name="files" type="data" format="tabular" multiple="true" label="Destination plates information (tsv)" />
-            </when>
-            <when value="collection">
-                <param name="collection" type="data_collection" collection_type="list" format="tabular" label="Destination plates information (tsv)" />
-            </when>
-        </conditional>
-        <section name="adv" title="Advanced Options" expanded="false">
-            <param name="robot" type="text" value="echo" label="Robot name">
-                <validator type="empty_field" message="Not empty"/>
-            </param>
-        </section>
+        <param name="source_plates" type="data_collection" collection_type="list" format="json" label="Source plates information (json)" />
+        <param name="source_wells" type="data_collection" collection_type="list" format="tabular" label="Source wells information (tsv)" />
+        <param name="dest_plates" type="data_collection" collection_type="list" format="json" label="Destination plates information (json)" />
+        <param name="dest_wells" type="data_collection" collection_type="list" format="tabular" label="Destination wells information (tsv)" />
     </inputs>
     <outputs>
-        <data name="output_warning" format="tabular" label="${tool.name} - Warning" />
+        <data name="output_warning" format="tsv" label="${tool.name} - Warning" />
         <data name="output_instruction" format="csv" label="${tool.name} - Instruction" />
     </outputs>
     <tests>
         <test>
             <!-- test 1: check if identical outputs are produced with default parameters  -->
-            <conditional name="conditional_source_json">
-                <param name="type" value="files"/>
-                <param name="files" value="plates_generator_source_plate_1.test-1.json" />
-            </conditional>
-            <conditional name="conditional_source_tsv">
-                <param name="type" value="files"/>
-                <param name="files" value="plates_generator_source_plate_1.test-1.tsv" />
-            </conditional>
-            <conditional name="conditional_destination_json">
-                <param name="type" value="files"/>
-                <param name="files" value="plates_generator_destination_plate_1.test-1.json" />
-            </conditional>
-            <conditional name="conditional_destination_tsv">
-                <param name="type" value="files"/>
-                <param name="files" value="plates_generator_destination_plate_1.test-1.tsv" />
-            </conditional>
+            <param name="source_plates">
+                <collection type="list">
+                    <element name="plates_generator_source_plate_1" value="plates_generator_source_plate_1.test-1.json" />
+                </collection>
+            </param>
+            <param name="source_wells">
+                <collection type="list">
+                    <element name="plates_generator_source_plate_1.test-1.tsv" value="plates_generator_source_plate_1.test-1.tsv" />
+                </collection>
+            </param>
+            <param name="dest_plates">
+                <collection type="list">
+                    <element name="plates_generator_destination_plate_1.test-1.json" value="plates_generator_destination_plate_1.test-1.json" />
+                </collection>
+            </param>
+            <param name="dest_wells">
+                <collection type="list">
+                    <element name="plates_generator_destination_plate_1.test-1.tsv" value="plates_generator_destination_plate_1.test-1.tsv" />
+                </collection>
+            </param>
             <output name="output_warning" ftype="tabular">
                 <assert_contents>
                     <has_n_lines n="12"/>
