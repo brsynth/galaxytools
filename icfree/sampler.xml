@@ -6,32 +6,43 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
-        #set ratios = []
-        #for $x in $adv.rep
-            #silent $ratios.append(str($x.ratio))
-        #end for
-        #set sratios = ' '.join(['"' + $x + '"' for $x in $ratios])
-        echo "${sratios}" &&
+        echo '$adv.sampling_ratio' &&
         python -m icfree.sampler
             '$cfps_file'
-            #if len(ratios) > 0
-                --sampling-ratios ${sratios}
-            #end if
             --nb-sampling-steps '$adv.nb_sampling_steps'
-            --nb-samples '$adv.nb_samples'
-            --seed '0'
+            --nb-samples '$nb_samples'
+            #if str($adv.sampling_ratio) != ""
+                #set ratios = ' '.join(['"' + $x + '"' for $x in $adv.sampling_ratio.split()])
+                --sampling-ratios $ratios
+            #end if
+            #if str($adv.seed_cond.seed_param) == 'not_random'
+                --seed '$adv.seed_cond.seed'
+            #end if
             --output-format 'tsv'
             --output-folder . &&
             mv sampling.tsv '$output_sampling'
     ]]></command>
     <inputs>
         <param name="cfps_file" type="data" format="tabular" label="CFPS parameters and features" />
+        <param name="nb_samples" type="integer" value="99" min="1" max="198" label="Number of samples to generate" />
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="nb_sampling_steps" type="integer" value="5" min="1" max="10" label="Number of values for all factors when performing the sampling" />
-            <param name="nb_samples" type="integer" value="99" min="1" max="198" label="Number of samples to generate" />
-            <repeat name="rep" title="Sampling ratio" min="0">
-                <param name="ratio" type="float" value="0.1" min="0.0" max="1.0" label="Ratio associated to each factor" />
-            </repeat>
+            <param name="sampling_ratio" type="text" value="" label="Ratios associated for all factors" help="Only float, space separated, are allowed">
+                <validator type="regex" message="Float separated by a space between in the range: 0.0 - 1.0">^(?:(0.\d+|1\.0)(\s0?\.\d+|1\.0)*)*$</validator>
+            </param>
+            <conditional name="seed_cond">
+                <param name="seed_param" type="select" label="Seed" help="Choose a seed or let it as random">
+                    <option value="random" selected="true">random</option>
+                    <option value="not_random">fixed</option>
+                </param>
+                <when value="random"/>
+                <when value="not_random">
+                    <param name="seed" type="text" value="0" label="Seed value" help="Only integer allowed">
+                        <validator type="empty_field" message="Not empty, select random"/>
+                        <validator type="regex" message="Only integer allowed">^(?:\d+)$</validator>
+                    </param>
+                </when>
+            </conditional>
         </section>
     </inputs>
     <outputs>
@@ -41,6 +52,8 @@
         <!-- test 1: check if identical outputs are produced with default parameters  -->
         <test>
             <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
+            <param name="seed_param" value="not_random" />
+            <param name="seed" value="0" />
             <output name="sampling" file="sampler_sampling.test-1.tsv" ftype="tabular" compare="diff" />
         </test>
         <!-- test 2: advanced arguments -->
@@ -48,15 +61,9 @@
             <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
             <param name="nb_sampling_steps" value="3" />
             <param name="nb_samples" value="100" />
-            <repeat name="rep">
-                <param name="ratio" value="0.4" />
-            </repeat>
-            <repeat name="rep">
-                <param name="ratio" value="0.2" />
-            </repeat>
-            <repeat name="rep">
-                <param name="ratio" value="0.3" />
-            </repeat>
+            <param name="sampling_ratio" value="0.4 0.2 0.3" />
+            <param name="seed_param" value="not_random" />
+            <param name="seed" value="0" />
             <param name="nb_samples" value="100" />
             <output name="sampling" file="sampler_sampling.test-2.tsv" ftype="tabular" compare="diff" />
         </test>

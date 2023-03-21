@@ -6,40 +6,27 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
-        mkdir json tsv &&
-        #set sps = []
-        #for $x in $source_plates:
-            #set $fname = str($x.element_identifier) + '.json'
+        #set sps = [], sws = [], dps = [], dws = []
+        #for $x in $plates_generator:
+            #set $fname = str($x.element_identifier)
             ln -sfn '$x' '$fname' &&
-            #silent sps.append($fname)
+            #if $fname.startswith('source') and $fname.endswith('json'):
+                #silent sps.append($fname)
+            #else if $fname.startswith('source') and $fname.endswith('tsv'):
+                #silent sws.append($fname)
+            #else if $fname.startswith('destination') and $fname.endswith('json'):
+                #silent dps.append($fname)
+            #else if $fname.startswith('destination') and $fname.endswith('tsv'):
+                #silent dsws.append($fname)
+            #end if
         #end for
-        #set s_sps = '" "'.join(sps)
-        #set sws = []
-        #for $x in $source_wells:
-            #set $fname = str($x.element_identifier) + '.tsv'
-            ln -sfn '$x' '$fname' &&
-            #silent sws.append($fname)
-        #end for
-        #set s_sws = '" "'.join(sws)
-        #set dps = []
-        #for $x in $dest_plates:
-            #set $fname = str($x.element_identifier) + '.json'
-            ln -sfn '$x' '$fname' &&
-            #silent dps.append($fname)
-        #end for
-        #set s_dps = '" "'.join(dps)
-        #set dws = []
-        #for $x in $dest_wells:
-            #set $fname = str($x.element_identifier) + '.tsv'
-            ln -sfn '$x' '$fname' &&
-            #silent dws.append($fname)
-        #end for
-        #set s_dws = '" "'.join(dws)
         python -m icfree.instructor
-            --source_plates '$s_sps'
-            --source_wells '$s_sws'
-            --dest_plates '$s_dps'
-            --dest_wells '$s_dws'
+            --source_plates '" "'.join($sps)
+            --source_wells '" "'.join($sws)
+            --dest_plates '" "'.join($dps)
+            --dest_wells '" "'.join($dws)
+            -spt '$source_plate'
+            --robot '$robot'
             --output-folder '.' &&
         mv instructions.csv '$output_instruction' &&
         #if not os.path.isfile('volume_warning.tsv')
@@ -48,10 +35,14 @@
         mv volume_warning.tsv '$output_warning'
     ]]></command>
     <inputs>
-        <param name="source_plates" type="data_collection" collection_type="list" format="json" label="Source plates information (json)" />
-        <param name="source_wells" type="data_collection" collection_type="list" format="tabular" label="Source wells information (tsv)" />
-        <param name="dest_plates" type="data_collection" collection_type="list" format="json" label="Destination plates information (json)" />
-        <param name="dest_wells" type="data_collection" collection_type="list" format="tabular" label="Destination wells information (tsv)" />
+        <param name="plates_generator" type="data_collection" collection_type="list" format="json,tabular" label="Source/Destination corresponding to plate/wells" help="Output from iCFree plates generator"/>
+        <param name="robot" type="select" label="Robot name">
+            <option value="ECHO" selected="true">ECHO</option>
+        </param>
+        <param name="source_plate" type="select" label="Source plate type">
+            <option value="384PP_AQ_GP3" selected="true">384PP_AQ_GP3</option>
+            <option value="384_AQ_CP">384_AQ_CP</option>
+        </param>
     </inputs>
     <outputs>
         <data name="output_warning" format="tsv" label="${tool.name} - Warning" />
@@ -60,23 +51,11 @@
     <tests>
         <test>
             <!-- test 1: check if identical outputs are produced with default parameters  -->
-            <param name="source_plates">
+            <param name="plates_generator">
                 <collection type="list">
                     <element name="plates_generator_source_plate_1" value="plates_generator_source_plate_1.test-1.json" />
-                </collection>
-            </param>
-            <param name="source_wells">
-                <collection type="list">
                     <element name="plates_generator_source_plate_1.test-1.tsv" value="plates_generator_source_plate_1.test-1.tsv" />
-                </collection>
-            </param>
-            <param name="dest_plates">
-                <collection type="list">
                     <element name="plates_generator_destination_plate_1.test-1.json" value="plates_generator_destination_plate_1.test-1.json" />
-                </collection>
-            </param>
-            <param name="dest_wells">
-                <collection type="list">
                     <element name="plates_generator_destination_plate_1.test-1.tsv" value="plates_generator_destination_plate_1.test-1.tsv" />
                 </collection>
             </param>

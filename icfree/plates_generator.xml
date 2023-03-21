@@ -69,17 +69,11 @@
     </inputs>
     <outputs>
         <data name="volumes_summary" format="tabular" label="${tool.name} - Volumes" />
-        <collection name="source_plate_json" type="list" label="${tool.name} - Source Plate (json)">
-            <discover_datasets pattern="(?P&lt;name&gt;source_plate_\d+)\.json$" format="json" />
-        </collection>
-        <collection name="source_plate_tsv" type="list" label="${tool.name} - Source Plate (tsv)">
-            <discover_datasets pattern="(?P&lt;name&gt;source_plate_\d+)\.tsv$" format="tabular" />
-        </collection>
-        <collection name="destination_plate_json" type="list" label="${tool.name} - Destination Plate (json)">
-            <discover_datasets pattern="(?P&lt;name&gt;destination_plate_\d+)\.json$" format="json" />
-        </collection>
-        <collection name="destination_plate_tsv" type="list" label="${tool.name} - Destination Plate (tsv)">
-            <discover_datasets pattern="(?P&lt;name&gt;destination_plate_\d+)\.tsv$" format="tabular" />
+        <collection name="output_source_dest" type="list" label="${tool.name} - Source Destination Plate">
+            <discover_datasets pattern="(?P&lt;name&gt;source_plate_\d+\.json)$" format="json" />
+            <discover_datasets pattern="(?P&lt;name&gt;source_plate_\d+\.tsv)$" format="tabular" />
+            <discover_datasets pattern="(?P&lt;name&gt;destination_plate_\d+\.json)$" format="json" />
+            <discover_datasets pattern="(?P&lt;name&gt;destination_plate_\d+\.tsv)$" format="tabular" />
         </collection>
     </outputs>
     <tests>
@@ -88,25 +82,19 @@
             <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
             <param name="volume_file" value="converter_sampling_concentrations.tsv" />
             <output name="volumes_summary" file="plates_generator_volumes_summary.test-1.tsv" ftype="tabular" compare="diff" />
-            <output_collection name="source_plate_json" type="list" count="1">
-                <element name="source_plate_1" ftype="json">
+            <output_collection name="output_source_dest" type="list" count="4">
+                <element name="source_plate_1.json" ftype="json">
                     <assert_contents>
                         <has_n_lines n="26"/>
                     </assert_contents>
                 </element>
-            </output_collection>
-            <output_collection name="source_plate_tsv" type="list" count="1">
-                <element name="source_plate_1" file="plates_generator_source_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
-            </output_collection>
-            <output_collection name="destination_plate_json" type="list" count="1">
-                <element name="destination_plate_1" ftype="json">
+                <element name="source_plate_1.tsv" file="plates_generator_source_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
+                <element name="destination_plate_1.json" ftype="json">
                     <assert_contents>
                         <has_n_lines n="26"/>
                     </assert_contents>
                 </element>
-            </output_collection>
-            <output_collection name="destination_plate_tsv" type="list" count="1">
-                <element name="destination_plate_1" file="plates_generator_destination_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
+                <element name="destination_plate_1.tsv" file="plates_generator_destination_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
             </output_collection>
         </test>
         <!-- test 2: advance arguments -->
@@ -126,8 +114,8 @@
             <repeat name="rep">
                 <param name="optimize_well_volumes" value="Promoter" />
             </repeat>
-            <output_collection name="destination_plate_tsv" type="list" count="1">
-                <element name="destination_plate_1" file="plates_generator_destination_plate_1.test-2.tsv" ftype="tabular" compare="diff" />
+            <output_collection name="output_source_dest" type="list" count="4">
+                <element name="destination_plate_1.tsv" file="plates_generator_destination_plate_1.test-2.tsv" ftype="tabular" compare="diff" />
             </output_collection>
         </test>
     </tests>
