@@ -6,7 +6,6 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
-        echo '$adv.sampling_ratio' &&
         python -m icfree.sampler
             '$cfps_file'
             --nb-sampling-steps '$adv.nb_sampling_steps'

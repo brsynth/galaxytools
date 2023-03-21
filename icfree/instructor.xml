@@ -6,9 +6,13 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
-        #set sps = [], sws = [], dps = [], dws = []
+        #set sps = []
+        #set sws = []
+        #set dps = []
+        #set dws = []
         #for $x in $plates_generator:
             #set $fname = str($x.element_identifier)
+            echo "$fname " &&
             ln -sfn '$x' '$fname' &&
             #if $fname.startswith('source') and $fname.endswith('json'):
                 #silent sps.append($fname)
@@ -17,14 +21,18 @@
             #else if $fname.startswith('destination') and $fname.endswith('json'):
                 #silent dps.append($fname)
             #else if $fname.startswith('destination') and $fname.endswith('tsv'):
-                #silent dsws.append($fname)
+                #silent dws.append($fname)
             #end if
         #end for
+        #set s_sps = '" "'.join($sps)
+        #set s_sws = '" "'.join($sws)
+        #set s_dps = '" "'.join($dps)
+        #set s_dws = '" "'.join($dws)
         python -m icfree.instructor
-            --source_plates '" "'.join($sps)
-            --source_wells '" "'.join($sws)
-            --dest_plates '" "'.join($dps)
-            --dest_wells '" "'.join($dws)
+            --source_plates $s_sps
+            --source_wells $s_sws
+            --dest_plates $s_dps
+            --dest_wells $s_dws
             -spt '$source_plate'
             --robot '$robot'
             --output-folder '.' &&
