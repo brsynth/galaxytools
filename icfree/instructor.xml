@@ -85,12 +85,12 @@ The module generates a list of instructions to perform the experiment.
 Input
 -----
 Required:
-* **Source plates file**: description of the source plates (source well name, source well volume...) (JSON format)
-* **Destination plates file**: description of the destination plates (destination well name, destination well volume...) (JSON format)
+* **A collection**: a collection with source/destination plates/wells, coming from iCFree plates generator tool.
 
 Advanced options:
 -----------------
-* **Robot name**: name of the robot to generate instructions for (default: "echo")
+* **Robot name**: name of the robot to generate instructions for (default: "ECHO")
+* **Source plate type**: type of plate used (default: "384PP_AQ_GP3")
 
 Output
 ------

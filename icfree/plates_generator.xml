@@ -146,9 +146,7 @@ Advanced Options:
 
 Output
 ------
-* **source_plate**: describe the source plate(s)
-* **destination_plate**: describe the destination plate(s)
-* **volumes_summary**: contains the summary of parameters volumes
+* **Collection**: Collection of files describing source/destination plates/wells
     ]]></help>
     <expand macro="creator"/>
     <expand macro="citation"/>
