@@ -1,0 +1,26 @@
+<macros>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@LICENSE@">MIT</token>
+    <xml name="stdio">
+        <stdio>
+            <regex match="WARNING" level="warning" />
+            <regex match="ERROR" level="fatal" />
+        </stdio>
+    </xml>
+    <xml name="citation">
+        <citations>
+            <citation type="bibtex">
+                @unpublished{icfree
+                    author = {Joan Hérisson, Yorgo El Moubayed},
+                    title = {{icfree}},
+                    url = {https://github.com/brsynth/icfree-ml/},
+                }
+            </citation>
+        </citations>
+    </xml>
+    <xml name="creator">
+        <creator>
+            <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
+        </creator>
+    </xml>
+</macros>

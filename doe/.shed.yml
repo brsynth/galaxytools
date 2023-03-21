@@ -1,0 +1,18 @@
+owner: tduigou
+long_description: |
+homepage_url: https://github.com/brsynth/icfree-ml
+remote_repository_url:
+  - https://github.com/brsynth/icfree-ml
+  - https://github.com/pablocarb/doebase
+categories:
+  - Systems Biology
+  - Synthetic Biology
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the BrsDoe suite"
+suite:
+  name: suite_brsdoe
+  description: Suite of tools for the Design Experiment Brs prject
+  long_description: |
+    "Suite of tools for the Design Experiment work done in the BRS team"
