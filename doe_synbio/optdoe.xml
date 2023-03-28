@@ -1,12 +1,13 @@
-<tool id="optdoe" name="Optimal Design of Experiment" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+<tool id="doe_synbio_optdoe" name="Optimal Design of Experiment" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
     <description>Combine selected genetic parts and enzyme variants for the desired pathways</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">2.0.2</token>
+        <import>macros.xml</import>
+        <token name="@TOOL_VERSION@">v2.0.2</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">doebase</requirement>
     </requirements>
+    <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
         python -m doebase
             --func doeGetSBOL
@@ -159,7 +160,7 @@
     </tests>
     <help><![CDATA[
 OptDoE
-======
+===========
 
 An optimal design of experiments is performed by using OptBioDes based on logistic regression analysis with an assumed linear model for the response. The design is evaluated by its D-efficiency, defined as:
 
@@ -171,12 +172,12 @@ Where n is the number of experimental runs or library size, p is the number of i
 The experimental design can be evaluated through the provided diagnostics for D-efficiency, power analysis, and relative prediction variance, allowing the optimal selection of library size.
 The resulting design is provided as an SBOL collection containing the definition of each DNA component and the combinatorial library of constructs.
 
-.. image:: https://raw.githubusercontent.com/brsynth/synbiocad-galaxy-wrappers/master/OptDoE/img/image3.png
+.. image:: https://raw.githubusercontent.com/brsynth/synbiocad-galaxy-wrappers/master/optdoe/img/image3.png
 	:width: 80 %
 	:align: center
 
 
-.. image:: https://raw.githubusercontent.com/brsynth/synbiocad-galaxy-wrappers/master/OptDoE/img/image46.png
+.. image:: https://raw.githubusercontent.com/brsynth/synbiocad-galaxy-wrappers/master/optdoe/img/image46.png
 	:width: 80 %
 	:align: center
 
@@ -210,9 +211,11 @@ Input
 -----
 
 Required:
+
 * **Genes**\ : Output of Selenzyme. The CSV file contains four columnds: Name,Type,Part,Step. The column "Name" contains the Uniprot ID found by Selenzyme. The column "Type" represents the type of the "Part", a *gene*. The column "Part" has the same information as the column "Name". The column "Step" contains the order of the position in the pathway of the gene.
 
 Advanced options:
+
 * **Optimised Genes**\ : SBOL file containing optimized versions of the genes associated with different RBS. Output of the PartsGenie tool.
 * **Ref Parts**\ : CSV with the genetic parts. Default (if left empty) is the above table. To generate a new compatible CSV file, please use the "OptDoE Parts Reference Generator" tool
 * **Maximal library size**\ : (integer, default: 32) Maximal number of constructs in the SBOL output.
@@ -222,9 +225,17 @@ Advanced options:
 
 Output
 ------
+
 * **Constructs**\ : Output SBOL file. It contains some combinations of constructs according to the algorithm described above.
     ]]></help>
-    <creator>
-        <person givenName="Pablo" familyName="Carbonell" email="pablo.carbonell@upv.es" identifier="https://orcid.org/0000-0002-0993-5625" />
-    </creator>
+    <expand macro="creator"/>
+    <citations>
+        <citation type="bibtex">
+        @unpublished{pablocarb
+            author = {Pablo Carbonell},
+            title = {{doebase}},
+            url = {https://github.com/pablocarb/doebase/},
+        }
+        </citation>
+    </citations>
 </tool>

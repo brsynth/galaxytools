@@ -1,3 +1,4 @@
+name: doe_synbio
 owner: tduigou
 long_description: |
 homepage_url: https://github.com/brsynth/icfree-ml
@@ -12,7 +13,7 @@ auto_tool_repositories:
   name_template: "{{ tool_id }}"
   description_template: "{{ tool_name }} tool from the BrsDoe suite"
 suite:
-  name: suite_brsdoe
+  name: suite_doe_synbio
   description: Suite of tools for the Design Experiment Brs prject
   long_description: |
     "Suite of tools for the Design Experiment work done in the BRS team"
