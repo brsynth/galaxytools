@@ -1,0 +1,61 @@
+<tool id="icfree_converter" name="iCFree converter" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
+    <description>Convert concentration values into volume values.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <expand macro="stdio"/>
+    <command detect_errors="exit_code"><![CDATA[
+        python -m icfree.converter
+            '$cfps_file'
+            '$concentrations_file'
+            --sample_volume '$adv.sample_volume'
+            --output-folder . &&
+            mv sampling_volumes.tsv '$output_sampling'
+    ]]></command>
+    <inputs>
+        <param name="cfps_file" type="data" format="tabular" label="CFPS parameters and features" />
+        <param name="concentrations_file" type="data" format="tabular" label="Concentrations to convert" />
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="sample_volume" type="integer" value="1000" min="1" max="100000" label="Final sample volume in each well in nL" />
+        </section>
+    </inputs>
+    <outputs>
+        <data name="output_sampling" format="tabular" label="${tool.name}" />
+    </outputs>
+    <tests>
+        <!-- test 1: check if identical outputs are produced with default parameters  -->
+        <test>
+            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
+            <param name="concentrations_file" value="converter_sampling_concentrations.tsv" />
+            <output name="output_sampling" file="converter_sampling_volumes.test-1.tsv" ftype="tabular" compare="diff" />
+        </test>
+        <!-- test 2: advanced options -->
+        <test>
+            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
+            <param name="concentrations_file" value="converter_sampling_concentrations.tsv" />
+            <param name="sample_volume" value="100" />
+            <output name="output_sampling" file="converter_sampling_volumes.test-2.tsv" ftype="tabular" compare="diff" />
+        </test>
+    </tests>
+    <help><![CDATA[
+Converter
+=========
+
+This converter module converts concentration values into volume values, these will be used as input for the plates_generator module.
+
+Input
+-----
+* **CFPS Parameters File**: The first column is the parameter (or factor) names. The second column is the maxValue of the parameter that will be used in the sampling. The third column is the concnetration of the stock. The fourth column is the deadVolume of the parameter. This is used to calculate the volume of the parameter that will not be pipetted by the robot (because of viscosity). The fifth column is the specific ratios we want to have for this parameter. If nothing defined, then take ratios given in program options. If one single number is given, then take this number as a const value.
+* **CFPS Parameters Concentrations File**: Concentration values for each cell-free parameter.
+
+Advanced options:
+* **Sample Volume**: Final sample volume in each well in nL (default: 1000)
+
+Output
+------
+* A TSV file with the volume values for each parameter.
+    ]]></help>
+    <expand macro="creator"/>
+    <expand macro="citation"/>
+</tool>

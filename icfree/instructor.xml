@@ -1,0 +1,102 @@
+<tool id="icfree_instructor" name="iCFree instructor" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
+    <description>Generates a list of Echo-compatible instructions to prepare samples</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <expand macro="stdio"/>
+    <command detect_errors="exit_code"><![CDATA[
+        #set sps = []
+        #set sws = []
+        #set dps = []
+        #set dws = []
+        #for $x in $plates_generator:
+            #set $fname = str($x.element_identifier)
+            echo "$fname " &&
+            ln -sfn '$x' '$fname' &&
+            #if $fname.startswith('source') and $fname.endswith('json'):
+                #silent sps.append($fname)
+            #else if $fname.startswith('source') and $fname.endswith('tsv'):
+                #silent sws.append($fname)
+            #else if $fname.startswith('destination') and $fname.endswith('json'):
+                #silent dps.append($fname)
+            #else if $fname.startswith('destination') and $fname.endswith('tsv'):
+                #silent dws.append($fname)
+            #end if
+        #end for
+        #set s_sps = '" "'.join($sps)
+        #set s_sws = '" "'.join($sws)
+        #set s_dps = '" "'.join($dps)
+        #set s_dws = '" "'.join($dws)
+        python -m icfree.instructor
+            --source_plates $s_sps
+            --source_wells $s_sws
+            --dest_plates $s_dps
+            --dest_wells $s_dws
+            -spt '$source_plate'
+            --robot '$robot'
+            --output-folder '.' &&
+        mv instructions.csv '$output_instruction' &&
+        #if not os.path.isfile('volume_warning.tsv')
+            touch volume_warning.tsv &&
+        #end if
+        mv volume_warning.tsv '$output_warning'
+    ]]></command>
+    <inputs>
+        <param name="plates_generator" type="data_collection" collection_type="list" format="json,tabular" label="Source/Destination corresponding to plate/wells" help="Output from iCFree plates generator"/>
+        <param name="robot" type="select" label="Robot name">
+            <option value="ECHO" selected="true">ECHO</option>
+        </param>
+        <param name="source_plate" type="select" label="Source plate type">
+            <option value="384PP_AQ_GP3" selected="true">384PP_AQ_GP3</option>
+            <option value="384_AQ_CP">384_AQ_CP</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output_warning" format="tsv" label="${tool.name} - Warning" />
+        <data name="output_instruction" format="csv" label="${tool.name} - Instruction" />
+    </outputs>
+    <tests>
+        <test>
+            <!-- test 1: check if identical outputs are produced with default parameters  -->
+            <param name="plates_generator">
+                <collection type="list">
+                    <element name="plates_generator_source_plate_1" value="plates_generator_source_plate_1.test-1.json" />
+                    <element name="plates_generator_source_plate_1.test-1.tsv" value="plates_generator_source_plate_1.test-1.tsv" />
+                    <element name="plates_generator_destination_plate_1.test-1.json" value="plates_generator_destination_plate_1.test-1.json" />
+                    <element name="plates_generator_destination_plate_1.test-1.tsv" value="plates_generator_destination_plate_1.test-1.tsv" />
+                </collection>
+            </param>
+            <output name="output_warning" ftype="tabular">
+                <assert_contents>
+                    <has_n_lines n="12"/>
+                    <has_line_matching expression="^Parameter\tMin\tMax\tPlate$"/>
+                </assert_contents>
+            </output>
+            <output name="output_instruction" file="instructor_instructions.csv" ftype="csv" compare="diff" />
+        </test>
+    </tests>
+    <help><![CDATA[
+Instructor
+==========
+
+The module generates a list of instructions to perform the experiment.
+
+Input
+-----
+Required:
+* **A collection**: a collection with source/destination plates/wells, coming from iCFree plates generator tool.
+
+Advanced options:
+-----------------
+* **Robot name**: name of the robot to generate instructions for (default: "ECHO")
+* **Source plate type**: type of plate used (default: "384PP_AQ_GP3")
+
+Output
+------
+* **instructions**: contains the instructions to perform the experiment
+* **volumes_warning**: contains the volumes that may cause issues with the chosen robot
+    ]]></help>
+    <expand macro="creator"/>
+    <expand macro="citation"/>
+</tool>
