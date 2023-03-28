@@ -32,14 +32,14 @@
         <test>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
             <param name="pathway_collection" value="rp_003_0261.xml,rp_003_0131.xml,rp_003_0001.xml"/>
-            <output name="sorted_pathways" file="lycopene_ranked_pathways.csv" ftype="csv" compare="diff" sort="true" />
+            <output name="sorted_pathways" file="ranked_pathways.csv" ftype="csv" compare="diff" sort="true" />
         </test>
     </tests>
     <help><![CDATA[
 Rank Pathways
 ================
 
-Sort a list of pathways according to their global score.	  
+Sort a list of pathways according to their global score.
 
 Input
 -----
@@ -52,24 +52,9 @@ Output
 ------
 
 * **Ranked Pathways**\ : Sorted names and scores of pathways
-
-Project Links
-------------------
-
-* `GitHub <https://github.com/brsynth/rptools/tree/master/rptools/rprank>`_
-
-License
--------
-
-* `MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
-
-Acknowledgments
----------------
-
-* Thomas Duigou
-
     ]]></help>
-    <creator>
-        <person givenName="Joan" familyName="Hérisson" email="joan.herisson@univ-evry.fr" identifier="https://orcid.org/0000-0001-9741-0847" />
-    </creator>
+    <expand macro="creator"/>
+    <citations>
+        <citation type="doi">10.1038/s41467-022-32661-x</citation>
+    </citations>
 </tool>
