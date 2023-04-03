@@ -1,4 +1,4 @@
-<tool id="get_sbml_model" name="Pick SBML Model" version="0.0.1" profile="19.09">
+<tool id="get_sbml_model" name="Pick SBML Model" version="0.0.2" profile="19.09" license="MIT">
     <description>Get an SBML model (BiGG)</description>
     <requirements>
         <requirement type="package" version="7.81.0">curl</requirement>
@@ -62,7 +62,7 @@
         </param>
     </inputs>
     <outputs>
-        <data name="model" format="xml" label="${input}" />
+        <data name="model" format="sbml" label="${input}" />
         <data name="compartments" format="tsv" label="${input} (compartments)" />
         <data name="biomass" format="tsv" label="${input} (biomass reactions)" />
     </outputs>
@@ -80,29 +80,8 @@ Pick SBML Model
 =================
 
 Download the selected SBML model fromg BiGG database.
-
-
-Version
-----------
-0.0.1
-
-
-Authors
--------
-
-* Joan Hérisson
-
-
-License
--------
-
-`MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
-
-
-Acknowledgments
----------------
-
-* Kenza Bazi-Kabbaj
-
     ]]></help>
+    <creator>
+        <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
+    </creator>
 </tool>
