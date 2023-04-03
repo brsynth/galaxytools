@@ -1,8 +1,8 @@
-<tool id="rrparser" name="RRules Parser" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+<tool id="rrparser" name="RRules Parser" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09" license="MIT">
     <description>Retrieve the reaction rules from RetroRules</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">2.5.0</token>
+        <token name="@TOOL_VERSION@">2.5.2</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rrparser</requirement>
@@ -104,30 +104,10 @@ Ouput
 -----
 
 * **out_rules**: (string): file containing the parsed reactions rules (default=csv). It will be zipped if *Compress output* is set to yes.
-
-Version
--------
-
-v2.5.0
-
-Authors
--------
-
-* **Thomas Duigou**
-* Melchior du Lac
-* Joan Hérisson
-
-License
--------
-
-This project is licensed under the MIT License - see the `LICENSE <https://github.com/brsynth/RRParser/blob/master/LICENSE>`_ file for details
-
-Acknowledgments
----------------
-
-* Joan Hérisson
-
     ]]></help>
+    <creator>
+        <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
+    </creator>
     <citations>
         <citation type="doi">10.1093/nar/gky940 </citation>
     </citations>
