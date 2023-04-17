@@ -1,4 +1,4 @@
-name: update
+name: autoupdate
 on:
   schedule:
     - cron: "0 1 * * 1"
@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
+  autoupdate:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout'
@@ -28,7 +28,9 @@ jobs:
         # git credentials
         #git config --global user.email "sbray@informatik.uni-freiburg.de"
         #git config --global user.name "planemo-autoupdate"
-        gh auth login --with-token < echo "${{ secrets.GITHUB_TOKEN }}"
+        echo "${{ secrets.GITHUB_TOKEN }}" > secrets.txt
+        gh auth login --with-token < secrets.txt
+        rm secrets.txt
 
         #ls $BASEDIR/*
         #cd tools-iuc

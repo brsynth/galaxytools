@@ -23,7 +23,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        manifest: ${{ fromJson(needs.list_tool.outputs.matrix) }}
+        repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
@@ -39,16 +39,16 @@ jobs:
           use-mamba: true
       - name: 'Prepare output'
         run: |
-          mkdir -p "log/${matrix.manifest}"
+          mkdir -p "log/${{ matrix.repo }}"
       - name: 'Wrapper Lint'
         run: |
-          planemo lint --urls --doi "tools/${matrix.manifest}"
+          planemo lint --urls --doi "tools/${{ matrix.repo }}"
       - name: 'Shed lint'
         run: |
-          ./scripts/shed_lint.py -i "tools/${matrix.manifest}"
+          ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
         run: |
-          mkdir -p "log/${matrix.manifest}"
+          mkdir -p "log/${{ matrix.repo }}"
           planemo test \
             --biocontainers \
             --no_dependency_resolution \
@@ -57,8 +57,8 @@ jobs:
             --galaxy_branch release_22.05 \
             --galaxy_python_version 3.7 \
             --test_timeout 900 \
-            --job_output_files "log/${matrix.manifest}" \
-            "tools/${matrix.manifest}"
+            --job_output_files "log/${{ matrix.repo }}" \
+            "tools/${{ matrix.repo }}"
       - name: 'Prepare artefact'
         run: |
           zip -r -9 log.zip log
