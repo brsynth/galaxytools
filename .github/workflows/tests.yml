@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
-        matrix:
-            manifest: ${{ fromJson(needs.list_tool.outputs.matrix) }}
+      matrix:
+        manifest: ${{ fromJson(needs.list_tool.outputs.matrix) }}
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
@@ -38,27 +38,29 @@ jobs:
           channel-priority: true
           use-mamba: true
       - name: 'Prepare output'
-        run:
+        run: |
           mkdir -p log
       - name: 'Wrapper Lint'
-        planemo lint --urls --doi "${matrix.manifest}"
+        run: |
+          planemo lint --urls --doi "${matrix.manifest}"
       - name: 'Shed lint'
-        ./scripts/shed_lint.py -i "{matrix.manifest}"
+        run: |
+          ./scripts/shed_lint.py -i "{matrix.manifest}"
       - name: 'Test tool'
-        run:
-            mkdir -p "log/${matrix.manifest}"
-            planemo test \
-              --biocontainers \
-              --no_dependency_resolution \
-              --no_conda_auto_init \
-              --galaxy_source https://github.com/galaxyproject/galaxy \
-              --galaxy_branch release_22.05 \
-              --galaxy_python_version 3.7 \
-              --test_timeout 900 \
-              --job_output_files "log/${matrix.manifest}" \
-              "${matrix.manifest}"
+        run: |
+          mkdir -p "log/${matrix.manifest}"
+          planemo test \
+            --biocontainers \
+            --no_dependency_resolution \
+            --no_conda_auto_init \
+            --galaxy_source https://github.com/galaxyproject/galaxy \
+            --galaxy_branch release_22.05 \
+            --galaxy_python_version 3.7 \
+            --test_timeout 900 \
+            --job_output_files "log/${matrix.manifest}" \
+            "${matrix.manifest}"
       - name: 'Prepare artefact'
-        run:
+        run: |
           zip -r -9 log.zip log
       - name: 'Upload Artifact Version'
         uses: actions/upload-artifact@v3
