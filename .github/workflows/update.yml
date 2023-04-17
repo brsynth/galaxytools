@@ -1,4 +1,4 @@
-name: autoupdate
+name: Update
 on:
   schedule:
     - cron: "0 1 * * 1"
@@ -10,8 +10,11 @@ permissions:
   pull-requests: write
 
 jobs:
-  autoupdate:
+  update:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
     steps:
     - name: 'Checkout'
       uses: actions/checkout@v3

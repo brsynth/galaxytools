@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v3
       - name: 'List repos'
         id: set-matrix
-        run: echo "matrix=$(find tools -depth 1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_OUTPUT}"
+        run: echo "matrix=$(find tools -mindepth 1 -maxdepth 1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_OUTPUT}"
 
   test_tool:
     needs: list_tool
@@ -26,7 +26,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        manifest: ${{ fromJson(needs.list_tool.outputs.matrix) }}
+        repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
@@ -40,7 +40,7 @@ jobs:
           use-mamba: true
       - name: 'Test ToolShed'
         run: |
-          planemo shed_update --check_diff --shed_target testtoolshed --shed_key "${{ secrets.TESTTOOLSHED }}" "tools/${matrix.manifest}"
+          planemo shed_update --check_diff --shed_target testtoolshed --shed_key "${{ secrets.TESTTOOLSHED }}" "tools/${{ matrix.repo }}"
       - name: 'Main ToolShed'
         run: |
-          planemo shed_update --check_diff --shed_target toolshed --shed_key "${{ secrets.TOOLSHED }}" "tools/${matrix.manifest}"
+          planemo shed_update --check_diff --shed_target toolshed --shed_key "${{ secrets.TOOLSHED }}" "tools/${{ matrix.repo }}"
