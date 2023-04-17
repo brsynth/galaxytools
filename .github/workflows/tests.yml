@@ -11,9 +11,9 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - name: "Checkout"
+      - name: 'Checkout'
         uses: actions/checkout@v3
-      - name: "List repos"
+      - name: 'List repos'
         id: set-matrix
         run: echo "matrix=$(find tools -depth 1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_ENV}"
 
@@ -37,10 +37,14 @@ jobs:
           mamba-version: "*"
           channel-priority: true
           use-mamba: true
-      - name: "Prepare output"
+      - name: 'Prepare output'
         run:
           mkdir -p log
-      - name: "Test tool"
+      - name: 'Wrapper Lint'
+        planemo lint --urls --doi "${matrix.manifest}"
+      - name: 'Shed lint'
+        ./scripts/shed_lint.py -i "{matrix.manifest}"
+      - name: 'Test tool'
         run:
             mkdir -p "log/${matrix.manifest}"
             planemo test \
@@ -53,7 +57,7 @@ jobs:
               --test_timeout 900 \
               --job_output_files "log/${matrix.manifest}" \
               "${matrix.manifest}"
-      - name: "Prepare artefact"
+      - name: 'Prepare artefact'
         run:
           zip -r -9 log.zip log
       - name: 'Upload Artifact Version'

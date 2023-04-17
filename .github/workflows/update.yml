@@ -1,0 +1,110 @@
+name: update
+on:
+  schedule:
+    - cron: "0 1 * * 1"
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+    - name: 'Deploying miniconda'
+      uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          environment-file: recipes/workflow.yaml
+          mamba-version: "*"
+          channel-priority: true
+          use-mamba: true
+    - name: 'Update repositories'
+      run: |
+        # git credentials
+        #git config --global user.email "sbray@informatik.uni-freiburg.de"
+        #git config --global user.name "planemo-autoupdate"
+        gh auth login --with-token < echo "${{ GITHUB_TOKEN }}"
+
+        #ls $BASEDIR/*
+        #cd tools-iuc
+        #echo "Adding upstream..."
+        #git remote add upstream https://github.com/galaxyproject/tools-iuc.git
+
+        #echo "Getting git remote..."
+        #git remote -v
+
+        #echo "Pulling latest from upstream..."
+        #git fetch --all
+        #git pull upstream main
+        #git push origin main
+
+        BASEDIR=`pwd`
+        REPOS=$(planemo ci_find_repos tools/)
+        USERNAME=brsynth
+
+        echo "List of repositories: $REPOS"
+        for REPO in "${REPOS}"; do
+          echo "${REPO}"
+
+          # checkout branch, create if it doesn't exist
+          if [[ $(gh pr list --limit 10000 | grep "${USERNAME}:${REPO}".\s*OPEN) ]]
+          then
+            echo "PR exists, we will checkout the branch and add to it"
+            git checkout --track "origin/${REPO}"
+          else
+            if [[ $(git branch -a --list "origin/${REPO}") ]]
+            then
+              echo "Branch exists without an open PR - deleting"
+              git push origin --delete "${REPO}"
+            fi
+            echo "Creating branch and checking out"
+            git checkout -b "${REPO}" origin/main
+          fi
+          git branch
+          echo "Running autoupdate command..."
+          cd "${REPO}"
+          planemo autoupdate . > "${BASEDIR}/autoupdate.log" #--skiplist $BASEDIR/autoupdate/tools-iuc_skip_list > $BASEDIR/autoupdate.log
+          rm -f tool_test_output.*
+          cd "${BASEDIR}/tools" # A laisser ?
+
+          if [[ $(git diff) ]]
+          then
+            TITLE=$(python "${BASEDIR}/scripts/pr_text.py" --repo "${REPO}" --log "${BASEDIR}/autoupdate.log" --shed "${REPO}/.shed.yml" --out "${BASEDIR}/body.txt")
+
+            # first check if a closed PR exists with the same title - if so, we don't continue
+            if [[ ! $(gh pr list -s closed --limit 1000 | grep "$TITLE" | grep CLOSED) ]]
+            then
+              echo "Adding..."
+              git add .
+
+              echo "Committing..."
+              git commit -m "${TITLE}"
+
+              echo "Push branch to remote..."
+              git push origin "${REPO}"
+
+              OLD_TITLE=$(gh pr list --limit 1000 | grep "${USERNAME}:${REPO}" | cut -f 2)
+              if [[ "${OLD_TITLE}" ]] # just need to update PR title
+              then
+                if [[ "${OLD_TITLE}" == *\) ]] # older PRs
+                then
+                  NEW_TITLE=$(echo "${OLD_TITLE}" | cut --complement -f 4 -d ' ' && echo  " to " && echo "${TITLE}" | cut -f 7 -d ' ')
+                else # newer PRs
+                  NEW_TITLE=$(echo "${OLD_TITLE}" | cut --complement -f 7 -d ' ' && echo "${TITLE}" | cut -f 7 -d ' ')
+                fi
+                PR_NUMBER=$(gh pr list --limit 1000 | grep "${USERNAME}:${REPO}" | cut -f 1)
+                gh pr edit "${PR_NUMBER}" -t "${NEW_TITLE}"
+              else # we need to create a PR
+                echo "Creating a PR..."
+                gh pr create --base main --head "${USERNAME}:${REPO}" --title "${TITLE}" --repo brsynth/synbiocad-galaxy-wrappers --body-file "${BASEDIR}/body.txt"
+              fi
+            fi
+          fi
+          # clean up for the next tool
+          git checkout -- "${REPO}"
+        done
