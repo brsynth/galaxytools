@@ -1,0 +1,119 @@
+name: Update
+on:
+  schedule:
+    - cron: "0 1 * * 1"
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  list_tool:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'List repos'
+        id: set-matrix
+        run: echo "matrix=$(find tools -mindepth 1 -maxdepth 1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_OUTPUT}"
+
+  update:
+    needs: [list_tool]
+    runs-on: ubuntu-latest
+    strategy:
+       max-parallel: 1
+       matrix:
+         repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.USER_TOKEN }}
+          ref: main
+      - name: "Setup python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+          cache-dependency-path: |
+            env/requirements.txt
+      - name: 'Install packages'
+        run: |
+          pip install -r env/requirements.txt
+      - name: 'Update repositories'
+        run: |
+          # git credentials
+          git config --global user.email "${{ secrets.USER_EMAIL }}"
+          git config --global user.name "${{ secrets.USER_NAME }}"
+
+          echo "${{ secrets.USER_TOKEN }}" > secrets.txt
+          gh auth login --with-token < secrets.txt
+          rm secrets.txt
+
+          git fetch --all
+          git pull origin main
+
+          BASEDIR=`pwd`
+          REPO=${{ matrix.repo }}
+          BRANCH="${GITHUB_REPOSITORY_OWNER}"-"${REPO}"
+
+          echo "Repository: ${REPO}"
+
+          # checkout branch, create if it doesn't exist
+          if [[ $(gh pr list --limit 10000 | grep "${BRANCH}".\s*OPEN) ]]
+          then
+            echo "PR exists, we will checkout the branch and add to it"
+            git checkout --track "origin/${BRANCH}"
+          else
+            if [[ $(git branch -a --list "origin/${BRANCH}") ]]
+            then
+              echo "Branch exists without an open PR - deleting"
+              git push origin --delete "${BRANCH}"
+            fi
+            echo "Creating branch and checking out"
+            git checkout -b "${BRANCH}" origin/main
+          fi
+
+          echo "Running autoupdate command..."
+          planemo autoupdate "tools/${REPO}" > "${BASEDIR}/autoupdate.log"
+
+          echo "Check to open PR"
+          if [[ $(git diff "tools/${REPO}") ]]
+          then
+            echo "Create title"
+            TITLE=$(python "${BASEDIR}/scripts/pr_text.py" --repo "${REPO}" --log "${BASEDIR}/autoupdate.log" --shed "tools/${REPO}/.shed.yml" --out "${BASEDIR}/body.txt")
+
+            # first check if a closed PR exists with the same title - if so, we don't continue
+            if [[ ! $(gh pr list -s closed --limit 1000 | grep "$TITLE" | grep CLOSED) ]]
+            then
+              echo "Adding..."
+              git add "tools/${REPO}"
+
+              echo "Committing..."
+              git commit -m "${TITLE}"
+
+              echo "Push branch to remote..."
+              git push origin "${BRANCH}"
+
+              OLD_TITLE=$(gh pr list --limit 1000 | grep "${BRANCH}" | cut -f 2)
+              if [[ "${OLD_TITLE}" ]] # just need to update PR title
+              then
+                if [[ "${OLD_TITLE}" == *\) ]] # older PRs
+                then
+                  NEW_TITLE=$(echo "${OLD_TITLE}" | cut --complement -f 4 -d ' ' && echo  " to " && echo "${TITLE}" | cut -f 7 -d ' ')
+                else # newer PRs
+                  NEW_TITLE=$(echo "${OLD_TITLE}" | cut --complement -f 7 -d ' ' && echo "${TITLE}" | cut -f 7 -d ' ')
+                fi
+                PR_NUMBER=$(gh pr list --limit 1000 | grep "${BRANCH}" | cut -f 1)
+                gh pr edit "${PR_NUMBER}" -t "${NEW_TITLE}"
+              else # we need to create a PR
+                echo "Creating a PR..."
+                gh pr create --base main --head "${BRANCH}" --title "${TITLE}" --repo brsynth/synbiocad-galaxy-wrappers --body-file "${BASEDIR}/body.txt"
+              fi
+            fi
+          fi

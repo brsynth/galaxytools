@@ -29,7 +29,7 @@
             --dmax '$adv.dmax'
             --mwmax_source '$adv.mwmax_source'
             --kinstall "\${TMPDIR:-.}"
-            --timeout '$adv.timeout' &&
+            --msc_timeout '$adv.timeout' &&
         if compgen -G 'out/*_scope.csv' > /dev/null; then
             cp out/*_scope.csv '$Reaction_Network';
         else

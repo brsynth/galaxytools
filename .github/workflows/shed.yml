@@ -1,0 +1,50 @@
+name: Shed
+
+on:
+  #push:
+  #  branches:
+  #    - main
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+
+  list_tool:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'List repos'
+        id: set-matrix
+        run: echo "matrix=$(find tools -mindepth 1 -maxdepth 1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_OUTPUT}"
+
+  test_tool:
+    needs: list_tool
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    defaults:
+      run:
+        shell: bash -el {0}
+    strategy:
+      max-parallel: 1
+      matrix:
+        repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'Deploying miniconda'
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          environment-file: recipes/workflow.yaml
+          mamba-version: "*"
+          channel-priority: true
+          use-mamba: true
+      - name: 'Test ToolShed'
+        run: |
+          planemo shed_update --check_diff --shed_target testtoolshed --shed_key "${{ secrets.TESTTOOLSHED }}" "tools/${{ matrix.repo }}"
+      - name: 'Main ToolShed'
+        run: |
+          planemo shed_update --check_diff --shed_target toolshed --shed_key "${{ secrets.TOOLSHED }}" "tools/${{ matrix.repo }}"
