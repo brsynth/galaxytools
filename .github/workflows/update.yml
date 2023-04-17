@@ -28,7 +28,7 @@ jobs:
         # git credentials
         #git config --global user.email "sbray@informatik.uni-freiburg.de"
         #git config --global user.name "planemo-autoupdate"
-        gh auth login --with-token < echo "${{ GITHUB_TOKEN }}"
+        gh auth login --with-token < echo "${{ secrets.GITHUB_TOKEN }}"
 
         #ls $BASEDIR/*
         #cd tools-iuc
