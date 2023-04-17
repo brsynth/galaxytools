@@ -1,8 +1,0 @@
-categories:
-- Synthetic Biology
-description: Pathways HTML Report
-long_description: 'Generates HTML report to explore the main characteristics of pathways
-  predicted with RetroPath suite. Source code may be found at the following location:
-  https://github.com/brsynth/rptools/tree/master/rptools/rpreport'
-name: rpreport
-owner: tduigou
