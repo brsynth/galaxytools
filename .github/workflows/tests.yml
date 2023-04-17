@@ -39,13 +39,13 @@ jobs:
           use-mamba: true
       - name: 'Prepare output'
         run: |
-          mkdir -p log
+          mkdir -p "log/${matrix.manifest}"
       - name: 'Wrapper Lint'
         run: |
-          planemo lint --urls --doi "${matrix.manifest}"
+          planemo lint --urls --doi "tools/${matrix.manifest}"
       - name: 'Shed lint'
         run: |
-          ./scripts/shed_lint.py -i "{matrix.manifest}"
+          ./scripts/shed_lint.py -i "tools/${matrix.manifest}"
       - name: 'Test tool'
         run: |
           mkdir -p "log/${matrix.manifest}"
@@ -58,7 +58,7 @@ jobs:
             --galaxy_python_version 3.7 \
             --test_timeout 900 \
             --job_output_files "log/${matrix.manifest}" \
-            "${matrix.manifest}"
+            "tools/${matrix.manifest}"
       - name: 'Prepare artefact'
         run: |
           zip -r -9 log.zip log
