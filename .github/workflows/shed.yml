@@ -1,9 +1,9 @@
-name: Tests
+name: Shed
 
 on:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
   schedule:
     - cron: '0 0 * * 1'
 
@@ -28,7 +28,7 @@ jobs:
       run:
         shell: bash -el {0}
     strategy:
-      max-parallel: 1 
+      max-parallel: 1
       matrix:
         repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
     steps:
