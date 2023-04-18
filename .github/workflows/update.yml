@@ -89,7 +89,7 @@ jobs:
               git push origin --delete "${REPO}"
             fi
             echo "Creating branch and checking out"
-            git checkout -b "${REPO}"
+            git checkout -b "${REPO}" origin/main
           fi
           #git branch
           echo "Running autoupdate command..."
@@ -131,4 +131,4 @@ jobs:
             fi
           fi
           # clean up for the next tool
-          git checkout -- "${REPO}"
+          #git checkout -- "${REPO}"
