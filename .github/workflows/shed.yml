@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  list_tool:
+  list:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -17,14 +17,14 @@ jobs:
         id: set-matrix
         run: echo "matrix=$(find tools -mindepth 1 -maxdepth 1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_OUTPUT}"
 
-  test_tool:
+  shed:
     needs: list_tool
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
       max-parallel: 1
       matrix:
-        repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
+        repo: ${{ fromJson(needs.list.outputs.matrix) }}
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
