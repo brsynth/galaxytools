@@ -29,11 +29,9 @@ jobs:
         with:
           python-version: '3.10'
           cache: 'pip' # caching pip dependencies
-          cache-dependency-path: |
-            env/requirements.txt
       - name: 'Install packages'
         run: |
-          pip install env/requirements.txt
+          pip install -r env/requirements.txt
 
   update:
     needs: [install_env, list_tool]
