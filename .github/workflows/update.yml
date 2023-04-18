@@ -65,8 +65,10 @@ jobs:
           #git fetch --all
           #git pull upstream main
           #git push origin main
-          git fetch --all
           #git pull origin main
+          git remote add origin git@github.com:brsynth/synbiocad-galaxy-wrappers.git
+          git fetch --all
+          git pull origin main
 
           BASEDIR=`pwd`
           USERNAME=brsynth
@@ -90,9 +92,9 @@ jobs:
           fi
           #git branch
           echo "Running autoupdate command..."
-          ls
           planemo autoupdate "tools/${REPO}" > "${BASEDIR}/autoupdate.log" #--skiplist $BASEDIR/autoupdate/tools-iuc_skip_list > $BASEDIR/autoupdate.log
 
+          echo "Check to open PR"
           if [[ $(git diff "tools/${REPO}") ]]
           then
             echo "Create title"
