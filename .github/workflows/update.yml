@@ -44,9 +44,10 @@ jobs:
       - name: 'Update repositories'
         run: |
           # git credentials
-          #git config --global user.email "sbray@informatik.uni-freiburg.de"
-          #git config --global user.name "planemo-autoupdate"
-          echo "${{ secrets.GITHUB_TOKEN }}" > secrets.txt
+          git config --global user.email "${{ secrets.USER_EMAIL }}"
+          git config --global user.name "${{ secrets.USER_NAME }}"
+
+          echo "${{ secrets.USER_TOKEN }}" > secrets.txt
           gh auth login --with-token < secrets.txt
           rm secrets.txt
 
