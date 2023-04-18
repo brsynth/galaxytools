@@ -21,20 +21,8 @@ jobs:
         id: set-matrix
         run: echo "matrix=$(find tools -mindepth 1 -maxdepth 1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_OUTPUT}"
 
-  install_env:
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Setup python"
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-          cache: 'pip' # caching pip dependencies
-      - name: 'Install packages'
-        run: |
-          pip install -r env/requirements.txt
-
   update:
-    needs: [install_env, list_tool]
+    needs: [list_tool]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -53,6 +41,9 @@ jobs:
           cache: 'pip' # caching pip dependencies
           cache-dependency-path: |
             env/requirements.txt
+      - name: 'Install packages'
+        run: |
+          pip install -r env/requirements.txt
       - name: 'Update repositories'
         run: |
           # git credentials
