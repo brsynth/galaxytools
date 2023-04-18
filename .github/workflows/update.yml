@@ -66,7 +66,7 @@ jobs:
           #git pull upstream main
           #git push origin main
           git fetch --all
-          git pull origin main
+          #git pull origin main
 
           BASEDIR=`pwd`
           USERNAME=brsynth
@@ -86,15 +86,16 @@ jobs:
               git push origin --delete "${REPO}"
             fi
             echo "Creating branch and checking out"
-            git checkout -b "${REPO}" origin/main
+            git checkout -b "${REPO}"
           fi
           #git branch
           echo "Running autoupdate command..."
           ls
           planemo autoupdate "tools/${REPO}" > "${BASEDIR}/autoupdate.log" #--skiplist $BASEDIR/autoupdate/tools-iuc_skip_list > $BASEDIR/autoupdate.log
 
-          if [[ $(git diff) ]]
+          if [[ $(git diff "tools/${REPO}") ]]
           then
+            echo "Create title"
             TITLE=$(python "${BASEDIR}/scripts/pr_text.py" --repo "${REPO}" --log "${BASEDIR}/autoupdate.log" --shed "${REPO}/.shed.yml" --out "${BASEDIR}/body.txt")
 
             # first check if a closed PR exists with the same title - if so, we don't continue
