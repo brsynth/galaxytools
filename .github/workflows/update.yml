@@ -29,11 +29,11 @@ jobs:
         with:
           python-version: '3.10'
           cache: 'pip' # caching pip dependencies
-          key: ${{ runner.os }}-pip
+          cache-dependency-path: |
+            env/requirements.txt
       - name: 'Install packages'
         run: |
-          pip install https://github.com/galaxyproject/planemo/archive/refs/heads/master.zip
-          pip install pyyaml
+          pip install env/requirements.txt
 
   update:
     needs: [install_env, list_tool]
@@ -48,11 +48,13 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
-      - name: 'Restore python env'
-        uses: actions/cache@v3
+      - name: "Setup python"
+        uses: actions/setup-python@v4
         with:
-          key: ${{ runner.os }}-pip
-          #path: <path to the files you need>  # See the note below
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+          cache-dependency-path: |
+            env/requirements.txt
       - name: 'Update repositories'
         run: |
           # git credentials
