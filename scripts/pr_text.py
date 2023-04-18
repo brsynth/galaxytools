@@ -40,5 +40,6 @@ text.append(
     "For any comments, queries or criticism about the bot, not related to the tool being updated in this PR, please create an issue [here](https://github.com/brsynth/synbiocad-galaxy-wrappers/issues/new)."
 )
 with open(args.out, "w") as f:
+    f.write("\n\n".join(text))
 
 print(f"Updating {args.repo} {update}")
