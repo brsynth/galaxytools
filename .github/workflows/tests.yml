@@ -21,9 +21,6 @@ jobs:
     needs: list_tool
     runs-on: ubuntu-latest
     continue-on-error: true
-    defaults:
-      run:
-        shell: bash -el {0}
     strategy:
       max-parallel: 1
       matrix:
@@ -32,15 +29,17 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v3
         with:
-          ref: master
-      - name: 'Deploying miniconda'
-        uses: conda-incubator/setup-miniconda@v2
+          ref: main
+      - name: "Setup python"
+        uses: actions/setup-python@v4
         with:
-          miniconda-version: "latest"
-          environment-file: recipes/workflow.yaml
-          mamba-version: "*"
-          channel-priority: true
-          use-mamba: true
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+          cache-dependency-path: |
+            env/requirements.txt
+      - name: 'Install packages'
+        run: |
+          pip install -r env/requirements.txt
       - name: 'Prepare output'
         run: |
           mkdir -p "log/${{ matrix.repo }}"
