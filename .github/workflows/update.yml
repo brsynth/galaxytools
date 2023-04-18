@@ -42,9 +42,9 @@ jobs:
           cache: 'pip' # caching pip dependencies
           cache-dependency-path: |
             env/requirements.txt
-      #- name: 'Install packages'
-      #  run: |
-      #    pip install -r env/requirements.txt
+      - name: 'Install packages'
+        run: |
+          pip install -r env/requirements.txt
       - name: 'Update repositories'
         run: |
           # git credentials
