@@ -65,12 +65,14 @@ jobs:
           #git fetch --all
           #git pull upstream main
           #git push origin main
+          git fetch --all
+          git pull origin main
 
           BASEDIR=`pwd`
           USERNAME=brsynth
           REPO=${{ matrix.repo }}
 
-          echo "${REPO}"
+          echo "Repository: ${REPO}"
 
           # checkout branch, create if it doesn't exist
           if [[ $(gh pr list --limit 10000 | grep "${USERNAME}:${REPO}".\s*OPEN) ]]
@@ -86,7 +88,7 @@ jobs:
             echo "Creating branch and checking out"
             git checkout -b "${REPO}" origin/main
           fi
-          git branch
+          #git branch
           echo "Running autoupdate command..."
           ls
           planemo autoupdate "tools/${REPO}" > "${BASEDIR}/autoupdate.log" #--skiplist $BASEDIR/autoupdate/tools-iuc_skip_list > $BASEDIR/autoupdate.log
