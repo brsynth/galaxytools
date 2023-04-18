@@ -6,8 +6,9 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   list_tool:
@@ -31,6 +32,9 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.USER_TOKEN }}
+          ref: main
       - name: "Setup python"
         uses: actions/setup-python@v4
         with:
