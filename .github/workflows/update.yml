@@ -24,13 +24,10 @@ jobs:
   update:
     needs: [list_tool]
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -el {0}
-    strategy:
-      max-parallel: 1
-      matrix:
-        repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
+    #strategy:
+    #   max-parallel: 1
+    #   matrix:
+    #     repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
@@ -73,7 +70,8 @@ jobs:
 
           BASEDIR=`pwd`
           USERNAME=brsynth
-          REPO=${{ matrix.repo }}
+          REPO="rp2biosensor"
+          #${{ matrix.repo }}
 
           echo "Repository: ${REPO}"
 
@@ -99,7 +97,7 @@ jobs:
           if [[ $(git diff "tools/${REPO}") ]]
           then
             echo "Create title"
-            TITLE=$(python "${BASEDIR}/scripts/pr_text.py" --repo "${REPO}" --log "${BASEDIR}/autoupdate.log" --shed "${REPO}/.shed.yml" --out "${BASEDIR}/body.txt")
+            TITLE=$(python "${BASEDIR}/scripts/pr_text.py" --repo "${REPO}" --log "${BASEDIR}/autoupdate.log" --shed "tools/${REPO}/.shed.yml" --out "${BASEDIR}/body.txt")
 
             # first check if a closed PR exists with the same title - if so, we don't continue
             if [[ ! $(gh pr list -s closed --limit 1000 | grep "$TITLE" | grep CLOSED) ]]
