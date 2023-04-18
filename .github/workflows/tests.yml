@@ -21,7 +21,11 @@ jobs:
     needs: list_tool
     runs-on: ubuntu-latest
     continue-on-error: true
+    defaults:
+      run:
+        shell: bash -el {0}
     strategy:
+      max-parallel: 1
       matrix:
         repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
     steps:

@@ -10,50 +10,62 @@ permissions:
   pull-requests: write
 
 jobs:
+  list_tool:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'List repos'
+        id: set-matrix
+        run: echo "matrix=$(find tools -mindepth 1 -maxdepth1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_OUTPUT}"
   update:
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash -el {0}
+    strategy:
+      max-parallel: 1
+      matrix:
+        repo: ${{ fromJson(needs.list_tool.outputs.matrix) }}
     steps:
-    - name: 'Checkout'
-      uses: actions/checkout@v3
-    - name: 'Deploying miniconda'
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        miniconda-version: "latest"
-        environment-file: recipes/workflow.yaml
-        mamba-version: "*"
-        channel-priority: true
-        use-mamba: true
-    - name: 'Update repositories'
-      run: |
-        # git credentials
-        #git config --global user.email "sbray@informatik.uni-freiburg.de"
-        #git config --global user.name "planemo-autoupdate"
-        echo "${{ secrets.GITHUB_TOKEN }}" > secrets.txt
-        gh auth login --with-token < secrets.txt
-        rm secrets.txt
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'Deploying miniconda'
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          environment-file: recipes/workflow.yaml
+          mamba-version: "*"
+          channel-priority: true
+          use-mamba: true
+      - name: 'Update repositories'
+        run: |
+          # git credentials
+          #git config --global user.email "sbray@informatik.uni-freiburg.de"
+          #git config --global user.name "planemo-autoupdate"
+          echo "${{ secrets.GITHUB_TOKEN }}" > secrets.txt
+          gh auth login --with-token < secrets.txt
+          rm secrets.txt
 
-        #ls $BASEDIR/*
-        #cd tools-iuc
-        #echo "Adding upstream..."
-        #git remote add upstream https://github.com/galaxyproject/tools-iuc.git
+          #ls $BASEDIR/*
+          #cd tools-iuc
+          #echo "Adding upstream..."
+          #git remote add upstream https://github.com/galaxyproject/tools-iuc.git
 
-        #echo "Getting git remote..."
-        #git remote -v
+          #echo "Getting git remote..."
+          #git remote -v
 
-        #echo "Pulling latest from upstream..."
-        #git fetch --all
-        #git pull upstream main
-        #git push origin main
+          #echo "Pulling latest from upstream..."
+          #git fetch --all
+          #git pull upstream main
+          #git push origin main
 
-        BASEDIR=`pwd`
-        REPOS=$(planemo ci_find_repos tools/)
-        USERNAME=brsynth
+          BASEDIR=`pwd`
+          USERNAME=brsynth
+          REPO=${{ matrix.repo }}
 
-        echo "List of repositories: $REPOS"
-        for REPO in "${REPOS}"; do
           echo "${REPO}"
 
           # checkout branch, create if it doesn't exist
@@ -73,8 +85,8 @@ jobs:
           git branch
           echo "Running autoupdate command..."
           cd "${REPO}"
-          planemo autoupdate . > "${BASEDIR}/autoupdate.log" #--skiplist $BASEDIR/autoupdate/tools-iuc_skip_list > $BASEDIR/autoupdate.log
-          rm -f tool_test_output.*
+          planemo autoupdate "tools/${REPO}" > "${BASEDIR}/autoupdate.log" #--skiplist $BASEDIR/autoupdate/tools-iuc_skip_list > $BASEDIR/autoupdate.log
+          #rm -f tool_test_output.*
           cd "${BASEDIR}/tools" # A laisser ?
 
           if [[ $(git diff) ]]
@@ -85,7 +97,7 @@ jobs:
             if [[ ! $(gh pr list -s closed --limit 1000 | grep "$TITLE" | grep CLOSED) ]]
             then
               echo "Adding..."
-              git add .
+              git add "tools/${REPO}"
 
               echo "Committing..."
               git commit -m "${TITLE}"
@@ -112,4 +124,3 @@ jobs:
           fi
           # clean up for the next tool
           git checkout -- "${REPO}"
-        done
