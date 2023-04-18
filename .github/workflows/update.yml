@@ -85,10 +85,10 @@ jobs:
           fi
           git branch
           echo "Running autoupdate command..."
-          cd "${REPO}"
+          #cd "${REPO}"
           planemo autoupdate "tools/${REPO}" > "${BASEDIR}/autoupdate.log" #--skiplist $BASEDIR/autoupdate/tools-iuc_skip_list > $BASEDIR/autoupdate.log
           #rm -f tool_test_output.*
-          cd "${BASEDIR}/tools" # A laisser ?
+          #cd "${BASEDIR}/tools" # A laisser ?
 
           if [[ $(git diff) ]]
           then
