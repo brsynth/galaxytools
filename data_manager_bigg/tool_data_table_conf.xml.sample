@@ -1,0 +1,13 @@
+<tables>
+    <!-- Location of sbml models -->
+    <table name="bigg_model_sbml" comment_char="#">
+        <columns>value, name, path</columns>
+        <file path="tool-data/bigg_model_sbml.loc" />
+    </table>
+    <!-- Location of metanetx chem prop data -->
+    <table name="metanetx_chem_prop" comment_char="#">
+        <columns>value, name, inchi</columns>
+        <file path="tool-data/metanetx_chem_prop.loc" />
+    </table>
+</tables>
+

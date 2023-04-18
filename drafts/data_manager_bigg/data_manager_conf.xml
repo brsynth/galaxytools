@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<data_managers>
+    <data_manager tool_file="data_manager/bigg_model_sbml_fetcher.xml" id="bigg_model_sbml_fetcher">
+        <data_table name="bigg_model_sbml">
+            <output>
+                <column name="value" />
+                <column name="name" />
+                <column name="path" output_ref="out_file">
+                    <move type="file" relativize_symlinks="True">
+                        <source>${path}</source>
+                        <target base="${GALAXY_DATA_MANAGER_DATA_PATH}">bigg/model/${name}.xml</target>
+                    </move>
+                    <value_translation>${GALAXY_DATA_MANAGER_DATA_PATH}/bigg/model/${name}.xml</value_translation>
+                    <value_translation type="function">abspath</value_translation>
+                </column>
+            </output>
+        </data_table>
+    </data_manager>
+    <data_manager tool_file="data_manager/metanetx_chem_prop_fetcher.xml" id="metanetx_chem_prop_fetcher">
+        <data_table name="metanetx_chem_prop">
+            <output>
+                <column name="value" />
+                <column name="name" />
+                <column name="inchi" />
+            </output>
+        </data_table>
+    </data_manager>
+</data_managers>

@@ -1,0 +1,54 @@
+<tool id="model_sbml_fetcher" name="Bigg SBML data manager" tool_type="manage_data" profile="18.09" version="0.0.1">
+    <description>Get an SBML model (BiGG)</description>
+    <requirements>
+        <requirement type="package" version="3.7">python</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python '$__tool_directory__/bigg_model_sbml_fetcher.py'
+            #if $model_cond.model_select == "auto"
+                --model-all
+            #else
+                --model-id '$model_cond.model_id'
+            #end if
+            --out-file '$out_file'
+    ]]></command>
+    <inputs>
+        <conditional name="model_cond">
+            <param name="model_select" type="select" label="Select a reference dataset your history or use a built-in?">
+                <option value="auto">Download all models</option>
+                <option value="manual">Manual install</option>
+            </param>
+            <when value="manual">
+                <param name="model_id" type="text" label="BIGG id model" value="">
+                    <validator type="empty_field" message="BIGG model ID is required"/>
+                </param>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="out_file" format="data_manager_json" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="model_id" value="e_coli_core"/>
+            <output name="out_file" file="e_coli_core.json"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+Pick SBML Model
+=================
+
+Download the selected SBML model fromg BiGG database.
+
+
+Version
+----------
+0.0.1
+
+License
+-------
+
+`MIT <https://github.com/brsynth/rptools/blob/master/LICENSE>`_
+
+    ]]></help>
+</tool>

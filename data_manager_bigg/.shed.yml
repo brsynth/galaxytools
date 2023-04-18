@@ -1,0 +1,10 @@
+name: data_manager_bigg
+owner: ggricourt
+description: Download data from BIGG website.
+homepage_url: http://bigg.ucsd.edu/
+long_description: |
+  Download data from BIGG website.
+remote_repository_url: "https://github.com/brsynth/synbiocad-galaxy-wrappers"
+type: unrestricted
+categories:
+  - Data Managers
