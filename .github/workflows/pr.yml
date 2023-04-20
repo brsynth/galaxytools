@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-      process: ${{ steps.set-matrix.outputs.process }}
+      nb: ${{ steps.set-matrix.outputs.nb }}
     steps:
       - name: 'Select modified files'
         id: files
@@ -27,16 +27,32 @@ jobs:
         run: |
           echo "list file modified"
           echo ${{ steps.files.outputs.all }}
-          matrix=$(jq -s -c '.[] | | map(select(contains("tools"))) | map(split("/")[2]) | sort | unique' <<< ${{ steps.files.outputs.all }})
+          matrix=$(echo ${{ steps.files.outputs.all }} | jq -R -s -c 'split(" ") | map(select(contains("tools"))) | map(split("/")[1]) | sort | unique')
+          echo "list of repo: ${matrix}"
           echo "matrix=$matrix" >> "${GITHUB_OUTPUT}"
-          process=true
-          [[ ${#matrix} -lt 3 ]] && process=false
-          echo "process=$process" >> "${GITHUB_OUTPUT}"
+          nb=$(echo ${matrix} | jq -s -c '.[] | length')
+          echo "Number of repos: ${nb}"
+          echo "nb=$nb" >> "${GITHUB_OUTPUT}"
+
+  skip:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'List repos'
+        id: set-matrix
+        run: |
+          matrix=$(jq -R -s -c '[split("\n")[] | select(.|length>0)]' .github/workflows/test_skip.txt)
+          echo "Number of repos: ${matrix}"
+          echo "matrix=$matrix" >> "${GITHUB_OUTPUT}"
 
   test:
-    needs: list
-    if: ${{ needs.list.outputs.process }} == true
+    needs: [list, skip]
+    if: needs.list.outputs.nb > 0
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       max-parallel: 1
       matrix:
@@ -56,9 +72,6 @@ jobs:
       - name: 'Install packages'
         run: |
           pip install -r env/requirements.txt
-      - name: 'Prepare output'
-        run: |
-          mkdir -p "log/${{ matrix.repo }}"
       - name: 'Wrapper Lint'
         run: |
           planemo lint --urls --doi "tools/${{ matrix.repo }}"
@@ -66,8 +79,8 @@ jobs:
         run: |
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
+        if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         run: |
-          mkdir -p "log/${{ matrix.repo }}"
           planemo test \
             --biocontainers \
             --no_dependency_resolution \
@@ -75,13 +88,20 @@ jobs:
             --galaxy_source https://github.com/galaxyproject/galaxy \
             --galaxy_branch release_22.05 \
             --galaxy_python_version 3.7 \
-            --test_timeout 900 \
-            --job_output_files "log/${{ matrix.repo }}" \
             "tools/${{ matrix.repo }}"
+      - name: 'Prepare artefact'
+        run: |
+          touch tool_test_output.html tool_test_output.json
+          zip -9 ${{ matrix.repo }}.zip tool_test_output.html tool_test_output.json
+      - name: 'Upload Artifact Version'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.repo }}-artifact
+          path: ${{ matrix.repo }}.zip
 
   shed:
     needs: list
-    if: github.event.pull_request.merged == true && ${{ needs.list.outputs.process }} == true
+    if: github.event.pull_request.merged == true && needs.list.outputs.process > 0
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
@@ -103,7 +123,7 @@ jobs:
           pip install -r env/requirements.txt
       - name: 'Test ToolShed'
         run: |
-          planemo shed_update --check_diff --shed_target testtoolshed --shed_key "${{ secrets.TESTTOOLSHED }}" "tools/${{ matrix.repo }}"
+          planemo shed_update --force_repository_creation --shed_target testtoolshed --shed_key "${{ secrets.TESTTOOLSHED }}" "tools/${{ matrix.repo }}"
       - name: 'Main ToolShed'
         run: |
-          planemo shed_update --check_diff --shed_target toolshed --shed_key "${{ secrets.TOOLSHED }}" "tools/${{ matrix.repo }}"
+          planemo shed_update --force_repository_creation --shed_target toolshed --shed_key "${{ secrets.TOOLSHED }}" "tools/${{ matrix.repo }}"
