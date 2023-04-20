@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "list file modified"
           echo ${{ steps.files.outputs.all }}
-          matrix=$(jq -R -s -c 'split(" ") | map(select(contains("tools"))) | map(split("/")[1]) | sort | unique' <<< ${{ steps.files.outputs.all }}
+          matrix=$(jq -R -s -c 'split(" ") | map(select(contains("tools"))) | map(split("/")[1]) | sort | unique' <<< ${{ steps.files.outputs.all }})
           echo "matrix=$matrix" >> "${GITHUB_OUTPUT}"
           process=true
           [[ ${#matrix} -lt 3 ]] && process=false
