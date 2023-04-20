@@ -79,7 +79,7 @@ jobs:
             "tools/${{ matrix.repo }}"
 
   shed:
-    needs: repo
+    needs: list
     if: github.event.pull_request.merged == true && ${{ needs.list.outputs.process }} == true
     runs-on: ubuntu-latest
     continue-on-error: true
