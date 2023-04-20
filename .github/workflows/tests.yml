@@ -17,8 +17,22 @@ jobs:
         id: set-matrix
         run: echo "matrix=$(find tools -mindepth 1 -maxdepth 1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_OUTPUT}"
 
+  skip:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'List repos'
+        id: set-matrix
+        run: |
+          matrix=$(jq -R -s -c '[split("\n")[] | select(.|length>0)]' .github/workflows/test_skip.txt)
+          echo "Number of repos: ${matrix}"
+          echo "matrix=$matrix" >> "${GITHUB_OUTPUT}"
+
   test:
-    needs: list
+    needs: [list, skip]
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
@@ -50,6 +64,7 @@ jobs:
         run: |
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
+        if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         run: |
           mkdir -p "log/${{ matrix.repo }}"
           planemo test \

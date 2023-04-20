@@ -21,13 +21,17 @@ jobs:
     steps:
       - name: 'Select modified files'
         id: files
-        uses: jitterbit/get-changed-files@v1
+        #uses: Ana06/get-changed-files@v2.2.0
+        uses: tj-actions/changed-files@v35
+        with:
+          files: tools/**
+          separator: ","
       - name: 'List repos'
         id: set-matrix
         run: |
           echo "list file modified"
-          echo ${{ steps.files.outputs.all }}
-          matrix=$(echo ${{ steps.files.outputs.all }} | jq -R -s -c 'split(" ") | map(select(contains("tools"))) | map(split("/")[1]) | sort | unique')
+          echo ${{ steps.files.outputs.all_changed_and_modified_files }}
+          matrix=$(echo ${{ steps.files.outputs.all_changed_and_modified_files }} | jq -R -s -c 'split(",") | map(select(contains("tools"))) | map(split("/")[1]) | sort | unique')
           echo "list of repo: ${matrix}"
           echo "matrix=$matrix" >> "${GITHUB_OUTPUT}"
           nb=$(echo ${matrix} | jq -s -c '.[] | length')
