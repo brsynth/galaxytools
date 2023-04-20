@@ -81,7 +81,7 @@ jobs:
         run: |
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
-        if: ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo)
+        if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         run: |
           planemo test \
             --biocontainers \
