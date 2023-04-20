@@ -107,7 +107,7 @@ jobs:
 
   shed:
     needs: list
-    if: github.event.pull_request.merged == true && needs.list.outputs.process > 0
+    if: ${{ github.event.pull_request.merged == true && needs.list.outputs.process > 0 }} 
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
