@@ -6,6 +6,7 @@ on:
       - edited
       - opened
       - reopened
+      - synchronize
   pull_request_target:
     types:
       - closed
@@ -85,7 +86,7 @@ jobs:
           name: ${{ matrix.repo }}-artifact
           path: ${{ matrix.repo }}.zip
   shed:
-    needs: repo
+    needs: list
     if: github.event.pull_request.merged == true && needs.list.outputs.process > 0
     runs-on: ubuntu-latest
     continue-on-error: true
