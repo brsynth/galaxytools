@@ -1,4 +1,4 @@
-<tool id="get_sbml_model" name="Pick SBML Model" version="0.0.2" profile="19.09" license="MIT">
+<tool id="get_sbml_model" name="Pick SBML Model" version="0.0.3" profile="19.09" license="MIT">
     <description>Get an SBML model (BiGG)</description>
     <requirements>
         <requirement type="package" version="7.81.0">curl</requirement>
@@ -71,7 +71,7 @@
         <!-- test 1: check if identical outputs are produced with iML1515 model input  -->
             <param name="input" value="iML1515" />
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1"/>
-            <output name="comp" md5="e93a875a2d8efc10a880ae3ac0018236"/>
+            <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236"/>
             <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06"/>
         </test>
     </tests>
