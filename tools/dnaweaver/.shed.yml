@@ -9,6 +9,5 @@ long_description: 'This tool uses a multi-objective algorithm to predict the bes
   as an SBOL file. Source code may be found at the following location: https://github.com/Edinburgh-Genome-Foundry/DnaWeaver'
 name: dnaweaver
 owner: tduigou
-  owner: tduigou
 homepage_url: https://github.com/brsynth/DNAWeaver_SynBioCAD
 remote_repository_url: https://github.com/brsynth/DNAWeaver_SynBioCAD
