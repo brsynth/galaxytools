@@ -1,4 +1,4 @@
-<tool id="sbol3_diff" name="SBOL3 DIFF" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+<tool id="sbol3_diff" name="SBOL3 DIFF" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09" license="MIT">
     <description>Computes the difference between two SBOL3 documents</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
@@ -34,7 +34,7 @@
     </tests>
     <help><![CDATA[
 SBOL3 DIFF
-================
+==========
 
 Input
 -----
@@ -48,24 +48,11 @@ Output
 ------
 
 * **Output**\ : Output with differences between two SBOL3 files.
-
-Project Links
-------------------
-
-* `GitHub <https://github.com/SynBioDex/SBOL-utilities>`_
-
-License
--------
-
-* `MIT <https://github.com/SynBioDex/SBOL-utilities/blob/develop/LICENSE.txt>`_
-
-Acknowledgments
----------------
-
-* Kenza BAZI-KABBAJ
-
     ]]></help>
     <creator>
-        <person givenName="Jacob" familyName="Beal" identifier="https://orcid.org/0000-0002-1663-5102" />
+        <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
     </creator>
+    <citations>
+        <citation type="doi">10.1021/acssynbio.1c00188</citation>
+    </citations>
 </tool>
