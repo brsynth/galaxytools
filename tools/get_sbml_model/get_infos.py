@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 from libsbml import (
     readSBMLFromFile
 )
+from requests import get as r_get
 
 
 def entry_point():
@@ -21,6 +22,16 @@ def entry_point():
         type=str,
         help='Path to store biomass reaction ID'
     )
+    parser.add_argument(
+        '--hostid',
+        type=str,
+        help='Extended name of the host organism'
+    )
+    parser.add_argument(
+        '--taxid',
+        type=str,
+        help='Path to store host taxonomy ID'
+    )
     params = parser.parse_args()
 
     sbml_doc = readSBMLFromFile(params.infile)
@@ -39,6 +50,34 @@ def entry_point():
             for rxn in reactions:
                 if 'biomass' in rxn.getId().lower():
                     f.write(f'{rxn.getId()}\n')
+
+    if params.taxid:
+        # Extended Name
+        server = 'http://bigg.ucsd.edu/api/v2/models/'
+        ext = params.hostid
+        r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
+        if not r.ok:
+            print(f"Warning: unable to retrieve host name for id {params.hostid}")
+        else:
+            try:
+                hostname = r.json()["organism"]
+            except KeyError:
+                print(f"*** Error: unable to retrieve host name for id {params.hostid}")
+                return -1
+        # TAXON ID
+        server = 'https://rest.ensembl.org'
+        ext = f'/taxonomy/id/{hostname}?'
+        r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
+        if not r.ok:
+            print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
+        else:
+            try:
+                taxid = r.json()["parent"]["id"]
+            except KeyError:
+                print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
+            with open(params.taxid, 'w') as f:
+                f.write('#ID\n')
+                f.write(f'{taxid}\n')
 
 if __name__ == "__main__":
     entry_point()

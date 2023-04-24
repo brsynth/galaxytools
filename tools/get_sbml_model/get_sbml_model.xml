@@ -8,7 +8,7 @@
     <command detect_errors="exit_code"><![CDATA[
         curl -o - 'http://bigg.ucsd.edu/static/models/$(input).xml.gz'
         | gunzip > '$model';
-        python '$__tool_directory__/'get_infos.py '$model' --comp '$compartments' --biomass '$biomass'
+        python '$__tool_directory__/'get_infos.py '$model' --hostid $input --comp '$compartments' --biomass '$biomass' --taxid '$taxid'
     ]]></command>
     <inputs>
         <param name="input" type="select" label="Strain">
@@ -63,6 +63,7 @@
     </inputs>
     <outputs>
         <data name="model" format="sbml" label="${input}" />
+        <data name="taxid" format="tsv" label="${input} (taxon id)" />
         <data name="compartments" format="tsv" label="${input} (compartments)" />
         <data name="biomass" format="tsv" label="${input} (biomass reactions)" />
     </outputs>
@@ -71,6 +72,7 @@
         <!-- test 1: check if identical outputs are produced with iML1515 model input  -->
             <param name="input" value="iML1515" />
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1"/>
+            <output name="taxid" md5="ec29688652dd49becf7be2a6c2469287"/>
             <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236"/>
             <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06"/>
         </test>
