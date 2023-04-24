@@ -79,5 +79,6 @@ def entry_point():
                 f.write('#ID\n')
                 f.write(f'{taxid}\n')
 
+
 if __name__ == "__main__":
     entry_point()
