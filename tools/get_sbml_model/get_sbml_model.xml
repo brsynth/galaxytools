@@ -84,4 +84,13 @@ Download the selected SBML model fromg BiGG database.
     <creator>
         <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
     </creator>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{get_sbml_model
+                author = {Joan Hérisson},
+                title = {{get_sbml_model}},
+                url = {https://github.com/brsynth/},
+            }
+        </citation>
+    </citations>
 </tool>
