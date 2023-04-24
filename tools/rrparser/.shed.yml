@@ -5,3 +5,5 @@ long_description: 'RRParser (Reaction Rules Parser) retrieves the reaction rules
   https://retrorules.org/. Source code may be found at the following location: https://github.com/brsynth/RRParser.'
 name: rrparser
 owner: tduigou
+homepage_url: https://github.com/brsynth/rrparser
+remote_repository_url: https://github.com/brsynth/rrparser
