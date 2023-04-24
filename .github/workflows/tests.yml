@@ -59,7 +59,7 @@ jobs:
           mkdir -p "log/${{ matrix.repo }}"
       - name: 'Wrapper Lint'
         run: |
-          planemo lint --urls --doi "tools/${{ matrix.repo }}"
+          planemo lint --urls --ensure_metadata "tools/${{ matrix.repo }}"
       - name: 'Shed lint'
         run: |
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"

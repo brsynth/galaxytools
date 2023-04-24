@@ -78,7 +78,8 @@ jobs:
           pip install -r env/requirements.txt
       - name: 'Wrapper Lint'
         run: |
-          planemo lint --urls --doi "tools/${{ matrix.repo }}"
+          planemo lint --urls --ensure_metadata "tools/${{ matrix.repo }}"
+          # no DOI checked due to restricted access
       - name: 'Shed lint'
         run: |
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
