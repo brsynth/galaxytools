@@ -34,7 +34,6 @@ jobs:
   test:
     needs: [list, skip]
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       max-parallel: 1
       matrix:
@@ -66,6 +65,8 @@ jobs:
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
+        timeout-minutes: 30
+        continue-on-error: true
         run: |
           mkdir -p "log/${{ matrix.repo }}"
           planemo test \
@@ -75,7 +76,6 @@ jobs:
             --galaxy_source https://github.com/galaxyproject/galaxy \
             --galaxy_branch release_22.05 \
             --galaxy_python_version 3.7 \
-            --test_timeout 900 \
             --job_output_files "log/${{ matrix.repo }}" \
             "tools/${{ matrix.repo }}"
       - name: 'Prepare artefact'
