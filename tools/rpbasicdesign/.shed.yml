@@ -8,3 +8,5 @@ description: 'rpbasicdesign extracts enzyme IDs from rpSBML files -- produced by
   location: https://github.com/brsynth/rpbasicdesign'
 name: rpbasicdesign
 owner: tduigou
+homepage_url: https://github.com/brsynth/rpbasicdesign
+remote_repository_url: https://github.com/brsynth/rpbasicdesign
