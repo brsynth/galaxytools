@@ -7,3 +7,5 @@ long_description: 'RP2paths extracts the set of pathways that lies in a metaboli
   following location: https://github.com/brsynth/rp2paths'
 name: rp2paths
 owner: tduigou
+homepage_url: https://github.com/brsynth/rp2paths
+remote_repository_url: https://github.com/brsynth/rp2paths
