@@ -59,9 +59,10 @@ jobs:
           mkdir -p "log/${{ matrix.repo }}"
       - name: 'Wrapper Lint'
         run: |
-          planemo lint --urls --ensure_metadata "tools/${{ matrix.repo }}"
+          planemo lint --urls --conda_requirements "tools/${{ matrix.repo }}"
       - name: 'Shed lint'
         run: |
+          planemo shed_lint --urls --xsd --ensure_metadata "tools/${{ matrix.repo }}"
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
