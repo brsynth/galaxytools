@@ -1,4 +1,4 @@
-<tool id="dnaweaver" name="DNA Weaver" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+<tool id="dnaweaver" name="DNA Weaver" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09" license="MIT">
     <description>Given a SBOL input, calculate assembly parts for Gibson or Golden Gate</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
@@ -106,29 +106,17 @@ Limitations
 --------------
 
 For constructs with repeated parts and other homologies (such as, in the example, the designs with several "Ter" in a row, ), Gibson assembly (and probably LCR assembly too) may create mis-annealed constructs and more clones will need to be picked. This is not taken into account by the script at the moment. This could be fixed by buying custom fragments from a commercial vendor for extreme cases (i.e. by amending the current implementation to forbid Gibson cuts in regions with homologies elsewhere and add a DNA vendor in the supply network).
-
-
-License
--------
-
-`MIT <https://raw.githubusercontent.com/Edinburgh-Genome-Foundry/DnaWeaver-online/master/LICENCE.txt>`_
-
-
-References
----------------
-
-`DNA Weaver: optimal DNA assembly strategies via supply networks and shortest-path algorithms <https://www.iwbdaconf.org/2019/docs/IWBDA19Proceedings.pdf>`_
-
-
-Acknowledgments
----------------
-
-* Thomas Duigou
-* Joan Hérisson
-
     ]]></help>
     <creator>
-        <person givenName="Valentin" familyName="Zulkower" />
-        <person givenName="Melchior" familyName="du Lac" />
+        <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
     </creator>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{DNAWeaver,
+                author = {Valentin Zulkower, Melchior Du Lac},
+                title = {{DNAWeaver}},
+                url = {https://www.iwbdaconf.org/2019/docs/IWBDA19Proceedings.pdf},
+            }
+        </citation>
+    </citations>
 </tool>
