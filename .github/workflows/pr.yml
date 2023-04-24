@@ -58,7 +58,6 @@ jobs:
     needs: [list, skip]
     if: ${{ github.event.pull_request.merged == false && needs.list.outputs.nb > 0 }}
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       max-parallel: 1
       matrix:
@@ -86,6 +85,8 @@ jobs:
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
+        timeout-minutes: 30
+        continue-on-error: true
         run: |
           planemo test \
             --biocontainers \
@@ -94,10 +95,9 @@ jobs:
             --galaxy_source https://github.com/galaxyproject/galaxy \
             --galaxy_branch release_22.05 \
             --galaxy_python_version 3.7 \
-            "tools/${{ matrix.repo }}"
+            "tools/${{ matrix.repo }}" || { touch tool_test_output.html tool_test_output.json; }
       - name: 'Prepare artefact'
         run: |
-          touch tool_test_output.html tool_test_output.json
           zip -9 ${{ matrix.repo }}.zip tool_test_output.html tool_test_output.json
       - name: 'Upload Artifact Version'
         uses: actions/upload-artifact@v3
