@@ -8,3 +8,5 @@ long_description: 'LCR Genie is a web-based tool for supporting the design of br
   Source code may be found at the following location: https://github.com/neilswainston/LCRGenie'
 name: lcrgenie
 owner: tduigou
+homepage_url: https://github.com/neilswanston/LCRGenie
+remote_repository_url: https://github.com/neilswanston/LCRGenie
