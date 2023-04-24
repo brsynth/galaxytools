@@ -8,7 +8,7 @@
     <command detect_errors="exit_code"><![CDATA[
         curl -o - 'http://bigg.ucsd.edu/static/models/$(input).xml.gz'
         | gunzip > '$model';
-        python '$__tool_directory__/'get_infos.py '$model' --hostid $input --comp '$compartments' --biomass '$biomass' --taxid '$taxid'
+        python '$__tool_directory__/'get_infos.py '$model' --hostid '$input' --comp '$compartments' --biomass '$biomass' --taxid '$taxid'
     ]]></command>
     <inputs>
         <param name="input" type="select" label="Strain">
