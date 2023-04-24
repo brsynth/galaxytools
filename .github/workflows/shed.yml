@@ -40,7 +40,7 @@ jobs:
           pip install -r env/requirements.txt
       - name: 'Test ToolShed'
         run: |
-          planemo shed_update --force_repository_creation --shed_target testtoolshed --shed_key "${{ secrets.TESTTOOLSHED }}" "tools/${{ matrix.repo }}"
+          planemo shed_update --force_repository_creation --shed_target testtoolshed --shed_key "${{ secrets.TESTTOOLSHED }}" "tools/${{ matrix.repo }}" || planemo shed_update --force_repository_creation --shed_target testtoolshed --shed_key "${{ secrets.TESTTOOLSHED }}" "tools/${{ matrix.repo }}"
       - name: 'Main ToolShed'
         run: |
-          planemo shed_update --force_repository_creation --shed_target toolshed --shed_key "${{ secrets.TOOLSHED }}" "tools/${{ matrix.repo }}"
+          planemo shed_update --force_repository_creation --shed_target toolshed --shed_key "${{ secrets.TOOLSHED }}" "tools/${{ matrix.repo }}" || planemo shed_update --force_repository_creation --shed_target toolshed --shed_key "${{ secrets.TOOLSHED }}" "tools/${{ matrix.repo }}"
