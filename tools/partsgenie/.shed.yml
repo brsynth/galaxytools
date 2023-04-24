@@ -5,3 +5,5 @@ long_description: 'PartsGenie allows for the design and optimisation of novel, r
   synthetic biology parts. Source code may be found at the following location: https://github.com/neilswainston/PartsGenieClient/'
 name: partsgenie
 owner: tduigou
+homepage_url: https://github.com/neilswainston/PartsGenieClient
+remote_repository_url: https://github.com/neilswainston/PartsGenieClient

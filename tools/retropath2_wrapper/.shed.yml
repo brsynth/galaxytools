@@ -11,3 +11,5 @@ long_description: 'Perform retrosynthesis search of possible metabolic routes be
   like the score for each reaction.'
 name: retropath2
 owner: tduigou
+homepage_url: https://github.com/brsynth/retropath2_wrapper
+remote_repository_url: https://github.com/brsynth/retropath2_wrapper

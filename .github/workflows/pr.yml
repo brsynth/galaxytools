@@ -56,7 +56,7 @@ jobs:
 
   test:
     needs: [list, skip]
-    if: needs.list.outputs.nb > 0
+    if: ${{ github.event.pull_request.merged == false && needs.list.outputs.nb > 0 }}
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
@@ -66,8 +66,6 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
-        with:
-          ref: main
       - name: "Setup python"
         uses: actions/setup-python@v4
         with:
@@ -80,9 +78,11 @@ jobs:
           pip install -r env/requirements.txt
       - name: 'Wrapper Lint'
         run: |
-          planemo lint --urls --doi "tools/${{ matrix.repo }}"
+          planemo lint "tools/${{ matrix.repo }}"
+          # no DOI checked due to restricted access
       - name: 'Shed lint'
         run: |
+          planemo shed_lint --urls --xsd --ensure_metadata "tools/${{ matrix.repo }}"
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
@@ -107,7 +107,7 @@ jobs:
 
   shed:
     needs: list
-    if: ${{ github.event.pull_request.merged == true && needs.list.outputs.process > 0 }} 
+    if: ${{ github.event.pull_request.merged == true && needs.list.outputs.nb > 0 }}
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:

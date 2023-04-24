@@ -4,3 +4,5 @@ description: Pick an SBML model among a list
 long_description: Download the selected SBML model fromg BiGG database.
 name: get_sbml_model
 owner: tduigou
+homepage_url: https://github.com/brsynth/synbiocad-galaxy-wrappers
+remote_repository_url: https://github.com/brsynth/synbiocad-galaxy-wrappers

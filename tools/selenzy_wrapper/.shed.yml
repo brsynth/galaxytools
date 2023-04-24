@@ -8,3 +8,5 @@ long_description: 'Selenzy performs enzyme sequence selection from a reaction qu
   Source code may be found at the following location: https://github.com/brsynth/selenzy-wrapper'
 name: selenzy
 owner: tduigou
+homepage_url: https://github.com/brsynth/selenzy-wrapper
+remote_repository_url: https://github.com/brsynth/selenzy-wrapper

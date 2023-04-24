@@ -7,3 +7,5 @@ long_description: 'DNA-Bot software takes as input the CSV files describing the 
   code may be found at the following location: https://github.com/brsynth/DNA-BOT/tree/DNA-BOT-APIv2'
 name: dnabot
 owner: tduigou
+homepage_url: https://github.com/brsynth/DNA-BOT
+remote_repository_url: https://github.com/brsynth/DNA-BOT

@@ -10,3 +10,5 @@ long_description: 'rp2biosensor extracts metabolic paths linking undetectable co
   https://github.com/brsynth/rp2biosensor'
 name: rp2biosensor
 owner: tduigou
+homepage_url: https://github.com/brsynth/rp2biosensor
+remote_repository_url: https://github.com/brsynth/rp2biosensor
