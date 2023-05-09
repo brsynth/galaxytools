@@ -1,4 +1,4 @@
-<tool id="sbol_converter" name="SBOL Converter" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+<tool id="sbol_converter" name="SBOL Converter" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09" license="MIT">
     <description>Convert between SBOL3 and other genetic design formats</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
@@ -93,7 +93,6 @@
         <param name="sbol2_input" value="BASIC_construct_A1_sbol2_input.xml" />
         <output name="output" file="BASIC_construct_A1_sbol3_output.nt" ftype="nt" compare="diff"/>
         </test>
-        
         <test>
         <!-- test 2: check if identical outputs are produced sbol3 to genbank-->
         <conditional name="convert_type">
@@ -119,7 +118,7 @@
     </tests>
     <help><![CDATA[
 SBOL Converter
-================
+==============
 
 Convert between SBOL3 and other genetic design formats.
 
@@ -132,13 +131,11 @@ Required:
 Output
 ------
 * **OUTPUT_FILE**\ : SBOL2 or SBOL3 or GENBANK or FASTA output file.
-
-Project Links
-------------------
-* `GitHub <https://github.com/SynBioDex/SBOL-utilities>`_
-
-License
--------
-* `MIT <https://github.com/SynBioDex/SBOL-utilities/blob/develop/LICENSE.txt>`_
     ]]></help>
+    <creator>
+        <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
+    </creator>
+    <citations>
+        <citation type="doi">10.1021/acssynbio.1c00188</citation>
+    </citations>
 </tool>
