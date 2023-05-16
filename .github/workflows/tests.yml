@@ -86,3 +86,6 @@ jobs:
         with:
           name: log-artifact
           path: log.zip
+      - name: 'Aggregate results'
+        run: |
+          ./scripts/aggregate_test.py -i .

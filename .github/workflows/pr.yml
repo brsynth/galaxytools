@@ -104,6 +104,9 @@ jobs:
         with:
           name: ${{ matrix.repo }}-artifact
           path: ${{ matrix.repo }}.zip
+      - name: 'Aggregate results'
+        run: |
+          ./scripts/aggregate_test.py -i .
 
   shed:
     needs: list
