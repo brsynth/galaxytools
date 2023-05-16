@@ -10,10 +10,6 @@
         <regex match="ERROR:root:ChemAxon" level="warning" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
-        echo "CACHE HOME \$XDG_CACHE_HOME" &&
-        echo "TEST1 \$TEST1" &&
-        echo "TEST2 \$TEST2" &&
-        echo "TEST3 \$TEST3" &&
         python -m rptools.rpthermo
         '$input'
         '$pathway_with_thermo'
@@ -23,9 +19,6 @@
     ]]></command>
     <environment_variables>
         <environment_variable name="XDG_CACHE_HOME">$__tool_directory__</environment_variable>
-        <environment_variable name="TEST1">\$__tool_directory__</environment_variable>
-        <environment_variable name="TEST2">\$_GALAXY_JOB_TMP_DIR</environment_variable>
-        <environment_variable name="TEST3">$_GALAXY_JOB_TMP_DIR</environment_variable>
     </environment_variables>
     <inputs>
         <param name="input" type="data" format="sbml" label="SBML Input File" help="Pathways in SBML format" />
