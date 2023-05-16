@@ -18,7 +18,7 @@
         --pMg '$adv.pMg'
     ]]></command>
     <environment_variables>
-        <environment_variable name="XDG_CACHE_HOME">$__tool_directory__</environment_variable>
+        <environment_variable name="XDG_CACHE_HOME">$TMPDIR</environment_variable>
     </environment_variables>
     <inputs>
         <param name="input" type="data" format="sbml" label="SBML Input File" help="Pathways in SBML format" />
