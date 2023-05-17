@@ -10,6 +10,7 @@
         <regex match="ERROR:root:ChemAxon" level="warning" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
+        export XDG_CACHE_HOME="\${TMPDIR:-.}" ;
         python -m rptools.rpthermo
         '$input'
         '$pathway_with_thermo'
@@ -17,9 +18,9 @@
         --ionic_strength '$adv.ionic_strength'
         --pMg '$adv.pMg'
     ]]></command>
-    <environment_variables>
+    <!-- <environment_variables>
         <environment_variable name="XDG_CACHE_HOME">\$TMPDIR</environment_variable>
-    </environment_variables>
+    </environment_variables> -->
     <inputs>
         <param name="input" type="data" format="sbml" label="SBML Input File" help="Pathways in SBML format" />
         <section name="adv" title="Advanced Options" expanded="false">
