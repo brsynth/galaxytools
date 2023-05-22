@@ -72,7 +72,7 @@ def entry_point():
             print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
         else:
             try:
-                taxid = r.json()["parent"]["id"]
+                taxid = r.json()["id"]
             except KeyError:
                 print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
             with open(params.taxid, 'w') as f:
