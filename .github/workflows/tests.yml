@@ -80,11 +80,11 @@ jobs:
             "tools/${{ matrix.repo }}"
       - name: 'Prepare artefact'
         run: |
-          zip -r -9 log.zip log
+          zip -r -9 log.zip "log/${{ matrix.repo }}"
       - name: 'Upload Artifact Version'
         uses: actions/upload-artifact@v3
         with:
-          name: log-artifact
+          name: log-artifact-${{ matrix.repo }}
           path: log.zip
       - name: 'Aggregate results'
         run: |
