@@ -4,12 +4,17 @@
         <requirement type="package" version="7.81.0">curl</requirement>
         <requirement type="package" version="1.11">gzip</requirement>
         <requirement type="package" version="5.19.2">python-libsbml</requirement>
-        <requirement type="package" version="5.19.2">requests</requirement>
+        <requirement type="package" version="2.29">requests</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         curl -o - 'http://bigg.ucsd.edu/static/models/$(input).xml.gz'
         | gunzip > '$model';
-        python '$__tool_directory__/'get_infos.py '$model' --hostid '$input' --comp '$compartments' --biomass '$biomass' --taxid '$taxid'
+        python '$__tool_directory__/'get_infos.py
+        '$model'
+        --hostid '$input'
+        --comp '$compartments'
+        --biomass '$biomass'
+        --taxid '$taxid'
     ]]></command>
     <inputs>
         <param name="input" type="select" label="Strain">
