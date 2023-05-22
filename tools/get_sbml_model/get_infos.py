@@ -62,22 +62,26 @@ def entry_point():
             try:
                 hostname = r.json()["organism"]
             except KeyError:
-                print(f"*** Error: unable to retrieve host name for id {params.hostid}")
-                return -1
-        # TAXON ID
-        server = 'https://rest.ensembl.org'
-        ext = f'/taxonomy/id/{hostname}?'
-        r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
-        if not r.ok:
-            print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
+                print(f"Warning: unable to retrieve host name for id {params.hostid}")
+                hostname = ''
+        if not hostname:
+            taxid = ''
         else:
-            try:
-                taxid = r.json()["parent"]["id"]
-            except KeyError:
+            # TAXON ID
+            server = 'https://rest.ensembl.org'
+            ext = f'/taxonomy/id/{hostname}?'
+            r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
+            if not r.ok:
                 print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
-            with open(params.taxid, 'w') as f:
-                f.write('#ID\n')
-                f.write(f'{taxid}\n')
+            else:
+                try:
+                    taxid = r.json()["id"]
+                except KeyError:
+                    print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
+                    taxid = ''
+        with open(params.taxid, 'w') as f:
+            f.write('#ID\n')
+            f.write(f'{taxid}\n')
 
 
 if __name__ == "__main__":
