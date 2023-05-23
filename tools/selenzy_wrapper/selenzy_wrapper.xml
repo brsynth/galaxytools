@@ -57,6 +57,16 @@
             <output name="uniprot_ids" file="uniprod_ids_out.xml" compare="diff" sort="true"/>
             <output name="uniprot_ids_csv" file="uniprod_ids_out.csv" ftype="csv" compare="diff"/>
         </test>
+        <test>
+        <!-- test 2: check with taxon ID from a file  -->
+            <param name="pathway" value="pathway.xml" />
+            <conditional name="input_sim_type">
+                <param name="host_taxID_type" value="tsv" />
+            </conditional>
+            <param name="host_taxID_file" value="taxID.tsv" />
+            <output name="uniprot_ids" file="uniprod_ids_out.xml" compare="diff" sort="true"/>
+            <output name="uniprot_ids_csv" file="uniprod_ids_out.csv" ftype="csv" compare="diff"/>
+        </test>
     </tests>
     <help><![CDATA[
 Selenzyme
