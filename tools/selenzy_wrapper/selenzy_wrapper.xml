@@ -38,7 +38,6 @@
                 <param name="host_taxID_file" type="data" format="tsv" label="Host taxon ID file" />
             </when>
         </conditional>
-        <!-- <param name="host_taxID" type="integer" value="83333" label="Host taxon ID" help="Taxon ID of the chassis (default: 83333 [E. coli K12])" /> -->
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="enzyme_taxIDs" type="text" value="" label="Comma separated taxon IDs of output enzyme sequences" />
             <param name="nb_ids" type="integer" value="-1" label="Number of uniprot IDs with top score to keep" help=" Number of enzyme IDs to display in results (after taxon IDs filtering) [default = -1 (no limit)]" />
