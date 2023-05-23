@@ -6,7 +6,7 @@ long_description: 'Selenzy performs enzyme sequence selection from a reaction qu
   RetroRules(https://github.com/brsynth/RRParser). This feature makes this tool especially
   useful in combination with RetroPath2.0 (https://github.com/brsynth/RetroPath2-wrapper).
   Source code may be found at the following location: https://github.com/brsynth/selenzy-wrapper'
-name: selenzy
+name: selenzy-wrapper
 owner: tduigou
 homepage_url: https://github.com/brsynth/selenzy-wrapper
 remote_repository_url: https://github.com/brsynth/selenzy-wrapper
