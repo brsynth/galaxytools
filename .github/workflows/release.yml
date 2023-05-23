@@ -1,31 +1,12 @@
 name: Release
 
 on:
-  schedule:
-    - cron: '0 0 * * 2'
+  workflow_call:
 
 jobs:
 
-  Diff:
-    runs-on: ubuntu-latest
-    outputs:
-      nb: ${{ steps.set-diff.outputs.nb }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-          ref: 'stable'
-      - name: "Check diff"
-        id: set-diff
-        run: |
-          nb=$(git diff --quiet stable..origin/main)
-          echo "nb=$nb" >> "${GITHUB_OUTPUT}"
-
   TagRaw:
     runs-on: ubuntu-latest
-    needs: [Diff]
-    if: ${{ needs.Diff.outputs.nb > 0 }}
     outputs:
       tag: ${{ steps.tag_label.outputs.tag }}
       changelog: ${{ steps.tag_raw.outputs.changelog }}
