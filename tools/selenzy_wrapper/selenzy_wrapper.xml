@@ -12,7 +12,11 @@
         --nb_targets '$adv.nb_targets'
         --d '$adv.direction'
         $adv.NoMSA
-        --host_taxID '$adv.host_taxID'
+        #if str($host_taxID_type_conditional.host_taxID_type) == "tsv":
+            --host_taxID `sed 1d ${host_taxID_type_conditional.host_taxID_file}`
+        #else:
+            --host_taxID '$host_taxID_type_conditional.host_taxID_int'
+        #end if
         #if str($adv.enzyme_taxIDs) != "":
             --enzyme_taxIDs '$adv.enzyme_taxIDs'
         #end if
@@ -22,8 +26,20 @@
     ]]></command>
     <inputs>
         <param name="pathway" type="data" format="sbml" label="Pathway (SBML)" />
+        <conditional name="host_taxID_type_conditional">
+            <param name="host_taxID_type" type="select" label="Host taxon ID type">
+                <option value="integer" selected="True">Value</option>
+                <option value="tsv">File</option>
+            </param>
+            <when value="integer">
+                <param name="host_taxID_int" type="integer" label="Host taxon ID value" value="83333" help="default: 83333 [E. coli K12]" />
+            </when>
+            <when value="tsv">
+                <param name="host_taxID_file" type="data" format="tsv" label="Host taxon ID file" />
+            </when>
+        </conditional>
+        <!-- <param name="host_taxID" type="integer" value="83333" label="Host taxon ID" help="Taxon ID of the chassis (default: 83333 [E. coli K12])" /> -->
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="host_taxID" type="integer" value="83333" label="Host taxon ID" help="Taxon ID of the chassis (default: 83333 [E. coli K12])" />
             <param name="enzyme_taxIDs" type="text" value="" label="Comma separated taxon IDs of output enzyme sequences" />
             <param name="nb_ids" type="integer" value="-1" label="Number of uniprot IDs with top score to keep" help=" Number of enzyme IDs to display in results (after taxon IDs filtering) [default = -1 (no limit)]" />
             <param name="nb_targets" type="integer" value="500" min="1" label="Number of targets to display in results" help="Number of targets to display in results (before taxon IDs filtering) [default = 500]" />
