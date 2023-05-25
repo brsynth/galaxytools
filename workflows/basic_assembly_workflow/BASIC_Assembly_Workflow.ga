@@ -1,0 +1,259 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "format-version": "0.1",
+    "name": "BASIC_Assembly_Workflow",
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "SBML pathways"
+                }
+            ],
+            "label": "SBML pathways",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 335.8000030517578,
+                "height": 61.80000305175781,
+                "left": -118.5,
+                "right": 81.5,
+                "top": 274,
+                "width": 200,
+                "x": -118.5,
+                "y": 274
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "274db529-8d38-4f2b-84ce-8bc14e5fc35e",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "0058aece-8f90-4470-ba24-ba9cf7a08fdc"
+                }
+            ]
+        },
+        "1": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/selenzy/selenzy-wrapper/0.1.0",
+            "errors": null,
+            "id": 1,
+            "input_connections": {
+                "pathway": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Selenzyme",
+            "outputs": [
+                {
+                    "name": "uniprot_ids",
+                    "type": "xml"
+                },
+                {
+                    "name": "uniprot_ids_csv",
+                    "type": "csv"
+                }
+            ],
+            "position": {
+                "bottom": 464.6000061035156,
+                "height": 123.60000610351562,
+                "left": 117.5,
+                "right": 317.5,
+                "top": 341,
+                "width": 200,
+                "x": 117.5,
+                "y": 341
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/selenzy/selenzy-wrapper/0.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "481f7c35323d",
+                "name": "selenzy",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"nb_ids\": \"-1\", \"nb_targets\": \"500\", \"direction\": \"0.0\", \"NoMSA\": \"true\", \"taxonIDs\": \"83333\"}, \"pathway\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.1.0",
+            "type": "tool",
+            "uuid": "b8f4e97e-a3e1-4743-80bf-29b3bf2c41eb",
+            "workflow_outputs": [
+                {
+                    "label": "Uniprot IDs",
+                    "output_name": "uniprot_ids",
+                    "uuid": "93661860-776f-4cb8-baa7-eda965d2c194"
+                },
+                {
+                    "label": "Uniprot IDs",
+                    "output_name": "uniprot_ids_csv",
+                    "uuid": "a62113ab-6728-48d5-acb4-14bc2bc6795d"
+                }
+            ]
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rpbasicdesign/rpbasicdesign/0.3.4",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "rpsbml_file": {
+                    "id": 1,
+                    "output_name": "uniprot_ids"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool BasicDesign",
+                    "name": "adv"
+                },
+                {
+                    "description": "runtime parameter for tool BasicDesign",
+                    "name": "rpsbml_file"
+                }
+            ],
+            "label": null,
+            "name": "BasicDesign",
+            "outputs": [
+                {
+                    "name": "sbol_dir",
+                    "type": "input"
+                },
+                {
+                    "name": "Constructs",
+                    "type": "csv"
+                },
+                {
+                    "name": "User parts plate",
+                    "type": "csv"
+                },
+                {
+                    "name": "Biolegio plate",
+                    "type": "csv"
+                }
+            ],
+            "position": {
+                "bottom": 583.8000030517578,
+                "height": 214.8000030517578,
+                "left": 386,
+                "right": 586,
+                "top": 369,
+                "width": 200,
+                "x": 386,
+                "y": 369
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rpbasicdesign/rpbasicdesign/0.3.4",
+            "tool_shed_repository": {
+                "changeset_revision": "de9f53630349",
+                "name": "rpbasicdesign",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"parts_files\": {\"__class__\": \"RuntimeValue\"}, \"lms_id\": \"LMS\", \"lmp_id\": \"LMP\", \"cds_permutation\": \"true\"}, \"backbone_id\": \"BASIC_SEVA_37_CmR-p15A.1\", \"rpsbml_file\": {\"__class__\": \"RuntimeValue\"}, \"sample_size\": \"88\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.3.4",
+            "type": "tool",
+            "uuid": "678a53d3-1241-4f82-8d40-3da99f2be890",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "Biolegio plate",
+                    "uuid": "a34be5bd-9da4-461c-bec5-1c4dc5a8c18f"
+                },
+                {
+                    "label": null,
+                    "output_name": "sbol_dir",
+                    "uuid": "469241a2-0ecb-42f5-bcea-53aca636bb46"
+                },
+                {
+                    "label": null,
+                    "output_name": "Constructs",
+                    "uuid": "8755e80f-1ebe-4210-b0df-8acf8218a62c"
+                },
+                {
+                    "label": null,
+                    "output_name": "User parts plate",
+                    "uuid": "ff9e10e0-bfd3-4d0f-98f1-87fd94771293"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/dnabot/dnabot/3.0.0",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "construct_file": {
+                    "id": 2,
+                    "output_name": "Constructs"
+                },
+                "plate_files": [
+                    {
+                        "id": 2,
+                        "output_name": "User parts plate"
+                    },
+                    {
+                        "id": 2,
+                        "output_name": "Biolegio plate"
+                    }
+                ]
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool DNA-Bot",
+                    "name": "adv"
+                }
+            ],
+            "label": null,
+            "name": "DNA-Bot",
+            "outputs": [
+                {
+                    "name": "dnabot_scripts",
+                    "type": "tar"
+                }
+            ],
+            "position": {
+                "bottom": 644.8000030517578,
+                "height": 194.8000030517578,
+                "left": 641.5,
+                "right": 841.5,
+                "top": 450,
+                "width": 200,
+                "x": 641.5,
+                "y": 450
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/dnabot/dnabot/3.0.0",
+            "tool_shed_repository": {
+                "changeset_revision": "6d55c77a17ab",
+                "name": "dnabot",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"default_settings_file\": {\"__class__\": \"RuntimeValue\"}, \"etoh_well\": \"A11\", \"soc_column\": \"1\"}, \"construct_file\": {\"__class__\": \"ConnectedValue\"}, \"plate_files\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.0.0",
+            "type": "tool",
+            "uuid": "d5a18d74-8189-48d7-83ca-a63f6f8e1d39",
+            "workflow_outputs": [
+                {
+                    "label": "DNA-Bot scripts",
+                    "output_name": "dnabot_scripts",
+                    "uuid": "e0eabfa3-2dbd-44bc-9471-f8589a1a1861"
+                }
+            ]
+        }
+    },
+    "tags": [],
+    "uuid": "64390e96-9d57-441a-81cf-7544414ea50c",
+    "version": 4
+}

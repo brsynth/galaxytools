@@ -1,0 +1,372 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "format-version": "0.1",
+    "name": "Genetic_Design_Workflow",
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "SBML Pathway"
+                }
+            ],
+            "label": "SBML Pathway",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 393.8000030517578,
+                "height": 61.80000305175781,
+                "left": -68,
+                "right": 132,
+                "top": 332,
+                "width": 200,
+                "x": -68,
+                "y": 332
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "e0c30803-3cb9-41f0-9474-f5f9d1d1e5ad",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "c6ae200e-5f3c-43d0-a3c0-2a13a1649b32"
+                }
+            ]
+        },
+        "1": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/selenzy/selenzy-wrapper/0.1.0",
+            "errors": null,
+            "id": 1,
+            "input_connections": {
+                "pathway": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Selenzyme",
+            "outputs": [
+                {
+                    "name": "uniprot_ids",
+                    "type": "xml"
+                },
+                {
+                    "name": "uniprot_ids_csv",
+                    "type": "csv"
+                }
+            ],
+            "position": {
+                "bottom": 611.6000061035156,
+                "height": 123.60000610351562,
+                "left": 152.25,
+                "right": 352.25,
+                "top": 488,
+                "width": 200,
+                "x": 152.25,
+                "y": 488
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/selenzy/selenzy-wrapper/0.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "481f7c35323d",
+                "name": "selenzy",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"nb_ids\": \"-1\", \"nb_targets\": \"500\", \"direction\": \"0.0\", \"NoMSA\": \"true\", \"taxonIDs\": \"83333\"}, \"pathway\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.1.0",
+            "type": "tool",
+            "uuid": "14aad2ec-173e-4d6b-9a4e-6a377c01eb47",
+            "workflow_outputs": [
+                {
+                    "label": "Uniprot IDs",
+                    "output_name": "uniprot_ids",
+                    "uuid": "dd39886f-4a0a-4b19-ab49-ce78fd6c3e78"
+                },
+                {
+                    "label": "Uniprot IDs",
+                    "output_name": "uniprot_ids_csv",
+                    "uuid": "eb5292b9-77e2-48f6-9f7a-c9f99c94c5f0"
+                }
+            ]
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/sbml2sbol/sbml2sbol/0.1.12",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "sbml_single_input": {
+                    "id": 1,
+                    "output_name": "uniprot_ids"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "SbmlToSbol",
+            "outputs": [
+                {
+                    "name": "sbol_outfile",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 536.6000061035156,
+                "height": 113.60000610351562,
+                "left": 433.5,
+                "right": 633.5,
+                "top": 423,
+                "width": 200,
+                "x": 433.5,
+                "y": 423
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/sbml2sbol/sbml2sbol/0.1.12",
+            "tool_shed_repository": {
+                "changeset_revision": "f0a06f526c7f",
+                "name": "sbml2sbol",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"rbs\": \"true\", \"max_prot_per_react\": \"3\", \"tirs\": \"\", \"pathway_id\": \"rp_pathway\", \"uniprotID_key\": \"selenzy\"}, \"sbml_single_input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.1.12",
+            "type": "tool",
+            "uuid": "585d5a08-f0c2-4a87-b3ca-ce9e809ad7bb",
+            "workflow_outputs": [
+                {
+                    "label": "SbmlToSbol: sbol outfile",
+                    "output_name": "sbol_outfile",
+                    "uuid": "0ab3c9d1-82fb-4295-89ad-02e8c5dc0e64"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/partsgenie/PartsGenie/1.0.1",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "enzymes_file": {
+                    "id": 2,
+                    "output_name": "sbol_outfile"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PartsGenie",
+                    "name": "enzymes_file"
+                }
+            ],
+            "label": null,
+            "name": "PartsGenie",
+            "outputs": [
+                {
+                    "name": "parts",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 484.1999969482422,
+                "height": 93.19999694824219,
+                "left": 692,
+                "right": 892,
+                "top": 391,
+                "width": 200,
+                "x": 692,
+                "y": 391
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/partsgenie/PartsGenie/1.0.1",
+            "tool_shed_repository": {
+                "changeset_revision": "295a21fc55d0",
+                "name": "partsgenie",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"url\": \"https://partsgenie.micalis.inrae.fr\"}, \"enzymes_file\": {\"__class__\": \"RuntimeValue\"}, \"taxonomy_id\": \"83333\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.1",
+            "type": "tool",
+            "uuid": "a6dd01a2-6def-4872-89d0-c762b7e6e1ca",
+            "workflow_outputs": [
+                {
+                    "label": "Parts",
+                    "output_name": "parts",
+                    "uuid": "73bc4334-9596-47f8-9fc3-a6e4767e97bb"
+                }
+            ]
+        },
+        "4": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/optdoe/OptDoE/2.0.1",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "adv|genes_sbol_file": {
+                    "id": 3,
+                    "output_name": "parts"
+                },
+                "genes_file": {
+                    "id": 1,
+                    "output_name": "uniprot_ids_csv"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Design of Experiment",
+                    "name": "adv"
+                }
+            ],
+            "label": null,
+            "name": "Design of Experiment",
+            "outputs": [
+                {
+                    "name": "constructs",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 693.8999938964844,
+                "height": 174.39999389648438,
+                "left": 939.5,
+                "right": 1139.5,
+                "top": 519.5,
+                "width": 200,
+                "x": 939.5,
+                "y": 519.5
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/optdoe/OptDoE/2.0.1",
+            "tool_shed_repository": {
+                "changeset_revision": "7f13e58f1532",
+                "name": "optdoe",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"genes_sbol_file\": {\"__class__\": \"ConnectedValue\"}, \"ref_parts_file\": {\"__class__\": \"RuntimeValue\"}, \"libsize\": \"32\", \"get_sequences\": \"true\", \"backtranslate\": \"true\", \"codon_table\": \"Eecoli.cut\"}, \"genes_file\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.0.1",
+            "type": "tool",
+            "uuid": "b9872d59-e433-4e31-8dc2-c00fd03c7a83",
+            "workflow_outputs": [
+                {
+                    "label": "Constructs",
+                    "output_name": "constructs",
+                    "uuid": "d677903a-dd9b-4deb-a09a-7c81b7803dac"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/dnaweaver/DNAWeaver/1.0.1",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input": {
+                    "id": 4,
+                    "output_name": "constructs"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "DNA Weaver",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "xlsx"
+                }
+            ],
+            "position": {
+                "bottom": 631.9499969482422,
+                "height": 93.19999694824219,
+                "left": 1222.25,
+                "right": 1422.25,
+                "top": 538.75,
+                "width": 200,
+                "x": 1222.25,
+                "y": 538.75
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/dnaweaver/DNAWeaver/1.0.1",
+            "tool_shed_repository": {
+                "changeset_revision": "90025c4cd50e",
+                "name": "dnaweaver",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"max_constructs\": \"-1\"}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"method\": \"golden_gate\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.1",
+            "type": "tool",
+            "uuid": "c045b22d-b1df-4620-80fe-d22c335b7e78",
+            "workflow_outputs": [
+                {
+                    "label": "Assembly Plan",
+                    "output_name": "output",
+                    "uuid": "42769098-1a73-4c65-ac2d-e0a54d9f2ea2"
+                }
+            ]
+        },
+        "6": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/lcrgenie/LCRGenie/1.0.1",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "LCR_input": {
+                    "id": 4,
+                    "output_name": "constructs"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "LCR Genie",
+            "outputs": [
+                {
+                    "name": "LCR_output",
+                    "type": "xlsx"
+                }
+            ],
+            "position": {
+                "bottom": 802.6000061035156,
+                "height": 113.60000610351562,
+                "left": 1224.5,
+                "right": 1424.5,
+                "top": 689,
+                "width": 200,
+                "x": 1224.5,
+                "y": 689
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/lcrgenie/LCRGenie/1.0.1",
+            "tool_shed_repository": {
+                "changeset_revision": "71568c0c83f4",
+                "name": "lcrgenie",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"LCR_input\": {\"__class__\": \"ConnectedValue\"}, \"adv\": {\"melting_temp\": \"60.0\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.1",
+            "type": "tool",
+            "uuid": "14974d0a-257e-4cba-8bea-37367638750e",
+            "workflow_outputs": [
+                {
+                    "label": "LCR Genie: Assembly Plan",
+                    "output_name": "LCR_output",
+                    "uuid": "ba05b6d0-a81f-496f-925b-bc2a9e014eac"
+                }
+            ]
+        }
+    },
+    "tags": [],
+    "uuid": "156b3f3d-9925-48fc-bb22-cfff50584c3e",
+    "version": 6
+}

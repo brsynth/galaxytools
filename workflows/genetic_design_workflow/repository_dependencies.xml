@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<repositories description="basic assembly workflow">
+    <repository name="selenzy" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="481f7c35323d"/>
+    <repository name="sbml2sbol" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="f0a06f526c7f"/>
+    <repository name="partsgenie" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="295a21fc55d0"/>
+    <repository name="optdoe" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="7f13e58f1532"/>
+    <repository name="dnaweaver" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="90025c4cd50e"/>
+    <repository name="lcrgenie" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="71568c0c83f4"/>
+</repositories>
