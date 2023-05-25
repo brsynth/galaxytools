@@ -88,5 +88,6 @@ jobs:
           name: log-artifact-${{ matrix.repo }}
           path: log.zip
       - name: 'Aggregate results'
+        if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         run: |
           ./scripts/aggregate_test.py -i .

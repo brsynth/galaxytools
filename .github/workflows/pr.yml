@@ -106,6 +106,7 @@ jobs:
           name: ${{ matrix.repo }}-artifact
           path: ${{ matrix.repo }}.zip
       - name: 'Aggregate results'
+        if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         run: |
           ./scripts/aggregate_test.py -i .
 
