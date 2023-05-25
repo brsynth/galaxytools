@@ -95,9 +95,10 @@ jobs:
             --galaxy_source https://github.com/galaxyproject/galaxy \
             --galaxy_branch release_22.05 \
             --galaxy_python_version 3.7 \
-            "tools/${{ matrix.repo }}" || { touch tool_test_output.html tool_test_output.json; }
+            "tools/${{ matrix.repo }}"
       - name: 'Prepare artefact'
         run: |
+          touch tool_test_output.html tool_test_output.json
           zip -9 ${{ matrix.repo }}.zip tool_test_output.html tool_test_output.json
       - name: 'Upload Artifact Version'
         uses: actions/upload-artifact@v3
