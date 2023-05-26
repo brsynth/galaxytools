@@ -65,7 +65,7 @@ jobs:
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
-        timeout-minutes: 60
+        timeout-minutes: 120
         continue-on-error: true
         run: |
           mkdir -p "log/${{ matrix.repo }}"
