@@ -20,7 +20,8 @@ jobs:
         id: set-diff
         run: |
           git diff --quiet stable..origin/main
-          echo "nb=$?" >> "${GITHUB_OUTPUT}"
+          nb=$?
+          echo "nb=$nb" >> "${GITHUB_OUTPUT}"
 
   Call:
     runs-on: ubuntu-latest
