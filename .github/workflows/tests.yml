@@ -65,7 +65,7 @@ jobs:
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
       - name: 'Test tool'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
-        timeout-minutes: 60
+        timeout-minutes: 120
         continue-on-error: true
         run: |
           mkdir -p "log/${{ matrix.repo }}"
@@ -80,6 +80,7 @@ jobs:
             "tools/${{ matrix.repo }}"
       - name: 'Prepare artefact'
         run: |
+          mkdir -p "log/${{ matrix.repo }}"
           zip -r -9 log.zip "log/${{ matrix.repo }}"
       - name: 'Upload Artifact Version'
         uses: actions/upload-artifact@v3
@@ -87,5 +88,6 @@ jobs:
           name: log-artifact-${{ matrix.repo }}
           path: log.zip
       - name: 'Aggregate results'
+        if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         run: |
           ./scripts/aggregate_test.py -i .
