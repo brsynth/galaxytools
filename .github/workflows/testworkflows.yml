@@ -60,24 +60,21 @@ jobs:
       - name: 'Install packages'
         run: |
           pip install -r env/requirements.txt
-      - name: 'Prepare output'
-        run: |
-          mkdir -p "log/${{ matrix.repo }}"
       - name: 'Worfklow Lint'
         run: |
           planemo workflow_lint \
             --fail_level error \
-            "tools/${{ matrix.repo }}/${{ matrix.repo }}.ga"
+            "worfklows/${{ matrix.repo }}"
       - name: 'Shed lint'
         run: |
-          planemo shed_lint --urls --xsd --ensure_metadata "tools/${{ matrix.repo }}"
-          ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
+          planemo shed_lint --urls --xsd --ensure_metadata "workflows/${{ matrix.repo }}"
+          ./scripts/shed_lint.py -i "workflows/${{ matrix.repo }}"
       - name: 'Test tool'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         timeout-minutes: 60
         run: |
           planemo test \
-            "tools/${{ matrix.repo }}/${{ matrix.repo }}.ga" \
+            "workflows/${{ matrix.repo }}/${{ matrix.repo }}.ga" \
             --engine external_galaxy \
             --galaxy_url https://galaxy-synbiocad.org \
             --galaxy_user_key "${{ secrets.GG_SYNBIOCAD_TOKEN }}"
