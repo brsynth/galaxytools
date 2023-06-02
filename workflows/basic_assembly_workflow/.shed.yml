@@ -2,6 +2,7 @@ Typical workflow:
 name: basic_assembly_workflow
 owner: tduigou
 remote_repository_url: https://github.com/brsynth/galaxytools/tree/master/workflows/basic_assembly_workflow
+homepage_url: https://github.com/brsynth/galaxytools
 type: unrestricted
 categories:
   - Systems Biology
