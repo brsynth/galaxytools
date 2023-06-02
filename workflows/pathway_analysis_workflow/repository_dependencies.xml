@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<repositories description="pathway analysis workflow">
-    <repository name="rpfba" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="fb5efc456dcc"/>
-    <repository name="rpthermo" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="44e54b56328d"/>
-    <repository name="rpscore" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="f818d489ca7d"/>
-    <repository name="rpranker" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="e95370d2e5f9"/>
-    <repository name="rpcompletion" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="98d925a75257"/>
-</repositories>

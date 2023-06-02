@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<repositories description="retrosynthesis workflow">
-    <repository name="rrparser" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="ea590c609fec"/>
-    <repository name="rpextractsink" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="47bb93e7832b"/>
-    <repository name="retropath2" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="9c8ac9980bd6"/>
-    <repository name="rp2paths" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="2782bee7c5a6"/>
-    <repository name="rpcompletion" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="b8242cf18cc0"/>
-</repositories>
