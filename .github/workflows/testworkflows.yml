@@ -64,7 +64,7 @@ jobs:
         run: |
           planemo workflow_lint \
             --fail_level error \
-            "worfklows/${{ matrix.repo }}"
+            "workflows/${{ matrix.repo }}"
       - name: 'Shed lint'
         run: |
           planemo shed_lint --urls --xsd --ensure_metadata "workflows/${{ matrix.repo }}"
