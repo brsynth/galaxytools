@@ -74,7 +74,7 @@ jobs:
         timeout-minutes: 60
         run: |
           planemo test \
-            "workflows/${{ matrix.repo }}/${{ matrix.repo }}.ga" \
             --engine external_galaxy \
             --galaxy_url https://galaxy-synbiocad.org \
-            --galaxy_user_key "${{ secrets.GG_SYNBIOCAD_TOKEN }}"
+            --galaxy_user_key "${{ secrets.GG_SYNBIOCAD_TOKEN }}" \
+            "workflows/${{ matrix.repo }}/${{ matrix.repo }}.ga"
