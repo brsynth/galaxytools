@@ -78,8 +78,7 @@ jobs:
           echo "list workflows"
           ls workflows
           echo "list repo"
-          ls  "workflows/${{ matrix.repo }"
-
+          ls  "workflows/${{ matrix.repo }}"
           planemo test \
             --engine external_galaxy \
             --galaxy_url https://galaxy-synbiocad.org \
