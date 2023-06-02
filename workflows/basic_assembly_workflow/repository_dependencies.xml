@@ -1,6 +1,0 @@
-<?xml version="1.0" ?>
-<repositories description="basic assembly workflow">
-    <repository name="selenzy" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="481f7c35323d"/>
-    <repository name="rpbasicdesign" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="de9f53630349"/>
-    <repository name="dnabot" owner="tduigou" toolshed="https://toolshed.g2.bx.psu.edu" changeset_revision="6d55c77a17ab"/>
-</repositories>
