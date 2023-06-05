@@ -429,7 +429,7 @@
         }
     },
     "tags": [
-        "BASIC_Assembly"
+        "brs", "assembly"
     ],
     "uuid": "22764e28-d3c7-40d2-888c-7a3722d29d26",
     "version": 0
