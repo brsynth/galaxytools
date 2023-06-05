@@ -75,10 +75,6 @@ jobs:
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         timeout-minutes: 60
         run: |
-          echo "list workflows"
-          ls workflows
-          echo "list repo"
-          ls  "workflows/${{ matrix.repo }}"
           planemo test \
             --engine external_galaxy \
             --galaxy_url https://galaxy-synbiocad.org \
