@@ -1,0 +1,12 @@
+Typical workflow:  
+name: basic_assembly_workflow
+owner: tduigou
+remote_repository_url: https://github.com/brsynth/galaxytools/tree/master/workflows/basic_assembly_workflow
+homepage_url: https://github.com/brsynth/galaxytools
+type: unrestricted
+categories:
+  - Systems Biology
+  - Synthetic Biology
+description: BASIC Assembly Workflow
+long_description: |
+  'This workflow proposes an alternative route to design plasmids encoding predicted pathways by using the BASIC assembly method. Importantly, it generates scripts enabling the automatic build of these plasmids using an Opentrons liquid handler robot. Source code may be found at the following location: https://github.com/brsynth/selenzy-wrapper , https://github.com/brsynth/rpbasicdesign , https://github.com/brsynth/DNA-BOT/tree/DNA-BOT-APIv2'

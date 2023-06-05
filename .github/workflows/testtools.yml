@@ -1,4 +1,4 @@
-name: Tests
+name: TestTools
 
 on:
   schedule:
@@ -27,7 +27,7 @@ jobs:
       - name: 'List repos'
         id: set-matrix
         run: |
-          matrix=$(jq -R -s -c '[split("\n")[] | select(.|length>0)]' .github/workflows/test_skip.txt)
+          matrix=$(jq -R -s -c '[split("\n")[] | select(.|length>0)]' .github/workflows/test_tools_skip.txt)
           echo "Number of repos: ${matrix}"
           echo "matrix=$matrix" >> "${GITHUB_OUTPUT}"
 
@@ -42,7 +42,7 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v3
         with:
-          ref: main
+          fetch-depth: 0
       - name: "Setup python"
         uses: actions/setup-python@v4
         with:
