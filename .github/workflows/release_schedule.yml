@@ -18,10 +18,12 @@ jobs:
           ref: 'stable'
       - name: "Check diff"
         id: set-diff
+        continue-on-error: true
         run: |
           git diff --quiet stable..origin/main
           nb=$?
-          echo "nb=$nb" >> "${GITHUB_OUTPUT}"
+          echo "Find diff: ${nb}"
+          echo "nb=${nb}" >> "${GITHUB_OUTPUT}"
 
   Call:
     runs-on: ubuntu-latest
