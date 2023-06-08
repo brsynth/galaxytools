@@ -1,0 +1,381 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "Evaluating and ranking a set of pathways based on multiple metrics",
+    "creator": [
+        {
+            "class": "Organization",
+            "name": "BioRetroSynth",
+            "url": "https://github.com/brsynth"
+        }
+    ],
+    "format-version": "0.1",
+    "license": "MIT",
+    "name": "Pathway Analysis",
+    "steps": {
+        "0": {
+            "annotation": "An identifier like \"biomass\"",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "An identifier like \"biomass\"",
+                    "name": "Biomass reaction ID"
+                }
+            ],
+            "label": "Biomass reaction ID",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 340.6434088812934,
+                "height": 75.60000610351562,
+                "left": -340.35936143663196,
+                "right": -160.35936143663196,
+                "top": 265.04340277777777,
+                "width": 180,
+                "x": -340.35936143663196,
+                "y": 265.04340277777777
+            },
+            "tool_id": null,
+            "tool_state": "{\"parameter_type\": \"text\", \"optional\": false}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "d2ebc0df-8d14-471a-a940-f9163d309d70",
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "Dataset of rpsbml pathways",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Dataset of rpsbml pathways",
+                    "name": "Heterologous pathways"
+                }
+            ],
+            "label": "Heterologous pathways",
+            "name": "Input dataset collection",
+            "outputs": [],
+            "position": {
+                "bottom": 462.64339531792535,
+                "height": 75.60000610351562,
+                "left": -340.35936143663196,
+                "right": -160.35936143663196,
+                "top": 387.04338921440973,
+                "width": 180,
+                "x": -340.35936143663196,
+                "y": 387.04338921440973
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"collection_type\": \"list\"}",
+            "tool_version": null,
+            "type": "data_collection_input",
+            "uuid": "396a82be-e939-4c16-95d7-cfafb0e472bd",
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "SBML model",
+            "content_id": null,
+            "errors": null,
+            "id": 2,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "SBML model",
+                    "name": "Chassis where to produce target from"
+                }
+            ],
+            "label": "Chassis where to produce target from",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 584.6434156629774,
+                "height": 75.60000610351562,
+                "left": -340.35936143663196,
+                "right": -160.35936143663196,
+                "top": 509.0434095594618,
+                "width": 180,
+                "x": -340.35936143663196,
+                "y": 509.0434095594618
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "ca69a88b-c781-4d72-ab5c-92df2afc720a",
+            "workflow_outputs": []
+        },
+        "3": {
+            "annotation": "An identifier like \"c\"",
+            "content_id": null,
+            "errors": null,
+            "id": 3,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "An identifier like \"c\"",
+                    "name": "Cell compartment ID"
+                }
+            ],
+            "label": "Cell compartment ID",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 707.7527533637152,
+                "height": 75.5999755859375,
+                "left": -340.35936143663196,
+                "right": -160.35936143663196,
+                "top": 632.1527777777777,
+                "width": 180,
+                "x": -340.35936143663196,
+                "y": 632.1527777777777
+            },
+            "tool_id": null,
+            "tool_state": "{\"parameter_type\": \"text\", \"optional\": false}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "d92f3120-93f4-4341-aab7-7432a889fd40",
+            "workflow_outputs": []
+        },
+        "4": {
+            "annotation": "Perform FBA",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/rpfba/rpfba/5.12.1",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "biomass_rxn_id": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "compartment_id": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "model": {
+                    "id": 2,
+                    "output_name": "output"
+                },
+                "pathway": {
+                    "id": 1,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Flux balance analysis",
+                    "name": "model"
+                },
+                {
+                    "description": "runtime parameter for tool Flux balance analysis",
+                    "name": "pathway"
+                }
+            ],
+            "label": "Flux Balance Analysis",
+            "name": "Flux balance analysis",
+            "outputs": [
+                {
+                    "name": "pathway_with_fba",
+                    "type": "sbml"
+                }
+            ],
+            "position": {
+                "bottom": 527.1434156629774,
+                "height": 188.10000610351562,
+                "left": -52.29688856336806,
+                "right": 127.703126695421,
+                "top": 339.0434095594618,
+                "width": 180.00001525878906,
+                "x": -52.29688856336806,
+                "y": 339.0434095594618
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/rpfba/rpfba/5.12.1",
+            "tool_shed_repository": {
+                "changeset_revision": "19be43e96154",
+                "name": "rpfba",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"merge\": \"false\", \"ignore_orphan_species\": \"true\"}, \"biomass_rxn_id\": {\"__class__\": \"ConnectedValue\"}, \"compartment_id\": {\"__class__\": \"ConnectedValue\"}, \"input_sim_type\": {\"sim_type\": \"fraction\", \"__current_case__\": 0, \"fraction_of\": \"0.75\"}, \"model\": {\"__class__\": \"RuntimeValue\"}, \"objective_rxn_id\": \"rxn_target\", \"pathway\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "5.12.1",
+            "type": "tool",
+            "uuid": "84470349-6e9c-4810-b2c8-3d5fdae0cca4",
+            "workflow_outputs": [
+                {
+                    "label": "pathway_fba",
+                    "output_name": "pathway_with_fba",
+                    "uuid": "5691075c-3a81-427b-b12d-5df59b988edc"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "Calculate the formation energy of chemical species and the Gibbs free energy of their reactions and pathways in an SBML",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rpthermo/rpthermo/5.12.1",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input": {
+                    "id": 4,
+                    "output_name": "pathway_with_fba"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Thermo",
+                    "name": "input"
+                }
+            ],
+            "label": "Thermo",
+            "name": "Thermo",
+            "outputs": [
+                {
+                    "name": "pathway_with_thermo",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 481.54339599609375,
+                "height": 85.5,
+                "left": 225.703125,
+                "right": 405.703125,
+                "top": 396.04339599609375,
+                "width": 180,
+                "x": 225.703125,
+                "y": 396.04339599609375
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rpthermo/rpthermo/5.12.1",
+            "tool_shed_repository": {
+                "changeset_revision": "21a900eee812",
+                "name": "rpthermo",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"ph\": \"7.5\", \"ionic_strength\": \"0.25\", \"pMg\": \"3.0\"}, \"input\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "5.12.1",
+            "type": "tool",
+            "uuid": "7b32553d-b992-4a54-a863-815f9b946581",
+            "workflow_outputs": [
+                {
+                    "label": "pathay_thermo",
+                    "output_name": "pathway_with_thermo",
+                    "uuid": "bbb6a168-236b-4e28-a1c4-18dbb8538eb0"
+                }
+            ]
+        },
+        "6": {
+            "annotation": "Computes a global score for a heterologous pathway.",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rpscore/rpscore/5.12.1",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "pathway": {
+                    "id": 5,
+                    "output_name": "pathway_with_thermo"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Score Pathway",
+                    "name": "pathway"
+                }
+            ],
+            "label": "Score Pathway",
+            "name": "Score Pathway",
+            "outputs": [
+                {
+                    "name": "scored_pathway",
+                    "type": "xml"
+                }
+            ],
+            "position": {
+                "bottom": 491.54339599609375,
+                "height": 85.5,
+                "left": 503.70313856336804,
+                "right": 683.703138563368,
+                "top": 406.04339599609375,
+                "width": 180,
+                "x": 503.70313856336804,
+                "y": 406.04339599609375
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rpscore/rpscore/5.12.1",
+            "tool_shed_repository": {
+                "changeset_revision": "da8ae7fa5ed3",
+                "name": "rpscore",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"no_of_rxns_thres\": \"10\"}, \"pathway\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "5.12.1",
+            "type": "tool",
+            "uuid": "6b680491-6b40-4f44-943e-9026a9264b54",
+            "workflow_outputs": [
+                {
+                    "label": "pathway_score",
+                    "output_name": "scored_pathway",
+                    "uuid": "87b486d0-6923-47d8-9d4f-0afcacbaca95"
+                }
+            ]
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rpranker/rpranker/5.12.1",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "pathway_collection": {
+                    "id": 6,
+                    "output_name": "scored_pathway"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Rank Pathways",
+            "outputs": [
+                {
+                    "name": "sorted_pathways",
+                    "type": "csv"
+                }
+            ],
+            "position": {
+                "bottom": 510.54340277777777,
+                "height": 85.5,
+                "left": 781.7031521267361,
+                "right": 961.7031521267361,
+                "top": 425.04340277777777,
+                "width": 180,
+                "x": 781.7031521267361,
+                "y": 425.04340277777777
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rpranker/rpranker/5.12.1",
+            "tool_shed_repository": {
+                "changeset_revision": "bab690866445",
+                "name": "rpranker",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"pathway_collection\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "5.12.1",
+            "type": "tool",
+            "uuid": "39986296-e23e-4af7-ac3d-e84de3cb1b4c",
+            "workflow_outputs": [
+                {
+                    "label": "Ranked Pathways",
+                    "output_name": "sorted_pathways",
+                    "uuid": "561c935b-6ccb-4aa6-9b23-31f374acec9e"
+                }
+            ]
+        }
+    },
+    "tags": [
+        "brs",
+        "retrosynthesis"
+    ],
+    "uuid": "f1011985-7282-45df-8326-b91a873fcd00",
+    "version": 10
+}
