@@ -3,15 +3,6 @@ name: TestWorkflows
 on:
   schedule:
     - cron: '0 0 * * 1'
-  pull_request:
-    types:
-      - edited
-      - opened
-      - reopened
-      - synchronize
-  pull_request_target:
-    types:
-      - closed
 
 jobs:
 
@@ -67,11 +58,7 @@ jobs:
           planemo workflow_lint \
             --fail_level error \
             "workflows/${{ matrix.repo }}"
-      - name: 'Shed lint'
-        run: |
-          planemo shed_lint --urls --xsd --ensure_metadata "workflows/${{ matrix.repo }}"
-          ./scripts/shed_lint.py -i "workflows/${{ matrix.repo }}"
-      - name: 'Test tool'
+      - name: 'Test worflow'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         timeout-minutes: 60
         run: |

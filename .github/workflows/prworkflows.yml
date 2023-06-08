@@ -1,4 +1,4 @@
-name: PullRequest
+name: PullRequestWorkflow
 
 on:
   pull_request:
@@ -26,7 +26,7 @@ jobs:
         #uses: Ana06/get-changed-files@v2.2.0
         uses: tj-actions/changed-files@v36
         with:
-          files: tools/**
+          files: workflows/**
           separator: ","
       - name: 'List repos'
         id: set-matrix
@@ -80,18 +80,10 @@ jobs:
           planemo workflow_lint \
             --fail_level error \
             "workflows/${{ matrix.repo }}"
-      - name: 'Shed lint'
-        run: |
-          planemo shed_lint --urls --xsd --ensure_metadata "workflows/${{ matrix.repo }}"
-          ./scripts/shed_lint.py -i "workflows/${{ matrix.repo }}"
       - name: 'Test tool'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         timeout-minutes: 60
         run: |
-          echo "list workflows"
-          ls workflows
-          echo "list repo"
-          ls  "workflows/${{ matrix.repo }}"
           planemo test \
             --engine external_galaxy \
             --galaxy_url https://galaxy-synbiocad.org \
