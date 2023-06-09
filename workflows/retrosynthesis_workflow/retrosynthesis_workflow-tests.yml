@@ -1,0 +1,44 @@
+- doc: Retrosynthesis
+  job:
+    Target to produce: 'InChI=1S/C40H56/c1-33(2)19-13-23-37(7)27-17-31-39(9)29-15-25-35(5)21-11-12-22-36(6)26-16-30-40(10)32-18-28-38(8)24-14-20-34(3)4/h11-12,15-22,25-32H,13-14,23-24H2,1-10H3/b12-11+,25-15+,26-16+,31-17+,32-18+,35-21+,36-22+,37-27+,38-28+,39-29+,40-30+'
+  outputs:
+    rpCompletion:
+      class: Collection
+      collection_type: list
+      elements:
+        - identifier: rp_001_0001.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_001_0001.xml
+          compare: sim_size
+        - identifier: rp_001_0006.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_001_0006.xml
+          compare: sim_size
+        - identifier: rp_001_0011.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_001_0011.xml
+          compare: sim_size
+        - identifier: rp_002_0001.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_002_0001.xml
+          compare: sim_size
+        - identifier: rp_002_0006.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_002_0006.xml
+          compare: sim_size
+        - identifier: rp_002_0011.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_002_0011.xml
+          compare: sim_size
+        - identifier: rp_003_0001.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_003_0001.xml
+          compare: sim_size
+        - identifier: rp_003_0116.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_003_0116.xml
+          compare: sim_size
+        - identifier: rp_003_0231.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_003_0231.xml
+          compare: sim_size
