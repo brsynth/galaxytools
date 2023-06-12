@@ -25,13 +25,13 @@
         </section>
     </inputs>
     <outputs>
-        <data name="html_file" format="html" label="${tool.name} - ${rp2_results.name}"/>
-        <data name="json_file" format="json" label="${tool.name} -${rp2_results.name}">
+        <data name="html_file" format="html" label="${tool.name} - ${rp2_results.name} (html)"/>
+        <data name="json_file" format="json" label="${tool.name} - ${rp2_results.name} (json)">
             <filter> adv['json_graph'] </filter>
         </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <!-- test 1: check if identical outputs are produced -->
             <param name="rp2_results" value="rp2-results-lactate.csv" />
             <param name="sink_file" value="sink-h2o2.csv" />
