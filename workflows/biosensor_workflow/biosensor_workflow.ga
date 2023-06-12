@@ -1,0 +1,440 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "Predicts metabolic reactions connecting any query metabolite to a given biosensor.",
+    "creator": [
+        {
+            "class": "Organization",
+            "name": "BioRetroSynth",
+            "url": "https://github.com/brsynth"
+        }
+    ],
+    "format-version": "0.1",
+    "license": "MIT",
+    "name": "BioSensor",
+    "steps": {
+        "0": {
+            "annotation": "Name of the biosensor",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Name of the biosensor",
+                    "name": "BioSensor name"
+                }
+            ],
+            "label": "BioSensor name",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 349,
+                "height": 63,
+                "left": -48.5,
+                "right": 151.5,
+                "top": 286,
+                "width": 200,
+                "x": -48.5,
+                "y": 286
+            },
+            "tool_id": null,
+            "tool_state": "{\"default\": \"H2O2\", \"parameter_type\": \"text\", \"optional\": true}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "6c743f9a-f4d5-44ad-9b18-41c631b89c26",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "baf1d70e-3f00-4ed3-ba3e-4a5e8c087bf8"
+                }
+            ]
+        },
+        "1": {
+            "annotation": "InChI of the biosensor. Default: InChI of H2O2.",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "InChI of the biosensor. Default: InChI of H2O2.",
+                    "name": "BioSensor InChI"
+                }
+            ],
+            "label": "BioSensor InChI",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 439,
+                "height": 63,
+                "left": -47.5,
+                "right": 152.5,
+                "top": 376,
+                "width": 200,
+                "x": -47.5,
+                "y": 376
+            },
+            "tool_id": null,
+            "tool_state": "{\"default\": \"InChI=1S/H2O2/c1-2/h1-2H\", \"parameter_type\": \"text\", \"optional\": true}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "5dc9e2bb-09e4-4cd1-8931-4b40fef15f5d",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "64ed0ece-c8b9-4ad3-ae4f-caa41cd839c2"
+                }
+            ]
+        },
+        "2": {
+            "annotation": "Name of the compound to detect",
+            "content_id": null,
+            "errors": null,
+            "id": 2,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Name of the compound to detect",
+                    "name": "Compound name"
+                }
+            ],
+            "label": "Compound name",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 577,
+                "height": 84,
+                "left": -45.5,
+                "right": 154.5,
+                "top": 493,
+                "width": 200,
+                "x": -45.5,
+                "y": 493
+            },
+            "tool_id": null,
+            "tool_state": "{\"default\": \"Target\", \"parameter_type\": \"text\", \"optional\": true}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "398b9893-c88b-4690-bb83-c3e8c064d595",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "310a24d5-1d0a-4851-a9b4-c24ddd6feb78"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "InChI of the compound to detect",
+            "content_id": null,
+            "errors": null,
+            "id": 3,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "InChI of the compound to detect",
+                    "name": "Compound InChI"
+                }
+            ],
+            "label": "Compound InChI",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 666,
+                "height": 63,
+                "left": -42.5,
+                "right": 157.5,
+                "top": 603,
+                "width": 200,
+                "x": -42.5,
+                "y": 603
+            },
+            "tool_id": null,
+            "tool_state": "{\"parameter_type\": \"text\", \"optional\": false}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "c4987b08-dd9c-465d-858f-b3caeb4ee748",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "00a3c0ad-8253-427c-86e7-3c250c3fe431"
+                }
+            ]
+        },
+        "4": {
+            "annotation": "InChI of the biosensor",
+            "content_id": null,
+            "errors": null,
+            "id": 4,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "InChI of the biosensor",
+                    "name": "Number of steps"
+                }
+            ],
+            "label": "Number of steps",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 762,
+                "height": 63,
+                "left": -40.5,
+                "right": 159.5,
+                "top": 699,
+                "width": 200,
+                "x": -40.5,
+                "y": 699
+            },
+            "tool_id": null,
+            "tool_state": "{\"default\": 2, \"parameter_type\": \"integer\", \"optional\": true}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "649e1211-0c09-4195-a3ec-e38f45355925",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "af169980-4524-43d4-a32f-b945f87860d7"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "Extract reaction rules from RetroRules.",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rrparser/rrparser/2.4.6",
+            "errors": null,
+            "id": 5,
+            "input_connections": {},
+            "inputs": [],
+            "label": "rrparser",
+            "name": "RRules Parser",
+            "outputs": [
+                {
+                    "name": "out_rules",
+                    "type": "csv"
+                }
+            ],
+            "position": {
+                "bottom": 920,
+                "height": 105,
+                "left": 265.5,
+                "right": 465.5,
+                "top": 815,
+                "width": 200,
+                "x": 265.5,
+                "y": 815
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rrparser/rrparser/2.4.6",
+            "tool_shed_repository": {
+                "changeset_revision": "ea590c609fec",
+                "name": "rrparser",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"compress\": \"false\", \"diameters\": [\"2\", \"4\", \"6\", \"8\", \"10\", \"12\"], \"rules\": {\"type\": \"all\", \"__current_case__\": 3}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.4.6",
+            "type": "tool",
+            "uuid": "2b726baf-728a-465c-ba23-9acac5b67bae",
+            "workflow_outputs": [
+                {
+                    "label": "RRules Parser(retro, d=['2', '4', '6', '8', '10', '12', '14', '16'])",
+                    "output_name": "out_rules",
+                    "uuid": "2c9da489-ff1d-4523-9227-4bb6e81a4b17"
+                }
+            ]
+        },
+        "6": {
+            "annotation": "Convert sink information into a RetroPath2.0-ready sink file",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/inchi_to_sink/inchi_to_sink/1.0.0",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "source_inchi": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "source_name": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "inchi to sink",
+            "name": "Inchi to sink",
+            "outputs": [
+                {
+                    "name": "sink",
+                    "type": "csv"
+                }
+            ],
+            "position": {
+                "bottom": 523,
+                "height": 147,
+                "left": 256.5,
+                "right": 456.5,
+                "top": 376,
+                "width": 200,
+                "x": 256.5,
+                "y": 376
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/inchi_to_sink/inchi_to_sink/1.0.0",
+            "tool_shed_repository": {
+                "changeset_revision": "3627d3e49889",
+                "name": "inchi_to_sink",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"source_inchi\": {\"__class__\": \"ConnectedValue\"}, \"source_name\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "d5d107ee-b25a-41d8-ab23-d1dda2106288",
+            "workflow_outputs": [
+                {
+                    "label": "Inchi to sink - Biosensor",
+                    "output_name": "sink",
+                    "uuid": "b72ea03a-4c0d-41b9-b74b-6655ce70cbef"
+                }
+            ]
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/retropath2/retropath2/2.3.0",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "max_steps": {
+                    "id": 4,
+                    "output_name": "output"
+                },
+                "rulesfile": {
+                    "id": 5,
+                    "output_name": "out_rules"
+                },
+                "sinkfile": {
+                    "id": 6,
+                    "output_name": "sink"
+                },
+                "source_inchi_type|source_inchi": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "source_name": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "RetroPath2.0",
+            "name": "RetroPath2.0",
+            "outputs": [
+                {
+                    "name": "Reaction_Network",
+                    "type": "csv"
+                }
+            ],
+            "position": {
+                "bottom": 751,
+                "height": 219,
+                "left": 541.5,
+                "right": 741.5,
+                "top": 532,
+                "width": 200,
+                "x": 541.5,
+                "y": 532
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/retropath2/retropath2/2.3.0",
+            "tool_shed_repository": {
+                "changeset_revision": "9c8ac9980bd6",
+                "name": "retropath2",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"version\": \"r20220104\", \"topx\": \"100\", \"dmin\": \"0\", \"dmax\": \"1000\", \"mwmax_source\": \"1000\", \"timeout\": \"60\"}, \"max_steps\": {\"__class__\": \"ConnectedValue\"}, \"rulesfile\": {\"__class__\": \"ConnectedValue\"}, \"sinkfile\": {\"__class__\": \"ConnectedValue\"}, \"source_inchi_type\": {\"inchi_type\": \"string\", \"__current_case__\": 0, \"source_inchi\": {\"__class__\": \"ConnectedValue\"}}, \"source_name\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.3.0",
+            "type": "tool",
+            "uuid": "245868cc-dbe2-40ea-bdf6-ca7053e13537",
+            "workflow_outputs": [
+                {
+                    "label": "RetroPath2.0",
+                    "output_name": "Reaction_Network",
+                    "uuid": "7ee0e88b-5ddd-49f6-82d2-6a01b01ba0a1"
+                }
+            ]
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rp2biosensor/rp2biosensor/3.0.0",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "rp2_results": {
+                    "id": 7,
+                    "output_name": "Reaction_Network"
+                },
+                "sink_file": {
+                    "id": 6,
+                    "output_name": "sink"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool rp2biosensor",
+                    "name": "rp2_results"
+                },
+                {
+                    "description": "runtime parameter for tool rp2biosensor",
+                    "name": "sink_file"
+                }
+            ],
+            "label": null,
+            "name": "rp2biosensor",
+            "outputs": [
+                {
+                    "name": "html_file",
+                    "type": "html"
+                }
+            ],
+            "position": {
+                "bottom": 572,
+                "height": 147,
+                "left": 825.5,
+                "right": 1025.5,
+                "top": 425,
+                "width": 200,
+                "x": 825.5,
+                "y": 425
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/tduigou/rp2biosensor/rp2biosensor/3.0.0",
+            "tool_shed_repository": {
+                "changeset_revision": "b0efd4b2ffba",
+                "name": "rp2biosensor",
+                "owner": "tduigou",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"adv\": {\"json_graph\": \"false\"}, \"rp2_results\": {\"__class__\": \"RuntimeValue\"}, \"sink_file\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.0.0",
+            "type": "tool",
+            "uuid": "ea1788bb-7af6-4097-87f5-8b2918b7f698",
+            "workflow_outputs": [
+                {
+                    "label": "biosensor",
+                    "output_name": "html_file",
+                    "uuid": "f4279ed9-48e8-44a1-a76f-b2db9fd0836f"
+                }
+            ]
+        }
+    },
+    "tags": [
+        "brs",
+        "biosensor"
+    ],
+    "uuid": "b8d05692-eccc-4288-b1e4-33399b403876",
+    "version": 2
+}
