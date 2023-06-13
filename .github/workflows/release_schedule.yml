@@ -18,10 +18,8 @@ jobs:
           ref: 'stable'
       - name: "Check diff"
         id: set-diff
-        continue-on-error: true
         run: |
-          git diff --quiet stable..origin/main
-          nb=$?
+          nb=$(git diff --shortstat stable..origin/main | cut -f2 -d ' ')
           echo "Find diff: ${nb}"
           echo "nb=${nb}" >> "${GITHUB_OUTPUT}"
 
