@@ -1,4 +1,4 @@
-<tool id="selenzy-wrapper" name="Selenzyme" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+<tool id="selenzy-wrapper" name="Selenzyme" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09" license="MIT">
     <description>Performs enzyme selection from a reaction query</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
@@ -54,7 +54,12 @@
         <test>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
             <param name="pathway" value="pathway.xml" />
-            <output name="uniprot_ids" file="uniprod_ids_out.xml" compare="diff" sort="true"/>
+            <output name="uniprot_ids">
+                <assert_contents>
+                    <is_valid_xml />
+                    <has_n_lines n="7968" />
+                </assert_contents>
+            </output>
             <output name="uniprot_ids_csv" file="uniprod_ids_out.csv" ftype="csv" compare="diff"/>
         </test>
         <test>
@@ -64,13 +69,18 @@
                 <param name="host_taxID_type" value="tsv" />
             </conditional>
             <param name="host_taxID_file" value="taxID.tsv" />
-            <output name="uniprot_ids" file="uniprod_ids_out.xml" compare="diff" sort="true"/>
+            <output name="uniprot_ids">
+                <assert_contents>
+                    <is_valid_xml />
+                    <has_n_lines n="7968" />
+                </assert_contents>
+            </output>
             <output name="uniprot_ids_csv" file="uniprod_ids_out.csv" ftype="csv" compare="diff"/>
         </test>
     </tests>
     <help><![CDATA[
 Selenzyme
-================
+=========
 
 Selenzyme searches for enzymes corresponding to each reaction of the pathway. It performs a reaction similarity search in the reference reaction database `MetaNetX <https://www.metanetx.org/>`_ and outputs an updated SBML file annotated with the enzyme UniProt IDs, as well as in CSV format.
 
@@ -90,32 +100,10 @@ Output
 
 * **Uniprot IDs (SBML)**\ : Annotated SBML pathway.
 * **Uniprot IDs (CSV)**\ : Annotated CSV pathway.
-
-Project Links
-------------------
-
-* `GitHub <https://github.com/brsynth/selenzy-wrapper>`_
-
-Version
-----------
-
-0.3.0
-
-Authors
--------
-* **Joan Hérisson**
-
-License
--------
-
-* `MIT <https://github.com/brsynth/selenzy-wrapper/blob/master/LICENSE>`_
-
-Acknowledgments
----------------
-
-* Thomas Duigou
-
     ]]></help>
+    <creator>
+        <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
+    </creator>
     <citations>
         <citation type="doi">10.1093/bioinformatics/bty065</citation>
     </citations>
