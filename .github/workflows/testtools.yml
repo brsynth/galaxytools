@@ -63,12 +63,14 @@ jobs:
         run: |
           planemo shed_lint --urls --xsd --ensure_metadata "tools/${{ matrix.repo }}"
           ./scripts/shed_lint.py -i "tools/${{ matrix.repo }}"
+      - name: 'Prepare'
+        run: |
+          mkdir -p "log/${{ matrix.repo }}"
       - name: 'Test tool'
         if: ${{ ! contains(fromJson(needs.skip.outputs.matrix), matrix.repo) }}
         timeout-minutes: 120
         continue-on-error: true
         run: |
-          mkdir -p "log/${{ matrix.repo }}"
           planemo test \
             --biocontainers \
             --no_dependency_resolution \
@@ -80,8 +82,7 @@ jobs:
             "tools/${{ matrix.repo }}"
       - name: 'Prepare artefact'
         run: |
-          mkdir -p "log/${{ matrix.repo }}"
-          zip -r -9 log.zip "log/${{ matrix.repo }}"
+          zip -r -9 log.zip log
       - name: 'Upload Artifact Version'
         uses: actions/upload-artifact@v3
         with:

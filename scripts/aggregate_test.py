@@ -41,5 +41,5 @@ if __name__ == "__main__":
         )
     if len(finputs) < 1:
         parser.error("No file provided")
-
+    print("Found: ", ",".join(finputs))
     parse_artifacts(finputs)
