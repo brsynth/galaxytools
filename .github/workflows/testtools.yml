@@ -78,8 +78,8 @@ jobs:
             --galaxy_source https://github.com/galaxyproject/galaxy \
             --galaxy_branch release_22.05 \
             --galaxy_python_version 3.7 \
-            --job_output_files "log/${{ matrix.repo }}" \
             "tools/${{ matrix.repo }}"
+          mv tool_test_output.json "log/${{ matrix.repo }}"
       - name: 'Prepare artefact'
         run: |
           zip -r -9 log.zip log
