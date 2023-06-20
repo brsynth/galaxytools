@@ -24,13 +24,7 @@ jobs:
           echo "nb=${nb}" >> "${GITHUB_OUTPUT}"
 
   Call:
-    runs-on: ubuntu-latest
     needs: [Diff]
     if: ${{ needs.Diff.outputs.nb > 0 }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - name: 'Dispatch'
-        uses: ./.github/workflows/release.yml
+    uses: ./.github/workflows/release.yml
+    secrets: inherit
