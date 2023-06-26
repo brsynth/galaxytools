@@ -24,7 +24,7 @@ jobs:
       - name: 'Select modified files'
         id: files
         #uses: Ana06/get-changed-files@v2.2.0
-        uses: tj-actions/changed-files@v36
+        uses: tj-actions/changed-files@v37
         with:
           files: tools/**
           separator: ","
