@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.2.0](https://github.com/brsynth/galaxytools/tree/0.2.0) (2023-07-03)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.1.0...0.2.0)
+
+**Implemented enhancements:**
+
+- Add workflow `strain design` [\#127](https://github.com/brsynth/galaxytools/issues/127)
+- Add workflow `genetic design` [\#125](https://github.com/brsynth/galaxytools/issues/125)
+- Add workflow `biosensor` [\#124](https://github.com/brsynth/galaxytools/issues/124)
+- Add workflow `retrosynthesis` [\#123](https://github.com/brsynth/galaxytools/issues/123)
+
+**Fixed bugs:**
+
+- workflow `pathway analysis` [\#126](https://github.com/brsynth/galaxytools/issues/126)
+- rp2biosensor: syntax [\#130](https://github.com/brsynth/galaxytools/pull/130) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+**Merged pull requests:**
+
+- Tools sample, table syntax [\#136](https://github.com/brsynth/galaxytools/pull/136) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- chore\(deps\): bump tj-actions/changed-files from 36 to 37 [\#135](https://github.com/brsynth/galaxytools/pull/135) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Tools: `selenzy_wrapper` [\#134](https://github.com/brsynth/galaxytools/pull/134) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Workflows: add `genetic assembly` [\#133](https://github.com/brsynth/galaxytools/pull/133) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Workflows: `straindesign` [\#132](https://github.com/brsynth/galaxytools/pull/132) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Workflows: add `biosensor` [\#131](https://github.com/brsynth/galaxytools/pull/131) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- workflows `retrosynthesis` [\#129](https://github.com/brsynth/galaxytools/pull/129) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Add `pathway_analysis` workflow [\#128](https://github.com/brsynth/galaxytools/pull/128) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- fix `sbol_converter` [\#122](https://github.com/brsynth/galaxytools/pull/122) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- chore\(deps\): bump tj-actions/changed-files from 35 to 36 [\#120](https://github.com/brsynth/galaxytools/pull/120) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Workflows `basic_assembly_workflow` [\#119](https://github.com/brsynth/galaxytools/pull/119) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- chore: rm config folders [\#118](https://github.com/brsynth/galaxytools/pull/118) ([breakthewall](https://github.com/breakthewall))
+- Taxonid [\#117](https://github.com/brsynth/galaxytools/pull/117) ([breakthewall](https://github.com/breakthewall))
+- Taxonid [\#116](https://github.com/brsynth/galaxytools/pull/116) ([breakthewall](https://github.com/breakthewall))
+- chore\(selenzy\_wrapper\): rm comment [\#115](https://github.com/brsynth/galaxytools/pull/115) ([breakthewall](https://github.com/breakthewall))
+- taxonid [\#114](https://github.com/brsynth/galaxytools/pull/114) ([breakthewall](https://github.com/breakthewall))
+
 ## [0.1.0](https://github.com/brsynth/galaxytools/tree/0.1.0) (2023-05-17)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/55db1c4095f1833e0122c5e1e8cf1df82fab81b6...0.1.0)
