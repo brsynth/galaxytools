@@ -71,6 +71,10 @@ jobs:
         timeout-minutes: 120
         continue-on-error: true
         run: |
+          export "TMPDIR=${{ runner.temp }}"
+          export "TEMP=${{ runner.temp }}"
+          export "TMP=${{ runner.temp }}"
+          export _GALAXY_JOB_HOME_DIR=$(pwd)
           planemo test \
             --biocontainers \
             --no_dependency_resolution \
@@ -81,11 +85,6 @@ jobs:
             --docker_extra_volume ./ \
             "tools/${{ matrix.repo }}"
           mv tool_test_output.json "log/${{ matrix.repo }}"
-        env: |
-          TMPDIR: ${{ runner.temp  }}
-          TEMP: ${{ runner.temp }}
-          TMP: ${{ runner.temp }}
-          _GALAXY_JOB_HOME_DIR: "."
       - name: 'Prepare artefact'
         run: |
           zip -r -9 log.zip log
