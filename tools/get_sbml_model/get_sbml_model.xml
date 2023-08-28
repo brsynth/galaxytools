@@ -1,4 +1,4 @@
-<tool id="get_sbml_model" name="Pick SBML Model" version="0.0.4" profile="19.09" license="MIT">
+<tool id="get_sbml_model" name="Pick SBML Model" version="0.0.4" profile="21.09" license="MIT">
     <description>Get an SBML model (BiGG)</description>
     <requirements>
         <requirement type="package" version="7.81.0">curl</requirement>
@@ -7,31 +7,32 @@
         <requirement type="package" version="2.29">requests</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        #if str($cond_src) == "from_bigg"
-            curl -o - 'http://bigg.ucsd.edu/static/models/$(hostid).xml.gz'
-            | gunzip > '$model' &&
+        #if str($cond_src.from_src) == 'from_bigg'
+            curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
+        #else
+            cp '${cond_src.input_file}' '$model' &&
         #end if
         python '$__tool_directory__/'get_infos.py
         '$model'
-        --hostid '$hostid'
+        --hostid '${cond_src.hostid}'
         --comp '$compartments'
         --biomass '$biomass'
         --taxid '$taxid'
     ]]></command>
     <inputs>
         <conditional name="cond_src">
-            <param name="from_src" type="select" label="Source of the file" help="Choose where the source of the file">
-                <option value="from_bigg" selected="True">Download file from BiGG</option>
-                <option value="from_history">Import file from history</option>
+            <param name="from_src" type="select" label="Select source">
+                <option value="from_bigg" selected="True">Download model from BiGG</option>
+                <option value="from_history">Select file from the History</option>
             </param>
             <when value="from_history">
                 <param name="hostid" type="text" help="ID of the model">
                     <validator type="empty_field" message="An ID is required"/>
                 </param>
-                <param name="model" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
+                <param name="input_file" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
             </when>
             <when value="from_bigg">
-                <param name="hostid" type="select" label="Strain">
+                 <param name="hostid" type="select" label="Strain">
                     <option value="iCN718">Acinetobacter baumannii AYE (iCN718)</option>
                     <option value="iYO844">Bacillus subtilis subsp. subtilis str. 168 (iYO844)</option>
                     <option value="iRC1080">Chlamydomonas reinhardtii (iRC1080)</option>
@@ -84,10 +85,10 @@
         </conditional>
     </inputs>
     <outputs>
-        <data name="model" format="sbml" label="${input}" />
-        <data name="taxid" format="tsv" label="${input} (taxon id)" />
-        <data name="compartments" format="tsv" label="${input} (compartments)" />
-        <data name="biomass" format="tsv" label="${input} (biomass reactions)" />
+        <data name="model" format="sbml" label="${cond_src.hostid}" />
+        <data name="taxid" format="tsv" label="${cond_src.hostid} (taxon id)" />
+        <data name="compartments" format="tsv" label="${cond_src.hostid} (compartments)" />
+        <data name="biomass" format="tsv" label="${cond_src.hostid} (biomass reactions)" />
     </outputs>
     <tests>
         <test>
@@ -104,19 +105,19 @@
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
                 <param name="hostid" value="e_coli_core" />
-                <param name="model" value="e_coli_core.xml" />
+                <param name="input_file" value="e_coli_core.xml" />
             </conditional>
             <output name="model" md5="4574760460afe9e1b3388dc15f354706" />
             <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
             <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
             <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
-        </test>
+            </test>
     </tests>
     <help><![CDATA[
 Pick SBML Model
 =================
 
-Download the selected SBML model fromg BiGG database.
+Download the selected SBML model fromg BiGG database or get statistics from local SBML model.
     ]]></help>
     <creator>
         <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
