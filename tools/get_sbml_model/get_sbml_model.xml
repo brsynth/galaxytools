@@ -91,25 +91,25 @@
     </outputs>
     <tests>
         <test>
-            <contidional name="cond_src">
+            <conditional name="cond_src">
                 <param name="from_src" value="from_bigg" />
                 <param name="hostid" value="iML1515" />
             </conditional>
-            <output name="model" md5="9bf81d20cab5476700697ded95b716d1"/>
-            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e"/>
-            <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236"/>
-            <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06"/>
+            <output name="model" md5="9bf81d20cab5476700697ded95b716d1" />
+            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
+            <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06" />
         </test>
         <test>
-            <contidional name="cond_src">
+            <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
                 <param name="hostid" value="e_coli_core" />
-                <param name="model" ftype="sbml" value="e_coli_core.xml" />
+                <param name="model" value="e_coli_core.xml" />
             </conditional>
-            <output name="model" md5="4574760460afe9e1b3388dc15f354706"/>
-            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e"/>
-            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf"/>
-            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a"/>
+            <output name="model" md5="4574760460afe9e1b3388dc15f354706" />
+            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
         </test>
     </tests>
     <help><![CDATA[
