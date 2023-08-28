@@ -81,6 +81,11 @@ jobs:
             --docker_extra_volume ./ \
             "tools/${{ matrix.repo }}"
           mv tool_test_output.json "log/${{ matrix.repo }}"
+        env: |
+          TMPDIR: ${{ runner.temp  }}
+          TEMP: ${{ runner.temp }}
+          TMP: ${{ runner.temp }}
+          _GALAXY_JOB_HOME_DIR: "."
       - name: 'Prepare artefact'
         run: |
           zip -r -9 log.zip log
