@@ -78,6 +78,7 @@ jobs:
             --galaxy_source https://github.com/galaxyproject/galaxy \
             --galaxy_branch release_22.05 \
             --galaxy_python_version 3.7 \
+            --docker_extra_volume ./ \
             "tools/${{ matrix.repo }}"
           mv tool_test_output.json "log/${{ matrix.repo }}"
       - name: 'Prepare artefact'
