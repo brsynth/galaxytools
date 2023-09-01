@@ -12,6 +12,12 @@ def entry_point():
         type=str,
         help='SBML input file (xml)'
     )
+    # argument to tag file from BiGG
+    parser.add_argument(
+        '--bigg',
+        action='store_true',
+        help='Tag file from BiGG'
+    )
     parser.add_argument(
         '--comp',
         type=str,
@@ -52,33 +58,41 @@ def entry_point():
                     f.write(f'{rxn.getId()}\n')
 
     if params.taxid:
-        # Extended Name
-        server = 'http://bigg.ucsd.edu/api/v2/models/'
-        ext = params.hostid
-        r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
-        if not r.ok:
-            print(f"Warning: unable to retrieve host name for id {params.hostid}")
-        else:
-            try:
-                hostname = r.json()["organism"]
-            except KeyError:
-                print(f"Warning: unable to retrieve host name for id {params.hostid}")
-                hostname = ''
-        if not hostname:
-            taxid = ''
-        else:
-            # TAXON ID
-            server = 'https://rest.ensembl.org'
-            ext = f'/taxonomy/id/{hostname}?'
+        hostname = ''
+
+        # Model from BiGG
+        if params.bigg:
+            # Extended Name
+            server = 'http://bigg.ucsd.edu/api/v2/models/'
+            ext = params.hostid
             r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
             if not r.ok:
-                print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
+                print(f"Warning: unable to retrieve host name for id {params.hostid}")
             else:
                 try:
-                    taxid = r.json()["id"]
+                    hostname = r.json()["organism"]
                 except KeyError:
+                    print(f"Warning: unable to retrieve host name for id {params.hostid}")
+            if not hostname:
+                taxid = ''
+            else:
+                # TAXON ID
+                server = 'https://rest.ensembl.org'
+                ext = f'/taxonomy/id/{hostname}?'
+                r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
+                if not r.ok:
                     print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
-                    taxid = ''
+                else:
+                    try:
+                        taxid = r.json()["id"]
+                    except KeyError:
+                        print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
+                        taxid = ''
+
+        # Model from user
+        else:
+            taxid = params.hostid
+
         with open(params.taxid, 'w') as f:
             f.write('#ID\n')
             f.write(f'{taxid}\n')
