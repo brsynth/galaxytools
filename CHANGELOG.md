@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.10](https://github.com/brsynth/galaxytools/tree/0.2.10) (2023-09-05)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.9...0.2.10)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump actions/checkout from 3 to 4 [\#140](https://github.com/brsynth/galaxytools/pull/140) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [0.2.9](https://github.com/brsynth/galaxytools/tree/0.2.9) (2023-09-01)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.8...0.2.9)
