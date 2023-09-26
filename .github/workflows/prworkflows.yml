@@ -20,7 +20,7 @@ jobs:
       nb: ${{ steps.set-matrix.outputs.nb }}
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 'Select modified files'
         id: files
         #uses: Ana06/get-changed-files@v2.2.0
@@ -46,7 +46,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 'List repos'
         id: set-matrix
         run: |
@@ -64,7 +64,7 @@ jobs:
         repo: ${{ fromJson(needs.list.outputs.matrix) }}
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: "Setup python"
         uses: actions/setup-python@v4
         with:
@@ -101,7 +101,7 @@ jobs:
         repo: ${{ fromJson(needs.list.outputs.matrix) }}
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: "Setup python"
         uses: actions/setup-python@v4
         with:

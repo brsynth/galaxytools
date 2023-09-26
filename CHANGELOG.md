@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.2.11](https://github.com/brsynth/galaxytools/tree/0.2.11) (2023-09-12)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.10...0.2.11)
+
+## [0.2.10](https://github.com/brsynth/galaxytools/tree/0.2.10) (2023-09-05)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.9...0.2.10)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump actions/checkout from 3 to 4 [\#140](https://github.com/brsynth/galaxytools/pull/140) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [0.2.9](https://github.com/brsynth/galaxytools/tree/0.2.9) (2023-09-01)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.8...0.2.9)
+
+## [0.2.8](https://github.com/brsynth/galaxytools/tree/0.2.8) (2023-08-28)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.7...0.2.8)
+
+**Merged pull requests:**
+
+- get\_sbml\_model, enable to load file from history [\#137](https://github.com/brsynth/galaxytools/pull/137) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.2.7](https://github.com/brsynth/galaxytools/tree/0.2.7) (2023-08-15)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.6...0.2.7)
