@@ -18,6 +18,7 @@
         python '$__tool_directory__/'get_infos.py
             #if str($cond_src.from_src) == 'from_bigg'
                 '$model'
+                --bigg
                 --taxid '$taxid'
             #else
                 '${cond_src.input_file}'
