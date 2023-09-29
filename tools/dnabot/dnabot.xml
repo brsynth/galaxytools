@@ -1,4 +1,4 @@
-<tool id="dnabot" name="DNA-Bot" version="@TOOL_VERSION@" profile="21.09" licence="MIT">
+<tool id="dnabot" name="DNA-Bot" version="@TOOL_VERSION@" profile="21.09" license="MIT">
     <description>DNA assembly using BASIC on OpenTrons</description>
     <macros>
         <token name="@TOOL_VERSION@">4.1.0</token>
