@@ -1,0 +1,84 @@
+<tool id="neo4jsbml" name="neo4jsbml" version="@TOOL_VERSION@" profile="21.09" license="MIT">
+    <description>Import SBML file into Neo4j</description>
+    <macros>
+        <token name="@TOOL_VERSION@">0.12.0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">neo4jsbml</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python -m neo4jsbml
+            --input-auradb-file '$input_auradb_file'
+            --input-file-sbml '$input_file_sbml'
+            #if str($input_tag_str) != ""
+                --input-tag-str '$input_tag_str'
+            #end if
+            --input-modelisation-json '$input_modelisation_json' | tee '$output_log'
+    ]]></command>
+    <inputs>
+        <param name="input_auradb_file" type="data" format="txt" label="Config file provided by AuraDB"/>
+        <param name="input_file_sbml" type="data" format="sbml" label="SBML model"/>
+        <param name="input_tag_str" type="text" label="Identifier of the model">
+            <validator type="regex" message="No special characters allowed">^(?:[\w-]*)$</validator>
+        </param>
+        <param name="input_modelisation_json" type="data" format="json" label="Arrow's schema"/>
+    </inputs>
+    <outputs>
+        <data name="output_log" format="txt" label="${tool.name} - log" />
+    </outputs>
+    <help><![CDATA[
+Neo4jSbml
+=========
+
+Step 1
+------
+
+Create a schema with `Arrows <https://arrows.app>`_
+
+Rules:
+- Nodes are labelled based on SBML object name as defined in the `SBML specification <https://sbml.org>`_
+- Properties are labelled based on SBML object properties as defined the `SBML specification <https://sbml.org>`_
+
+Step 2
+------
+Export your schema at the JSON format.
+
+Step 3
+------
+
+Import your data with `neo4jsbml` into Neo4j.
+- Use either a configuration file `ini` or individual parameters
+- Password needs to be store in a file for safety security
+- If you have multiple model in the database, pass a `tag` to identify the model loaded into the database if you want to avoid collision
+
+Inputs
+------
+
+Database parameters
+- **Protocol**: choose the protocol (default: neo4j)
+- **Url of the database**: define the url of the database
+- **Port of the database**: define the port of the database (default: 7687)
+- **Username of the database**: User name of the database
+- **Password of the database**: file with the password
+- **Database name**: database name
+
+Input
+- **SBML model**: SBML model
+- **Identifier of the model**: Associate an ID to the nodes
+- **Arrow's schema**: Schema created with Arrow
+
+Ouput
+-----
+
+- Traceback of the tool
+]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{neo4jsbml
+                author = {Guillaume Gricourt, Thomas Duigou, Sandra Dérozier, Jean-Loup Faulon},
+                title = {{Neo4jSbml}},
+                url = {https://github.com/brsynth/neo4jsbml/},
+            }
+        </citation>
+    </citations>
+</tool>
