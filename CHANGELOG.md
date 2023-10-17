@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/brsynth/galaxytools/tree/0.4.0) (2023-10-09)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.3.0...0.4.0)
+
+**Merged pull requests:**
+
+- Add tool `neo4jsbml` [\#144](https://github.com/brsynth/galaxytools/pull/144) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.3.0](https://github.com/brsynth/galaxytools/tree/0.3.0) (2023-09-29)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.12...0.3.0)
