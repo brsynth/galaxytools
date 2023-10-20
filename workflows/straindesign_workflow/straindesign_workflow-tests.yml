@@ -1,0 +1,20 @@
+- doc: StrainDesign
+  job:
+    Medium file:
+      class: File
+      location: https://raw.github.com/brsynth/straindesign/main/tests/straindesign/dataset/medium/butanol.tsv
+    Model chassis:
+      class: File
+      location: https://raw.github.com/brsynth/straindesign/main/tests/straindesign/dataset/model/iAF1260.xml
+    Heterologous pathway:
+      class: File
+      location: https://raw.github.com/brsynth/straindesign/main/tests/straindesign/dataset/pathway/butanol.xml
+    Biomass Reaction ID: BIOMASS_Ec_iAF1260_core_59p81M
+    Target Reaction ID: EX_1btol_e
+    Substrate Reaction ID: EX_glc__D_e
+  outputs:
+    straindesign:
+      asserts:
+        has_size:
+          value: "30000"
+          delta: "10000"

@@ -1,0 +1,491 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "Perform deletion of genes to produce a compound",
+    "creator": [
+        {
+            "class": "Organization",
+            "name": "BioRetroSynth",
+            "url": "https://github.com/brsynth"
+        }
+    ],
+    "format-version": "0.1",
+    "license": "MIT",
+    "name": "StrainDesign",
+    "steps": {
+        "0": {
+            "annotation": "SBML type expected",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "SBML type expected",
+                    "name": "Model chassis"
+                }
+            ],
+            "label": "Model chassis",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 210.5,
+                "height": 63,
+                "left": 345,
+                "right": 545,
+                "top": 147.5,
+                "width": 200,
+                "x": 345,
+                "y": 147.5
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "97aabce5-3fc3-4144-a371-575bb52f1659",
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "Tabular type expected",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Tabular type expected",
+                    "name": "Medium file"
+                }
+            ],
+            "label": "Medium file",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 311.5,
+                "height": 63,
+                "left": 345,
+                "right": 545,
+                "top": 248.5,
+                "width": 200,
+                "x": 345,
+                "y": 248.5
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": true}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "0503bba7-3d65-47b6-9063-0a363b3a567f",
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "Reaction ID",
+            "content_id": null,
+            "errors": null,
+            "id": 2,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Reaction ID",
+                    "name": "Biomass Reaction ID"
+                }
+            ],
+            "label": "Biomass Reaction ID",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 433.5,
+                "height": 84,
+                "left": 345,
+                "right": 545,
+                "top": 349.5,
+                "width": 200,
+                "x": 345,
+                "y": 349.5
+            },
+            "tool_id": null,
+            "tool_state": "{\"parameter_type\": \"text\", \"optional\": false}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "ef1634ab-2bd3-419e-b92d-c451ffc4962a",
+            "workflow_outputs": []
+        },
+        "3": {
+            "annotation": "SBML type expected",
+            "content_id": null,
+            "errors": null,
+            "id": 3,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "SBML type expected",
+                    "name": "Heterologous pathway"
+                }
+            ],
+            "label": "Heterologous pathway",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 555.5,
+                "height": 84,
+                "left": 345,
+                "right": 545,
+                "top": 471.5,
+                "width": 200,
+                "x": 345,
+                "y": 471.5
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": true}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "5c9e7c6c-fc18-4afa-a463-0984eaffa600",
+            "workflow_outputs": []
+        },
+        "4": {
+            "annotation": "Reaction ID",
+            "content_id": null,
+            "errors": null,
+            "id": 4,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Reaction ID",
+                    "name": "Target Reaction ID"
+                }
+            ],
+            "label": "Target Reaction ID",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 676.5,
+                "height": 84,
+                "left": 346,
+                "right": 546,
+                "top": 592.5,
+                "width": 200,
+                "x": 346,
+                "y": 592.5
+            },
+            "tool_id": null,
+            "tool_state": "{\"parameter_type\": \"text\", \"optional\": false}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "67937d19-0e0b-490e-acc6-a41227646799",
+            "workflow_outputs": []
+        },
+        "5": {
+            "annotation": "Reaction ID",
+            "content_id": null,
+            "errors": null,
+            "id": 5,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Reaction ID",
+                    "name": "Substrate Reaction ID"
+                }
+            ],
+            "label": "Substrate Reaction ID",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 819.5,
+                "height": 105,
+                "left": 345,
+                "right": 545,
+                "top": 714.5,
+                "width": 200,
+                "x": 345,
+                "y": 714.5
+            },
+            "tool_id": null,
+            "tool_state": "{\"parameter_type\": \"text\", \"optional\": true}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "12550252-99f0-4c89-994a-fa117ce0a432",
+            "workflow_outputs": []
+        },
+        "6": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/straindesign_simulate_deletion/straindesign_simulate_deletion/3.1.0+galaxy1",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "biomass_rxn_id": {
+                    "id": 2,
+                    "output_name": "output"
+                },
+                "input_strategy|substrate_rxn_id": {
+                    "id": 5,
+                    "output_name": "output"
+                },
+                "medium": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "model": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "pathway": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "target_rxn_id": {
+                    "id": 4,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "StrainDesign simulate-deletion",
+            "outputs": [
+                {
+                    "name": "output_tsv",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 250.5,
+                "height": 292,
+                "left": 673,
+                "right": 873,
+                "top": -41.5,
+                "width": 200,
+                "x": 673,
+                "y": -41.5
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/straindesign_simulate_deletion/straindesign_simulate_deletion/3.1.0+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "33c6ffbd098f",
+                "name": "straindesign_simulate_deletion",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"biomass_rxn_id\": {\"__class__\": \"ConnectedValue\"}, \"input_strategy\": {\"strategy\": \"ko\", \"__current_case__\": 0, \"substrate_rxn_id\": {\"__class__\": \"ConnectedValue\"}, \"annotate\": \"false\"}, \"max_knockouts\": \"3\", \"max_time_cond\": {\"max_time_param\": \"no\", \"__current_case__\": 1}, \"medium\": {\"__class__\": \"ConnectedValue\"}, \"model\": {\"__class__\": \"ConnectedValue\"}, \"pathway\": {\"__class__\": \"ConnectedValue\"}, \"target_rxn_id\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.1.0+galaxy1",
+            "type": "tool",
+            "uuid": "166ac096-162b-4bbd-bc78-fc756eefc5d7",
+            "workflow_outputs": [
+                {
+                    "label": "StrainDesign simulate-deletion(ko)",
+                    "output_name": "output_tsv",
+                    "uuid": "4fab08c4-e4bc-4376-9364-560712ccb870"
+                }
+            ]
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/straindesign_analyzing_model/straindesign_analyzing_model/3.1.0+galaxy1",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "biomass_rxn_id": {
+                    "id": 2,
+                    "output_name": "output"
+                },
+                "medium": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "model": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "pathway": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "substrate_cond|substrate_rxn_id": {
+                    "id": 5,
+                    "output_name": "output"
+                },
+                "target_rxn_id": {
+                    "id": 4,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "StrainDesign analyzing-model",
+            "outputs": [
+                {
+                    "name": "output_png",
+                    "type": "png"
+                }
+            ],
+            "position": {
+                "bottom": 592.5,
+                "height": 292,
+                "left": 673,
+                "right": 873,
+                "top": 300.5,
+                "width": 200,
+                "x": 673,
+                "y": 300.5
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/straindesign_analyzing_model/straindesign_analyzing_model/3.1.0+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "490a37e24bed",
+                "name": "straindesign_analyzing_model",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"biomass_rxn_id\": {\"__class__\": \"ConnectedValue\"}, \"medium\": {\"__class__\": \"ConnectedValue\"}, \"model\": {\"__class__\": \"ConnectedValue\"}, \"pathway\": {\"__class__\": \"ConnectedValue\"}, \"substrate_cond\": {\"substrate_param\": \"yes\", \"__current_case__\": 0, \"substrate_rxn_id\": {\"__class__\": \"ConnectedValue\"}}, \"target_rxn_id\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.1.0+galaxy1",
+            "type": "tool",
+            "uuid": "2602ede6-0d47-44da-bd85-c1c07376a6a7",
+            "workflow_outputs": [
+                {
+                    "label": "StrainDesign analyzing-model",
+                    "output_name": "output_png",
+                    "uuid": "c476faa7-7b68-4fcc-ab5c-591262ecc6b6"
+                }
+            ]
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/straindesign_reduce_model/straindesign_reduce_model/3.1.0+galaxy1",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "model": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "sd_strategy|sd_tsv": {
+                    "id": 6,
+                    "output_name": "output_tsv"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "StrainDesign reduce-model",
+            "outputs": [
+                {
+                    "name": "output_sbml",
+                    "type": "sbml"
+                }
+            ],
+            "position": {
+                "bottom": 261.5,
+                "height": 189,
+                "left": 951,
+                "right": 1151,
+                "top": 72.5,
+                "width": 200,
+                "x": 951,
+                "y": 72.5
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/straindesign_reduce_model/straindesign_reduce_model/3.1.0+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "78b7443af284",
+                "name": "straindesign_reduce_model",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"input_gene_str\": \"\", \"model\": {\"__class__\": \"ConnectedValue\"}, \"sd_strategy\": {\"sd_cond\": \"yes\", \"__current_case__\": 0, \"sd_tsv\": {\"__class__\": \"ConnectedValue\"}, \"sd_strategy_str\": \"yield-max\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.1.0+galaxy1",
+            "type": "tool",
+            "uuid": "e5af6044-76fd-4d01-93d3-dced5ecca572",
+            "workflow_outputs": [
+                {
+                    "label": "StrainDesign reduce-model",
+                    "output_name": "output_sbml",
+                    "uuid": "eb4069a8-fdf3-466c-9d7a-fda83227b0d7"
+                }
+            ]
+        },
+        "9": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/straindesign_analyzing_model/straindesign_analyzing_model/3.1.0+galaxy1",
+            "errors": null,
+            "id": 9,
+            "input_connections": {
+                "biomass_rxn_id": {
+                    "id": 2,
+                    "output_name": "output"
+                },
+                "medium": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "model": {
+                    "id": 8,
+                    "output_name": "output_sbml"
+                },
+                "pathway": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "substrate_cond|substrate_rxn_id": {
+                    "id": 5,
+                    "output_name": "output"
+                },
+                "target_rxn_id": {
+                    "id": 4,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool StrainDesign analyzing-model",
+                    "name": "medium"
+                },
+                {
+                    "description": "runtime parameter for tool StrainDesign analyzing-model",
+                    "name": "model"
+                },
+                {
+                    "description": "runtime parameter for tool StrainDesign analyzing-model",
+                    "name": "pathway"
+                }
+            ],
+            "label": null,
+            "name": "StrainDesign analyzing-model",
+            "outputs": [
+                {
+                    "name": "output_png",
+                    "type": "png"
+                }
+            ],
+            "position": {
+                "bottom": 747.5,
+                "height": 271,
+                "left": 1239,
+                "right": 1439,
+                "top": 476.5,
+                "width": 200,
+                "x": 1239,
+                "y": 476.5
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/straindesign_analyzing_model/straindesign_analyzing_model/3.1.0+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "490a37e24bed",
+                "name": "straindesign_analyzing_model",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"biomass_rxn_id\": {\"__class__\": \"ConnectedValue\"}, \"medium\": {\"__class__\": \"RuntimeValue\"}, \"model\": {\"__class__\": \"RuntimeValue\"}, \"pathway\": {\"__class__\": \"RuntimeValue\"}, \"substrate_cond\": {\"substrate_param\": \"yes\", \"__current_case__\": 0, \"substrate_rxn_id\": {\"__class__\": \"ConnectedValue\"}}, \"target_rxn_id\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.1.0+galaxy1",
+            "type": "tool",
+            "uuid": "95b2e9ce-d31d-42d0-829d-f85736bbe804",
+            "workflow_outputs": [
+                {
+                    "label": "straindesign",
+                    "output_name": "output_png",
+                    "uuid": "e0b3c37d-260d-4033-b015-bad7822bd7b8"
+                }
+            ]
+        }
+    },
+    "tags": [
+        "brs",
+        "straindesign"
+    ],
+    "uuid": "5ef85967-2620-4ef3-8514-a72267a0c87b",
+    "version": 13
+}

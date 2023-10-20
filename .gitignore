@@ -5,3 +5,4 @@ node_modules
 *.code-workspace
 tool_test_output.html
 tool_test_output.json
+.hg_archival.txt

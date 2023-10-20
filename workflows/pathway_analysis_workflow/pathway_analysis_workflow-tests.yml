@@ -1,0 +1,42 @@
+- doc: Evaluating and ranking a set of pathways based on multiple metrics
+  job:
+    Heterologous pathways:
+      class: Collection
+      collection_type: list
+      elements:
+        - identifier: rp_001_0001.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_001_0001.xml
+        - identifier: rp_001_0006.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_001_0006.xml
+        - identifier: rp_001_0011.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_001_0011.xml
+        - identifier: rp_002_0001.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_002_0001.xml
+        - identifier: rp_002_0006.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_002_0006.xml
+        - identifier: rp_002_0011.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_002_0011.xml
+        - identifier: rp_003_0001.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_003_0001.xml
+        - identifier: rp_003_0116.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_003_0116.xml
+        - identifier: rp_003_0231.xml
+          class: File
+          location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/rp_003_0231.xml
+    Chassis where to produce target from:
+      class: File
+      location: https://zenodo.org/api/files/5db78fa1-b8cb-4046-b57c-8a9d00806f42/SBML_Model_iML1515.xml
+    Biomass reaction ID: R_BIOMASS_Ec_iML1515_core_75p37M
+    Cell compartment ID: c
+  outputs:
+    Ranked Pathways:
+      path: test-data/ranked_pathways.csv
+      compare: sim_size

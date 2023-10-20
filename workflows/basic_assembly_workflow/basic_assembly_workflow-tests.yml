@@ -1,0 +1,17 @@
+- doc: Test for BASIC Assembly workflow
+  job:
+    Linkers and user parts:
+      class: File
+      location: https://zenodo.org/record/6123887/files/parts_for_lycopene.csv
+    Pathway (SBML):
+      class: File
+      location: https://zenodo.org/record/6123887/files/rp_002_0011.xml
+    DNA-Bot settings:
+      class: File
+      location: https://zenodo.org/record/6123887/files/dnabot_paris_settings.yaml
+    Host taxon ID: 83333
+    Enzyme taxon IDs: 553
+  outputs:
+    dnabot_scripts:
+      path: test-data/dna_bot_scripts.tar
+      compare: sim_size

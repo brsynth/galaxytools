@@ -1,0 +1,7 @@
+- doc: Biosensor
+  job:
+    Compound InChI: 'InChI=1S/C3H6O3/c1-2(4)3(5)6/h2,4H,1H3,(H,5,6)/p-1/t2-/m0/s1'
+  outputs:
+    biosensor:
+      path: test-data/biosensor.html
+      compare: sim_size

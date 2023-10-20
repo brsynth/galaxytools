@@ -37,10 +37,10 @@
             --robot '$robot'
             --output-folder '.' &&
         mv instructions.csv '$output_instruction' &&
-        #if not os.path.isfile('volume_warning.tsv')
-            touch volume_warning.tsv &&
+        #if not os.path.isfile('volumes_warnings.tsv')
+            touch volumes_warnings.tsv &&
         #end if
-        mv volume_warning.tsv '$output_warning'
+        mv volumes_warnings.tsv '$output_warning'
     ]]></command>
     <inputs>
         <param name="plates_generator" type="data_collection" collection_type="list" format="json,tabular" label="Source/Destination corresponding to plate/wells" help="Output from iCFree plates generator"/>
@@ -53,7 +53,7 @@
         </param>
     </inputs>
     <outputs>
-        <data name="output_warning" format="tsv" label="${tool.name} - Warning" />
+        <data name="output_warning" format="tabular" label="${tool.name} - Warning" />
         <data name="output_instruction" format="csv" label="${tool.name} - Instruction" />
     </outputs>
     <tests>
@@ -61,10 +61,10 @@
             <!-- test 1: check if identical outputs are produced with default parameters  -->
             <param name="plates_generator">
                 <collection type="list">
-                    <element name="plates_generator_source_plate_1" value="plates_generator_source_plate_1.test-1.json" />
-                    <element name="plates_generator_source_plate_1.test-1.tsv" value="plates_generator_source_plate_1.test-1.tsv" />
-                    <element name="plates_generator_destination_plate_1.test-1.json" value="plates_generator_destination_plate_1.test-1.json" />
-                    <element name="plates_generator_destination_plate_1.test-1.tsv" value="plates_generator_destination_plate_1.test-1.tsv" />
+                    <element name="source_plate_1.json" value="plates_generator_source_plate_1.test-1.json" />
+                    <element name="source_plate_1.tsv" value="plates_generator_source_plate_1.test-1.tsv" />
+                    <element name="destination_plate_1.json" value="plates_generator_destination_plate_1.test-1.json" />
+                    <element name="destination_plate_1.tsv" value="plates_generator_destination_plate_1.test-1.tsv" />
                 </collection>
             </param>
             <output name="output_warning" ftype="tabular">

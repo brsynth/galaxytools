@@ -1,7 +1,7 @@
-<tool id="dnabot" name="DNA-Bot" version="@TOOL_VERSION@" profile="21.09">
+<tool id="dnabot" name="DNA-Bot" version="@TOOL_VERSION@" profile="21.09" license="MIT">
     <description>DNA assembly using BASIC on OpenTrons</description>
     <macros>
-        <token name="@TOOL_VERSION@">3.1.0</token>
+        <token name="@TOOL_VERSION@">4.1.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">dnabot</requirement>
@@ -63,7 +63,7 @@
             <param name="plate_files" value="user_parts_coords.csv,linker_parts_coords.csv"/>
             <output name="dnabot_scripts" ftype="tar">
                 <assert_contents>
-                    <has_size value="153600" delta="10000"/>
+                    <has_size value="165900" delta="10000"/>
                 </assert_contents>
             </output>
         </test>
@@ -99,22 +99,11 @@ Ouput
 
 * **Dnabot scripts**: DNA-Bot scripts in TAR format which implement the 4 assembly steps and metainformation to keep track of parameters.
 
-Version
--------
-
-3.1.0
-
 Authors
 -------
 
 * **Matthew C Haines**
 * Thomas Duigou
-
-License
--------
-
-`MIT <https://github.com/BASIC-DNA-ASSEMBLY/DNA-BOT/blob/master/LICENSE>`_
-
 
 Acknowledgments
 ---------------

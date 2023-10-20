@@ -1,0 +1,8 @@
+categories:
+  - Systems Biology
+description: Import SBML file into Neo4j
+long_description: Import SBML file into Neo4j
+name: neo4jsbml
+owner: tduigou
+homepage_url: https://github.com/brsynth/neo4jsbml
+remote_repository_url: https://github.com/brsynth/neo4jsbml

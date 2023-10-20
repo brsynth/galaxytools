@@ -1,3 +1,0 @@
-  <section id="sbc-util" name="SynBioCAD Utilities">
-    <tool file="synbiocad-galaxy-wrappers/sbml2sbol/sbml2sbol.xml" />
-  </section>
