@@ -2,7 +2,6 @@ from argparse import ArgumentParser
 from libsbml import (
     readSBMLFromFile
 )
-#from requests import get as r_get
 from taxonid import get_taxonid
 
 
@@ -40,51 +39,6 @@ def get_biomass_rxn(sbml_doc):
     return None
 
 
-# def get_taxon_id(hostname):
-#     '''
-#     Returns the taxonomy ID of the host organism
-    
-#     Parameters
-#     ----------
-#     hostname: str
-#         Extended name of the host organism
-        
-#     Returns
-#     -------
-#     taxid: str
-#         Taxonomy ID of the host organism
-#     '''
-#     taxid = get_taxon_id(hostid)
-#     hostname = ''
-#     # Extended Name
-#     server = 'http://bigg.ucsd.edu/api/v2/models/'
-#     ext = hostid
-#     r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
-#     if not r.ok:
-#         print(f"Warning: unable to retrieve host name for id {hostid}")
-#     else:
-#         try:
-#             hostname = r.json()["organism"]
-#         except KeyError:
-#             print(f"Warning: unable to retrieve host name for id {hostid}")
-#     if not hostname:
-#         taxid = ''
-#     else:
-#         # TAXON ID
-#         server = 'https://rest.ensembl.org'
-#         ext = f'/taxonomy/id/{hostname}?'
-#         r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
-#         if not r.ok:
-#             print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
-#         else:
-#             try:
-#                 taxid = r.json()["id"]
-#             except KeyError:
-#                 print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
-#                 taxid = ''
-#     return taxid
-
-
 def args():
     parser = ArgumentParser('Returns cell informations')
     parser.add_argument(
@@ -114,9 +68,9 @@ def args():
         help='ID of biomass reaction'
     )
     parser.add_argument(
-        '--host-ext-name',
+        '--hostname',
         type=str,
-        help='Extended name of the host organism'
+        help='Name of the host organism'
     )
     parser.add_argument(
         '--taxid',
@@ -162,13 +116,7 @@ def entry_point():
     else:
         print(f'Biomass reaction ID: {biomass_id}')
 
-    taxid = get_taxonid(params.host_ext_name)
-    # # Model from BiGG
-    # if params.bigg:
-    #     taxid = get_taxon_id(params.host_ext_name)
-    # # Model from user
-    # else:
-    #     taxid = params.host_ext_name
+    taxid = get_taxonid(params.hostname)
 
     if params.taxid:
         with open(params.taxid, 'w') as f:

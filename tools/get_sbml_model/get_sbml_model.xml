@@ -10,20 +10,16 @@
     <command detect_errors="exit_code"><![CDATA[
         #if str($cond_src.from_src) == 'from_bigg'
             curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
-        #else
-            python -m taxonid '${cond_src.hostname}' --output-file tmpfile &&
-            echo "#ID" > '$taxid' &&
-            cat tmpfile >> '$taxid' &&
         #end if
         python '$__tool_directory__/'get_infos.py
             #if str($cond_src.from_src) == 'from_bigg'
                 '$model'
                 --bigg
-                --taxid '$taxid'
             #else
                 '${cond_src.input_file}'
+                --hostname '${cond_src.hostid}'
             #end if
-            --host-ext-name '${cond_src.host_ext_name}'
+            --taxid '$taxid'
             --comp '$compartments'
             --biomass '$biomass'
     ]]></command>
@@ -34,10 +30,7 @@
                 <option value="from_history">Select file from the History</option>
             </param>
             <when value="from_history">
-                <param name="hostname" type="text" help="Fullname of the model">
-                    <validator type="empty_field" message="The fullname of the organism is required"/>
-                </param>
-                <param name="host_ext_name" type="text" help="Model extended name">
+                <param name="hostid" type="text" label="Model's fullname" help="Model extended name">
                     <validator type="empty_field" message="Organism extended name required"/>
                 </param>
                 <param name="input_file" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
