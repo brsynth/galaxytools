@@ -5,7 +5,7 @@
         <requirement type="package" version="1.11">gzip</requirement>
         <requirement type="package" version="5.19.2">python-libsbml</requirement>
         <requirement type="package" version="2.29">requests</requirement>
-        <requirement type="package" version="0.1.0">taxonid</requirement>
+        <requirement type="package" version="0.1.1">taxonid</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #if str($cond_src.from_src) == 'from_bigg'
@@ -25,7 +25,7 @@
             #else
                 '${cond_src.input_file}'
             #end if
-            --hostid '${cond_src.hostid}'
+            --host-ext-name '${cond_src.host_ext_name}'
             --comp '$compartments'
             --biomass '$biomass'
     ]]></command>
@@ -39,8 +39,8 @@
                 <param name="hostname" type="text" help="Fullname of the model">
                     <validator type="empty_field" message="The fullname of the organism is required"/>
                 </param>
-                <param name="hostid" type="text" help="ID of the model">
-                    <validator type="empty_field" message="ID of the organism is required"/>
+                <param name="host_ext_name" type="text" help="Model extended name">
+                    <validator type="empty_field" message="Organism extended name required"/>
                 </param>
                 <param name="input_file" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
             </when>
