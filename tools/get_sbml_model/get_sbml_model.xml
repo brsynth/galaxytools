@@ -15,8 +15,6 @@
             echo "#ID" > '$taxid' &&
             cat tmpfile >> '$taxid' &&
         #end if
-        echo "listdir:";
-        ls;
         python '$__tool_directory__/'get_infos.py
             #if str($cond_src.from_src) == 'from_bigg'
                 '$model'
