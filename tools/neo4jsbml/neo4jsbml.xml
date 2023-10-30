@@ -1,0 +1,141 @@
+<tool id="neo4jsbml" name="Neo4jSbml" version="@TOOL_VERSION@" profile="21.09">
+    <description>Import SBML file into Neo4j</description>
+    <macros>
+        <token name="@TOOL_VERSION@">0.11.0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">neo4jsbml</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        neo4jsbml
+            --input-protocol-str '$input_protocol_str'
+            --input-url-str '$input_url_str'
+            --input-port-int '$input_port_int'
+            --input-user-str '$input_user_str'
+            --input-password-file '$input_password_file'
+            --input-database-str '$input_database_str'
+
+            --input-file-sbml '$input_file_sbml'
+            #if str($input_tag_str) != ""
+                --input-tag-str '$input_tag_str'
+            #end if
+            #if $is_test
+                --dry-run
+            #end if
+            --input-modelisation-json '$input_modelisation_json' > '$output_log'
+    ]]></command>
+    <inputs>
+        <param name="input_protocol_str" type="select" label="Protocol">
+            <option value="neo4j" selected="true">neo4j</option>
+            <option value="neo4j+s">neo4j+s</option>
+            <option value="neo4j+ssc">neo4j+ssc</option>
+            <option value="bolt">bolt</option>
+            <option value="bolt+s">bolt+s</option>
+            <option value="bolt+ssc">bolt+ssc</option>
+        </param>
+        <param name="input_url_str" type="text" label="Url of the database">
+            <validator type="empty_field" message="Not empty"/>
+        </param>
+        <param name="input_port_int" type="text" value="7687" label="Port of the database">
+            <validator type="empty_field" message="Not empty"/>
+            <validator type="regex" message="Only integers are allowed">^(?:\d+)$</validator>
+        </param>
+        <param name="input_user_str" type="text" value="neo4j" label="Username of the database">
+            <validator type="empty_field" message="Not empty"/>
+        </param>
+        <param name="input_password_file" type="data" format="txt" label="Password of the database"/>
+        <param name="input_database_str" type="text" label="Database name">
+            <validator type="empty_field" message="Not empty"/>
+        </param>
+
+        <param name="input_file_sbml" type="data" format="sbml" label="SBML model"/>
+        <param name="input_tag_str" type="text" label="Identifier of the model"/>
+        <param name="input_modelisation_json" type="data" format="json" label="Arrow's schema"/>
+    </inputs>
+    <outputs>
+        <data name="output_log" format="txt" label="${tool.name} - log" />
+    </outputs>
+    <tests>
+        <test>
+        <!-- test 1: check if identical outputs are produced with compress option -->
+            <param name="input_url_str" value="" />
+            <param name="input_user_str" value="" />
+            <param name="input_password_file" value="pwd.txt"/>
+            <param name="input_database_str" value="" />
+
+            <param name="input_file_sbml" value="e_coli_core.xml.gz" />
+            <param name="input_modelisation_json" value="schema.json" />
+
+            <param name="is_test" type="boolean" checked="true" />
+
+            <output name="output_log" ftype="txt">
+                <assert_contents>
+                    <has_text text="Start -" />
+                    <has_text text="End -" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+Neo4jSbml
+=========
+
+Step 1
+------
+
+Create a schema with [arrows](https://arrows.app), following these rules:
+.. image:: ${static_path}/images/PathwayModelisation-1.0.0.arrows.png
+    :width: 90 %
+    :align: center
+
+Rules:
+* Nodes are labelled based on SBML object name as defined in the `SBML specification <https://sbml.org>`_
+* Properties are labelled based on SBML object properties as defined the `SBML specification <https://sbml.org>`_
+
+Step 2
+------
+Export your schema at the JSON format.
+.. image:: ${static_path}/images/arrows.dwl.png
+    :width: 90 %
+    :align: center
+
+Step 3
+------
+
+Import your data with `neo4jsbml` into Neo4j.
+* Use either a configuration file `ini` or individual parameters
+* Password needs to be store in a file for safety security
+* If you have multiple model in the database, pass a `tag` to identify the model loaded into the database if you want to avoid collision
+
+
+Inputs
+------
+
+Database parameters
+* **Protocol**: choose the protocol (default: neo4j)
+* **Url of the database**: define the url of the database
+* **Port of the database**: define the port of the database (default: 7687)
+* **Username of the database**: User name of the database
+* **Password of the database**: file with the password
+* **Database name**: database name
+
+Input
+* **SBML model**: SBML model
+* **Identifier of the model**: Associate an ID to the nodes
+* **Arrow's schema**: Schema created with Arrow
+
+Ouput
+-----
+
+* Traceback of the tool
+]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{neo4jsbml
+                author = {Guillaume Gricourt, Thomas Duigou, Sandra Dérozier, Jean-Loup Faulon},
+                title = {{Neo4jSbml}},
+                url = {https://github.com/brsynth/neo4jsbml/},
+            }
+        </citation>
+    </citations>
+</tool>
