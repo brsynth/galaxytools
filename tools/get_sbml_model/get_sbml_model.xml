@@ -1,19 +1,15 @@
-<tool id="get_sbml_model" name="Pick SBML Model" version="0.1.0" profile="21.09" license="MIT">
+<tool id="get_sbml_model" name="Pick SBML Model" version="0.2.0" profile="21.09" license="MIT">
     <description>Get an SBML model (BiGG)</description>
     <requirements>
         <requirement type="package" version="7.81.0">curl</requirement>
         <requirement type="package" version="1.11">gzip</requirement>
         <requirement type="package" version="5.19.2">python-libsbml</requirement>
         <requirement type="package" version="2.29">requests</requirement>
-        <requirement type="package" version="0.1.0">taxonid</requirement>
+        <requirement type="package" version="0.1.1">taxonid</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #if str($cond_src.from_src) == 'from_bigg'
             curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
-        #else
-            python -m taxonid '${cond_src.hostname}' --output-file tmpfile &&
-            echo "#ID" > '$taxid' &&
-            cat tmpfile >> '$taxid' &&
         #end if
         echo "listdir:";
         ls;
@@ -21,11 +17,11 @@
             #if str($cond_src.from_src) == 'from_bigg'
                 '$model'
                 --bigg
-                --taxid '$taxid'
             #else
                 '${cond_src.input_file}'
+                --hostname '${cond_src.hostid}'
             #end if
-            --hostid '${cond_src.hostid}'
+            --taxid '$taxid'
             --comp '$compartments'
             --biomass '$biomass'
     ]]></command>
@@ -36,11 +32,8 @@
                 <option value="from_history">Select file from the History</option>
             </param>
             <when value="from_history">
-                <param name="hostname" type="text" help="Fullname of the model">
-                    <validator type="empty_field" message="The fullname of the organism is required"/>
-                </param>
-                <param name="hostid" type="text" help="ID of the model">
-                    <validator type="empty_field" message="ID of the organism is required"/>
+                <param name="hostid" type="text" label="Model's fullname" help="Model extended name">
+                    <validator type="empty_field" message="Organism extended name required"/>
                 </param>
                 <param name="input_file" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
             </when>
