@@ -1,32 +1,29 @@
-<tool id="get_sbml_model" name="Pick SBML Model" version="0.0.4" profile="21.09" license="MIT">
+<tool id="get_sbml_model" name="Pick SBML Model" version="0.2.0" profile="21.09" license="MIT">
     <description>Get an SBML model (BiGG)</description>
     <requirements>
         <requirement type="package" version="7.81.0">curl</requirement>
         <requirement type="package" version="1.11">gzip</requirement>
         <requirement type="package" version="5.19.2">python-libsbml</requirement>
         <requirement type="package" version="2.29">requests</requirement>
-        <requirement type="package" version="0.1.0">taxonid</requirement>
+        <requirement type="package" version="0.1.1">taxonid</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #if str($cond_src.from_src) == 'from_bigg'
             curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
         #end if
+        echo "listdir:";
+        ls;
         python '$__tool_directory__/'get_infos.py
             #if str($cond_src.from_src) == 'from_bigg'
                 '$model'
+                --bigg
             #else
                 '${cond_src.input_file}'
+                --hostname '${cond_src.hostid}'
             #end if
-            --hostid '${cond_src.hostid}'
+            --taxid '$taxid'
             --comp '$compartments'
             --biomass '$biomass'
-        #if str($cond_src.from_src) == 'from_bigg'
-            --taxid '$taxid'
-        #else
-            python -m taxonid '${cond_src.hostid}' --output-file tmpfile
-            echo "#ID" > '$taxid'
-            cat tmpfile >> '$taxid'
-        #end if
     ]]></command>
     <inputs>
         <conditional name="cond_src">
@@ -35,8 +32,8 @@
                 <option value="from_history">Select file from the History</option>
             </param>
             <when value="from_history">
-                <param name="hostid" type="text" help="Fullname of the model">
-                    <validator type="empty_field" message="The fullname of the organism is required"/>
+                <param name="hostid" type="text" label="Model's fullname" help="Model extended name">
+                    <validator type="empty_field" message="Organism extended name required"/>
                 </param>
                 <param name="input_file" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
             </when>
@@ -94,33 +91,32 @@
         </conditional>
     </inputs>
     <outputs>
-        <when value="from_bigg">
-            <data name="model" format="sbml" label="${cond_src.hostid}" />
-        </when>
+        <data name="model" format="sbml" label="${cond_src.hostid}">
+            <filter>cond_src['from_src'] == 'from_bigg'</filter>
+        </data>
         <data name="taxid" format="tsv" label="${cond_src.hostid} (taxon id)" />
         <data name="compartments" format="tsv" label="${cond_src.hostid} (compartments)" />
         <data name="biomass" format="tsv" label="${cond_src.hostid} (biomass reactions)" />
     </outputs>
     <tests>
         <test>
-            <conditional name="cond_src">
-                <param name="from_src" value="from_bigg" />
-                <param name="hostid" value="iML1515" />
-            </conditional>
+            <param name="from_src" value="from_bigg" />
+            <param name="hostid" value="iML1515" />
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1" />
-            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="taxid" md5="7c62bd818057838b3557c8d87cca47fc" />
             <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
             <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06" />
         </test>
         <test>
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
-                <param name="hostid" value="Escherichia coli str. K-12 substr. MG1655" />
+                <param name="hostname" value="Escherichia coli str. K-12 substr. MG1655" />
+                <param name="hostid" value="e_coli_core" />
                 <param name="input_file" value="e_coli_core.xml" />
             </conditional>
-            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
-            <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
-            <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06" />
+            <output name="taxid" md5="ee08b511771328e6254775a51779d421" />
+            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
             </test>
     </tests>
     <help><![CDATA[

@@ -2,10 +2,44 @@ from argparse import ArgumentParser
 from libsbml import (
     readSBMLFromFile
 )
-from requests import get as r_get
+from taxonid import get_taxonid
 
 
-def entry_point():
+def get_biomass_rxn(sbml_doc):
+    '''
+    Returns the biomass reaction of the model
+    
+    Parameters
+    ----------
+    sbml_doc: libsbml.SBMLDocument
+        SBML model
+        
+    Returns
+    -------
+    biomass_rxn: libsbml.Reaction
+        Biomass reaction
+    '''
+    reactions = sbml_doc.getModel().getListOfReactions()
+    # Search for 'biomass' keyword in reaction name
+    for rxn in reactions:
+        if 'biomass' in rxn.getName().lower():
+            return rxn
+    # Search for 'biomass' keyword in products
+    # AND not in reactants
+    for rxn in reactions:
+        in_reactants = False
+        for reac in rxn.getListOfReactants():
+            if 'biomass' in reac.getSpecies().lower():
+                in_reactants = True
+                break
+        if not in_reactants:
+            for prod in rxn.getListOfProducts():
+                if 'biomass' in prod.getSpecies().lower():
+                    return rxn
+    return None
+
+
+def args():
     parser = ArgumentParser('Returns cell informations')
     parser.add_argument(
         'infile',
@@ -29,9 +63,14 @@ def entry_point():
         help='Path to store biomass reaction ID'
     )
     parser.add_argument(
-        '--hostid',
+        '--biomass-id',
         type=str,
-        help='Extended name of the host organism'
+        help='ID of biomass reaction'
+    )
+    parser.add_argument(
+        '--hostname',
+        type=str,
+        help='Name of the host organism'
     )
     parser.add_argument(
         '--taxid',
@@ -39,63 +78,52 @@ def entry_point():
         help='Path to store host taxonomy ID'
     )
     params = parser.parse_args()
+    return params
+
+
+def entry_point():
+
+    params = args()
 
     sbml_doc = readSBMLFromFile(params.infile)
 
+    compartments = sbml_doc.getModel().getListOfCompartments()
+    comp_str = ''
+    for comp in compartments:
+        comp_str += f'{comp.getId()}\t{comp.getName()}\n'
     if params.comp:
-        compartments = sbml_doc.getModel().getListOfCompartments()
         with open(params.comp, 'w') as f:
             f.write('#ID\tNAME\n')
-            for comp in compartments:
-                f.write(f'{comp.getId()}\t{comp.getName()}\n')
+            f.write(comp_str)
+    else:
+        print('Compartments:')
+        for comp in compartments:
+            print(f'{comp.getId()}\t{comp.getName()}'.replace('\n', ' | '))
 
+    if params.biomass_id:
+        biomass_rxn = sbml_doc.getModel().getReaction(params.biomass_id)
+    else:
+        biomass_rxn = get_biomass_rxn(sbml_doc)
+    if not biomass_rxn:
+        print('Warning: unable to retrieve biomass reaction')
+        biomass_id = ''
+    else:
+        biomass_id = biomass_rxn.getId()
     if params.biomass:
-        reactions = sbml_doc.getModel().getListOfReactions()
         with open(params.biomass, 'w') as f:
             f.write('#ID\n')
-            for rxn in reactions:
-                if 'biomass' in rxn.getId().lower():
-                    f.write(f'{rxn.getId()}\n')
+            f.write(f'{biomass_id}\n')
+    else:
+        print(f'Biomass reaction ID: {biomass_id}')
+
+    taxid = get_taxonid(params.hostname)
 
     if params.taxid:
-        hostname = ''
-
-        # Model from BiGG
-        if params.bigg:
-            # Extended Name
-            server = 'http://bigg.ucsd.edu/api/v2/models/'
-            ext = params.hostid
-            r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
-            if not r.ok:
-                print(f"Warning: unable to retrieve host name for id {params.hostid}")
-            else:
-                try:
-                    hostname = r.json()["organism"]
-                except KeyError:
-                    print(f"Warning: unable to retrieve host name for id {params.hostid}")
-            if not hostname:
-                taxid = ''
-            else:
-                # TAXON ID
-                server = 'https://rest.ensembl.org'
-                ext = f'/taxonomy/id/{hostname}?'
-                r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
-                if not r.ok:
-                    print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
-                else:
-                    try:
-                        taxid = r.json()["id"]
-                    except KeyError:
-                        print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
-                        taxid = ''
-
-        # Model from user
-        else:
-            taxid = params.hostid
-
         with open(params.taxid, 'w') as f:
             f.write('#ID\n')
             f.write(f'{taxid}\n')
+    else:
+        print(f'Taxonomy ID: {taxid}')
 
 
 if __name__ == "__main__":

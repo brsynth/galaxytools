@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.4.0](https://github.com/brsynth/galaxytools/tree/0.4.0) (2023-10-09)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.3.0...0.4.0)
+
+**Merged pull requests:**
+
+- Add tool `neo4jsbml` [\#144](https://github.com/brsynth/galaxytools/pull/144) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+## [0.3.0](https://github.com/brsynth/galaxytools/tree/0.3.0) (2023-09-29)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.12...0.3.0)
+
+**Merged pull requests:**
+
+- Get sbml model [\#143](https://github.com/brsynth/galaxytools/pull/143) ([breakthewall](https://github.com/breakthewall))
+- chore\(deps\): bump tj-actions/changed-files from 37 to 39 [\#142](https://github.com/brsynth/galaxytools/pull/142) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Updating dnabot from version 3.1.0 to 4.1.0 [\#141](https://github.com/brsynth/galaxytools/pull/141) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- get\_sbml\_model, load file from history [\#139](https://github.com/brsynth/galaxytools/pull/139) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+## [0.2.12](https://github.com/brsynth/galaxytools/tree/0.2.12) (2023-09-19)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.11...0.2.12)
+
+## [0.2.11](https://github.com/brsynth/galaxytools/tree/0.2.11) (2023-09-12)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.10...0.2.11)
+
 ## [0.2.10](https://github.com/brsynth/galaxytools/tree/0.2.10) (2023-09-05)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.9...0.2.10)
