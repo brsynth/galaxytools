@@ -384,7 +384,7 @@ jobs:
   deploy:
     name: Deploy
     needs: [setup, lint, combine_outputs]
-    if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'brsynth' && github.event.pull_request.merged == true}}
+    if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'brsynth' && github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -421,7 +421,7 @@ jobs:
   deploy-report:
     name: Report deploy status
     needs: [deploy]
-    if: ${{ always() && needs.deploy.result != 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'brsynth' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'brsynth' && github.event.pull_request.merged == true && needs.deploy.result != 'success' }}
     runs-on: ubuntu-latest
     steps:
     # report to the PR if deployment failed
@@ -433,7 +433,6 @@ jobs:
     - name: Create comment
       uses: peter-evans/create-or-update-comment@v2
       with:
-        token: ${{ secrets.PAT }}
         issue-number: ${{ steps.getpr.outputs.number }}
         body: |
           Attention: deployment ${{ needs.deploy.result }}!
