@@ -47,6 +47,7 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.7']
+        workflows: [true, false]
     steps:
     - name: Print github context properties
       run: |
@@ -93,6 +94,7 @@ jobs:
         galaxy-branch: ${{ env.GALAXY_BRANCH }}
         max-chunks: ${{ env.MAX_CHUNKS }}
         python-version: ${{ matrix.python-version }}
+        worfklows: ${{ matrix.workflows }}
     - name: Show commit range
       run: echo '${{ steps.discover.outputs.commit-range }}'
     - name: Show repository list
