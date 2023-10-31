@@ -17,8 +17,8 @@
                 --bigg
             #else
                 '${cond_src.input_file}'
-                --hostname '${cond_src.hostid}'
             #end if
+            --hostname '${cond_src.hostid}'
             --taxid '$taxid'
             --comp '$compartments'
             --biomass '$biomass'
