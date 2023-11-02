@@ -177,6 +177,8 @@ jobs:
       run: pip install flake8 flake8-import-order
     - name: Flake8
       run: echo '${{ needs.setup.outputs.repository-list }}' | xargs -d '\n' flake8 --output-file pylint_report.txt --tee
+    - name: Test
+      run: echo 'Repository list: ${{ needs.setup.outputs.repository-list }}'
     - uses: actions/upload-artifact@v3
       if: ${{ failure() }}
       with:
@@ -274,7 +276,7 @@ jobs:
   test:
     name: Test tools
     needs: setup
-    if: ${{ needs.setup.outputs.repository-list != '' }}
+    if: ${{ needs.setup.outputs.repository-list != ''  && github.event.pull_request.merged == false }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -340,7 +342,7 @@ jobs:
   combine_outputs:
     name: Combine chunked test results
     needs: [setup, test]
-    if: ${{ always() && needs.setup.outputs.repository-list != '' }}
+    if: ${{ needs.setup.outputs.repository-list != '' && github.event.pull_request.merged == false }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
