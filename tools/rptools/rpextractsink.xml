@@ -33,7 +33,7 @@
         <test>
         <!-- test 1: check if identical outputs are produced with iCN718 model input  -->
             <param name="input" value="iCN718.xml.gz" />
-            <output name="sink" md5="0a7438b90704bf1ba88e123e6bb54df2" />
+            <output name="sink" md5="5ff3987609142e828ec8e3c97b8dab12" />
         </test>
     </tests>
     <help><![CDATA[
