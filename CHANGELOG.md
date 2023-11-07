@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.4.2](https://github.com/brsynth/galaxytools/tree/0.4.2) (2023-10-30)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.1...0.4.2)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump SimenB/github-actions-cpu-cores from 1 to 2 [\#156](https://github.com/brsynth/galaxytools/pull/156) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump peter-evans/create-or-update-comment from 2 to 3 [\#155](https://github.com/brsynth/galaxytools/pull/155) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump actions/checkout from 3 to 4 [\#154](https://github.com/brsynth/galaxytools/pull/154) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Github workflows [\#153](https://github.com/brsynth/galaxytools/pull/153) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Get sbml model [\#151](https://github.com/brsynth/galaxytools/pull/151) ([breakthewall](https://github.com/breakthewall))
+- Get sbml model [\#150](https://github.com/brsynth/galaxytools/pull/150) ([breakthewall](https://github.com/breakthewall))
+- Get sbml model [\#149](https://github.com/brsynth/galaxytools/pull/149) ([breakthewall](https://github.com/breakthewall))
+- Get sbml model [\#148](https://github.com/brsynth/galaxytools/pull/148) ([breakthewall](https://github.com/breakthewall))
+- Rptools [\#146](https://github.com/brsynth/galaxytools/pull/146) ([breakthewall](https://github.com/breakthewall))
+
 ## [0.4.1](https://github.com/brsynth/galaxytools/tree/0.4.1) (2023-10-10)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.0...0.4.1)
