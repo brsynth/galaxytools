@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.3](https://github.com/brsynth/galaxytools/tree/0.4.3) (2023-11-02)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.2...0.4.3)
+
+**Merged pull requests:**
+
+- Updating rptools from version 6.3.0 to 6.3.2 [\#152](https://github.com/brsynth/galaxytools/pull/152) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.4.2](https://github.com/brsynth/galaxytools/tree/0.4.2) (2023-10-30)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.1...0.4.2)
