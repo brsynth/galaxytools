@@ -11,7 +11,7 @@
     <command detect_errors="exit_code"><![CDATA[
         python -m rptools.rpfba '$pathway' '$model' '$compartment_id' '$pathway_with_fba'
             #if str($adv.merge) == "true":
-                --merge
+                --merge '$output_merge'
             #end if
                 --objective_rxn_id '$objective_rxn_id'
                 --sim '$input_sim_type.sim_type'
@@ -60,6 +60,9 @@
     </inputs>
     <outputs>
         <data name="pathway_with_fba" format="sbml" label="${tool.name}(${input_sim_type.sim_type}) - ${pathway.name}" />
+        <data name="output_merge" format="sbml" label="${tool.name}(${input_sim_type.sim_type}) - ${pathway.name} - merge">
+            <filter>adv['merge']</filter>
+        </data>
     </outputs>
     <tests>
         <test>
