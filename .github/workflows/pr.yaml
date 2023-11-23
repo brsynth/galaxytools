@@ -178,7 +178,9 @@ jobs:
     - name: Flake8
       run: echo '${{ needs.setup.outputs.repository-list }}' | xargs -d '\n' flake8 --output-file pylint_report.txt --tee
     - name: Test
-      run: echo 'Repository list: ${{ needs.setup.outputs.repository-list }}'
+      run: |
+        echo "Repository list:"
+        echo "${{ needs.setup.outputs.repository-list }}"
     - uses: actions/upload-artifact@v3
       if: ${{ failure() }}
       with:
