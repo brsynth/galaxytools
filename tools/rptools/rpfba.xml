@@ -77,7 +77,7 @@
                     <has_text text="5.54302" />
                     <!--check fba_biomass value-->
                     <has_text text="1.31359" />
-                    <has_n_lines n="396" />
+                    <has_n_lines n="455" />
                 </assert_contents>
             </output>
         </test>
@@ -95,7 +95,7 @@
                     <!--check fba_fba value-->
                     <has_text text="16.47058" />
                     <not_has_text text="fba_fraction" />
-                    <has_n_lines n="380" />
+                    <has_n_lines n="415" />
                 </assert_contents>
             </output>
         </test>
@@ -113,7 +113,7 @@
                     <!--check fba_pfba value-->
                     <has_text text="2623.54248" />
                     <not_has_text text="fba_fraction" />
-                    <has_n_lines n="380" />
+                    <has_n_lines n="415" />
                 </assert_contents>
             </output>
         </test>
