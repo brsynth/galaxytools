@@ -16,11 +16,10 @@
         python '$__tool_directory__/'get_infos.py
             #if str($cond_src.from_src) == 'from_bigg'
                 '$model'
-                --bigg
             #else
                 '${cond_src.input_file}'
-                --hostname '${cond_src.hostid}'
             #end if
+            --hostname '${cond_src.hostid}'
             --taxid '$taxid'
             --comp '$compartments'
             --biomass '$biomass'
@@ -103,9 +102,9 @@
             <param name="from_src" value="from_bigg" />
             <param name="hostid" value="iML1515" />
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1" />
-            <output name="taxid" md5="7c62bd818057838b3557c8d87cca47fc" />
+            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
             <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
-            <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06" />
+            <output name="biomass" md5="95c0255bd5dd8753c6dde53c0f2958ea" />
         </test>
         <test>
             <conditional name="cond_src">
@@ -114,10 +113,10 @@
                 <param name="hostid" value="e_coli_core" />
                 <param name="input_file" value="e_coli_core.xml" />
             </conditional>
-            <output name="taxid" md5="ee08b511771328e6254775a51779d421" />
-            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
-            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
-            </test>
+            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
+            <output name="biomass" md5="95c0255bd5dd8753c6dde53c0f2958ea" />
+        </test>
     </tests>
     <help><![CDATA[
 Pick SBML Model
