@@ -55,7 +55,7 @@
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="merge" type="boolean" label="Output the merged model?" checked="false" display="checkboxes" />
-            <param name="with_orphan_species" type="boolean" label="Ignore metabolites that are only consumed or produced?" checked="false" />
+            <param name="with_orphan_species" type="boolean" label="Add metabolites that are only consumed or produced?" checked="false" />
         </section>
     </inputs>
     <outputs>
@@ -165,7 +165,7 @@ Optional:
 Advanced options:
 
 * **Output the merged model?**\ : (boolean, default=False) output the full merged model instead of heterologous pathway only
-* **Ignore Orphan Species?**\ : (boolean, default=True) ignore metabolites that are only consumed or produced
+* **With Orphan Species?**\ : (boolean, default=False) add metabolites that are only consumed or produced
     ]]></help>
     <expand macro="creator"/>
     <citations>
