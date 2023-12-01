@@ -92,12 +92,12 @@
         </conditional>
     </inputs>
     <outputs>
-        <data name="model" format="sbml" label="${cond_src.hostid}">
+        <data name="model" format="sbml" label="${cond_src.host}">
             <filter>cond_src['from_src'] == 'from_bigg'</filter>
         </data>
-        <data name="taxid" format="tsv" label="${cond_src.hostid} (taxon id)" />
-        <data name="compartments" format="tsv" label="${cond_src.hostid} (compartments)" />
-        <data name="biomass" format="tsv" label="${cond_src.hostid} (biomass reactions)" />
+        <data name="taxid" format="tsv" label="${cond_src.host} (taxon id)" />
+        <data name="compartments" format="tsv" label="${cond_src.host} (compartments)" />
+        <data name="biomass" format="tsv" label="${cond_src.host} (biomass reactions)" />
     </outputs>
     <tests>
         <test expect_num_outputs="4">
