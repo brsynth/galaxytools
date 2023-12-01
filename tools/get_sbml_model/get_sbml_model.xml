@@ -10,17 +10,14 @@
     <command detect_errors="exit_code"><![CDATA[
         #import json
         #if str($cond_src.from_src) == 'from_bigg'
-            #set $hostname=json.load(open('$__tool_directory__/'host.json))[$cond_src.hostid]
+            #set $hostname=json.load(open(str($__tool_directory__/host.json)))[$cond_src.hostid]
             curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
         #else
             #set $hostname=$cond_src.hostname
+            #set $model=$cond_src.input_file
         #end if
         python '$__tool_directory__/'get_infos.py
-            #if str($cond_src.from_src) == 'from_bigg'
-                '$model'
-            #else
-                '${cond_src.input_file}'
-            #end if
+            '$model'
             --hostname '${hostname}'
             --taxid '$taxid'
             --comp '$compartments'
@@ -33,13 +30,16 @@
                 <option value="from_history">Select file from the History</option>
             </param>
             <when value="from_history">
-                <param name="host" type="text" label="Model's fullname" help="Model extended name">
+                <param name="hostname" type="text" label="Model's fullname" help="Model extended name">
                     <validator type="empty_field" message="Organism extended name required"/>
+                </param>
+                <param name="hostid" type="text" label="Model's ID" help="Model ID">
+                    <validator type="empty_field" message="Organism ID required"/>
                 </param>
                 <param name="input_file" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
             </when>
             <when value="from_bigg">
-                 <param name="host" type="select" label="Strain">
+                 <param name="hostid" type="select" label="Strain">
                     <option value="iCN718i">Acinetobacter baumannii AYE (iCN718)</option>
                     <option value="iYO844">Bacillus subtilis subsp. subtilis str. 168 (iYO844)</option>
                     <option value="iRC1080">Chlamydomonas reinhardtii (iRC1080)</option>
@@ -92,17 +92,17 @@
         </conditional>
     </inputs>
     <outputs>
-        <data name="model" format="sbml" label="${cond_src.host}">
+        <data name="model" format="sbml" label="${cond_src.hostid}">
             <filter>cond_src['from_src'] == 'from_bigg'</filter>
         </data>
-        <data name="taxid" format="tsv" label="${cond_src.host} (taxon id)" />
-        <data name="compartments" format="tsv" label="${cond_src.host} (compartments)" />
-        <data name="biomass" format="tsv" label="${cond_src.host} (biomass reactions)" />
+        <data name="taxid" format="tsv" label="${cond_src.hostid} (taxon id)" />
+        <data name="compartments" format="tsv" label="${cond_src.hostid} (compartments)" />
+        <data name="biomass" format="tsv" label="${cond_src.hostid} (biomass reactions)" />
     </outputs>
     <tests>
         <test expect_num_outputs="4">
             <param name="from_src" value="from_bigg" />
-            <param name="host" value="iML1515|Escherichia coli str. K-12 substr. MG1655" />
+            <param name="hostid" value="iML1515" />
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1" />
             <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
             <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
@@ -111,7 +111,8 @@
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
-                <param name="host" value="Escherichia coli str. K-12 substr. MG1655" />
+                <param name="hostname" value="Escherichia coli str. K-12 substr. MG1655" />
+                <param name="hostid" value="e_coli_core" />
                 <param name="input_file" value="e_coli_core.xml" />
             </conditional>
             <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
