@@ -8,12 +8,12 @@
         <requirement type="package" version="0.1.1">taxonid</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+        #import json
         #if str($cond_src.from_src) == 'from_bigg'
-            #set $hostid=str($cond_src.host).split("|")[O]
-            #set $hostname=str($cond_src.host).split("|")[1]
-            curl -o - 'http://bigg.ucsd.edu/static/models/${hostid}.xml.gz' | gunzip > '$model' &&
+            #set $hostname=json.load(open('$__tool_directory__/'host.json))[$cond_src.hostid]
+            curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
         #else
-            #set $hostname=$cond_src.host
+            #set $hostname=$cond_src.hostname
         #end if
         python '$__tool_directory__/'get_infos.py
             #if str($cond_src.from_src) == 'from_bigg'
@@ -40,53 +40,53 @@
             </when>
             <when value="from_bigg">
                  <param name="host" type="select" label="Strain">
-                    <option value="iCN718i|Acinetobacter baumannii AYE">Acinetobacter baumannii AYE (iCN718)</option>
-                    <option value="iYO844|Bacillus subtilis subsp. subtilis str. 168">Bacillus subtilis subsp. subtilis str. 168 (iYO844)</option>
-                    <option value="iRC1080|Chlamydomonas reinhardtii">Chlamydomonas reinhardtii (iRC1080)</option>
-                    <option value="iCN900|Clostridioides difficile 630">Clostridioides difficile 630 (iCN900)</option>
-                    <option value="iHN637|Clostridium ljungdahlii DSM 13528">Clostridium ljungdahlii DSM 13528 (iHN637)</option>
-                    <option value="iCHOv1_DG44|Cricetulus griseus">Cricetulus griseus (iCHOv1_DG44)</option>
-                    <option value="iCHOv1|Cricetulus griseus">Cricetulus griseus (iCHOv1)</option>
-                    <option value="iAF1260b|Escherichia coli str. K-12 substr. MG1655">Escherichia coli str. K-12 substr. MG1655 (iAF1260b)</option>
-                    <option value="iAF1260|Escherichia coli str. K-12 substr. MG1655">Escherichia coli str. K-12 substr. MG1655 (iAF1260)</option>
-                    <option value="iML1515|Escherichia coli str. K-12 substr. MG1655" selected="true">Escherichia coli str. K-12 substr. MG1655 (iML1515)</option>
-                    <option value="iJO1366|Escherichia coli str. K-12 substr. MG1655">Escherichia coli str. K-12 substr. MG1655 (iJO1366)</option>
-                    <option value="iJR904|Escherichia coli str. K-12 substr. MG1655">Escherichia coli str. K-12 substr. MG1655 (iJR904)</option>
-                    <option value="e_coli_core|Escherichia coli str. K-12 substr. MG1655">Escherichia coli str. K-12 substr. MG1655 (e_coli_core)</option>
-                    <option value="iAF987|Geobacter metallireducens GS-15">Geobacter metallireducens GS-15 (iAF987)</option>
-                    <option value="iIT341|Helicobacter pylori 26695">Helicobacter pylori 26695 (iIT341)</option>
-                    <option value="iAT_PLT_636|Homo sapiens">Homo sapiens (iAT_PLT_636)</option>
-                    <option value="Recon3D|Homo sapiens">Homo sapiens (Recon3D)</option>
-                    <option value="iAB_RBC_283|Homo sapiens">Homo sapiens (iAB_RBC_283)</option>
-                    <option value="RECON1|Homo sapiens">Homo sapiens (RECON1)</option>
-                    <option value="iYL1228|Klebsiella pneumoniae subsp. pneumoniae MGH 78578">Klebsiella pneumoniae subsp. pneumoniae MGH 78578 (iYL1228)</option>
-                    <option value="iNF517|Lactococcus lactis subsp. cremoris MG1363">Lactococcus lactis subsp. cremoris MG1363 (iNF517)</option>
-                    <option value="iAF692|Methanosarcina barkeri str. Fusaro">Methanosarcina barkeri str. Fusaro (iAF692)</option>
-                    <option value="iMM1415|Mus musculus">Mus musculus (iMM1415)</option>
-                    <option value="iNJ661|Mycobacterium tuberculosis H37Rv">Mycobacterium tuberculosis H37Rv (iNJ661)</option>
-                    <option value="iEK1008|Mycobacterium tuberculosis H37Rv">Mycobacterium tuberculosis H37Rv (iEK1008)</option>
-                    <option value="iLB1027_lipid|Phaeodactylum tricornutum CCAP 1055/1">Phaeodactylum tricornutum CCAP 1055/1 (iLB1027_lipid)</option>
-                    <option value="iAM_Pb448|Plasmodium berghei">Plasmodium berghei (iAM_Pb448)</option>
-                    <option value="iAM_Pc455|Plasmodium cynomolgi strain B">Plasmodium cynomolgi strain B (iAM_Pc455)</option>
-                    <option value="iAM_Pf480|Plasmodium falciparum 3D7">Plasmodium falciparum 3D7 (iAM_Pf480)</option>
-                    <option value="iAM_Pk459|Plasmodium knowlesi strain H">Plasmodium knowlesi strain H (iAM_Pk459)</option>
-                    <option value="iAM_Pv461|Plasmodium vivax Sal-1">Plasmodium vivax Sal-1 (iAM_Pv461)</option>
-                    <option value="iJN746|Pseudomonas putida KT2440">Pseudomonas putida KT2440 (iJN746)</option>
-                    <option value="iJN1463|Pseudomonas putida KT2440">Pseudomonas putida KT2440 (iJN1463)</option>
-                    <option value="iND750|Saccharomyces cerevisiae S288C">Saccharomyces cerevisiae S288C (iND750)</option>
-                    <option value="iMM904|Saccharomyces cerevisiae S288C">Saccharomyces cerevisiae S288C (iMM904)</option>
-                    <option value="STM_v1_0|Salmonella enterica subsp. enterica serovar Typhimurium str. LT2">Salmonella enterica subsp. enterica serovar Typhimurium str. LT2 (STM_v1_0)</option>
-                    <option value="iYS1720|Salmonella pan-reactome">Salmonella pan-reactome (iYS1720)</option>
-                    <option value="iSB619|Staphylococcus aureus subsp. aureus N315">Staphylococcus aureus subsp. aureus N315 (iSB619)</option>
-                    <option value="iYS854|Staphylococcus aureus subsp. aureus USA300_TCH1516">Staphylococcus aureus subsp. aureus USA300_TCH1516 (iYS854)</option>
-                    <option value="iJB785|Synechococcus elongatus PCC 7942">Synechococcus elongatus PCC 7942 (iJB785)</option>
-                    <option value="iJN678|Synechocystis sp. PCC 6803">Synechocystis sp. PCC 6803 (iJN678)</option>
-                    <option value="iSynCJ816|Synechocystis sp. PCC 6803">Synechocystis sp. PCC 6803 (iSynCJ816)</option>
-                    <option value="iLJ478|Thermotoga maritima MSB8">Thermotoga maritima MSB8 (iLJ478)</option>
-                    <option value="iIS312|Trypanosoma cruzi Dm28c">Trypanosoma cruzi Dm28c (iIS312)</option>
-                    <option value="iIS312_Trypomastigote|Trypanosoma cruzi Dm28c">Trypanosoma cruzi Dm28c (iIS312_Trypomastigote)</option>
-                    <option value="iIS312_Epimastigote|Trypanosoma cruzi Dm28c">Trypanosoma cruzi Dm28c (iIS312_Epimastigote)</option>
-                    <option value="iIS312_Amastigote|Trypanosoma cruzi Dm28c">Trypanosoma cruzi Dm28c (iIS312_Amastigote)</option>
+                    <option value="iCN718i">Acinetobacter baumannii AYE (iCN718)</option>
+                    <option value="iYO844">Bacillus subtilis subsp. subtilis str. 168 (iYO844)</option>
+                    <option value="iRC1080">Chlamydomonas reinhardtii (iRC1080)</option>
+                    <option value="iCN900">Clostridioides difficile 630 (iCN900)</option>
+                    <option value="iHN637">Clostridium ljungdahlii DSM 13528 (iHN637)</option>
+                    <option value="iCHOv1_DG44">Cricetulus griseus (iCHOv1_DG44)</option>
+                    <option value="iCHOv1">Cricetulus griseus (iCHOv1)</option>
+                    <option value="iAF1260b">Escherichia coli str. K-12 substr. MG1655 (iAF1260b)</option>
+                    <option value="iAF1260">Escherichia coli str. K-12 substr. MG1655 (iAF1260)</option>
+                    <option value="iML1515" selected="true">Escherichia coli str. K-12 substr. MG1655 (iML1515)</option>
+                    <option value="iJO1366">Escherichia coli str. K-12 substr. MG1655 (iJO1366)</option>
+                    <option value="iJR904">Escherichia coli str. K-12 substr. MG1655 (iJR904)</option>
+                    <option value="e_coli_core">Escherichia coli str. K-12 substr. MG1655 (e_coli_core)</option>
+                    <option value="iAF987">Geobacter metallireducens GS-15 (iAF987)</option>
+                    <option value="iIT341">Helicobacter pylori 26695 (iIT341)</option>
+                    <option value="iAT_PLT_636">Homo sapiens (iAT_PLT_636)</option>
+                    <option value="Recon3D">Homo sapiens (Recon3D)</option>
+                    <option value="iAB_RBC_283">Homo sapiens (iAB_RBC_283)</option>
+                    <option value="RECON1">Homo sapiens (RECON1)</option>
+                    <option value="iYL1228">Klebsiella pneumoniae subsp. pneumoniae MGH 78578 (iYL1228)</option>
+                    <option value="iNF517">Lactococcus lactis subsp. cremoris MG1363 (iNF517)</option>
+                    <option value="iAF692">Methanosarcina barkeri str. Fusaro (iAF692)</option>
+                    <option value="iMM1415">Mus musculus (iMM1415)</option>
+                    <option value="iNJ661">Mycobacterium tuberculosis H37Rv (iNJ661)</option>
+                    <option value="iEK1008">Mycobacterium tuberculosis H37Rv (iEK1008)</option>
+                    <option value="iLB1027_lipid">Phaeodactylum tricornutum CCAP 1055/1 (iLB1027_lipid)</option>
+                    <option value="iAM_Pb448">Plasmodium berghei (iAM_Pb448)</option>
+                    <option value="iAM_Pc455">Plasmodium cynomolgi strain B (iAM_Pc455)</option>
+                    <option value="iAM_Pf480">Plasmodium falciparum 3D7 (iAM_Pf480)</option>
+                    <option value="iAM_Pk459">Plasmodium knowlesi strain H (iAM_Pk459)</option>
+                    <option value="iAM_Pv461">Plasmodium vivax Sal-1 (iAM_Pv461)</option>
+                    <option value="iJN746">Pseudomonas putida KT2440 (iJN746)</option>
+                    <option value="iJN1463">Pseudomonas putida KT2440 (iJN1463)</option>
+                    <option value="iND750">Saccharomyces cerevisiae S288C (iND750)</option>
+                    <option value="iMM904">Saccharomyces cerevisiae S288C (iMM904)</option>
+                    <option value="STM_v1_0">Salmonella enterica subsp. enterica serovar Typhimurium str. LT2 (STM_v1_0)</option>
+                    <option value="iYS1720">Salmonella pan-reactome (iYS1720)</option>
+                    <option value="iSB619">Staphylococcus aureus subsp. aureus N315 (iSB619)</option>
+                    <option value="iYS854">Staphylococcus aureus subsp. aureus USA300_TCH1516 (iYS854)</option>
+                    <option value="iJB785">Synechococcus elongatus PCC 7942 (iJB785)</option>
+                    <option value="iJN678">Synechocystis sp. PCC 6803 (iJN678)</option>
+                    <option value="iSynCJ816">Synechocystis sp. PCC 6803 (iSynCJ816)</option>
+                    <option value="iLJ478">Thermotoga maritima MSB8 (iLJ478)</option>
+                    <option value="iIS312">Trypanosoma cruzi Dm28c (iIS312)</option>
+                    <option value="iIS312_Trypomastigote">Trypanosoma cruzi Dm28c (iIS312_Trypomastigote)</option>
+                    <option value="iIS312_Epimastigote">Trypanosoma cruzi Dm28c (iIS312_Epimastigote)</option>
+                    <option value="iIS312_Amastigote">Trypanosoma cruzi Dm28c (iIS312_Amastigote)</option>
                 </param>
             </when>
         </conditional>
@@ -115,8 +115,8 @@
                 <param name="input_file" value="e_coli_core.xml" />
             </conditional>
             <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
-            <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
-            <output name="biomass" md5="95c0255bd5dd8753c6dde53c0f2958ea" />
+            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
         </test>
     </tests>
     <help><![CDATA[
