@@ -9,8 +9,8 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #if str($cond_src.from_src) == 'from_bigg'
-            #set $hostid=$cond_src.host.split("|")[O]
-            #set $hostname=$cond_src.host.split("|")[1]
+            #set $hostid=str($cond_src.host).split("|")[O]
+            #set $hostname=str($cond_src.host).split("|")[1]
             curl -o - 'http://bigg.ucsd.edu/static/models/${hostid}.xml.gz' | gunzip > '$model' &&
         #else
             #set $hostname=$cond_src.host
