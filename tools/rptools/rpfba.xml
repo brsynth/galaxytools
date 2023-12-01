@@ -15,8 +15,8 @@
             #end if
                 --objective_rxn_id '$objective_rxn_id'
                 --sim '$input_sim_type.sim_type'
-            #if str($adv.ignore_orphan_species) == "true":
-                --ignore_orphan_species
+            #if str($adv.with_orphan_species) == "true":
+                --with_orphan_species
             #end if
                 --log "error"
             #if str($input_sim_type.sim_type)=="fba"
@@ -55,7 +55,7 @@
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="merge" type="boolean" label="Output the merged model?" checked="false" display="checkboxes" />
-            <param name="ignore_orphan_species" type="boolean" label="Ignore metabolites that are only consumed or produced?" checked="true" />
+            <param name="with_orphan_species" type="boolean" label="Ignore metabolites that are only consumed or produced?" checked="false" />
         </section>
     </inputs>
     <outputs>
