@@ -5,4 +5,6 @@ tools/partsgenie
 workflows/retrosynthesis_workflow
 workflows/genetic_assembly_workflow
 workflows/straindesign_workflow
-drafts/*
+drafts/data_manager_bigg
+drafts/genes2doe
+drafts/rpMergeSBML
