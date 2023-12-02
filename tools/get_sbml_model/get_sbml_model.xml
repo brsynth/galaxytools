@@ -11,7 +11,7 @@
         #import json
         #if str($cond_src.from_src) == 'from_bigg'
             #set host=json.load(open($__tool_directory__ + '/host.json'))
-            #set hostname=$host[$cond_src.hostid]
+            #set hostname=$host[str($cond_src.hostid)]
             curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
         #else
             #set hostname=$cond_src.hostname
