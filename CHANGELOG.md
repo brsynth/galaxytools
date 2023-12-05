@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.6](https://github.com/brsynth/galaxytools/tree/0.4.6) (2023-11-23)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.5...0.4.6)
+
+**Fixed bugs:**
+
+- Update `rptools` [\#158](https://github.com/brsynth/galaxytools/pull/158) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.4.5](https://github.com/brsynth/galaxytools/tree/0.4.5) (2023-11-14)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.4...0.4.5)
