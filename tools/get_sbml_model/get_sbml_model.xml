@@ -10,15 +10,15 @@
     <command detect_errors="exit_code"><![CDATA[
         #import re
         #if str($cond_src.from_src) == 'from_bigg'
-            #set hostname=str(re.sub(r'\s\(\w+\)', '', $cond_src.hostid.get_display_text()))
+            #set hostname=re.sub(r'\s\(\w+\)', '', $cond_src.hostid.get_display_text())
             curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
         #else
-            #set hostname=$cond_src.hostname
+            #set hostname="'" + $cond_src.hostname + "'"
             #set model=$cond_src.input_file
         #end if
         python '$__tool_directory__/'get_infos.py
             '$model'
-            --hostname '$hostname'
+            --hostname $hostname
             --taxid '$taxid'
             --comp '$compartments'
             --biomass '$biomass'
