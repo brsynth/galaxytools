@@ -1,3 +1,0 @@
-retrosynthesis_workflow
-genetic_assembly_workflow
-straindesign_workflow

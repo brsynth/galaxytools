@@ -11,8 +11,9 @@
         python -m rptools.rpextractsink
             '$input'
             '$sink'
-            --compartment_id '$compartment_id'
+            --compartment-id '$compartment_id'
             $adv.remove_dead_end
+            $adv.standalone
             --cache-dir "\${TMPDIR:-.}"
     ]]></command>
     <inputs>
@@ -21,7 +22,8 @@
             <validator type="empty_field" message="SBML compartment ID is required"/>
         </param>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="--remove_dead_end" type="boolean" truevalue="--remove_dead_end" falsevalue="" checked="true" label="Remove dead-end metabolites using FVA evaluation?" help="Perform FVA (Flux Variability Analysis) evaluation to remove dead end metabolites" />
+            <param argument="--remove_dead_end" type="boolean" truevalue="--remove-dead-end" falsevalue="" checked="true" label="Remove dead-end metabolites using FVA evaluation?" help="Perform FVA (Flux Variability Analysis) evaluation to remove dead end metabolites" />
+            <param argument="--standalone" type="boolean" truevalue="--standalone" falsevalue="" checked="true" label="Do not connect to Internet" help="If True, do not retrieve InChI from Internet" />
         </section>
     </inputs>
     <outputs>
@@ -31,7 +33,7 @@
         <test>
         <!-- test 1: check if identical outputs are produced with iCN718 model input  -->
             <param name="input" value="iCN718.xml.gz" />
-            <output name="sink" md5="0a7438b90704bf1ba88e123e6bb54df2" />
+            <output name="sink" md5="5ff3987609142e828ec8e3c97b8dab12" />
         </test>
     </tests>
     <help><![CDATA[
@@ -55,6 +57,7 @@ Required:
 Advanced options:
 
 * **Remove dead-end metabolites using FVA evaluation?**\ : (boolean, default: True) Perform FVA (Flux Variability Analysis) evaluation to remove dead end metabolites.
+* **Do not connect to Internet**: (boolean, default: False) If True, do not retrieve InChI from Internet
 
 Output
 ------

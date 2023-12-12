@@ -1,5 +1,88 @@
 # Changelog
 
+## [0.4.7](https://github.com/brsynth/galaxytools/tree/0.4.7) (2023-12-01)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.6...0.4.7)
+
+**Fixed bugs:**
+
+- `rpbasicdesign` test failed [\#121](https://github.com/brsynth/galaxytools/issues/121)
+
+**Closed issues:**
+
+- No merged model outputted with `rptools/rpfba` [\#157](https://github.com/brsynth/galaxytools/issues/157)
+
+**Merged pull requests:**
+
+- Update `rptools` 6.5.0 [\#159](https://github.com/brsynth/galaxytools/pull/159) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+## [0.4.6](https://github.com/brsynth/galaxytools/tree/0.4.6) (2023-11-23)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.5...0.4.6)
+
+**Fixed bugs:**
+
+- Update `rptools` [\#158](https://github.com/brsynth/galaxytools/pull/158) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+## [0.4.5](https://github.com/brsynth/galaxytools/tree/0.4.5) (2023-11-14)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.4...0.4.5)
+
+## [0.4.4](https://github.com/brsynth/galaxytools/tree/0.4.4) (2023-11-07)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.3...0.4.4)
+
+## [0.4.3](https://github.com/brsynth/galaxytools/tree/0.4.3) (2023-11-02)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.2...0.4.3)
+
+**Merged pull requests:**
+
+- Updating rptools from version 6.3.0 to 6.3.2 [\#152](https://github.com/brsynth/galaxytools/pull/152) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+## [0.4.2](https://github.com/brsynth/galaxytools/tree/0.4.2) (2023-10-30)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.1...0.4.2)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump SimenB/github-actions-cpu-cores from 1 to 2 [\#156](https://github.com/brsynth/galaxytools/pull/156) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump peter-evans/create-or-update-comment from 2 to 3 [\#155](https://github.com/brsynth/galaxytools/pull/155) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump actions/checkout from 3 to 4 [\#154](https://github.com/brsynth/galaxytools/pull/154) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Github workflows [\#153](https://github.com/brsynth/galaxytools/pull/153) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Get sbml model [\#151](https://github.com/brsynth/galaxytools/pull/151) ([breakthewall](https://github.com/breakthewall))
+- Get sbml model [\#150](https://github.com/brsynth/galaxytools/pull/150) ([breakthewall](https://github.com/breakthewall))
+- Get sbml model [\#149](https://github.com/brsynth/galaxytools/pull/149) ([breakthewall](https://github.com/breakthewall))
+- Get sbml model [\#148](https://github.com/brsynth/galaxytools/pull/148) ([breakthewall](https://github.com/breakthewall))
+- Rptools [\#146](https://github.com/brsynth/galaxytools/pull/146) ([breakthewall](https://github.com/breakthewall))
+
+## [0.4.1](https://github.com/brsynth/galaxytools/tree/0.4.1) (2023-10-10)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.0...0.4.1)
+
+## [0.4.0](https://github.com/brsynth/galaxytools/tree/0.4.0) (2023-10-09)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.3.0...0.4.0)
+
+**Merged pull requests:**
+
+- Add tool `neo4jsbml` [\#144](https://github.com/brsynth/galaxytools/pull/144) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+## [0.3.0](https://github.com/brsynth/galaxytools/tree/0.3.0) (2023-09-29)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.12...0.3.0)
+
+**Merged pull requests:**
+
+- Get sbml model [\#143](https://github.com/brsynth/galaxytools/pull/143) ([breakthewall](https://github.com/breakthewall))
+- chore\(deps\): bump tj-actions/changed-files from 37 to 39 [\#142](https://github.com/brsynth/galaxytools/pull/142) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Updating dnabot from version 3.1.0 to 4.1.0 [\#141](https://github.com/brsynth/galaxytools/pull/141) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- get\_sbml\_model, load file from history [\#139](https://github.com/brsynth/galaxytools/pull/139) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+## [0.2.12](https://github.com/brsynth/galaxytools/tree/0.2.12) (2023-09-19)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.11...0.2.12)
+
 ## [0.2.11](https://github.com/brsynth/galaxytools/tree/0.2.11) (2023-09-12)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.2.10...0.2.11)
