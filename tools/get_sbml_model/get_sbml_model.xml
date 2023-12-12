@@ -11,16 +11,14 @@
         #if str($cond_src.from_src) == 'from_bigg'
             curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
         #end if
-        echo "listdir:";
-        ls;
         python '$__tool_directory__/'get_infos.py
             #if str($cond_src.from_src) == 'from_bigg'
                 '$model'
                 --bigg
             #else
                 '${cond_src.input_file}'
-                --hostname '${cond_src.hostid}'
             #end if
+            --hostname '${cond_src.hostid}'
             --taxid '$taxid'
             --comp '$compartments'
             --biomass '$biomass'
