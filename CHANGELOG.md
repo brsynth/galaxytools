@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.4.7](https://github.com/brsynth/galaxytools/tree/0.4.7) (2023-12-01)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.6...0.4.7)
+
+**Fixed bugs:**
+
+- `rpbasicdesign` test failed [\#121](https://github.com/brsynth/galaxytools/issues/121)
+
+**Closed issues:**
+
+- No merged model outputted with `rptools/rpfba` [\#157](https://github.com/brsynth/galaxytools/issues/157)
+
+**Merged pull requests:**
+
+- Update `rptools` 6.5.0 [\#159](https://github.com/brsynth/galaxytools/pull/159) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.4.6](https://github.com/brsynth/galaxytools/tree/0.4.6) (2023-11-23)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.5...0.4.6)
