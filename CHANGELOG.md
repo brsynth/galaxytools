@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.0](https://github.com/brsynth/galaxytools/tree/0.5.0) (2023-12-11)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.7...0.5.0)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump actions/setup-python from 4 to 5 [\#167](https://github.com/brsynth/galaxytools/pull/167) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Updating doe\_synbio from version 2.1.1 to 2.1.2 [\#166](https://github.com/brsynth/galaxytools/pull/166) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Update `icfree` [\#161](https://github.com/brsynth/galaxytools/pull/161) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.4.7](https://github.com/brsynth/galaxytools/tree/0.4.7) (2023-12-01)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.6...0.4.7)
