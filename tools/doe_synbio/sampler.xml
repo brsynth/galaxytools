@@ -2,7 +2,7 @@
     <description>Generate data points using latin hypercube sampling (LHS)</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@TOOL_VERSION@">2.1.3</token>
+        <token name="@TOOL_VERSION@">2.2.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">icfree</requirement>
