@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6.0](https://github.com/brsynth/galaxytools/tree/0.6.0) (2023-12-18)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.5.0...0.6.0)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump actions/download-artifact from 3 to 4 [\#172](https://github.com/brsynth/galaxytools/pull/172) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump actions/upload-artifact from 3 to 4 [\#171](https://github.com/brsynth/galaxytools/pull/171) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update version 3.1.0 `retropath2_wrapper` [\#168](https://github.com/brsynth/galaxytools/pull/168) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Tool `get_sbml_model` [\#162](https://github.com/brsynth/galaxytools/pull/162) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.5.0](https://github.com/brsynth/galaxytools/tree/0.5.0) (2023-12-11)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.7...0.5.0)
