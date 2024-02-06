@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.5](https://github.com/brsynth/galaxytools/tree/0.6.5) (2024-01-23)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.4...0.6.5)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump actions/cache from 3 to 4 [\#174](https://github.com/brsynth/galaxytools/pull/174) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Updating retropath2\_wrapper from version 3.1.0 to 3.1.1 [\#173](https://github.com/brsynth/galaxytools/pull/173) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.6.4](https://github.com/brsynth/galaxytools/tree/0.6.4) (2024-01-16)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.3...0.6.4)
