@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.6](https://github.com/brsynth/galaxytools/tree/0.6.6) (2024-02-05)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.5...0.6.6)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump 8BitJonny/gh-get-current-pr from 2.2.0 to 3.0.0 [\#176](https://github.com/brsynth/galaxytools/pull/176) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump peter-evans/create-or-update-comment from 3 to 4 [\#175](https://github.com/brsynth/galaxytools/pull/175) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [0.6.5](https://github.com/brsynth/galaxytools/tree/0.6.5) (2024-01-23)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.4...0.6.5)
