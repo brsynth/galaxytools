@@ -1,4 +1,4 @@
-<tool id="PartsGenie" name="PartsGenie" version="1.0.1">
+<tool id="partsgenie" name="PartsGenie" version="1.0.1">
     <description>An integrated tool for optimizing and sharing synthetic biology parts</description>
     <requirements>
         <requirement type="package" version="1.0.1">partsgenieclient</requirement>
