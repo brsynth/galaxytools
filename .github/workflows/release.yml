@@ -19,7 +19,7 @@ jobs:
       - name: "Check diff"
         id: set-diff
         run: |
-          nb=$(git diff --shortstat stable..origin/main | cut -f2 -d ' ')
+          nb=$(git diff --name-only stable..origin/main | grep -E "^tools|^workflows" | wc -l | tr -d " ")
           echo "Find diff: ${nb}"
           echo "nb=${nb}" >> "${GITHUB_OUTPUT}"
 
@@ -77,7 +77,7 @@ jobs:
           echo "$USER $PROJECT"
           github_changelog_generator --user "$USER" --project "$PROJECT" --no-unreleased
       - name: 'Upload Artifact Changelog'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: changelog-artifact
           path: CHANGELOG.md
@@ -95,7 +95,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: 'Download Artifact Changelog'
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: changelog-artifact
       # Commit

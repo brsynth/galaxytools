@@ -49,6 +49,55 @@ def args():
     return params
 
 
+def get_taxon_id(hostid: str, bigg: bool):
+    '''
+    Returns the taxonomy ID of the host organism
+    
+    Parameters
+    ----------
+    hostid: str
+        Extended name of the host organism or host ID if from BiGG
+    bigg: bool
+        True if the model is from BiGG
+        
+    Returns
+    -------
+    taxid: str
+        Taxonomy ID of the host organism
+    '''
+    if not bigg:
+        return get_taxonid(hostid)
+
+    hostname = ''
+    # Extended Name
+    server = 'http://bigg.ucsd.edu/api/v2/models/'
+    ext = hostid
+    r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
+    if not r.ok:
+        print(f"Warning: unable to retrieve host name for id {hostid}")
+    else:
+        try:
+            hostname = r.json()["organism"]
+        except KeyError:
+            print(f"Warning: unable to retrieve host name for id {hostid}")
+    if not hostname:
+        taxid = ''
+    else:
+        # TAXON ID
+        server = 'https://rest.ensembl.org'
+        ext = f'/taxonomy/id/{hostname}?'
+        r = r_get(server+ext, headers={ "Content-Type" : "application/json"})
+        if not r.ok:
+            print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
+        else:
+            try:
+                taxid = r.json()["id"]
+            except KeyError:
+                print(f"Warning: unable to retrieve taxonomy ID for host organism {hostname}")
+                taxid = ''
+    return taxid
+
+
 def entry_point():
     params = args()
 
@@ -83,7 +132,7 @@ def entry_point():
     else:
         print(f"Biomass reaction ID: {biomass_id}")
 
-    taxid = get_taxonid(params.hostname)
+    taxid = get_taxon_id(params.hostname, params.bigg)
 
     if params.taxid:
         with open(params.taxid, "w") as f:

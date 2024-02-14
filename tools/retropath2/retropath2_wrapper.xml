@@ -2,7 +2,7 @@
     <description>Build a reaction network from a set of source compounds to a set of sink compounds</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">3.0.1</token>
+        <token name="@TOOL_VERSION@">3.1.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">retropath2_wrapper</requirement>
