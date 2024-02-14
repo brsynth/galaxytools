@@ -187,23 +187,23 @@ Above are examples of two constructs generated through optimal combinatorial des
 Note: if advanced parameter "input_parts" is left empty, the following parts are used:
 
 
-    +---------+------------+--------------------------------------------------+
-    | Name    | Type       | SynBioHub                                        |
-    +=========+============+==================================================+
-    | PlacUV5 | Promoter   | https://synbiohub.org/public/igem/BBa_K1847014/1 |
-    +---------+------------+--------------------------------------------------+
-    | Ptrc    | Promoter   | https://synbiohub.org/public/igem/BBa_J56012/1   |
-    +---------+------------+--------------------------------------------------+
-    | BBR1    | Origin     | https://synbiohub.org/public/igem/BBa_I50041/1   |
-    +---------+------------+--------------------------------------------------+
-    | p15A    | Origin     | https://synbiohub.org/public/igem/BBa_I50032/1   |
-    +---------+------------+--------------------------------------------------+
-    | ColE1   | Origin     | https://synbiohub.org/public/igem/BBa_J64101/1   |
-    +---------+------------+--------------------------------------------------+
-    | res1    | Resistance | https://synbiohub.org/public/igem/BBa_I13800/1   |
-    +---------+------------+--------------------------------------------------+
-    | Ter     | Terminator | https://synbiohub.org/public/igem/BBa_B1006/1    |
-    +---------+------------+--------------------------------------------------+
+    +---------+------------+--------------+
+    | Name    | Type       | SynBioHub    |
+    +=========+============+==============+
+    | PlacUV5 | Promoter   | BBa_K1847014 |
+    +---------+------------+--------------+
+    | Ptrc    | Promoter   | BBa_J56012   |
+    +---------+------------+--------------+
+    | BBR1    | Origin     | BBa_I50041   |
+    +---------+------------+--------------+
+    | p15A    | Origin     | BBa_I50032   |
+    +---------+------------+--------------+
+    | ColE1   | Origin     | BBa_J64101   |
+    +---------+------------+--------------+
+    | res1    | Resistance | BBa_I13800   |
+    +---------+------------+--------------+
+    | Ter     | Terminator | BBa_B1006    |
+    +---------+------------+--------------+
 
 The source of this file can be found here as a model: https://raw.githubusercontent.com/pablocarb/doebase/master/doebase/data/ref_parts.csv
 
