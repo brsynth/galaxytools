@@ -19,7 +19,7 @@ jobs:
       - name: "Check diff"
         id: set-diff
         run: |
-          nb=$(git diff --shortstat stable..origin/main | cut -f2 -d ' ')
+          nb=$(git diff --name-only stable..origin/main | grep -E "^tools|^workflows" | wc -l | tr -d " ")
           echo "Find diff: ${nb}"
           echo "nb=${nb}" >> "${GITHUB_OUTPUT}"
 
