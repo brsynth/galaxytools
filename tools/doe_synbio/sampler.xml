@@ -53,21 +53,20 @@
     <tests>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
         <test>
-            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
+            <param name="cfps_file" value="sampler/input/parameters.tsv" />
             <param name="seed_param" value="not_random" />
             <param name="seed" value="0" />
-            <output name="output_sampling" file="sampler_sampling.test-1.tsv" ftype="tabular" compare="diff" />
+            <output name="output_sampling" file="sampler/output/sampling.test-1.tsv" ftype="tabular" compare="diff" />
         </test>
         <!-- test 2: advanced arguments -->
         <test>
-            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
+            <param name="cfps_file" value="sampler/input/parameters.tsv" />
             <param name="nb_sampling_steps" value="3" />
             <param name="nb_samples" value="100" />
             <param name="sampling_ratio" value="0.4 0.2 0.3" />
             <param name="seed_param" value="not_random" />
             <param name="seed" value="0" />
-            <param name="nb_samples" value="100" />
-            <output name="output_sampling" file="sampler_sampling.test-2.tsv" ftype="tabular" compare="diff" />
+            <output name="output_sampling" file="sampler/output/sampling.test-2.tsv" ftype="tabular" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[
