@@ -41,7 +41,7 @@
             <when value="from_bigg">
                  <param name="hostid" type="select" label="Strain">
                      <!-- Be careful, the text name is used for the hostname variable -->
-                    <option value="iCN718i">Acinetobacter baumannii AYE (iCN718)</option>
+                    <option value="iCN718">Acinetobacter baumannii AYE (iCN718)</option>
                     <option value="iYO844">Bacillus subtilis subsp. subtilis str. 168 (iYO844)</option>
                     <option value="iRC1080">Chlamydomonas reinhardtii (iRC1080)</option>
                     <option value="iCN900">Clostridioides difficile 630 (iCN900)</option>
