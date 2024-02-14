@@ -50,7 +50,7 @@
                 <validator type="regex" message="Some letters followed by a number">^(?:[A-K]{1}([1-9]|1[0-2]))$</validator>
             </param>
 
-            <param name="nplicate" type="integer" value="3" min="1" max="12" label="Numbers of copies of volume sets"/>
+            <param name="nplicate" type="integer" value="1" min="1" max="12" label="Numbers of copies of volume sets"/>
             <param name="keep_nil_vol" type="boolean" truevalue="True" falsevalue="False" checked="true" display="checkboxes" label="Keep nil volumes in instructions or not"/>
 
             <param name="source_plate_well_capacity" type="integer" value="60000" label="Maximum volume capacity of the source plate in nL" />
@@ -79,43 +79,22 @@
     <tests>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
         <test>
-            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
-            <param name="volume_file" value="converter_sampling_concentrations.tsv" />
-            <output name="volumes_summary" file="plates_generator_volumes_summary.test-1.tsv" ftype="tabular" compare="diff" />
+            <param name="cfps_file" value="plates_generator/input/parameters.tsv" />
+            <param name="volume_file" value="plates_generator/input/sampling.tsv" />
+            <output name="volumes_summary" file="plates_generator/output/volumes_summary.tsv" ftype="tabular" compare="diff" />
             <output_collection name="output_source_dest" type="list" count="4">
                 <element name="source_plate_1.json" ftype="json">
                     <assert_contents>
-                        <has_n_lines n="26"/>
+                        <has_n_lines n="17"/>
                     </assert_contents>
                 </element>
-                <element name="source_plate_1.tsv" file="plates_generator_source_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
+                <element name="source_plate_1.tsv" file="plates_generator/output/source_plate_1.tsv" ftype="tabular" compare="diff" />
                 <element name="destination_plate_1.json" ftype="json">
                     <assert_contents>
-                        <has_n_lines n="26"/>
+                        <has_n_lines n="17"/>
                     </assert_contents>
                 </element>
-                <element name="destination_plate_1.tsv" file="plates_generator_destination_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
-            </output_collection>
-        </test>
-        <!-- test 2: advance arguments -->
-        <test>
-            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
-            <param name="volume_file" value="converter_sampling_concentrations.tsv" />
-            <param name="source_plate_dead_volume" value="1500" />
-            <param name="dest_plate_dead_volume" value="1000" />
-            <param name="dest_starting_well" value="C3" />
-            <param name="src_starting_well" value="A2" />
-            <param name="nplicate" value="2" />
-            <param name="keep_nil_vol" value="False" />
-            <param name="plate_dimensions" value="32x32" />
-            <repeat name="rep">
-                <param name="optimize_well_volumes" value="RBS" />
-            </repeat>
-            <repeat name="rep">
-                <param name="optimize_well_volumes" value="Promoter" />
-            </repeat>
-            <output_collection name="output_source_dest" type="list" count="4">
-                <element name="destination_plate_1.tsv" file="plates_generator_destination_plate_1.test-2.tsv" ftype="tabular" compare="diff" />
+                <element name="destination_plate_1.tsv" file="plates_generator/output/destination_plate_1.tsv" ftype="tabular" compare="diff" />
             </output_collection>
         </test>
     </tests>

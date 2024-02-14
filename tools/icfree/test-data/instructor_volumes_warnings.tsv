@@ -1,12 +1,10 @@
 Parameter	Min	Max	Plate
-Mg-glutamate	0.4		plates_generator_destination_plate_1.json
-CoA	0.052		plates_generator_destination_plate_1.json
-3-PGA	6.0		plates_generator_destination_plate_1.json
-NTP	0.3		plates_generator_destination_plate_1.json
-NAD	0.066		plates_generator_destination_plate_1.json
-Folinic acid	0.014		plates_generator_destination_plate_1.json
-Spermidine	0.2		plates_generator_destination_plate_1.json
-tRNA	0.04		plates_generator_destination_plate_1.json
-Amino acids	0.3		plates_generator_destination_plate_1.json
-CAMP	0.15		plates_generator_destination_plate_1.json
-PEG	2.0		plates_generator_destination_plate_1.json
+Component_1		60000.0	out/source_plate_1.json
+Component_2		60000.0	out/source_plate_1.json
+Component_3		60000.0	out/source_plate_1.json
+Component_4		60000.0	out/source_plate_1.json
+Component_5		60000.0	out/source_plate_1.json
+Component_6		60000.0	out/source_plate_1.json
+Component_7		60000.0	out/source_plate_1.json
+Component_8		60000.0	out/source_plate_1.json
+Water		60000.0	out/source_plate_1.json
