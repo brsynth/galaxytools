@@ -63,7 +63,7 @@
                 <collection type="list">
                     <element name="source_plate_1.json" value="plates_generator/output/source_plate_1.json" />
                     <element name="source_plate_1.tsv" value="plates_generator/output/source_plate_1.tsv" />
-                    <element name="destination_plate_1.json" value="plates_generator/output/destination_plate_1..json" />
+                    <element name="destination_plate_1.json" value="plates_generator/output/destination_plate_1.json" />
                     <element name="destination_plate_1.tsv" value="plates_generator/output/destination_plate_1.tsv" />
                 </collection>
             </param>

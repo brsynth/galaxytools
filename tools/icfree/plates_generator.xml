@@ -85,13 +85,13 @@
             <output_collection name="output_source_dest" type="list" count="4">
                 <element name="source_plate_1.json" ftype="json">
                     <assert_contents>
-                        <has_n_lines n="17"/>
+                        <has_n_lines n="18"/>
                     </assert_contents>
                 </element>
                 <element name="source_plate_1.tsv" file="plates_generator/output/source_plate_1.tsv" ftype="tabular" compare="diff" />
                 <element name="destination_plate_1.json" ftype="json">
                     <assert_contents>
-                        <has_n_lines n="17"/>
+                        <has_n_lines n="18"/>
                     </assert_contents>
                 </element>
                 <element name="destination_plate_1.tsv" file="plates_generator/output/destination_plate_1.tsv" ftype="tabular" compare="diff" />
