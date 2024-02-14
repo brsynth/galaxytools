@@ -1,5 +1,60 @@
 # Changelog
 
+## [0.6.6](https://github.com/brsynth/galaxytools/tree/0.6.6) (2024-02-05)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.5...0.6.6)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump 8BitJonny/gh-get-current-pr from 2.2.0 to 3.0.0 [\#176](https://github.com/brsynth/galaxytools/pull/176) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump peter-evans/create-or-update-comment from 3 to 4 [\#175](https://github.com/brsynth/galaxytools/pull/175) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [0.6.5](https://github.com/brsynth/galaxytools/tree/0.6.5) (2024-01-23)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.4...0.6.5)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump actions/cache from 3 to 4 [\#174](https://github.com/brsynth/galaxytools/pull/174) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Updating retropath2\_wrapper from version 3.1.0 to 3.1.1 [\#173](https://github.com/brsynth/galaxytools/pull/173) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+## [0.6.4](https://github.com/brsynth/galaxytools/tree/0.6.4) (2024-01-16)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.3...0.6.4)
+
+## [0.6.3](https://github.com/brsynth/galaxytools/tree/0.6.3) (2024-01-09)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.2...0.6.3)
+
+## [0.6.2](https://github.com/brsynth/galaxytools/tree/0.6.2) (2023-12-26)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.1...0.6.2)
+
+## [0.6.1](https://github.com/brsynth/galaxytools/tree/0.6.1) (2023-12-19)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.0...0.6.1)
+
+## [0.6.0](https://github.com/brsynth/galaxytools/tree/0.6.0) (2023-12-18)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.5.0...0.6.0)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump actions/download-artifact from 3 to 4 [\#172](https://github.com/brsynth/galaxytools/pull/172) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump actions/upload-artifact from 3 to 4 [\#171](https://github.com/brsynth/galaxytools/pull/171) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Update version 3.1.0 `retropath2_wrapper` [\#168](https://github.com/brsynth/galaxytools/pull/168) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Tool `get_sbml_model` [\#162](https://github.com/brsynth/galaxytools/pull/162) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
+## [0.5.0](https://github.com/brsynth/galaxytools/tree/0.5.0) (2023-12-11)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.7...0.5.0)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump actions/setup-python from 4 to 5 [\#167](https://github.com/brsynth/galaxytools/pull/167) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Updating doe\_synbio from version 2.1.1 to 2.1.2 [\#166](https://github.com/brsynth/galaxytools/pull/166) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Update `icfree` [\#161](https://github.com/brsynth/galaxytools/pull/161) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.4.7](https://github.com/brsynth/galaxytools/tree/0.4.7) (2023-12-01)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.4.6...0.4.7)
