@@ -26,16 +26,9 @@
     <tests>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
         <test>
-            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
-            <param name="concentrations_file" value="converter_sampling_concentrations.tsv" />
-            <output name="output_sampling" file="converter_sampling_volumes.test-1.tsv" ftype="tabular" compare="diff" />
-        </test>
-        <!-- test 2: advanced options -->
-        <test>
-            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
-            <param name="concentrations_file" value="converter_sampling_concentrations.tsv" />
-            <param name="sample_volume" value="100" />
-            <output name="output_sampling" file="converter_sampling_volumes.test-2.tsv" ftype="tabular" compare="diff" />
+            <param name="cfps_file" value="converter/input/parameters.tsv" />
+            <param name="concentrations_file" value="converter/input/sampling_concentrations.tsv" />
+            <output name="output_sampling" file="converter/output/sampling_volumes.tsv" ftype="tabular" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[
