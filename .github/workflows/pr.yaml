@@ -384,11 +384,11 @@ jobs:
           exit 1
         fi
 
-  # deploy the tools to the toolsheds (first TTS for testing)
+  # deploy the tools to the toolsheds (first TTS for testing), github.event.pull_request.merged == true
   deploy:
     name: Deploy
     needs: [setup, lint, combine_outputs]
-    if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'brsynth' && github.event.pull_request.merged == true }}
+    if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'brsynth'}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
