@@ -1,5 +1,5 @@
 tools/neo4jsbml
-tools/retropath2_wrapper
+tools/retropath2
 tools/rpbasicdesign
 tools/partsgenie
 workflows/retrosynthesis_workflow
