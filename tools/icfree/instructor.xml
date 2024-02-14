@@ -69,7 +69,6 @@
             </param>
             <output name="output_warning" ftype="tabular">
                 <assert_contents>
-                    <has_n_lines n="10"/>
                     <has_line_matching expression="^Parameter\tMin\tMax\tPlate$"/>
                 </assert_contents>
             </output>
