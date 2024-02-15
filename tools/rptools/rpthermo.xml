@@ -49,8 +49,9 @@
         </test>
     </tests>
     <help><![CDATA[
-Thermodynamics
-==============
+rpThermo - Thermodynamics
+=========================
+
 Calculate the formation energy of chemical species either using an internal database or estimate it by decomposing them using the `component contribution <https://gitlab.com/elad.noor/component-contribution>`_ method. Thereafter this tool predicts the Gibbs free energy of reactions and of the whole heterologous pathway by combining the formation energy of each individual compound.
 
 The goal of the thermodynamic analysis is to estimate the feasibility of the predicted pathways toward target production, in physiological conditions (PH, ionic strength).

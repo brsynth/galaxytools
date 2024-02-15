@@ -36,8 +36,8 @@
         </test>
     </tests>
     <help><![CDATA[
-Rank Pathways
-================
+rpRanker - Rank Pathways
+========================
 
 Sort a list of pathways according to their global score.
 
