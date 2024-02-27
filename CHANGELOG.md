@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.8](https://github.com/brsynth/galaxytools/tree/0.6.8) (2024-02-14)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.7...0.6.8)
+
+**Merged pull requests:**
+
+- Fix `partsgenie` id [\#179](https://github.com/brsynth/galaxytools/pull/179) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Fix dirname for `retropath2` [\#178](https://github.com/brsynth/galaxytools/pull/178) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Fix `dnabot` version [\#177](https://github.com/brsynth/galaxytools/pull/177) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+- Updating doe\_synbio from version 2.1.2 to
+2.2.0 [\#169](https://github.com/brsynth/galaxytools/pull/169) ([guillaume-gricourt](https://github.com/guillaume-gricourt))
+
 ## [0.6.7](https://github.com/brsynth/galaxytools/tree/0.6.7) (2024-02-06)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.6...0.6.7)
