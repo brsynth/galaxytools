@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.11](https://github.com/brsynth/galaxytools/tree/0.6.11) (2024-03-05)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.10...0.6.11)
+
 ## [0.6.10](https://github.com/brsynth/galaxytools/tree/0.6.10) (2024-02-27)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.9...0.6.10)
