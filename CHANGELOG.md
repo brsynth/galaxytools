@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.12](https://github.com/brsynth/galaxytools/tree/0.6.12) (2024-03-12)
+
+[Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.11...0.6.12)
+
+**Merged pull requests:**
+
+- chore\(deps\): bump softprops/action-gh-release from 1 to 2 [\#185](https://github.com/brsynth/galaxytools/pull/185) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): bump mathieudutour/github-tag-action from 6.1 to 6.2 [\#184](https://github.com/brsynth/galaxytools/pull/184) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [0.6.11](https://github.com/brsynth/galaxytools/tree/0.6.11) (2024-03-05)
 
 [Full Changelog](https://github.com/brsynth/galaxytools/compare/0.6.10...0.6.11)
