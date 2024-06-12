@@ -1,0 +1,18 @@
+{
+    "Dimensions": "16x24",
+    "deadVolume": 0,
+    "Well capacity": 60000,
+    "Current well": "E7",
+    "Parameters": [
+        "Component_6",
+        "Component_4",
+        "Water",
+        "Component_3",
+        "Component_7",
+        "Component_2",
+        "Component_5",
+        "Component_1",
+        "Component_8"
+    ],
+    "Wells": "out/destination_plate_1.tsv"
+}
