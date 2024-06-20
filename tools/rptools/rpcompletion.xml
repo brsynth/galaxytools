@@ -4,21 +4,20 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements"/>
-    <stdio>
-        <exit_code range="1" level="fatal" description="Could not Xref compartment_id" />
-        <exit_code range="2" level="fatal" description="ValueError returned" />
-    </stdio>
     <command detect_errors="exit_code"><![CDATA[
+        echo "launch !!!!!!!!!!!!!!!!!" &&
+        pip list &&
         python -m rptools.rpcompletion
-        '$rp2_pathways'
-        '$sink'
-        '$rp2paths_compounds'
-        '$rp2paths_pathways'
-        completed_pathways
-        --upper_flux_bound '$adv.upper_flux_bound'
-        --lower_flux_bound '$adv.lower_flux_bound'
-        --max_subpaths_filter '$adv.max_subpaths_filter'
-        --cache-dir "\${TMPDIR:-.}"
+            '$rp2_pathways'
+            '$sink'
+            '$rp2paths_compounds'
+            '$rp2paths_pathways'
+            completed_pathways
+            --upper_flux_bound '$adv.upper_flux_bound'
+            --lower_flux_bound '$adv.lower_flux_bound'
+            --max_subpaths_filter '$adv.max_subpaths_filter'
+            --cache-dir "\${TMPDIR:-.}" &&
+        echo "Finish!!!!!!!!"
     ]]></command>
     <inputs>
         <param name="rp2paths_pathways" type="data" format="csv" label="RP2paths pathways" />
@@ -39,18 +38,18 @@
     <tests>
         <test>
         <!-- test 1: check if outputs are represented in an expected number  -->
-            <param name="rp2paths_pathways" value="4-rp2paths_pathways.csv" />
-            <param name="rp2paths_compounds" value="3-rp2paths_compounds.tsv" />
             <param name="rp2_pathways" value="1-rp2_metnet.csv" />
             <param name="sink" value="2-sink.csv" />
-            <output_collection name="pathways" type="list" count="9"/>
+            <param name="rp2paths_compounds" value="3-rp2paths_compounds.tsv" />
+            <param name="rp2paths_pathways" value="4-rp2paths_pathways.csv" />
+            <output_collection name="pathways" type="list" count="10"/>
         </test>
     </tests>
     <help><![CDATA[
-rpCompletion
-============
+rpCompletion - Complete pathway
+===============================
 
-Completes mono-component reactions output by `RetroPath2.0 <https://www.sciencedirect.com/science/article/pii/S1096717617301337>`_ with the appropriate cofactors. Creates sub-paths when multiple reaction rules are associated with a single reaction. Input is a single pathways file produced by RP2Paths. It stands on rpCache which store pre-computed data.
+Completes mono-component reactions output by RetroPath2.0 (10.1016/j.ymben.2017.12.002) with the appropriate cofactors. Creates sub-paths when multiple reaction rules are associated with a single reaction. Input is a single pathways file produced by RP2Paths. It stands on rpCache which store pre-computed data.
 
 Input
 -----
