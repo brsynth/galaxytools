@@ -9,7 +9,7 @@
         python icfree/instructor.py
             '$source_plate_file'
             '$destination_plate_file'
-            'Instruction'
+            'instructor.csv'
             --source_plate_type '$source_plate_type'
             --max_transfer_volume '$max_transfer_volume'
             --split_threshold '$split_threshold'
@@ -28,10 +28,32 @@
         </section>
     </inputs>
     <outputs>
-        <data name="output_instruction" format="list" label="${tool.name} - Instructor">
+        <data name="output_instructor" format="list" label="${tool.name} - Instructor">
             <discover_datasets pattern="__designation_and_ext__" format="csv" />
         </data>
     </outputs>
+    <tests>
+        <test>
+            <!-- python -m icfree.instructor source_plate.csv destination_plate.csv Instruction.csv -->
+            <param name="source_plate_file" value="plate_designer.source_plate.test-2.csv" />
+            <param name="destination_plate_file" value="plate_designer.destination_plate.test-2.csv" />
+            <output_collection name="output_instructor" type="list" count="1">
+                <element name="instructor.csv" file="instructor.test-1.csv" ftype="tabular" compare="diff" />
+            </output_collection>
+        </test>
+        <test>
+            <!-- python -m icfree.instructor source_plate.csv destination_plate.csv Instruction.csv --source_plate_type "Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" --split_components "Hela lysate,Access prot 50%" -->
+            <param name="source_plate_file" value="plate_designer.source_plate.test-2.csv" />
+            <param name="destination_plate_file" value="plate_designer.destination_plate.test-2.csv" />
+            <param name="source_plate_type" value="Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" />
+            <param name="split_components" value="Hela lysate,Access prot 50%" />
+            <output_collection name="output_instructor" type="list" count="2">
+                <element name="instructor.csv" file="instructor.test-2.csv" ftype="tabular" compare="diff" />
+                <element name="instructor_Hela lysate.csv" file="instructor.hela.test-2.csv" ftype="tabular" compare="diff" />
+                <element name="instructor_Access prot 50%.csv" file="instructor.access.test-2.csv" ftype="tabular" compare="diff" />
+            </output_collection>
+        </test>
+    </tests>
     <help><![CDATA[
 Instructor
 ==========
