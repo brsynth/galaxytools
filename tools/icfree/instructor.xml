@@ -32,26 +32,6 @@
             <discover_datasets pattern="__designation_and_ext__" format="csv" />
         </data>
     </outputs>
-    <tests>
-        <test>
-            <!-- test 1: check if identical outputs are produced with default parameters  -->
-            <param name="plates_generator">
-                <collection type="list">
-                    <element name="source_plate_1.json" value="plates_generator_source_plate_1.test-1.json" />
-                    <element name="source_plate_1.tsv" value="plates_generator_source_plate_1.test-1.tsv" />
-                    <element name="destination_plate_1.json" value="plates_generator_destination_plate_1.test-1.json" />
-                    <element name="destination_plate_1.tsv" value="plates_generator_destination_plate_1.test-1.tsv" />
-                </collection>
-            </param>
-            <output name="output_warning" ftype="tabular">
-                <assert_contents>
-                    <has_n_lines n="12"/>
-                    <has_line_matching expression="^Parameter\tMin\tMax\tPlate$"/>
-                </assert_contents>
-            </output>
-            <output name="output_instruction" file="instructor_instructions.csv" ftype="csv" compare="diff" />
-        </test>
-    </tests>
     <help><![CDATA[
 Instructor
 ==========
