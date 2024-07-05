@@ -41,6 +41,24 @@
     <outputs>
         <data name="output_sampling" format="tabular" label="${tool.name}" />
     </outputs>
+    <tests>
+        <!-- test 1: check if identical outputs are produced with default parameters  -->
+        <test>
+            <param name="input_file" value="sampler/input/components.tsv" />
+            <param name="num_samples" value="3" />
+            <param name="seed_param" value="not_random" />
+            <param name="seed" value="0" />
+            <output name="output_sampling" file="sampler/output/sampling.test-1.tsv" ftype="tabular" compare="diff" />
+        </test>
+        <!-- test 1: check if identical outputs are produced with default parameters  -->
+        <test>
+            <param name="input_file" value="sampler/input/components.tsv" />
+            <param name="num_samples" value="4" />
+            <param name="step" value="3.1" />
+            <param name="seed_param" value="not_random" />
+            <param name="seed" value="0" />
+            <output name="output_sampling" file="sampler/output/sampling.test-1.tsv" ftype="tabular" compare="diff" />
+        </test>
     <help><![CDATA[
 Sampler
 =======
