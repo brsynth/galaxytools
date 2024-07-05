@@ -1,37 +1,28 @@
 <tool id="doe_synbio_sampler" name="iCFree sampler" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
-    <description>Generate data points using latin hypercube sampling (LHS)</description>
+    <description>Generate Latin Hypercube Samples for given components.</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@TOOL_VERSION@">2.2.0</token>
+        <token name="@TOOL_VERSION@">2.3.1</token>
     </macros>
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">icfree</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">icfree-ml</requirement>
     </requirements>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
         python -m icfree.sampler
-            '$cfps_file'
-            --nb-sampling-steps '$adv.nb_sampling_steps'
-            --nb-samples '$nb_samples'
-            #if str($adv.sampling_ratio) != ""
-                #set ratios = ' '.join(['"' + $x + '"' for $x in $adv.sampling_ratio.split()])
-                --sampling-ratios $ratios
-            #end if
+            '$input_file'
+            '$output_sampling'
+            '$num_samples'
+            --step '$adv.step'
             #if str($adv.seed_cond.seed_param) == 'not_random'
                 --seed '$adv.seed_cond.seed'
             #end if
-            --output-format 'tsv'
-            --output-folder . &&
-            mv sampling.tsv '$output_sampling'
     ]]></command>
     <inputs>
-        <param name="cfps_file" type="data" format="tabular" label="CFPS parameters and features" />
-        <param name="nb_samples" type="integer" value="99" min="1" max="198" label="Number of samples to generate" />
+        <param name="input_file" type="data" format="tabular" label="Input file with components and their max values." />
+        <param name="num_samples" type="integer" value="99" min="1" max="198" label="Number of samples to generate" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="nb_sampling_steps" type="integer" value="5" min="1" max="10" label="Number of values for all factors when performing the sampling" />
-            <param name="sampling_ratio" type="text" value="" label="Ratios associated for all factors" help="Only float, space separated, are allowed">
-                <validator type="regex" message="Float separated by a space between in the range: 0.0 - 1.0">^(?:(0.\d+|1\.0)(\s0?\.\d+|1\.0)*)*$</validator>
-            </param>
+            <param name="step" type="float" value="2.5" min="1" max="10" label="Step size for creating discrete ranges" />
             <conditional name="seed_cond">
                 <param name="seed_param" type="select" label="Seed" help="Choose a seed or let it as random">
                     <option value="random" selected="true">random</option>
@@ -50,82 +41,11 @@
     <outputs>
         <data name="output_sampling" format="tabular" label="${tool.name}" />
     </outputs>
-    <tests>
-        <!-- test 1: check if identical outputs are produced with default parameters  -->
-        <test>
-            <param name="cfps_file" value="sampler/input/parameters.tsv" />
-            <param name="seed_param" value="not_random" />
-            <param name="seed" value="0" />
-            <output name="output_sampling" file="sampler/output/sampling.test-1.tsv" ftype="tabular" compare="diff" />
-        </test>
-        <!-- test 2: advanced arguments -->
-        <test>
-            <param name="cfps_file" value="sampler/input/parameters.tsv" />
-            <param name="nb_sampling_steps" value="3" />
-            <param name="nb_samples" value="100" />
-            <param name="sampling_ratio" value="0.4 0.2 0.3" />
-            <param name="seed_param" value="not_random" />
-            <param name="seed" value="0" />
-            <output name="output_sampling" file="sampler/output/sampling.test-2.tsv" ftype="tabular" compare="diff" />
-        </test>
-    </tests>
     <help><![CDATA[
 Sampler
 =======
 
-This module generates a list of values for all parameters given in the input file.
-The values are generated using a Latin Hypercube Sampling (LHS) method (lhs function from the pyDOE package).
-The number of values generated is given by the user and the values are saved in csv or tsv file.
-
-It is important to note that the user can pass some values that he whishes to combine. In this case, we are dealing with discrete space, and because LHS is working on continuous space the result sampling can contain duplicates.
-To avoid this, we have set some filters to select the appropriate sampling method:
-
-* If the result sampling contain duplicates, then we replace them by random samples.
-* Proceed with full random sampling.
-* Generate all the combinations.
-
-Input
------
-
-Below is an example of an input file:
-
-+-----------+----------+---------------------+
-| Parameter | maxValue | Ratios              |
-+===========+==========+=====================+
-| CP        | 125      | 0.0 0.1 0.3 0.5 1.0 |
-+-----------+----------+---------------------+
-| CPK       | 125      | 1                   |
-+-----------+----------+---------------------+
-| tRNA      | 125      |                     |
-+-----------+----------+---------------------+
-| AA        | 125      |                     |
-+-----------+----------+---------------------+
-| ribosomes | 125      |                     |
-+-----------+----------+---------------------+
-| mRNA      | 125      |                     |
-+-----------+----------+---------------------+
-| Mg        | 125      |                     |
-+-----------+----------+---------------------+
-| K         | 125      |                     |
-+-----------+----------+---------------------+
-
-The first column is the parameter (or factor) names.
-
-The second column is the maxValue of the parameter that will be used in the sampling.
-
-The third column is the specific ratios we want to have for this parameter. If nothing defined, then take ratios given in program options.
-If one single number is given, then take this number as a const value.
-If no value is given, then take the default ratios (`nb_samples` linear ratios from 0 to 1).
-
-Advanced options:
------------------
-* **Number of sampling steps**: Number of values for all factors when performing the sampling (default: 5)
-* **Sampling ratios**: Ratios for all factors when performing the sampling
-* **Number of samples**: Number of samples to generate for all factors when performing the sampling (default: 99)
-
-Output
-------
-* a TSV file with the sampling values for each parameter
+Generate Latin Hypercube Samples for given components.
     ]]></help>
     <expand macro="creator"/>
     <citations>
