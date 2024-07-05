@@ -1,0 +1,120 @@
+<tool id="icfree_plates_designer" name="iCFree plates designer" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
+    <description>Prepare source and destination well-plate mappings with advanced options.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <expand macro="stdio"/>
+    <command detect_errors="exit_code"><![CDATA[
+        #set well_capacity = []
+        #set dead_volumes = []
+        #for $x in $adv.rep
+            #silent well_capacity.append(str($x.component_name) + "=" + str($x.well_capacity))
+            #silent dead_volumes.append(str($x.component_name) + "=" + str($x.dead_volumes))
+        #end for
+        #set swell_capacity = ','.join($well_capacity)
+        #set sdead_volumes = ','.join($dead_volumes)
+
+        python icfree/plates_designer.py
+            '$sampling_file'
+            '$sample_volume'
+            --start_well_src_plt '$adv.start_well_src_plt'
+            --start_well_dst_plt '$adv.start_well_dst_plt'
+            --plate_dims '$adv.plate_dims'
+            #if len($well_capacity) > 0
+                --well_capacity '$swell_capacity'
+            #end if
+            --default_well_capacity '$adv.default_well_capacity'
+            #if len($dead_volumes) > 0
+                --dead_volumes '$sdead_volumes'
+            #end if
+            --default_dead_volume '$adv.default_dead_volume'
+            --num_replicates '$adv.num_replicates'
+            --output_folder . &&
+        mv source_plate.csv '$output_source_plate' &&
+        mv destination_plate.csv '$output_destination_plate'
+           ]]></command>
+    <inputs>
+        <param name="sampling_file" type="data" format="tabular" label="Sampling file" />
+        <param name="sample_volume" type="integer" optional="false" label="Wanted sample volume in the destination plate" />
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="start_well_src_plt" type="text" value="A1" label="Starting well for the source plate">
+                <validator type="empty_field" message="Not empty"/>
+                <validator type="regex" message="Some letters followed by a number">^(?:[A-K]{1}([1-9]|1[0-2]))$</validator>
+            </param>
+            <param name="start_well_dst_plt" type="text" value="A1" label="Starting well for the destination plate">
+                <validator type="empty_field" message="Not empty"/>
+                <validator type="regex" message="Some letters followed by a number">^(?:[A-K]{1}([1-9]|1[0-2]))$</validator>
+            </param>
+            <param name="plate_dims" type="text" value="16x24" label="Plate dimensions (Format: NxM)">
+                <validator type="empty_field" message="Not empty"/>
+                <validator type="regex" message="An 'x' separator is expected">^(?:\d+x\d+)$</validator>
+            </param>
+            <param name="default_well_capacity" type="integer" value="60000" label="Default well capacity in nL for components not specified in well_capacity" />
+            <param name="default_dead_volume" type="integer" value="15000" label="Default dead volume in nL for the source plate"/>
+            <param name="num_replicates" type="integer" value="1" label="Number of wanted replicates"/>
+            <repeat name="rep" title="Specific components">
+                <param name="component_name" type="text" value="" label="Component Name">
+                    <validator type="empty_field" message="Not empty"/>
+                </param>
+                <param name="well_capacity" type="integer" optional="60000" label="Well capacity" />
+                <param name="dead_volumes" type="integer" optional="15000" label="Dead volumes" />
+            </repeat>
+        </section>
+    </inputs>
+    <outputs>
+        <data name="output_source_plate" format="tabular" label="${tool.name} - Source" />
+        <data name="output_destination_plate" format="tabular" label="${tool.name} - Destination" />
+    </outputs>
+    <tests>
+        <!-- test 1: check if identical outputs are produced with default parameters  -->
+        <test>
+            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
+            <param name="volume_file" value="converter_sampling_concentrations.tsv" />
+            <output name="volumes_summary" file="plates_generator_volumes_summary.test-1.tsv" ftype="tabular" compare="diff" />
+            <output_collection name="output_source_dest" type="list" count="4">
+                <element name="source_plate_1.json" ftype="json">
+                    <assert_contents>
+                        <has_n_lines n="26"/>
+                    </assert_contents>
+                </element>
+                <element name="source_plate_1.tsv" file="plates_generator_source_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
+                <element name="destination_plate_1.json" ftype="json">
+                    <assert_contents>
+                        <has_n_lines n="26"/>
+                    </assert_contents>
+                </element>
+                <element name="destination_plate_1.tsv" file="plates_generator_destination_plate_1.test-1.tsv" ftype="tabular" compare="diff" />
+            </output_collection>
+        </test>
+        <!-- test 2: advance arguments -->
+        <test>
+            <param name="cfps_file" value="converter_proCFPS_parameters.tsv" />
+            <param name="volume_file" value="converter_sampling_concentrations.tsv" />
+            <param name="source_plate_dead_volume" value="1500" />
+            <param name="dest_plate_dead_volume" value="1000" />
+            <param name="dest_starting_well" value="C3" />
+            <param name="src_starting_well" value="A2" />
+            <param name="nplicate" value="2" />
+            <param name="keep_nil_vol" value="False" />
+            <param name="plate_dimensions" value="32x32" />
+            <repeat name="rep">
+                <param name="optimize_well_volumes" value="RBS" />
+            </repeat>
+            <repeat name="rep">
+                <param name="optimize_well_volumes" value="Promoter" />
+            </repeat>
+            <output_collection name="output_source_dest" type="list" count="4">
+                <element name="destination_plate_1.tsv" file="plates_generator_destination_plate_1.test-2.tsv" ftype="tabular" compare="diff" />
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+Plates Generator
+================
+
+Prepare source and destination well-plate mappings with advanced options.
+    ]]></help>
+    <expand macro="creator"/>
+    <expand macro="citation"/>
+</tool>
