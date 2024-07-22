@@ -29,6 +29,9 @@
             --dmax '$adv.dmax'
             --mwmax_source '$adv.mwmax_source'
             --kinstall "\${TMPDIR:-.}"
+            #if str($adv.network) == "true":
+                --no-network
+            #end if
             --msc_timeout '$adv.timeout' &&
         if compgen -G 'out/*_scope.csv' > /dev/null; then
             cp out/*_scope.csv '$Reaction_Network';
@@ -57,6 +60,7 @@
             <param name="dmax" type="integer" value="1000" min="0" max="1000" label="Maximum rule diameter" help="Maximum rule diameter of the sphere including the atoms around the reacting center. The higher is the diameter, the more specific are the rules."/>
             <param name="mwmax_source" type="integer" value="1000" min="0" max="2000" label="Molecular weight of source (Da)" help="The molecular weight cutoff (in Da), above which initial source (ie target) and intermediate compounds will be filtered out." />
             <param name="timeout" type="integer" value="60" min="30" max="600" label="Timeout (min)" help="Maximal time of RetroPath2.0 execution (60 minutes by default)." />
+            <param name="network" type="boolean" checked="false" label="Do not use network" />
         </section>
     </inputs>
     <outputs>
