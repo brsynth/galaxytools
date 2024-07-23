@@ -8,12 +8,20 @@
         <requirement type="package" version="@TOOL_VERSION@">retropath2_wrapper</requirement>
     </requirements>
     <stdio>
+        <!-- Fatal -->
         <exit_code range="1" level="fatal" description="Cannot find source-in-sink file" />
+        <regex match="It seems that the target product is already in the chassis" source="both" level="fatal" description="It seems that the target product is already in the chassis" />
         <exit_code range="2" level="fatal" description="Running the RetroPath2.0 Knime program produced an OSError" />
+        <regex match="The following error occured" source="both" level="fatal" description="The following error occured" />
         <exit_code range="3" level="fatal" description="The InChI string is malformed" />
-        <exit_code range="-1" level="warning" description="Source has been found in the sink" />
-        <exit_code range="-2" level="warning" description="RetroPath2.0 has found no solution" />
-        <exit_code range="-3" level="warning" description="Time limit reached" />
+        <regex match="is not a valid InChI notation" source="both" level="fatal" description="is not a valid InChI notation" />
+        <exit_code range="4" level="fatal" description="Sink file is malformed" />
+        <regex match="The sink file is malformed" source="both" level="fatal" description="The sink file is malformed" />
+        <!-- Warning -->
+        <exit_code range="10" level="warning" description="Source has been found in the sink" />
+        <regex match="Source has been found in the sink" source="both" level="warning" description="Source has been found in the sink" />
+        <exit_code range="11" level="warning" description="RetroPath2.0 has found no solution" />
+        <regex match="No solution has been found" source="both" level="warning" description="No solution has been found" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
         python -m retropath2_wrapper
@@ -53,6 +61,7 @@
             <param name="version" type="select" label="Workflow version" help="Retropath2.0 Workflow versions, formatted as 'r{year}{month}{day}' (the latest version 'r20220104' is used by default).">
                 <option value="v9">v9</option>
                 <option value="r20210127">r20210127</option>
+                <option value="r20220224">r20220224</option>
                 <option value="r20220104" selected="true">r20220104</option>
             </param>
             <param name="topx" type="integer" value="100" min="1" max="1000" label="TopX" help="The maximal number of intermediate compounds to use as new starting points for a next iteration of the retrosynthesis algorithm." />
