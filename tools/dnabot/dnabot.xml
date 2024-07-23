@@ -1,7 +1,7 @@
 <tool id="dnabot" name="DNA-Bot" version="@TOOL_VERSION@" profile="21.09" license="MIT">
     <description>DNA assembly using BASIC on OpenTrons</description>
     <macros>
-        <token name="@TOOL_VERSION@">3.1.0</token>
+        <token name="@TOOL_VERSION@">4.1.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">dnabot</requirement>
@@ -63,7 +63,7 @@
             <param name="plate_files" value="user_parts_coords.csv,linker_parts_coords.csv"/>
             <output name="dnabot_scripts" ftype="tar">
                 <assert_contents>
-                    <has_size value="150000" delta="10000"/>
+                    <has_size value="160000" delta="10000"/>
                 </assert_contents>
             </output>
         </test>
@@ -72,7 +72,7 @@
 DNA-Bot
 ============
 
-**DNA-Bot** tool reads the list of constructs where each row corresponds to one construct and consists of a sequence of BASIC (Biopart Assembly Standard for Idempotent Cloning) linker and DNA part IDs (in an operon format), and the DNA-parts position on the source plates. The tool generates a set of python scripts to drive an Opentrons liquid handling robot for building the plasmids using BASIC assembly method (as decribed in `Storch2015 <https://doi.org/10.1021/sb500356d>`_).
+**DNA-Bot** tool reads the list of constructs where each row corresponds to one construct and consists of a sequence of BASIC (Biopart Assembly Standard for Idempotent Cloning) linker and DNA part IDs (in an operon format), and the DNA-parts position on the source plates. The tool generates a set of python scripts to drive an Opentrons liquid handling robot for building the plasmids using BASIC assembly method, as decribed by Storch et al. (10.1021/sb500356d).
 
 These python scripts implement the **4 assembly steps**: clip reactions, purification, assembly and strain transformation. In short, the **Clip reactions** step prepares the mixes for the ligation of the individual DNA parts with the linkers; the **Purification** step purifies the linker-ligated DNA parts using magnetic beads and the Opentrons magnetic module; the **Assembly** step mixes the DNA purified parts to build the final constructs; while the **Transformation** step transforms the chassis micro-organism with the plasmid and inoculates onto agar.
 
