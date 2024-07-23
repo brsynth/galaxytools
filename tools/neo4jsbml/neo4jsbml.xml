@@ -7,21 +7,21 @@
         <requirement type="package" version="@TOOL_VERSION@">neo4jsbml</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python -m neo4jsbml
-            --input-auradb-file '$input_auradb_file'
+        neo4jsbml sbml-to-neo4j
+            --input-auradb-txt '$input_auradb_txt'
             --input-file-sbml '$input_file_sbml'
-            #if str($input_tag_str) != ""
-                --input-tag-str '$input_tag_str'
+            #if str($parameter_tag_property_str) != ""
+                --parameter-tag-property-str '$parameter_tag_property_str'
             #end if
-            --input-modelisation-json '$input_modelisation_json' | tee '$output'
+            --input-arrows-json '$input_arrows_json' | tee '$output'
     ]]></command>
     <inputs>
-        <param name="input_auradb_file" type="data" format="txt" label="Config file provided by AuraDB"/>
+        <param name="input_auradb_txt" type="data" format="txt" label="Config file provided by AuraDB"/>
         <param name="input_file_sbml" type="data" format="sbml" label="SBML model"/>
-        <param name="input_tag_str" type="text" label="Identifier of the model">
+        <param name="parameter_tag_property_str" type="text" label="Identifier of the model">
             <validator type="regex" message="No special characters allowed">^(?:[\w-]*)$</validator>
         </param>
-        <param name="input_modelisation_json" type="data" format="json" label="Arrow's schema"/>
+        <param name="input_arrows_json" type="data" format="json" label="Arrow's schema"/>
     </inputs>
     <outputs>
         <data name="output" format="txt" label="${tool.name} - log" />
@@ -66,10 +66,18 @@ Ouput
 ]]></help>
     <citations>
         <citation type="bibtex">
-            @unpublished{neo4jsbml
-                author = {Guillaume Gricourt, Thomas Duigou, Sandra Dérozier, Jean-Loup Faulon},
-                title = {{Neo4jSbml}},
-                url = {https://github.com/brsynth/neo4jsbml/},
+            @article{gricourt_neo4jsbml_2024,
+                title = {neo4jsbml: import systems biology markup language data into the graph database {Neo4j}},
+                volume = {12},
+                issn = {2167-8359},
+                url = {https://peerj.com/articles/16726},
+                doi = {10.7717/peerj.16726},
+                urldate = {2024-01-22},
+                journal = {PeerJ},
+                author = {Gricourt, Guillaume and Duigou, Thomas and Dérozier, Sandra and Faulon, Jean-Loup},
+                month = jan,
+                year = {2024},
+                pages = {e16726},
             }
         </citation>
     </citations>
