@@ -63,7 +63,7 @@
             <param name="plate_files" value="user_parts_coords.csv,linker_parts_coords.csv"/>
             <output name="dnabot_scripts" ftype="tar">
                 <assert_contents>
-                    <has_size value="150000" delta="10000"/>
+                    <has_size value="160000" delta="10000"/>
                 </assert_contents>
             </output>
         </test>
