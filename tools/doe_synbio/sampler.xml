@@ -2,7 +2,7 @@
     <description>Generate Latin Hypercube Samples for given components.</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@TOOL_VERSION@">2.3.1</token>
+        <token name="@TOOL_VERSION@">2.4.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">icfree-ml</requirement>
@@ -57,8 +57,9 @@
             <param name="step" value="3.1" />
             <param name="seed_param" value="not_random" />
             <param name="seed" value="0" />
-            <output name="output_sampling" file="sampler/output/sampling.test-1.tsv" ftype="tabular" compare="diff" />
+            <output name="output_sampling" file="sampler/output/sampling.test-2.tsv" ftype="tabular" compare="diff" />
         </test>
+    </tests>
     <help><![CDATA[
 Sampler
 =======
