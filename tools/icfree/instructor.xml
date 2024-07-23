@@ -6,31 +6,33 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
-        python icfree/instructor.py
+        python -m icfree.instructor
             '$source_plate_file'
             '$destination_plate_file'
             'instructor.csv'
             --source_plate_type '$source_plate_type'
             --max_transfer_volume '$max_transfer_volume'
-            --split_threshold '$split_threshold'
+            #if str($adv.split_threshold) != ''
+                --split_threshold '$split_threshold'
+            #end if
     ]]></command>
     <inputs>
         <param name="source_plate_file" type="data" format="tabular" label="Source corresponding to plate/wells" help="Output from iCFree plates designer"/>
         <param name="destination_plate_file" type="data" format="tabular" label="Destination corresponding to plate/wells" help="Output from iCFree plates designer"/>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="source_plate_type" type="text" value="384PP_AQ_GP3" label="Source plate type" help="Comma-separated list of component and plate type pairs, e.g., 'Component_1:384PP_AQ_CP,Component_2:384PP_AQ_GP3'. Default for all is 384PP_AQ_GP3." >
+            <param name="source_plate_type" type="text" value="default:384PP_AQ_GP3" label="Source plate type" help="Comma-separated list of component and plate type pairs, e.g., 'Component_1:384PP_AQ_CP,Component_2:384PP_AQ_GP3'. Default for all is default:384PP_AQ_GP3." >
                 <validator type="empty_field" message="Source plate type is required"/>
             </param>
-            <param argument="max_transfer_volume" type="integer" optional="true" label="Maximum transfer volume" help="Maximum volume for a single transfer. If not specified, no splitting will be performed." />
-            <param argument="split_threshold" type="integer" optional="true" label="Split threshold" help="Volume threshold above which transfers need to be split. If not specified, no splitting will be performed." />
+            <param argument="max_transfer_volume" type="integer" min="1" max="50000" value="500" label="Maximum transfer volume" help="Maximum volume for a single transfer. If not specified, no splitting will be performed." />
+            <param argument="split_threshold" type="integer" min="1" max="50000" value="500" label="Split threshold" help="Volume threshold above which transfers need to be split. If not specified, no splitting will be performed." />
             <param name="split_components" type="text" optional="true" label="Split components" help="Comma-separated list of component names to create separate files for." >
             </param>
         </section>
     </inputs>
     <outputs>
-        <data name="output_instructor" format="list" label="${tool.name} - Instructor">
-            <discover_datasets pattern="__designation_and_ext__" format="csv" />
-        </data>
+        <collection name="output_instructor" type="list" label="${tool.name} - Instructor">
+            <discover_datasets pattern="__designation_and_ext__" format="csv" directory="."/>
+        </collection>
     </outputs>
     <tests>
         <test>
@@ -42,7 +44,7 @@
             </output_collection>
         </test>
         <test>
-            <!-- python -m icfree.instructor source_plate.csv destination_plate.csv Instruction.csv --source_plate_type "Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" --split_components "Hela lysate,Access prot 50%" -->
+            <!-- python -m icfree.instructor source_plate.csv destination_plate.csv Instruction.csv -source_plate_type "Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" -split_components "Hela lysate,Access prot 50%" -->
             <param name="source_plate_file" value="plate_designer.source_plate.test-2.csv" />
             <param name="destination_plate_file" value="plate_designer.destination_plate.test-2.csv" />
             <param name="source_plate_type" value="Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" />
@@ -57,7 +59,6 @@
     <help><![CDATA[
 Instructor
 ==========
-
 The module generates a list of instructions for handling the generated plates.
 
 ]]></help>

@@ -12,8 +12,8 @@
             #silent well_capacity.append(str($x.component_name) + "=" + str($x.well_capacity))
             #silent dead_volumes.append(str($x.component_name) + "=" + str($x.dead_volumes))
         #end for
-        #set swell_capacity = '"' + ','.join($well_capacity) + '"'
-        #set sdead_volumes = '"' + ','.join($dead_volumes) + '"'
+        #set swell_capacity = ','.join($well_capacity)
+        #set sdead_volumes = ','.join($dead_volumes)
 
         python -m icfree.plate_designer
             '$sampling_file'
@@ -50,15 +50,15 @@
                 <validator type="empty_field" message="Not empty"/>
                 <validator type="regex" message="An 'x' separator is expected">^(?:\d+x\d+)$</validator>
             </param>
-            <param name="default_well_capacity" type="integer" value="60000" label="Default well capacity in nL for components not specified in well_capacity" />
-            <param name="default_dead_volume" type="integer" value="15000" label="Default dead volume in nL for the source plate"/>
-            <param name="num_replicates" type="integer" value="1" label="Number of wanted replicates"/>
+            <param name="default_well_capacity" type="integer" value="60000" min="1" max="250000" label="Default well capacity in nL for components not specified in well_capacity" />
+            <param name="default_dead_volume" type="integer" value="15000" min="1" max="250000" label="Default dead volume in nL for the source plate"/>
+            <param name="num_replicates" type="integer" value="1" min="1" max="10" label="Number of wanted replicates"/>
             <repeat name="rep" title="Specific components">
                 <param name="component_name" type="text" value="" label="Component Name">
                     <validator type="empty_field" message="Not empty"/>
                 </param>
-                <param name="well_capacity" type="integer" value="60000" label="Well capacity" />
-                <param name="dead_volumes" type="integer" value="15000" label="Dead volumes" />
+                <param name="well_capacity" type="integer" value="60000" min="1" max="250000" label="Well capacity" />
+                <param name="dead_volumes" type="integer" value="15000" min="1" max="250000" label="Dead volumes" />
             </repeat>
         </section>
     </inputs>
@@ -68,8 +68,8 @@
     </outputs>
     <tests>
         <test>
-            <!-- python -m icfree.plate_designer sampling.test-1.tsv 6000 --default_well_capacity 60000 --default_dead_volume 20000 --num_replicates 1 -->
-            <param name="sampling_file" value="sampling.test-1.test" />
+            <!-- python -m icfree.plate_designer sampling.test-1.tsv 6000 -default_well_capacity 60000 -default_dead_volume 20000 -num_replicates 1 -->
+            <param name="sampling_file" value="sampling.test-1.tsv" />
             <param name="sample_volume" value="6000" />
             <param name="default_well_capacity" value="60000" />
             <param name="default_dead_volume" value="20000" />
@@ -78,8 +78,8 @@
             <output name="output_destination_plate" file="plates_generator.source_plate.test-1.tsv" ftype="tabular" compare="diff" />
         </test>
         <test>
-            <!-- python -m icfree.plate_designer sampling.test-1.tsv 5000 --default_well_capacity 60000 --default_dead_volume 20000 --num_replicates 2 --well_capacity "Hela lysate=3000,Access prot 50%=4000,Reaction mix=3000,RNA 1ug/uL=2000" --dead_volumes "Hela lysate=30,Access prot 50%=5,Reaction mix=10,RNA 1ug/uL=20" -->
-            <param name="sampling_file" value="sampling.test-1.test" />
+            <!-- python -m icfree.plate_designer sampling.test-1.tsv 5000 -default_well_capacity 60000 -default_dead_volume 20000 -num_replicates 2 -well_capacity "Hela lysate=3000,Access prot 50%=4000,Reaction mix=3000,RNA 1ug/uL=2000" -dead_volumes "Hela lysate=30,Access prot 50%=5,Reaction mix=10,RNA 1ug/uL=20" -->
+            <param name="sampling_file" value="sampling.test-1.tsv" />
             <param name="sample_volume" value="5000" />
             <param name="default_well_capacity" value="60000" />
             <param name="default_dead_volume" value="20000" />
