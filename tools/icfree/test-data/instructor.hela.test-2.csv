@@ -1,7 +1,0 @@
-Source Plate Name,Source Plate Type,Source Well,Destination Plate Name,Destination Well,Transfer Volume,Sample ID
-Source[1],384PP_AQ_CP,{A1;B1},Destination[1],A1,492.5,Hela lysate
-Source[1],384PP_AQ_CP,{A1;B1},Destination[1],B1,970.0,Hela lysate
-Source[1],384PP_AQ_CP,{A1;B1},Destination[1],C1,537.5,Hela lysate
-Source[1],384PP_AQ_CP,{A1;B1},Destination[1],D1,492.5,Hela lysate
-Source[1],384PP_AQ_CP,{A1;B1},Destination[1],E1,970.0,Hela lysate
-Source[1],384PP_AQ_CP,{A1;B1},Destination[1],F1,537.5,Hela lysate
