@@ -6,97 +6,67 @@
     <expand macro="requirements"/>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
-        #set sps = []
-        #set sws = []
-        #set dps = []
-        #set dws = []
-        #for $x in $plates_generator:
-            #set $fname = str($x.element_identifier)
-            echo "$fname " &&
-            ln -sfn '$x' '$fname' &&
-            #if $fname.startswith('source') and $fname.endswith('json'):
-                #silent sps.append($fname)
-            #else if $fname.startswith('source') and $fname.endswith('tsv'):
-                #silent sws.append($fname)
-            #else if $fname.startswith('destination') and $fname.endswith('json'):
-                #silent dps.append($fname)
-            #else if $fname.startswith('destination') and $fname.endswith('tsv'):
-                #silent dws.append($fname)
-            #end if
-        #end for
-        #set s_sps = '" "'.join($sps)
-        #set s_sws = '" "'.join($sws)
-        #set s_dps = '" "'.join($dps)
-        #set s_dws = '" "'.join($dws)
         python -m icfree.instructor
-            --source_plates $s_sps
-            --source_wells $s_sws
-            --dest_plates $s_dps
-            --dest_wells $s_dws
-            -spt '$source_plate'
-            --robot '$robot'
-            --output-folder '.' &&
-        mv instructions.csv '$output_instruction' &&
-        #if not os.path.isfile('volumes_warnings.tsv')
-            touch volumes_warnings.tsv &&
-        #end if
-        mv volumes_warnings.tsv '$output_warning'
+            '$source_plate_file'
+            '$destination_plate_file'
+            'instructor.csv'
+            --source_plate_type '$source_plate_type'
+            --max_transfer_volume '$max_transfer_volume'
+            #if str($adv.split_threshold) != ''
+                --split_threshold '$split_threshold'
+            #end if
+            #if str($adv.split_components) != ''
+                --split_components '$split_components'
+            #end if
     ]]></command>
     <inputs>
-        <param name="plates_generator" type="data_collection" collection_type="list" format="json,tabular" label="Source/Destination corresponding to plate/wells" help="Output from iCFree plates generator"/>
-        <param name="robot" type="select" label="Robot name">
-            <option value="ECHO" selected="true">ECHO</option>
-        </param>
-        <param name="source_plate" type="select" label="Source plate type">
-            <option value="384PP_AQ_GP3" selected="true">384PP_AQ_GP3</option>
-            <option value="384_AQ_CP">384_AQ_CP</option>
-        </param>
+        <param name="source_plate_file" type="data" format="csv" label="Source corresponding to plate/wells" help="Output from iCFree plates designer"/>
+        <param name="destination_plate_file" type="data" format="csv" label="Destination corresponding to plate/wells" help="Output from iCFree plates designer"/>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="source_plate_type" type="text" value="default:384PP_AQ_GP3" label="Source plate type" help="Comma-separated list of component and plate type pairs, e.g., 'Component_1:384PP_AQ_CP,Component_2:384PP_AQ_GP3'. Default for all is default:384PP_AQ_GP3." >
+                <validator type="empty_field" message="Source plate type is required"/>
+            </param>
+            <param argument="max_transfer_volume" type="integer" min="1" max="50000" value="500" label="Maximum transfer volume" help="Maximum volume for a single transfer. If not specified, no splitting will be performed." />
+            <param argument="split_threshold" type="integer" min="1" max="50000" value="500" label="Split threshold" help="Volume threshold above which transfers need to be split. If not specified, no splitting will be performed." />
+            <param name="split_components" type="text" optional="true" label="Split components" help="Comma-separated list of component names to create separate files for." >
+            </param>
+        </section>
     </inputs>
     <outputs>
-        <data name="output_warning" format="tabular" label="${tool.name} - Warning" />
-        <data name="output_instruction" format="csv" label="${tool.name} - Instruction" />
+        <collection name="output_instructor" type="list" label="${tool.name} - Instructor">
+            <discover_datasets pattern="__designation_and_ext__" format="csv" directory="."/>
+        </collection>
     </outputs>
     <tests>
         <test>
-            <!-- test 1: check if identical outputs are produced with default parameters  -->
-            <param name="plates_generator">
-                <collection type="list">
-                    <element name="source_plate_1.json" value="plates_generator_source_plate_1.test-1.json" />
-                    <element name="source_plate_1.tsv" value="plates_generator_source_plate_1.test-1.tsv" />
-                    <element name="destination_plate_1.json" value="plates_generator_destination_plate_1.test-1.json" />
-                    <element name="destination_plate_1.tsv" value="plates_generator_destination_plate_1.test-1.tsv" />
-                </collection>
-            </param>
-            <output name="output_warning" ftype="tabular">
-                <assert_contents>
-                    <has_n_lines n="12"/>
-                    <has_line_matching expression="^Parameter\tMin\tMax\tPlate$"/>
-                </assert_contents>
-            </output>
-            <output name="output_instruction" file="instructor_instructions.csv" ftype="csv" compare="diff" />
+            <!-- python -m icfree.instructor plates_designer.source_plate.test-2.csv plates_designer.destination_plate.test-2.csv 'instructor.test-1.csv' -source_plate_type 'default:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -->
+            <param name="source_plate_file" value="plates_designer.source_plate.test-2.csv" />
+            <param name="destination_plate_file" value="plates_designer.destination_plate.test-2.csv" />
+            <output_collection name="output_instructor" type="list" count="1">
+                <element name="instructor" file="instructor.test-1.csv" ftype="csv" compare="diff" />
+            </output_collection>
+        </test>
+        <test>
+            <!-- python -m icfree.instructor plates_designer.source_plate.test-2.csv plates_designer.destination_plate.test-2.csv 'instructor.csv' -source_plate_type 'Hela lysate:384PP_AQ_CP,Access prot 50X:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -split_components 'Hela lysate,Access prot 50X' -->
+            <param name="source_plate_file" value="plates_designer.source_plate.test-2.csv" />
+            <param name="destination_plate_file" value="plates_designer.destination_plate.test-2.csv" />
+            <param name="source_plate_type" value="Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" />
+            <param name="split_components" value="Hela lysate,Access prot 50%" />
+            <output_collection name="output_instructor" type="list" count="3">
+                <element name="instructor" file="instructor.test-2.csv" ftype="csv" compare="diff" />
+                <element name="instructor_Hela lysate" file="instructor.hela.test-2.csv" ftype="csv" compare="diff" />
+                <!--
+                    <element name="instructor_Access prot 50X" file="instructor.access.test-2.csv" ftype="csv" compare="diff" />
+                -->
+            </output_collection>
         </test>
     </tests>
     <help><![CDATA[
 Instructor
 ==========
+The module generates a list of instructions for handling the generated plates.
 
-The module generates a list of instructions to perform the experiment.
-
-Input
------
-Required:
-* **A collection**: a collection with source/destination plates/wells, coming from iCFree plates generator tool.
-
-Advanced options:
------------------
-* **Robot name**: name of the robot to generate instructions for (default: "ECHO")
-* **Source plate type**: type of plate used (default: "384PP_AQ_GP3")
-
-Output
-------
-* **instructions**: contains the instructions to perform the experiment
-* **volumes_warning**: contains the volumes that may cause issues with the chosen robot
-    ]]></help>
+]]></help>
     <expand macro="creator"/>
     <expand macro="citation"/>
 </tool>
