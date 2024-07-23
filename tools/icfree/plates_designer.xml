@@ -29,13 +29,12 @@
                 --dead_volumes '$sdead_volumes'
             #end if
             --default_dead_volume '$adv.default_dead_volume'
-            --num_replicates '$adv.num_replicates'
-            --output_folder . &&
+            --num_replicates '$adv.num_replicates' &&
         mv source_plate.csv '$output_source_plate' &&
         mv destination_plate.csv '$output_destination_plate'
            ]]></command>
     <inputs>
-        <param name="sampling_file" type="data" format="tabular" label="Sampling file" />
+        <param name="sampling_file" type="data" format="csv" label="Sampling file" />
         <param name="sample_volume" type="integer" optional="false" label="Wanted sample volume in the destination plate" />
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="start_well_src_plt" type="text" value="A1" label="Starting well for the source plate">
@@ -68,18 +67,17 @@
     </outputs>
     <tests>
         <test>
-            <!-- python -m icfree.plate_designer sampling.test-1.tsv 6000 -default_well_capacity 60000 -default_dead_volume 20000 -num_replicates 1 -->
+            <!-- python -m icfree.plate_designer sampling.test-1.csv 6000 -default_well_capacity 60000 -default_dead_volume 20000 -num_replicates 1 -->
             <param name="sampling_file" value="sampling.test-1.csv" />
             <param name="sample_volume" value="6000" />
             <param name="default_well_capacity" value="60000" />
             <param name="default_dead_volume" value="20000" />
             <param name="num_replicates" value="1" />
-            <output name="output_source_plate" file="plates_generator.source_plate.test-1.csv" ftype="csv" compare="diff" />
-            <output name="output_destination_plate" file="plates_generator.destination_plate.test-1.csv" ftype="csv" compare="diff" />
+            <output name="output_source_plate" file="plates_designer.source_plate.test-1.csv" ftype="csv" compare="diff" />
+            <output name="output_destination_plate" file="plates_designer.destination_plate.test-1.csv" ftype="csv" compare="diff" />
         </test>
-        <!--
         <test>
-             python -m icfree.plate_designer sampling.test-1.tsv 5000 -default_well_capacity 60000 -default_dead_volume 20000 -num_replicates 2 -well_capacity "Hela lysate=3000,Access prot 50%=4000,Reaction mix=3000,RNA 1ug/uL=2000" -dead_volumes "Hela lysate=30,Access prot 50%=5,Reaction mix=10,RNA 1ug/uL=20"
+            <!-- python -m icfree.plate_designer sampling.test-1.csv '5000' -start_well_src_plt 'A1' -start_well_dst_plt 'A1' -plate_dims '16x24' -well_capacity 'Hela lysate=3000,Access prot 50X=4000,Reaction mix=3000,RNA 1ug/uL=2000' -default_well_capacity '60000' -dead_volumes 'Hela lysate=30,Access prot 50X=5,Reaction mix=10,RNA 1ug/uL=20' -default_dead_volume '20000' -num_replicates '2' -->
             <param name="sampling_file" value="sampling.test-1.csv" />
             <param name="sample_volume" value="5000" />
             <param name="default_well_capacity" value="60000" />
@@ -105,10 +103,9 @@
                 <param name="well_capacity" value="2000" />
                 <param name="dead_volumes" value="20" />
             </repeat>
-            <output name="output_source_plate" file="plates_generator.source_plate.test-2.tsv" ftype="tabular" compare="diff" />
-            <output name="output_destination_plate" file="plates_generator.source_plate.test-2.tsv" ftype="tabular" compare="diff" />
-            </test>
-        -->
+            <output name="output_source_plate" file="plates_designer.source_plate.test-2.csv" ftype="csv" compare="diff" />
+            <output name="output_destination_plate" file="plates_designer.destination_plate.test-2.csv" ftype="csv" compare="diff" />
+        </test>
     </tests>
     <help><![CDATA[
 Plates Generator

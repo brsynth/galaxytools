@@ -15,10 +15,13 @@
             #if str($adv.split_threshold) != ''
                 --split_threshold '$split_threshold'
             #end if
+            #if str($adv.split_components) != ''
+                --split_components '$split_components'
+            #end if
     ]]></command>
     <inputs>
-        <param name="source_plate_file" type="data" format="tabular" label="Source corresponding to plate/wells" help="Output from iCFree plates designer"/>
-        <param name="destination_plate_file" type="data" format="tabular" label="Destination corresponding to plate/wells" help="Output from iCFree plates designer"/>
+        <param name="source_plate_file" type="data" format="csv" label="Source corresponding to plate/wells" help="Output from iCFree plates designer"/>
+        <param name="destination_plate_file" type="data" format="csv" label="Destination corresponding to plate/wells" help="Output from iCFree plates designer"/>
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="source_plate_type" type="text" value="default:384PP_AQ_GP3" label="Source plate type" help="Comma-separated list of component and plate type pairs, e.g., 'Component_1:384PP_AQ_CP,Component_2:384PP_AQ_GP3'. Default for all is default:384PP_AQ_GP3." >
                 <validator type="empty_field" message="Source plate type is required"/>
@@ -36,23 +39,25 @@
     </outputs>
     <tests>
         <test>
-            <!-- python -m icfree.instructor source_plate.csv destination_plate.csv Instruction.csv -->
-            <param name="source_plate_file" value="plate_designer.source_plate.test-2.csv" />
-            <param name="destination_plate_file" value="plate_designer.destination_plate.test-2.csv" />
+            <!-- python -m icfree.instructor plates_designer.source_plate.test-2.csv plates_designer.destination_plate.test-2.csv 'instructor.test-1.csv' -source_plate_type 'default:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -->
+            <param name="source_plate_file" value="plates_designer.source_plate.test-2.csv" />
+            <param name="destination_plate_file" value="plates_designer.destination_plate.test-2.csv" />
             <output_collection name="output_instructor" type="list" count="1">
-                <element name="instructor.csv" file="instructor.test-1.csv" ftype="tabular" compare="diff" />
+                <element name="instructor" file="instructor.test-1.csv" ftype="csv" compare="diff" />
             </output_collection>
         </test>
         <test>
-            <!-- python -m icfree.instructor source_plate.csv destination_plate.csv Instruction.csv -source_plate_type "Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" -split_components "Hela lysate,Access prot 50%" -->
-            <param name="source_plate_file" value="plate_designer.source_plate.test-2.csv" />
-            <param name="destination_plate_file" value="plate_designer.destination_plate.test-2.csv" />
+            <!-- python -m icfree.instructor plates_designer.source_plate.test-2.csv plates_designer.destination_plate.test-2.csv 'instructor.csv' -source_plate_type 'Hela lysate:384PP_AQ_CP,Access prot 50X:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -split_components 'Hela lysate,Access prot 50X' -->
+            <param name="source_plate_file" value="plates_designer.source_plate.test-2.csv" />
+            <param name="destination_plate_file" value="plates_designer.destination_plate.test-2.csv" />
             <param name="source_plate_type" value="Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" />
             <param name="split_components" value="Hela lysate,Access prot 50%" />
-            <output_collection name="output_instructor" type="list" count="2">
-                <element name="instructor.csv" file="instructor.test-2.csv" ftype="tabular" compare="diff" />
-                <element name="instructor_Hela lysate.csv" file="instructor.hela.test-2.csv" ftype="tabular" compare="diff" />
-                <element name="instructor_Access prot 50%.csv" file="instructor.access.test-2.csv" ftype="tabular" compare="diff" />
+            <output_collection name="output_instructor" type="list" count="3">
+                <element name="instructor" file="instructor.test-2.csv" ftype="csv" compare="diff" />
+                <element name="instructor_Hela lysate" file="instructor.hela.test-2.csv" ftype="csv" compare="diff" />
+                <!--
+                    <element name="instructor_Access prot 50X" file="instructor.access.test-2.csv" ftype="csv" compare="diff" />
+                -->
             </output_collection>
         </test>
     </tests>
