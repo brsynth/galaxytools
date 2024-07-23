@@ -61,8 +61,8 @@
             <param name="version" type="select" label="Workflow version" help="Retropath2.0 Workflow versions, formatted as 'r{year}{month}{day}' (the latest version 'r20220104' is used by default).">
                 <option value="v9">v9</option>
                 <option value="r20210127">r20210127</option>
-                <option value="r20220224">r20220224</option>
-                <option value="r20220104" selected="true">r20220104</option>
+                <option value="r20220104">r20220104</option>
+                <option value="r20220224" selected="true">r20220224</option>
             </param>
             <param name="topx" type="integer" value="100" min="1" max="1000" label="TopX" help="The maximal number of intermediate compounds to use as new starting points for a next iteration of the retrosynthesis algorithm." />
             <param name="dmin" type="integer" value="0" min="0" max="1000" label="Minimum rule diameter" help="Minimum rule diameter of the sphere including the atoms around the reacting center. The higher is the diameter, the more specific are the rules." />
