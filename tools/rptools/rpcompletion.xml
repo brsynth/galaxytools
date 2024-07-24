@@ -43,7 +43,7 @@
             <param name="rp2paths_compounds" value="3-rp2paths_compounds.tsv" />
             <param name="rp2_pathways" value="1-rp2_metnet.csv" />
             <param name="sink" value="2-sink.csv" />
-            <output_collection name="pathways" type="list" count="9"/>
+            <output_collection name="pathways" type="list" count="10/>
         </test>
     </tests>
     <help><![CDATA[
