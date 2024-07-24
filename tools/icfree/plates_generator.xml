@@ -1,4 +1,4 @@
-<tool id="icfree_plates_designer" name="iCFree plates designer" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
+<tool id="icfree_plates_generator" name="iCFree plates designer" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
     <description>Prepare source and destination well-plate mappings with advanced options.</description>
     <macros>
         <import>macros.xml</import>
@@ -35,7 +35,7 @@
            ]]></command>
     <inputs>
         <param name="sampling_file" type="data" format="csv" label="Sampling file" />
-        <param name="sample_volume" type="integer" optional="false" label="Wanted sample volume in the destination plate" />
+        <param name="sample_volume" type="integer" value="10000" min="1" max="1000000" label="Wanted sample volume in the destination plate" />
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="start_well_src_plt" type="text" value="A1" label="Starting well for the source plate">
                 <validator type="empty_field" message="Not empty"/>
