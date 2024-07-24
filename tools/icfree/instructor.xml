@@ -1,4 +1,4 @@
-<tool id="icfree_instructor" name="iCFree instructor" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
+<tool id="icfree_instructor" name="iCFree instructor" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
     <description>Generates a list of Echo-compatible instructions to prepare samples</description>
     <macros>
         <import>macros.xml</import>
