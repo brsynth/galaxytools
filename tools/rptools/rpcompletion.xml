@@ -22,7 +22,7 @@
     ]]></command>
     <inputs>
         <param name="rp2paths_pathways" type="data" format="csv" label="RP2paths pathways" />
-        <param name="rp2paths_compounds" type="data" format="csv" label="RP2paths compounds" />
+        <param name="rp2paths_compounds" type="data" format="tabular" label="RP2paths compounds" />
         <param name="rp2_pathways" type="data" format="csv" label="RetroPath2.0 metabolic network" />
         <param name="sink" type="data" format="csv" label="Sink from SBML" />
         <section name="adv" title="Advanced Options" expanded="false">
@@ -43,14 +43,14 @@
             <param name="rp2paths_compounds" value="3-rp2paths_compounds.tsv" />
             <param name="rp2_pathways" value="1-rp2_metnet.csv" />
             <param name="sink" value="2-sink.csv" />
-            <output_collection name="pathways" type="list" count="9"/>
+            <output_collection name="pathways" type="list" count="10"/>
         </test>
     </tests>
     <help><![CDATA[
 rpCompletion
 ============
 
-Completes mono-component reactions output by `RetroPath2.0 <https://www.sciencedirect.com/science/article/pii/S1096717617301337>`_ with the appropriate cofactors. Creates sub-paths when multiple reaction rules are associated with a single reaction. Input is a single pathways file produced by RP2Paths. It stands on rpCache which store pre-computed data.
+Completes mono-component reactions output by `RetroPath2.0 <https://www.doi.org/10.1016/j.ymben.2017.12.002>`_ with the appropriate cofactors. Creates sub-paths when multiple reaction rules are associated with a single reaction. Input is a single pathways file produced by RP2Paths. It stands on rpCache which store pre-computed data.
 
 Input
 -----
