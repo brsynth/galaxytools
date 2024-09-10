@@ -10,7 +10,7 @@
             '$source_plate_file'
             '$destination_plate_file'
             'instructor.csv'
-            --source_plate_type '$source_plate_type'
+            --source_plate_type '$adv.source_plate_type'
             --max_transfer_volume '$max_transfer_volume'
             #if str($adv.split_threshold) != ''
                 --split_threshold '$split_threshold'
