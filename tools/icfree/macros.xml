@@ -3,15 +3,9 @@
     <token name="@VERSION_SUFFIX@">0</token>
     <xml name="requirements">
         <requirements>
-            <requirement type="package" version="@TOOL_VERSION@">icfree-ml</requirement>
+            <requirement type="package" version="@TOOL_VERSION@">icfree</requirement>
             <yield/>
         </requirements>
-    </xml>
-    <xml name="stdio">
-        <stdio>
-            <regex match="WARNING" level="warning" />
-            <regex match="ERROR" level="fatal" />
-        </stdio>
     </xml>
     <xml name="citation">
         <citations>

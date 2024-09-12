@@ -4,7 +4,6 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements"/>
-    <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
         #set well_capacity = []
         #set dead_volumes = []

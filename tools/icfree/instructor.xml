@@ -4,19 +4,20 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements"/>
-    <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
         python -m icfree.instructor
             '$source_plate_file'
             '$destination_plate_file'
-            'instructor.csv'
+            'instructions.csv'
             --source_plate_type '$adv.source_plate_type'
-            --max_transfer_volume '$max_transfer_volume'
+            #if str($adv.max_transfer_volume) != ''
+                --max_transfer_volume '$adv.max_transfer_volume'
+            #end if
             #if str($adv.split_threshold) != ''
-                --split_threshold '$split_threshold'
+                --split_threshold '$adv.split_threshold'
             #end if
             #if str($adv.split_components) != ''
-                --split_components '$split_components'
+                --split_components '$adv.split_components'
             #end if
     ]]></command>
     <inputs>
@@ -26,14 +27,14 @@
             <param name="source_plate_type" type="text" value="default:384PP_AQ_GP3" label="Source plate type" help="Comma-separated list of component and plate type pairs, e.g., 'Component_1:384PP_AQ_CP,Component_2:384PP_AQ_GP3'. Default for all is default:384PP_AQ_GP3." >
                 <validator type="empty_field" message="Source plate type is required"/>
             </param>
-            <param argument="max_transfer_volume" type="integer" min="1" max="50000" value="500" label="Maximum transfer volume" help="Maximum volume for a single transfer. If not specified, no splitting will be performed." />
-            <param argument="split_threshold" type="integer" min="1" max="50000" value="500" label="Split threshold" help="Volume threshold above which transfers need to be split. If not specified, no splitting will be performed." />
+            <param argument="max_transfer_volume" type="integer" optional="true" label="Maximum transfer volume" help="Maximum volume for a single transfer. If not specified, no splitting will be performed." />
+            <param argument="split_threshold" type="integer" optional="true" label="Split threshold" help="Volume threshold above which transfers need to be split. If not specified, no splitting will be performed." />
             <param name="split_components" type="text" optional="true" label="Split components" help="Comma-separated list of component names to create separate files for." >
             </param>
         </section>
     </inputs>
     <outputs>
-        <collection name="output_instructor" type="list" label="${tool.name} - Instructor">
+        <collection name="output_instructor" type="list" label="${tool.name} - Instructions">
             <discover_datasets pattern="__designation_and_ext__" format="csv" directory="."/>
         </collection>
     </outputs>
@@ -43,7 +44,7 @@
             <param name="source_plate_file" value="plates_designer.source_plate.test-2.csv" />
             <param name="destination_plate_file" value="plates_designer.destination_plate.test-2.csv" />
             <output_collection name="output_instructor" type="list" count="1">
-                <element name="instructor" file="instructor.test-1.csv" ftype="csv" compare="diff" />
+                <element name="instructions" file="instructor.test-1.csv" ftype="csv" compare="diff" />
             </output_collection>
         </test>
         <test>
@@ -53,8 +54,8 @@
             <param name="source_plate_type" value="Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" />
             <param name="split_components" value="Hela lysate,Access prot 50%" />
             <output_collection name="output_instructor" type="list" count="3">
-                <element name="instructor" file="instructor.test-2.csv" ftype="csv" compare="diff" />
-                <element name="instructor_Hela lysate" file="instructor.hela.test-2.csv" ftype="csv" compare="diff" />
+                <element name="instructions" file="instructor.test-2.csv" ftype="csv" compare="diff" />
+                <element name="instructions_Hela lysate" file="instructor.hela.test-2.csv" ftype="csv" compare="diff" />
                 <!--
                     <element name="instructor_Access prot 50X" file="instructor.access.test-2.csv" ftype="csv" compare="diff" />
                 -->
