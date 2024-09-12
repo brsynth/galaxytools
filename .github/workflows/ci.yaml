@@ -33,7 +33,7 @@ jobs:
         token: ${{ secrets.PAT }}
         repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
         comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-        reaction-type: hooray
+        reactions: hooray
     - name: Set galaxy fork and branch
       id: get-fork-branch
       run: |
@@ -76,7 +76,7 @@ jobs:
         echo 'Using ${{ steps.discover.outputs.chunk-count }} chunks (${{ steps.discover.outputs.chunk-list }})'
 
   lint:
-    name: Check for missing containers
+    name: Lint tool-list
     needs: setup
     if: ${{ needs.setup.outputs.repository-list != '' || needs.setup.outputs.tool-list != '' }}
     runs-on: ubuntu-latest
@@ -102,8 +102,10 @@ jobs:
       id: lint
       with:
         mode: lint
+        fail-level: warn
         repository-list: ${{ needs.setup.outputs.repository-list }}
         tool-list: ${{ needs.setup.outputs.tool-list }}
+        additional-planemo-options: --biocontainers
     - uses: actions/upload-artifact@v4
       if: ${{ failure() }}
       with:
@@ -204,6 +206,7 @@ jobs:
       with:
         name: 'All tool test results'
         path: upload
+    - run: cat upload/tool_test_output.md >> $GITHUB_STEP_SUMMARY
     - name: Create URL to the run output
       if: ${{ github.event.client_payload.slash_command.command == 'run-all-tool-tests' }}
       id: vars
