@@ -5,10 +5,11 @@
     </macros>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
+        mkdir -p outdir &&
         python -m icfree.instructor
             '$source_plate_file'
             '$destination_plate_file'
-            'instructions.csv'
+            'outdir/instructions.csv'
             --source_plate_type '$adv.source_plate_type'
             #if str($adv.max_transfer_volume) != ''
                 --max_transfer_volume '$adv.max_transfer_volume'
@@ -35,7 +36,7 @@
     </inputs>
     <outputs>
         <collection name="output_instructor" type="list" label="${tool.name} - Instructions">
-            <discover_datasets pattern="__designation_and_ext__" format="csv" directory="."/>
+            <discover_datasets pattern="__designation_and_ext__" format="csv" directory="outdir"/>
         </collection>
     </outputs>
     <tests>
