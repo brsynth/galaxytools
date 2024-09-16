@@ -1,5 +1,0 @@
-  <section id="sbc-pa" name="SynBioCAD Pathway Analysis">
-    <tool file="synbiocad-galaxy-wrappers/straindesign/analyzing-model.xml" />
-    <tool file="synbiocad-galaxy-wrappers/straindesign/reduce-model.xml" />
-    <tool file="synbiocad-galaxy-wrappers/straindesign/simulate-deletion.xml" />
-  </section>

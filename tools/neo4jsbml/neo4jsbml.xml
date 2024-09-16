@@ -1,0 +1,84 @@
+<tool id="neo4jsbml" name="neo4jsbml" version="@TOOL_VERSION@" profile="21.09" license="MIT">
+    <description>Import SBML file into Neo4j</description>
+    <macros>
+        <token name="@TOOL_VERSION@">1.0.1</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">neo4jsbml</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        neo4jsbml sbml-to-neo4j
+            --input-auradb-txt '$input_auradb_txt'
+            --input-file-sbml '$input_file_sbml'
+            #if str($parameter_tag_property_str) != ""
+                --parameter-tag-property-str '$parameter_tag_property_str'
+            #end if
+            --input-arrows-json '$input_arrows_json' | tee '$output'
+    ]]></command>
+    <inputs>
+        <param name="input_auradb_txt" type="data" format="txt" label="Config file provided by AuraDB"/>
+        <param name="input_file_sbml" type="data" format="sbml" label="SBML model"/>
+        <param name="parameter_tag_property_str" type="text" label="Identifier of the model">
+            <validator type="regex" message="No special characters allowed">^(?:[\w-]*)$</validator>
+        </param>
+        <param name="input_arrows_json" type="data" format="json" label="Arrow's schema"/>
+    </inputs>
+    <outputs>
+        <data name="output" format="txt" label="${tool.name} - log" />
+    </outputs>
+    <help><![CDATA[
+Neo4jSbml
+=========
+
+Step 1
+------
+
+Create a schema with `Arrows <https://arrows.app>`_
+
+Rules:
+- Nodes are labelled based on SBML object name as defined in the `SBML specification <https://sbml.org>`_
+- Properties are labelled based on SBML object properties as defined the `SBML specification <https://sbml.org>`_
+
+Step 2
+------
+Export your schema at the JSON format.
+
+Step 3
+------
+
+Import your data with `neo4jsbml` into Neo4j.
+- Use either a configuration file `ini` or individual parameters
+- Password needs to be store in a file for safety security
+- If you have multiple model in the database, pass a `tag` to identify the model loaded into the database if you want to avoid collision
+
+Inputs
+------
+
+- **AuraDB config like**: a txt file with these variables NEO4J_URI, NEO4J_USERNAME, NEO4J_PASSWORD and AURA_INSTANCENAME. One per line like: NEO4J_USERNAME=neo4j
+- **SBML model**: SBML model
+- **Identifier of the model**: Associate an ID to the nodes (optional)
+- **Arrow's schema**: Schema created with Arrow
+
+Ouput
+-----
+
+- Traceback of the tool
+]]></help>
+    <citations>
+        <citation type="bibtex">
+            @article{gricourt_neo4jsbml_2024,
+                title = {neo4jsbml: import systems biology markup language data into the graph database {Neo4j}},
+                volume = {12},
+                issn = {2167-8359},
+                url = {https://peerj.com/articles/16726},
+                doi = {10.7717/peerj.16726},
+                urldate = {2024-01-22},
+                journal = {PeerJ},
+                author = {Gricourt, Guillaume and Duigou, Thomas and Dérozier, Sandra and Faulon, Jean-Loup},
+                month = jan,
+                year = {2024},
+                pages = {e16726},
+            }
+        </citation>
+    </citations>
+</tool>

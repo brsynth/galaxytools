@@ -15,7 +15,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: 'List repos'
         id: set-matrix
         run: echo "matrix=$(find tools -mindepth 1 -maxdepth 1 -type d | jq -R -s -c 'split("\n")[:-1] | map(split("/")[-1])')" >> "${GITHUB_OUTPUT}"
@@ -29,12 +29,12 @@ jobs:
          repo: ${{ fromJson(needs.list.outputs.matrix) }}
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.USER_TOKEN }}
           ref: main
       - name: "Setup python"
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
           cache: 'pip' # caching pip dependencies

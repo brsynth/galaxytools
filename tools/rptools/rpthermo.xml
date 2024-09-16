@@ -43,7 +43,7 @@
                     <has_text text="-2308.11630" />
                     <!--check thermo_dG value-->
                     <has_text text="-2151.84763" />
-                    <has_n_lines n="483" />
+                    <has_n_lines n="522" />
                 </assert_contents>
             </output>
         </test>

@@ -10,22 +10,22 @@
     <command detect_errors="exit_code"><![CDATA[
         #if str($convert_type.type) == "SBOL2 to SBOL3"
             ln -sv '$sbol2_input' 'input.$sbol2_input.ext' &&
-            sbol2to3 -o '$output' 'input.$sbol2_input.ext'
+            sbol2-to-sbol3 -o '$output' 'input.$sbol2_input.ext'
         #elif str($convert_type.type) == "SBOL3 to SBOL2"
             ln -sv '$sbol3_input' 'input.$sbol3_input.ext' &&
-            sbol3to2 -o '$output' 'input.$sbol3_input.ext'
+            sbol3-to-sbol2 -o '$output' 'input.$sbol3_input.ext'
         #elif str($convert_type.type) == "SBOL3 to GENBANK"
             ln -sv '$sbol3_input' 'input.$sbol3_input.ext' &&
-            sbol2genbank -o '$output' 'input.$sbol3_input.ext'
+            sbol-to-genbank -o '$output' 'input.$sbol3_input.ext'
         #elif str($convert_type.type) == "GENBANK to SBOL3"
             ln -sv '$genbank_input' 'input.$genbank_input.ext' &&
-            genbank2sbol -o '$output' 'input.$genbank_input.ext' --namespace '$convert_type.namespace'
+            genbank-to-sbol -o '$output' 'input.$genbank_input.ext' --namespace '$convert_type.namespace'
         #elif str($convert_type.type) == "SBOL3 to FASTA"
             ln -sv '$sbol3_input' 'input.$sbol3_input.ext' &&
-            sbol2fasta -o '$output' 'input.$sbol3_input.ext'
+            sbol-to-fasta -o '$output' 'input.$sbol3_input.ext'
         #elif str($convert_type.type) == "FASTA to SBOL3"
             ln -sv '$fasta_input' 'input.$fasta_input.ext' &&
-            fasta2sbol -o '$output' 'input.$fasta_input.ext' --namespace '$convert_type.namespace'
+            fasta-to-sbol -o '$output' 'input.$fasta_input.ext' --namespace '$convert_type.namespace'
         #elif str($convert_type.type) == "SBOL2 to FASTA"
             ln -sv '$sbol2_input' 'input.$sbol2_input.ext' &&
             sbol-converter SBOL2 FASTA -o '$output' 'input.$sbol2_input.ext'
