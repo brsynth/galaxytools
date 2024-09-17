@@ -2,27 +2,62 @@
     <description>Generate Latin Hypercube Samples for given components.</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@TOOL_VERSION@">2.4.0</token>
+        <token name="@TOOL_VERSION@">2.5.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">icfree-ml</requirement>
     </requirements>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
+        #import json
+        #set $components = {}
+        #for $x in $adv.rep
+            $components.__setitem__(str($x.component_name), str($x.component_value))
+        #end for
+
         python -m icfree.sampler
             '$input_file'
             '$output_sampling'
             '$num_samples'
-            --step '$adv.step'
+            #if str($adv.range_cond.range_param) == 'ratios'
+                --ratios '$adv.range_cond.by_ratios'
+            #else
+                --step '$adv.range_cond.by_step'
+            #end if
             #if str($adv.seed_cond.seed_param) == 'not_random'
                 --seed '$adv.seed_cond.seed'
+            #end if
+            #if len(components) > 0
+                --fixed_values '#echo json.dumps(components)#'
             #end if
     ]]></command>
     <inputs>
         <param name="input_file" type="data" format="tabular" label="Input file with components and their max values." />
-        <param name="num_samples" type="integer" value="99" min="1" max="198" label="Number of samples to generate" />
+        <param name="num_samples" type="integer" min="1" label="Number of samples to generate" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="step" type="float" value="2.5" min="1" max="10" label="Step size for creating discrete ranges" />
+            <!-- Range -->
+            <conditional name="range_cond">
+                <param name="range_param" type="select" label="Seed" help="How to create the discrete range">
+                    <option value="step" selected="true">step</option>
+                    <option value="ratios">ratios</option>
+                </param>
+                <when value="step">
+                    <param name="by_step" type="float" value="2.5" min="0" label="Step size for creating discrete ranges" />
+                </when>
+                <when value="ratios">
+                    <param name="by_ratios" type="text" label="Ratios to be sampled">
+                        <validator type="regex" message="List of float values, separated by a comma without of spaces">^(\d+(\.\d+)?)(,\d+(\.\d+)?)*$</validator>
+                    </param>
+                </when>
+            </conditional>
+            <!-- Fixed values -->
+            <repeat name="rep" title="Fixed values for components as a dictionary">
+                <param name="component_name" type="text" value="" label="Component Name">
+                    <validator type="empty_field" message="Not empty" />
+                </param>
+                <param name="component_value" type="integer" value="1" min="1" label="Value" />
+            </repeat>
+            <!-- Seed -->
             <conditional name="seed_cond">
                 <param name="seed_param" type="select" label="Seed" help="Choose a seed or let it as random">
                     <option value="random" selected="true">random</option>
@@ -50,7 +85,7 @@
             <param name="seed" value="0" />
             <output name="output_sampling" file="sampler/output/sampling.test-1.tsv" ftype="tabular" compare="diff" />
         </test>
-        <!-- test 1: check if identical outputs are produced with default parameters  -->
+        <!-- test 2: with specific step  -->
         <test>
             <param name="input_file" value="sampler/input/components.tsv" />
             <param name="num_samples" value="4" />
@@ -58,6 +93,32 @@
             <param name="seed_param" value="not_random" />
             <param name="seed" value="0" />
             <output name="output_sampling" file="sampler/output/sampling.test-2.tsv" ftype="tabular" compare="diff" />
+        </test>
+        <!-- test 3: with fixed values  -->
+        <test>
+            <param name="input_file" value="sampler/input/components.tsv" />
+            <param name="num_samples" value="3" />
+            <param name="seed_param" value="not_random" />
+            <param name="seed" value="0" />
+            <repeat name="rep">
+                <param name="component_name" value="Hela lysate" />
+                <param name="component_value" value="10" />
+            </repeat>
+            <repeat name="rep">
+                <param name="component_name" value="RNA 1ug/uL" />
+                <param name="component_value" value="20" />
+            </repeat>
+            <output name="output_sampling" file="sampler/output/sampling.test-3.tsv" ftype="tabular" compare="diff" />
+        </test>
+        <!-- test 4: with ratios  -->
+        <test>
+            <param name="input_file" value="sampler/input/components.tsv" />
+            <param name="num_samples" value="4" />
+            <param name="seed_param" value="not_random" />
+            <param name="seed" value="0" />
+            <param name="range_param" value="ratios" />
+            <param name="by_ratios" value="0.5,0.1,0.3,0.2" />
+            <output name="output_sampling" file="sampler/output/sampling.test-4.tsv" ftype="tabular" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[
