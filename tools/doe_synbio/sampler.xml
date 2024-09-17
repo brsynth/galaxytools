@@ -33,11 +33,11 @@
     ]]></command>
     <inputs>
         <param name="input_file" type="data" format="tabular" label="Input file with components and their max values." />
-        <param name="num_samples" type="integer" min="1" label="Number of samples to generate" />
+        <param name="num_samples" type="integer" value="1" min="1" label="Number of samples to generate" />
         <section name="adv" title="Advanced Options" expanded="false">
             <!-- Range -->
             <conditional name="range_cond">
-                <param name="range_param" type="select" label="Seed" help="How to create the discrete range">
+                <param name="range_param" type="select" label="Discrete range" help="How to create the discrete range">
                     <option value="step" selected="true">step</option>
                     <option value="ratios">ratios</option>
                 </param>
