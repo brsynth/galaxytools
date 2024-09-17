@@ -1,11 +1,11 @@
-<tool id="doe_synbio_sampler" name="iCFree sampler" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
+<tool id="doe_synbio_sampler" name="iCFree sampler" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
     <description>Generate Latin Hypercube Samples for given components.</description>
     <macros>
         <import>macros.xml</import>
         <token name="@TOOL_VERSION@">2.5.0</token>
     </macros>
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">icfree-ml</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">icfree</requirement>
     </requirements>
     <expand macro="stdio"/>
     <command detect_errors="exit_code"><![CDATA[
@@ -89,7 +89,8 @@
         <test>
             <param name="input_file" value="sampler/input/components.tsv" />
             <param name="num_samples" value="4" />
-            <param name="step" value="3.1" />
+            <param name="range_param" value="step" />
+            <param name="by_step" value="3.1" />
             <param name="seed_param" value="not_random" />
             <param name="seed" value="0" />
             <output name="output_sampling" file="sampler/output/sampling.test-2.tsv" ftype="tabular" compare="diff" />

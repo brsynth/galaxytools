@@ -1,4 +1,4 @@
-<tool id="doe_synbio_optdoe" name="Optimal Design of Experiment" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="@LICENCE@">
+<tool id="doe_synbio_optdoe" name="Optimal Design of Experiment" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
     <description>Combine selected genetic parts and enzyme variants for the desired pathways</description>
     <macros>
         <import>macros.xml</import>
