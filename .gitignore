@@ -6,3 +6,4 @@ node_modules
 tool_test_output.html
 tool_test_output.json
 .hg_archival.txt
+*.swp
