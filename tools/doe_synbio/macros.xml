@@ -1,6 +1,5 @@
 <macros>
     <token name="@VERSION_SUFFIX@">0</token>
-    <token name="@LICENSE@">MIT</token>
     <xml name="stdio">
         <stdio>
             <regex match="WARNING" level="warning" />
