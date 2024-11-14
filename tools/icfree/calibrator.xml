@@ -1,0 +1,123 @@
+<tool id="icfree_calibrator" name="iCFree calibrator" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
+    <description>Calculate yield based on fluorescence data and optionally apply calibration</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+        cp '$initial_data_file' 'initial_data.csv' &&
+        cp '$sampling_file' 'sampling.csv' &&
+        #if $adv.ref_file
+            cp '$adv.ref_file' 'reference.csv' &&
+        #end if
+        python -m icfree.learner.extractor
+            --initial_data_file 'initial_data.csv'
+            --sampling_file 'sampling.csv'
+            --output_file 'extractor.csv'
+            #if str($adv.num_samples) != ''
+                --num_samples '$adv.num_samples'
+            #end if
+            #if str($adv.num_replicates) != ''
+                --num_replicates '$adv.num_replicates'
+            #end if
+            &&
+        python -m icfree.learner.calibrator
+            --file 'extractor.csv'
+            --output 'calibrated.csv'
+            --jove_plus '$jove_plus'
+            --jove_minus '$jove_minus'
+            --r2_limit '$adv.r2_limit'
+            #if str($adv.num_control_points) != ''
+                --num_control_points '$adv.num_control_points'
+            #end if
+            #if $adv.ref_file
+                --ref_file 'reference.csv'
+                --plot '$output_graph'
+            #end if
+            #if str($adv.num_samples) != ''
+                --num '$adv.num_samples'
+            #end if
+            &&
+        mv 'calibrated.csv' '$output_calibrated' &&
+        mv 'calibrated_control_points.csv' '$output_control_points'
+    ]]></command>
+    <inputs>
+        <param name="initial_data_file" type="data" format="csv" label="Initial file" help="Initial file"/>
+        <param name="sampling_file" type="data" format="csv" label="Sampling file" help="Sampling file"/>
+        <param argument="jove_plus" type="integer" label="Line number for Jove+ (1-based index)" help="Line number for Jove+ (1-based index)" />
+        <param argument="jove_minus" type="integer" label="Line number for Jove- (1-based index)" help="Line number for Jove- (1-based index)" />
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param argument="num_samples" type="integer" optional="true" label="Number of samples" help="Number of samples" />
+            <!-- Extractor -->
+            <param argument="num_replicates" type="integer" optional="true" label="Number of replicates" help="Number of replicates." />
+            <!-- Calibrator -->
+            <param argument="r2_limit" type="float" value="0.8" label="R-squared limit for the regression" help="R-squared limit for the regression" />
+            <param argument="num_control_points" type="integer" optional="true" label="Number of control points to select" help="Number of control points to select" />
+            <param name="ref_file" type="data" optional="true" format="csv" label="Reference input file" help="Reference input file"/>
+        </section>
+    </inputs>
+    <outputs>
+        <data name="output_calibrated" format="csv" label="${tool.name} - Calibrated yields" />
+        <data name="output_control_points" format="csv" label="${tool.name} - Control points" />
+        <data name="output_graph" format="png" label="${tool.name} - Graph">
+            <filter>adv['ref_file']</filter>
+        </data>
+    </outputs>
+    <tests>
+        <test expect_num_outputs="2">
+            <!-- python -m icfree.learner.extractor -initial_data_file calibrator.input.initial_data.csv -sampling_file calibrator.input.sampling.csv -output_file calibrator.extractor_output.1.csv -->
+            <!-- python -m icfree.learner.calibrator -file calibrator.extractor_output.1.csv -output calibrator.output.csv -jove_plus 3 -jove_minus 2 -->
+            <param name="initial_data_file" value="calibrator.input.initial_data.csv" />
+            <param name="sampling_file" value="calibrator.input.sampling.csv" />
+            <param name="jove_plus" value="3" />
+            <param name="jove_minus" value="2" />
+            <output name="output_calibrated" ftype="csv">
+                <assert_contents>
+                    <has_n_lines n="343" />
+                </assert_contents>
+            </output>
+            <output name="output_control_points" ftype="csv">
+                <assert_contents>
+                    <has_n_lines n="11" />
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="3">
+            <!-- python -m icfree.learner.extractor -initial_data_file calibrator.input.initial_data.csv -sampling_file calibrator.input.sampling.tsv -output_file calibrator.output.extractor.2.csv -num_samples 20 -num_replicates 3 -->
+            <!-- python -m icfree.learner.calibrator -file calibrator.output.extractor.2.csv -output calibrator.output.2.csv -jove_plus 4 -jove_minus 3 -r2_limit 0.9 -num 20 -num_control_points 4 -ref_file calibrator.input.ref.csv -->
+            <param name="initial_data_file" value="calibrator.input.initial_data.csv" />
+            <param name="sampling_file" value="calibrator.input.sampling.csv" />
+            <param name="ref_file" value="calibrator.input.ref.csv" />
+            <param name="num_samples" value="20" />
+            <param name="num_replicates" value="3" />
+            <param name="r2_limit" value="0.9" />
+            <param name="num_control_points" value="4" />
+            <param name="jove_plus" value="4" />
+            <param name="jove_minus" value="3" />
+            <output name="output_calibrated" ftype="csv">
+                <assert_contents>
+                    <has_n_lines n="21" />
+                </assert_contents>
+            </output>
+            <output name="output_control_points" ftype="csv">
+                <assert_contents>
+                    <has_n_lines n="21" />
+                </assert_contents>
+            </output>
+            <output name="calibrator_graph" ftype="png" >
+                <assert_contents>
+                    <has_size value="45000" delta="1000" />
+                </assert_contents>
+            </output>
+        </test>
+
+    </tests>
+    <help><![CDATA[
+Calibrator
+==========
+Calculate yield based on fluorescence data and apply calibration.
+
+]]></help>
+    <expand macro="creator"/>
+    <expand macro="citation"/>
+</tool>
