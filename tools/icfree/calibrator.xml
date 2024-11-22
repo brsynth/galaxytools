@@ -67,7 +67,7 @@
                     <has_n_lines n="343" />
                 </assert_contents>
             </output>
-            <output name="calibrator_graph" ftype="png" >
+            <output name="output_graph" ftype="png" >
                 <assert_contents>
                     <has_size value="62000" delta="2000" />
                 </assert_contents>
@@ -90,7 +90,7 @@
                     <has_n_lines n="21" />
                 </assert_contents>
             </output>
-            <output name="calibrator_graph" ftype="png" >
+            <output name="output_graph" ftype="png" >
                 <assert_contents>
                     <has_size value="45000" delta="1000" />
                 </assert_contents>
