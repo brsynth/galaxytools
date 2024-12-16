@@ -2,7 +2,7 @@
     <description>Generate Latin Hypercube Samples for given components.</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@TOOL_VERSION@">2.5.2</token>
+        <token name="@TOOL_VERSION@">2.6.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">icfree</requirement>
