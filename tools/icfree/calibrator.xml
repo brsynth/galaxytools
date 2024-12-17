@@ -64,12 +64,12 @@
             <param name="jove_minus" value="2" />
             <output name="output_calibrated" ftype="csv">
                 <assert_contents>
-                    <has_n_lines n="343" />
+                    <has_n_lines n="58" />
                 </assert_contents>
             </output>
             <output name="output_graph" ftype="png" >
                 <assert_contents>
-                    <has_size value="62000" delta="2000" />
+                    <has_size value="45000" delta="2000" />
                 </assert_contents>
             </output>
         </test>
@@ -92,7 +92,7 @@
             </output>
             <output name="output_graph" ftype="png" >
                 <assert_contents>
-                    <has_size value="45000" delta="1000" />
+                    <has_size value="38000" delta="1000" />
                 </assert_contents>
             </output>
 
