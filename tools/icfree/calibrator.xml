@@ -32,7 +32,8 @@
                 --num '$adv.num_samples'
             #end if
             'extractor.csv' 'reference.csv' &&
-        mv 'calibrated.csv' '$output_calibrated'
+        mv 'calibrated.csv' '$output_calibrated' &&
+        mv 'calibrated_control_points.csv' '$output_control_points'
     ]]></command>
     <inputs>
         <param name="initial_data_file" type="data" format="csv" label="Initial file" help="Initial file"/>
@@ -51,10 +52,11 @@
     </inputs>
     <outputs>
         <data name="output_calibrated" format="csv" label="${tool.name} - Calibrated yields" />
+        <data name="output_control_points" format="csv" label="${tool.name} - Control points" />
         <data name="output_graph" format="png" label="${tool.name} - Graph" />
     </outputs>
     <tests>
-        <test expect_num_outputs="2">
+        <test expect_num_outputs="3">
             <!-- python -m icfree.learner.extractor -initial_data_file calibrator.input.initial_data.csv -sampling_file calibrator.input.sampling.csv -output_file calibrator.extractor_output.1.csv -->
             <!-- python -m icfree.learner.calibrator -output calibrator.output.calibrated.1.csv -jove_plus 3 -jove_minus 2 -plot calibrator.output.1.png calibrator.output.extractor.1.csv calibrator.input.ref.csv -->
             <param name="initial_data_file" value="calibrator.input.initial_data.csv" />
@@ -67,13 +69,18 @@
                     <has_n_lines n="58" />
                 </assert_contents>
             </output>
+            <output name="output_control_points" ftype="csv">
+                <assert_contents>
+                    <has_n_lines n="6" />
+                </assert_contents>
+            </output>
             <output name="output_graph" ftype="png" >
                 <assert_contents>
                     <has_size value="45000" delta="2000" />
                 </assert_contents>
             </output>
         </test>
-        <test expect_num_outputs="2">
+        <test expect_num_outputs="3">
             <!-- python -m icfree.learner.extractor -initial_data_file calibrator.input.initial_data.csv -sampling_file calibrator.input.sampling.tsv -output_file calibrator.output.extractor.2.csv -num_samples 20 -num_replicates 3 -->
             <!-- python -m icfree.learner.calibrator -plot calibrator.output.2.png -output calibrator.output.2.csv -jove_plus 4 -jove_minus 3 -r2_limit 0.9 -num 20 -num_control_points 4 calibrator.output.extractor.2.csv calibrator.input.ref.csv -->
             <param name="initial_data_file" value="calibrator.input.initial_data.csv" />
@@ -90,14 +97,17 @@
                     <has_n_lines n="21" />
                 </assert_contents>
             </output>
+            <output name="output_control_points" ftype="csv">
+                <assert_contents>
+                    <has_n_lines n="21" />
+                </assert_contents>
+            </output>
             <output name="output_graph" ftype="png" >
                 <assert_contents>
                     <has_size value="38000" delta="1000" />
                 </assert_contents>
             </output>
-
         </test>
-
     </tests>
     <help><![CDATA[
 Calibrator
