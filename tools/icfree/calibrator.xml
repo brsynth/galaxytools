@@ -5,20 +5,8 @@
     </macros>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
-        cp '$initial_data_file' 'initial_data.csv' &&
-        cp '$sampling_file' 'sampling.csv' &&
+        cp '$extractor_file' 'extractor.csv' &&
         cp '$ref_file' 'reference.csv' &&
-        python -m icfree.learner.extractor
-            --initial_data_file 'initial_data.csv'
-            --sampling_file 'sampling.csv'
-            --output_file 'extractor.csv'
-            #if str($adv.num_samples) != ''
-                --num_samples '$adv.num_samples'
-            #end if
-            #if str($adv.num_replicates) != ''
-                --num_replicates '$adv.num_replicates'
-            #end if
-            &&
         python -m icfree.learner.calibrator
             --output 'calibrated.csv'
             --plot '$output_graph'
@@ -28,23 +16,16 @@
             #if str($adv.num_control_points) != ''
                 --num_control_points '$adv.num_control_points'
             #end if
-            #if str($adv.num_samples) != ''
-                --num '$adv.num_samples'
-            #end if
             'extractor.csv' 'reference.csv' &&
         mv 'calibrated.csv' '$output_calibrated' &&
         mv 'calibrated_control_points.csv' '$output_control_points'
     ]]></command>
     <inputs>
-        <param name="initial_data_file" type="data" format="csv" label="Initial file" help="Initial file"/>
-        <param name="sampling_file" type="data" format="csv" label="Sampling file" help="Sampling file"/>
+        <param name="extractor_file" type="data" format="csv" label="Extractor file" help="Extractor file"/>
         <param name="ref_file" type="data" format="csv" label="Reference input file" help="Reference input file"/>
         <param argument="jove_plus" type="integer" value="3" label="Line number for Jove+ (1-based index)" help="Line number for Jove+ (1-based index)" />
         <param argument="jove_minus" type="integer" value="2" label="Line number for Jove- (1-based index)" help="Line number for Jove- (1-based index)" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="num_samples" type="integer" optional="true" label="Number of samples" help="Number of samples" />
-            <!-- Extractor -->
-            <param argument="num_replicates" type="integer" optional="true" label="Number of replicates" help="Number of replicates." />
             <!-- Calibrator -->
             <param argument="r2_limit" type="float" value="0.8" label="R-squared limit for the regression" help="R-squared limit for the regression" />
             <param argument="num_control_points" type="integer" optional="true" label="Number of control points to select" help="Number of control points to select" />
@@ -57,10 +38,8 @@
     </outputs>
     <tests>
         <test expect_num_outputs="3">
-            <!-- python -m icfree.learner.extractor -initial_data_file calibrator.input.initial_data.csv -sampling_file calibrator.input.sampling.csv -output_file calibrator.extractor_output.1.csv -->
-            <!-- python -m icfree.learner.calibrator -output calibrator.output.calibrated.1.csv -jove_plus 3 -jove_minus 2 -plot calibrator.output.1.png calibrator.output.extractor.1.csv calibrator.input.ref.csv -->
-            <param name="initial_data_file" value="calibrator.input.initial_data.csv" />
-            <param name="sampling_file" value="calibrator.input.sampling.csv" />
+            <!-- python -m icfree.learner.calibrator -output calibrator.output.calibrated.1.csv -jove_plus 3 -jove_minus 2 -plot calibrator.output.1.png extractor.output.1.csv calibrator.input.ref.csv -->
+            <param name="extractor_file" value="extractor.output.1.csv" />
             <param name="ref_file" value="calibrator.input.ref.csv" />
             <param name="jove_plus" value="3" />
             <param name="jove_minus" value="2" />
@@ -81,13 +60,9 @@
             </output>
         </test>
         <test expect_num_outputs="3">
-            <!-- python -m icfree.learner.extractor -initial_data_file calibrator.input.initial_data.csv -sampling_file calibrator.input.sampling.tsv -output_file calibrator.output.extractor.2.csv -num_samples 20 -num_replicates 3 -->
-            <!-- python -m icfree.learner.calibrator -plot calibrator.output.2.png -output calibrator.output.2.csv -jove_plus 4 -jove_minus 3 -r2_limit 0.9 -num 20 -num_control_points 4 calibrator.output.extractor.2.csv calibrator.input.ref.csv -->
-            <param name="initial_data_file" value="calibrator.input.initial_data.csv" />
-            <param name="sampling_file" value="calibrator.input.sampling.csv" />
+            <!-- python -m icfree.learner.calibrator -output calibrator.output.calibrated.2.csv -jove_plus 4 -jove_minus 3 -r2_limit 0.9 -num 20 -num_control_points 4 -plot calibrator.output.2.png extractor.output.2.csv calibrator.input.ref.csv -->
+            <param name="extractor_file" value="extractor.output.2.csv" />
             <param name="ref_file" value="calibrator.input.ref.csv" />
-            <param name="num_samples" value="20" />
-            <param name="num_replicates" value="3" />
             <param name="r2_limit" value="0.9" />
             <param name="num_control_points" value="4" />
             <param name="jove_plus" value="4" />
@@ -99,7 +74,7 @@
             </output>
             <output name="output_control_points" ftype="csv">
                 <assert_contents>
-                    <has_n_lines n="21" />
+                    <has_n_lines n="5" />
                 </assert_contents>
             </output>
             <output name="output_graph" ftype="png" >

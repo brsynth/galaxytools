@@ -1,4 +1,4 @@
-<tool id="icfree_plates_designer" name="iCFree plates designer" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
+<tool id="icfree_plate_designer" name="iCFree plate designer" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
     <description>Prepare source and destination well-plate mappings with advanced options.</description>
     <macros>
         <import>macros.xml</import>
@@ -6,14 +6,18 @@
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
         #set well_capacity = []
-        #set dead_volumes = []
+        #set dead_volume = []
+        #set extra_well = []
         #for $x in $adv.rep
             #silent well_capacity.append(str($x.component_name) + "=" + str($x.well_capacity))
-            #silent dead_volumes.append(str($x.component_name) + "=" + str($x.dead_volumes))
+            #silent dead_volume.append(str($x.component_name) + "=" + str($x.dead_volume))
+            #silent extra_well.append(str($x.component_name) + "=" + str($x.extra_well))
         #end for
         #set swell_capacity = ','.join($well_capacity)
-        #set sdead_volumes = ','.join($dead_volumes)
+        #set sdead_volumes = ','.join($dead_volume)
+        #set sextra_wells = ','.join($extra_well)
 
+        mkdir -p outdir &&
         python -m icfree.plate_designer
             '$sampling_file'
             '$sample_volume'
@@ -24,13 +28,17 @@
                 --well_capacity '$swell_capacity'
             #end if
             --default_well_capacity '$adv.default_well_capacity'
-            #if len($dead_volumes) > 0
+            #if len($dead_volume) > 0
                 --dead_volumes '$sdead_volumes'
             #end if
             --default_dead_volume '$adv.default_dead_volume'
-            --num_replicates '$adv.num_replicates' &&
-        mv source_plate.csv '$output_source_plate' &&
-        mv destination_plate.csv '$output_destination_plate'
+            #if len($extra_well) > 0
+                --extra_wells '$sextra_wells'
+            #end if
+            --num_replicates '$adv.num_replicates'
+            --output_folder outdir &&
+        mv outdir/source_plate.csv '$output_source_plate' &&
+        mv outdir/destination_plate.csv '$output_destination_plate'
            ]]></command>
     <inputs>
         <param name="sampling_file" type="data" format="csv" label="Sampling file" />
@@ -56,7 +64,8 @@
                     <validator type="empty_field" message="Not empty"/>
                 </param>
                 <param name="well_capacity" type="integer" value="60000" min="1" max="250000" label="Well capacity" />
-                <param name="dead_volumes" type="integer" value="15000" min="1" max="250000" label="Dead volumes" />
+                <param name="dead_volume" type="integer" value="15000" min="1" max="250000" label="Dead volume" />
+                <param name="extra_well" type="integer" value="0" min="0" max="100" label="Extra well" />
             </repeat>
         </section>
     </inputs>
@@ -72,11 +81,11 @@
             <param name="default_well_capacity" value="60000" />
             <param name="default_dead_volume" value="20000" />
             <param name="num_replicates" value="1" />
-            <output name="output_source_plate" file="plates_designer.source_plate.test-1.csv" ftype="csv" compare="diff" />
-            <output name="output_destination_plate" file="plates_designer.destination_plate.test-1.csv" ftype="csv" compare="diff" />
+            <output name="output_source_plate" file="plate_designer.source_plate.test-1.csv" ftype="csv" compare="diff" />
+            <output name="output_destination_plate" file="plate_designer.destination_plate.test-1.csv" ftype="csv" compare="diff" />
         </test>
         <test>
-            <!-- python -m icfree.plate_designer sampling.test-1.csv '5000' -start_well_src_plt 'A1' -start_well_dst_plt 'A1' -plate_dims '16x24' -well_capacity 'Hela lysate=3000,Access prot 50X=4000,Reaction mix=3000,RNA 1ug/uL=2000' -default_well_capacity '60000' -dead_volumes 'Hela lysate=30,Access prot 50X=5,Reaction mix=10,RNA 1ug/uL=20' -default_dead_volume '20000' -num_replicates '2' -->
+            <!-- mkdir output ; python -m icfree.plate_designer sampling.test-1.csv '5000' -start_well_src_plt 'A1' -start_well_dst_plt 'A1' -plate_dims '16x24' -well_capacity 'Hela lysate=3000,Access prot 50X=4000,Reaction mix=3000,RNA 1ug/uL=2000' -default_well_capacity '60000' -dead_volumes 'Hela lysate=30,Access prot 50X=5,Reaction mix=10,RNA 1ug/uL=20' -default_dead_volume '20000' -num_replicates '2' -extra_wells 'Hela lysate=1,Access prot 50X=0,Reaction mix=1,RNA 1ug/uL=2' -num_replicates 2 -output_folder output -->
             <param name="sampling_file" value="sampling.test-1.csv" />
             <param name="sample_volume" value="5000" />
             <param name="default_well_capacity" value="60000" />
@@ -85,30 +94,34 @@
             <repeat name="rep">
                 <param name="component_name" value="Hela lysate" />
                 <param name="well_capacity" value="3000" />
-                <param name="dead_volumes" value="30" />
+                <param name="dead_volume" value="30" />
+                <param name="extra_well" value="1" />
             </repeat>
             <repeat name="rep">
                 <param name="component_name" value="Access prot 50%" />
                 <param name="well_capacity" value="4000" />
-                <param name="dead_volumes" value="5" />
+                <param name="dead_volume" value="5" />
+                <param name="extra_well" value="0" />
             </repeat>
             <repeat name="rep">
                 <param name="component_name" value="Reaction mix" />
                 <param name="well_capacity" value="3000" />
-                <param name="dead_volumes" value="10" />
+                <param name="dead_volume" value="10" />
+                <param name="extra_well" value="1" />
             </repeat>
             <repeat name="rep">
                 <param name="component_name" value="RNA 1ug/uL" />
                 <param name="well_capacity" value="2000" />
-                <param name="dead_volumes" value="20" />
+                <param name="dead_volume" value="20" />
+                <param name="extra_well" value="2" />
             </repeat>
-            <output name="output_source_plate" file="plates_designer.source_plate.test-2.csv" ftype="csv" compare="diff" />
-            <output name="output_destination_plate" file="plates_designer.destination_plate.test-2.csv" ftype="csv" compare="diff" />
+            <output name="output_source_plate" file="plate_designer.source_plate.test-2.csv" ftype="csv" compare="diff" />
+            <output name="output_destination_plate" file="plate_designer.destination_plate.test-2.csv" ftype="csv" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[
-Plates Generator
-================
+Plate Generator
+===============
 
 Prepare source and destination well-plate mappings with advanced options.
     ]]></help>
