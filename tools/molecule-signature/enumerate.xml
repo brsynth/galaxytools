@@ -1,0 +1,37 @@
+<tool id="molecule_signature_enumerate" name="Molecule Signature Enumerate" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
+    <description>Enumerate Molecules from a ECFP fingerprint</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+        python '$__tool_directory__/scripts/enumerate.py'
+            --input-smiles-str '$input_smiles_str'
+            --output-data-tsv '$output_enumerate_tsv'
+            #if $input_alphabet_npz
+                --input-alphabet-npz '$input_alphabet_npz'
+            #else
+                --input-alphabet-npz '$__tool_directory__/alphabet/metanetx_emolecules_drugbank_merged_alphabet.npz'
+            #end if
+    ]]></command>
+    <inputs>
+        <param name="input_smiles_str" type="text" label="SMILES of the molecule"/>
+        <param name="input_alphabet_npz" type="data" format="npz" optional="true" label="Alphabet file" help="If the file is not provided, the one from 10.5281/zenodo.14760991 will be used"/>
+    </inputs>
+    <outputs>
+        <data name="output_enumerate_tsv" format="tabular" label="${tool.name}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_smiles_str" value="CCO" />
+            <output name="output_enumerate_tsv" value="enumerate.tsv" ftype="tabular" />
+        </test>
+    </tests>
+    <help><![CDATA[
+Enumerate Molecules
+===================
+Enumerate Molecules from a ECFP fingerprint
+
+]]></help>
+    <expand macro="creator"/>
+</tool>

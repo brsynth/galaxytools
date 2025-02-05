@@ -1,0 +1,31 @@
+<tool id="molecule_signature_signature" name="Molecule Signature Signature" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
+    <description>Create a molecule signature from a molecule</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+        python '$__tool_directory__/scripts/signature.py'
+            --input-smiles-str '$input_smiles_str'
+            --output-data-tsv '$output_signature_tsv'
+    ]]></command>
+    <inputs>
+        <param name="input_smiles_str" type="text" label="SMILES of the molecule"/>
+    </inputs>
+    <outputs>
+        <data name="output_signature_tsv" format="tabular" label="${tool.name}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_smiles_str" value="CCO" />
+            <output name="output_signature_tsv" value="signature.tsv" ftype="tabular" />
+        </test>
+    </tests>
+    <help><![CDATA[
+Build signature
+===============
+Create a molecule signature from a molecule.
+
+]]></help>
+    <expand macro="creator"/>
+</tool>
