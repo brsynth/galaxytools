@@ -2,8 +2,8 @@ import argparse
 import logging
 import sys
 
-import pandas as pd
 from molsig.Signature import MoleculeSignature
+import pandas as pd
 from rdkit import Chem
 
 

@@ -3,9 +3,9 @@ import logging
 import sys
 import time
 
-import pandas as pd
 from molsig.enumerate_signature import enumerate_molecule_from_morgan
 from molsig.SignatureAlphabet import load_alphabet
+import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
