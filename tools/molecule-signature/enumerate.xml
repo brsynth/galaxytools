@@ -34,4 +34,5 @@ Enumerate Molecules from a ECFP fingerprint
 
 ]]></help>
     <expand macro="creator"/>
+    <expand macro="citation"/>
 </tool>

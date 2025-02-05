@@ -28,4 +28,5 @@ Create a molecule signature from a molecule.
 
 ]]></help>
     <expand macro="creator"/>
+    <expand macro="citation"/>
 </tool>
