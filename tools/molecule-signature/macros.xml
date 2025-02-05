@@ -7,6 +7,17 @@
             <yield/>
         </requirements>
     </xml>
+    <xml name="citation">
+        <citations>
+            <citation type="bibtex">
+                @unpublished{MoleculeSignature,
+                    author = {Philippe Meyer, Thomas Duigou, Guillaume Gricourt, Jean-Loup Faulon},
+                    title = {{MoleculeSignature}},
+                    url = {https://github.com/brsynth/molecule-signature},
+                }
+            </citation>
+        </citations>
+    </xml>
     <xml name="creator">
         <creator>
             <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
