@@ -5,13 +5,16 @@
     </macros>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
-        #import os
-        cp '$input_param_tsv' param.tsv &&
-        unzip '$input_folder_zip' -d indir &&
-        (find indir -type f | while read file; do mv "\$file" indir; done) &&
+        cp '$input_param_tsv' 'param.tsv' &&
+        mkdir 'indir' &&
+        #for $i, $input in enumerate($input_data_csv)
+            #if $input
+                cp '$input' 'indir/plate.${i}.csv' &&
+            #end if
+        #end for
         python -m icfree.learner
-            --data_folder indir
-            --parameter_file param.tsv
+            --data_folder 'indir'
+            --parameter_file 'param.tsv'
             --output_folder 'outdir'
             #if str($adv.name_list) != ''
                 --name_list '$adv.name_list'
@@ -36,7 +39,7 @@
             --verbose && ls 'outdir'
     ]]></command>
     <inputs>
-        <param name="input_folder_zip" type="data" format="zip" label="Zip folder containing the data files" help="Zip folder containing the data file"/>
+        <param name="input_data_csv" type="data" format="csv" multiple="true" label="Input data files" help="Input data files" />
         <param name="input_param_tsv" type="data" format="tabular" label="Parameter values for the experiments" help="Parameter values for the experiment"/>
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="name_list" type="text" value="" label="Labels of the feature list" help="A comma-separated string of column names or identifiers, converted to a list of strings representing columns that contain labels (y). This separates y columns from the rest (X features). (Default: Yield1,Yield2,Yield3,Yield4,Yield5)" />
@@ -66,9 +69,10 @@
         </section>
     </inputs>
     <outputs>
-        <collection name="output_csv" type="list" label="${tool.name} - Data">
-            <discover_datasets pattern="(?P&lt;name&gt;.*).csv" format="csv" directory="outdir" />
-        </collection>
+        <data name="output_csv" format="csv" label="${tool.name} - Data">
+            <!-- <discover_datasets pattern="(?P&lt;name&gt;.*).csv" ext="csv" directory="outdir" /> -->
+            <discover_datasets pattern="__designation_and_ext__" ext="csv" directory="outdir" />
+        </data>
         <collection name="output_png" type="list" label="${tool.name} - Plot">
             <discover_datasets pattern="(?P&lt;name&gt;.*).png" format="png" directory="outdir" />
         </collection>
@@ -76,15 +80,15 @@
     <tests>
         <test>
             <!-- python -m icfree.learner -data_folder learner -parameter_file learner.input.param.tsv -output_folder tmp -save_plot -verbose -seed 85 -->
-            <param name="input_folder_zip" value="learner.input.folder.zip" />
+            <param name="input_data_csv" value="learner.input.data.1.csv,learner.input.data.2.csv" />
             <param name="input_param_tsv" value="learner.input.param.tsv" />
-            <output_collection name="output_csv" type="list" count="1">
-                <element name="next_sampling_ei50" ftype="csv" >
+            <output name="output_csv">
+                <discovered_dataset designation="next_sampling_ei50" ftype="csv">
                     <assert_contents>
                         <has_n_lines n="51" />
                     </assert_contents>
-                </element>
-            </output_collection>
+                </discovered_dataset>
+            </output>
             <output_collection name="output_png" type="list" count="4">
                 <element name="EI selected">
                     <assert_contents>
@@ -110,7 +114,7 @@
         </test>
         <test>
             <!-- python -m icfree.learner -data_folder learner -parameter_file learner.input.param.tsv -output_folder tmp2 -name_list "Yield1,Yield2" -nb_rep 5 -flatten -seed 85 -nb_new_data_predict 20 -nb_new_data 2 -parameter_step 2 -n_group 3 -km 5 -ks 2 -save_plot -verbose -->
-            <param name="input_folder_zip" value="learner.input.folder.zip" />
+            <param name="input_data_csv" value="learner.input.data.1.csv,learner.input.data.2.csv" />
             <param name="input_param_tsv" value="learner.input.param.tsv" />
             <param name="name_list" value="Yield1,Yield2" />
             <param name="nb_rep" value="5" />
@@ -121,13 +125,14 @@
             <param name="n_group" value="3" />
             <param name="km" value="5" />
             <param name="ks" value="2" />
-            <output_collection name="output_csv" type="list" count="1">
-                <element name="next_sampling_ei5" file="learner.output.data.2.csv" ftype="csv" >
+            <!-- <element name="next_sampling_ei5" file="learner.output.data.2.csv" ftype="csv" > -->
+            <output name="output_csv">
+                <discovered_dataset designation="next_sampling_ei5" ftype="csv">
                     <assert_contents>
                         <has_n_lines n="6" />
                     </assert_contents>
-                </element>
-            </output_collection>
+                </discovered_dataset>
+            </output>
             <output_collection name="output_png" type="list" count="4">
                 <element name="EI selected">
                     <assert_contents>
