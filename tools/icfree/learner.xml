@@ -36,8 +36,11 @@
             --km '$adv.km'
             --ks '$adv.ks'
             --save_plot
-            --verbose && ls 'outdir'
+            --verbose
     ]]></command>
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">.matplotlib</environment_variable>
+    </environment_variables>
     <inputs>
         <param name="input_data_csv" type="data" format="csv" multiple="true" label="Input data files" help="Input data files" />
         <param name="input_param_tsv" type="data" format="tabular" label="Parameter values for the experiments" help="Parameter values for the experiment"/>
@@ -83,11 +86,9 @@
             <param name="input_data_csv" value="learner.input.data.1.csv,learner.input.data.2.csv" />
             <param name="input_param_tsv" value="learner.input.param.tsv" />
             <output name="output_csv">
-                <discovered_dataset designation="next_sampling_ei50" ftype="csv">
-                    <assert_contents>
-                        <has_n_lines n="51" />
-                    </assert_contents>
-                </discovered_dataset>
+                <assert_contents>
+                    <has_n_lines n="51" />
+                </assert_contents>
             </output>
             <output_collection name="output_png" type="list" count="4">
                 <element name="EI selected">
@@ -127,11 +128,9 @@
             <param name="ks" value="2" />
             <!-- <element name="next_sampling_ei5" file="learner.output.data.2.csv" ftype="csv" > -->
             <output name="output_csv">
-                <discovered_dataset designation="next_sampling_ei5" ftype="csv">
-                    <assert_contents>
-                        <has_n_lines n="6" />
-                    </assert_contents>
-                </discovered_dataset>
+                <assert_contents>
+                    <has_n_lines n="6" />
+                </assert_contents>
             </output>
             <output_collection name="output_png" type="list" count="4">
                 <element name="EI selected">
