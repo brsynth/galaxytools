@@ -70,8 +70,8 @@
     </inputs>
     <outputs>
         <data name="output_csv" format="csv" label="${tool.name} - Data">
-            <!-- <discover_datasets pattern="(?P&lt;name&gt;.*).csv" ext="csv" directory="outdir" /> -->
-            <discover_datasets pattern="__designation_and_ext__" ext="csv" directory="outdir" />
+            <discover_datasets pattern="(?P&lt;designation&gt;.*).csv" ext="csv" directory="outdir" assign_primary_output="true" />
+            <!-- <discover_datasets pattern="__designation_and_ext__" ext="csv" directory="outdir" assign_primary_output="true"/> -->
         </data>
         <collection name="output_png" type="list" label="${tool.name} - Plot">
             <discover_datasets pattern="(?P&lt;name&gt;.*).png" format="png" directory="outdir" />
