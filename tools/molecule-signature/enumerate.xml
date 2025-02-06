@@ -5,7 +5,7 @@
     </macros>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
-        python '$__tool_directory__/scripts/enumerate.py'
+        molsig enumerate
             --input-smiles-str '$input_smiles_str'
             --output-data-tsv '$output_enumerate_tsv'
             #if $input_alphabet_npz
