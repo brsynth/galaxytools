@@ -85,7 +85,7 @@
             <!-- python -m icfree.learner -data_folder learner -parameter_file learner.input.param.tsv -output_folder tmp -save_plot -verbose -seed 85 -->
             <param name="input_data_csv" value="learner.input.data.1.csv,learner.input.data.2.csv" />
             <param name="input_param_tsv" value="learner.input.param.tsv" />
-            <output name="output_csv">
+            <output name="output_csv" count="1">
                 <assert_contents>
                     <has_n_lines n="51" />
                 </assert_contents>
@@ -127,7 +127,7 @@
             <param name="km" value="5" />
             <param name="ks" value="2" />
             <!-- <element name="next_sampling_ei5" file="learner.output.data.2.csv" ftype="csv" > -->
-            <output name="output_csv">
+            <output name="output_csv" count="1">
                 <assert_contents>
                     <has_n_lines n="6" />
                 </assert_contents>
