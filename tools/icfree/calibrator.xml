@@ -21,14 +21,14 @@
         mv 'calibrated_control_points.csv' '$output_control_points'
     ]]></command>
     <inputs>
-        <param name="extractor_file" type="data" format="csv" label="Extractor file" help="Extractor file"/>
-        <param name="ref_file" type="data" format="csv" label="Reference input file" help="Reference input file"/>
-        <param argument="jove_plus" type="integer" value="3" label="Line number for Jove+ (1-based index)" help="Line number for Jove+ (1-based index)" />
-        <param argument="jove_minus" type="integer" value="2" label="Line number for Jove- (1-based index)" help="Line number for Jove- (1-based index)" />
+        <param name="extractor_file" type="data" format="csv" label="Extracted fluo/lumi values"/>
+        <param name="ref_file" type="data" format="csv" label="Reference input file" />
+        <param argument="jove_plus" type="integer" value="3" label="Line number for Jove+ (1-based index)" />
+        <param argument="jove_minus" type="integer" value="2" label="Line number for Jove- (1-based index)" />
         <section name="adv" title="Advanced Options" expanded="false">
             <!-- Calibrator -->
-            <param argument="r2_limit" type="float" value="0.8" label="R-squared limit for the regression" help="R-squared limit for the regression" />
-            <param argument="num_control_points" type="integer" optional="true" label="Number of control points to select" help="Number of control points to select" />
+            <param argument="r2_limit" type="float" value="0.8" label="R-squared limit for the regression" />
+            <param argument="num_control_points" type="integer" optional="true" label="Number of control points to select" />
         </section>
     </inputs>
     <outputs>

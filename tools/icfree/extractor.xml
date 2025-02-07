@@ -21,11 +21,11 @@
         mv 'extractor.csv' '$output'
     ]]></command>
     <inputs>
-        <param name="initial_data_file" type="data" format="csv" label="Initial file" help="Initial file"/>
-        <param name="sampling_file" type="data" format="csv" label="Sampling file" help="Sampling file"/>
+        <param name="initial_data_file" type="data" format="csv" label="FLuo/Lumi values"/>
+        <param name="sampling_file" type="data" format="csv" label="Sampling file"/>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="num_samples" type="integer" optional="true" label="Number of samples" help="Number of samples" />
-            <param argument="num_replicates" type="integer" optional="true" label="Number of replicates" help="Number of replicates." />
+            <param argument="num_samples" type="integer" optional="true" label="Number of samples" />
+            <param argument="num_replicates" type="integer" optional="true" label="Number of replicates" />
         </section>
     </inputs>
     <outputs>
