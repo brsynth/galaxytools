@@ -12,7 +12,12 @@
             --output '$output_enumerate_tsv'
     ]]></command>
     <inputs>
-        <param name="input_smiles_str" type="text" label="SMILES of the molecule" />
+        <param name="input_smiles_str" type="text" label="SMILES of the molecule">
+            <validator type="empty_field" message="You must provide the InChI string" />
+            <validator type="length" max="999" message="Length of SMILES is comprised between [1-999]" />
+            <validator type="regex" negate="true" message="Wildcards are not allowed">^(?:\*)$</validator>
+            <sanitizer sanitize="false" />
+        </param>
         <param name="input_alphabet_npz" type="data" format="npz" label="Alphabet file" />
     </inputs>
     <outputs>
@@ -20,7 +25,7 @@
     </outputs>
     <tests>
         <test>
-            <param name="input_smiles_str" value="CCO" />
+            <param name="input_smiles_str" value="C=C1CC[C@H]2[C@]3(C)CC[C@H]4C(C)(C)CCC[C@]4(C)[C@H]3CC[C@]2(C)[C@H]1CO" />
             <param name="input_alphabet_npz" value="alphabet.npz" />
             <output name="output_enumerate_tsv" value="enumerate.tsv" ftype="tabular" compare="diff" />
         </test>
