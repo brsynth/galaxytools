@@ -6,8 +6,8 @@
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
         molsig signature
-            --input-smiles-str '$input_smiles_str'
-            --output-data-tsv '$output_signature_tsv'
+            --smiles '$input_smiles_str'
+            --output '$output_signature_tsv'
     ]]></command>
     <inputs>
         <param name="input_smiles_str" type="text" label="SMILES of the molecule"/>
