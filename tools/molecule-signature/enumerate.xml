@@ -5,9 +5,10 @@
     </macros>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
+        cp '$input_alphabet_npz' 'alphabet.npz' &&
         molsig enumerate
             --smiles '$input_smiles_str'
-            --alphabet '$input_alphabet_npz'
+            --alphabet 'alphabet.npz'
             --output '$output_enumerate_tsv'
     ]]></command>
     <inputs>
@@ -20,8 +21,8 @@
     <tests>
         <test>
             <param name="input_smiles_str" value="CCO" />
-            <param name="input_alphabet_npz" ftype="npz" value="alphabet.npz" />
-            <output name="output_enumerate_tsv" value="enumerate.tsv" ftype="tabular" />
+            <param name="input_alphabet_npz" value="alphabet.npz" />
+            <output name="output_enumerate_tsv" value="enumerate.tsv" ftype="tabular" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[

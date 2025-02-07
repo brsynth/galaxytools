@@ -18,7 +18,7 @@
     <tests>
         <test>
             <param name="input_smiles_str" value="CCO" />
-            <output name="output_signature_tsv" value="signature.tsv" ftype="tabular" />
+            <output name="output_signature_tsv" value="signature.tsv" ftype="tabular" compare="diff" />
         </test>
     </tests>
     <help><![CDATA[
