@@ -11,8 +11,7 @@
     ]]></command>
     <inputs>
         <param name="input_smiles_str" type="text" label="SMILES of the molecule">
-            <validator type="empty_field" message="You must provide the InChI string" />
-            <validator type="length" max="999" message="Length of SMILES is comprised between [1-999]" />
+            <validator type="empty_field" message="You must provide the SMILES string" />
             <validator type="regex" message="Wildcards are not allowed">^[^*?]*$</validator>
             <sanitizer sanitize="false" />
         </param>
