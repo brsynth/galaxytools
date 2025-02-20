@@ -20,6 +20,9 @@
             #if str($adv.split_components) != ''
                 --split_components '$adv.split_components'
             #end if
+            #if str($adv.dispense_order) != ''
+                --dispense_order '$adv.dispense_order'
+            #end if
     ]]></command>
     <inputs>
         <param name="source_plate_file" type="data" format="csv" label="Source corresponding to plate/wells" help="Output from iCFree plates designer"/>
@@ -30,8 +33,8 @@
             </param>
             <param argument="max_transfer_volume" type="integer" optional="true" label="Maximum transfer volume" help="Maximum volume for a single transfer. If not specified, no splitting will be performed." />
             <param argument="split_threshold" type="integer" optional="true" label="Split threshold" help="Volume threshold above which transfers need to be split. If not specified, no splitting will be performed." />
-            <param name="split_components" type="text" optional="true" label="Split components" help="Comma-separated list of component names to create separate files for." >
-            </param>
+            <param name="split_components" type="text" optional="true" label="Split components" help="Comma-separated list of component names to create separate files for." />
+            <param name="dispense_order" type="text" optional="true" label="Dispense order" help="Comma-separated list of component specifying dispensing order." />
         </section>
     </inputs>
     <outputs>
@@ -41,17 +44,21 @@
     </outputs>
     <tests>
         <test>
-            <!-- python -m icfree.instructor plates_designer.source_plate.test-2.csv plates_designer.destination_plate.test-2.csv 'instructor.test-1.csv' -source_plate_type 'default:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -->
-            <param name="source_plate_file" value="plates_designer.source_plate.test-2.csv" />
-            <param name="destination_plate_file" value="plates_designer.destination_plate.test-2.csv" />
+            <!-- python -m icfree.instructor ../plate_designer.source_plate.test-2.csv ../plate_designer.destination_plate.test-2.csv 'instructor.test-1.csv' -source_plate_type 'default:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -->
+            <param name="source_plate_file" value="plate_designer.source_plate.test-2.csv" />
+            <param name="destination_plate_file" value="plate_designer.destination_plate.test-2.csv" />
+            <param name="max_transfer_volume" value="500" />
+            <param name="split_threshold" value="500" />
             <output_collection name="output_instructor" type="list" count="1">
                 <element name="instructions" file="instructor.test-1.csv" ftype="csv" compare="diff" />
             </output_collection>
         </test>
         <test>
-            <!-- python -m icfree.instructor plates_designer.source_plate.test-2.csv plates_designer.destination_plate.test-2.csv 'instructor.csv' -source_plate_type 'Hela lysate:384PP_AQ_CP,Access prot 50X:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -split_components 'Hela lysate,Access prot 50X' -->
-            <param name="source_plate_file" value="plates_designer.source_plate.test-2.csv" />
-            <param name="destination_plate_file" value="plates_designer.destination_plate.test-2.csv" />
+            <!-- python -m icfree.instructor plate_designer.source_plate.test-2.csv plate_designer.destination_plate.test-2.csv 'instructor.csv' -source_plate_type 'Hela lysate:384PP_AQ_CP,Access prot 50X:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -split_components 'Hela lysate,Access prot 50X' -dispense_order 'Access prot 50X,Hela lysate' -->
+            <param name="source_plate_file" value="plate_designer.source_plate.test-2.csv" />
+            <param name="destination_plate_file" value="plate_designer.destination_plate.test-2.csv" />
+            <param name="max_transfer_volume" value="500" />
+            <param name="split_threshold" value="500" />
             <param name="source_plate_type" value="Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" />
             <param name="split_components" value="Hela lysate,Access prot 50%" />
             <output_collection name="output_instructor" type="list" count="3">

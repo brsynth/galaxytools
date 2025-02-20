@@ -1,0 +1,66 @@
+<tool id="icfree_extractor" name="iCFree extractor" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
+    <description>Process fluorescence data</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+        cp '$initial_data_file' 'initial_data.csv' &&
+        cp '$sampling_file' 'sampling.csv' &&
+        python -m icfree.learner.extractor
+            --initial_data_file 'initial_data.csv'
+            --sampling_file 'sampling.csv'
+            --output_file 'extractor.csv'
+            #if str($adv.num_samples) != ''
+                --num_samples '$adv.num_samples'
+            #end if
+            #if str($adv.num_replicates) != ''
+                --num_replicates '$adv.num_replicates'
+            #end if
+            &&
+        mv 'extractor.csv' '$output'
+    ]]></command>
+    <inputs>
+        <param name="initial_data_file" type="data" format="csv" label="FLuo/Lumi values"/>
+        <param name="sampling_file" type="data" format="csv" label="Sampling file"/>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param argument="num_samples" type="integer" optional="true" label="Number of samples" />
+            <param argument="num_replicates" type="integer" optional="true" label="Number of replicates" />
+        </section>
+    </inputs>
+    <outputs>
+        <data name="output" format="csv" label="${tool.name}" />
+    </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <!-- python -m icfree.learner.extractor -initial_data_file extractor.input.initial_data.csv -sampling_file extractor.input.sampling.csv -output_file extractor.output.1.csv -->
+            <param name="initial_data_file" value="extractor.input.initial_data.csv" />
+            <param name="sampling_file" value="extractor.input.sampling.csv" />
+            <output name="output" ftype="csv">
+                <assert_contents>
+                    <has_n_lines n="58" />
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <!-- python -m icfree.learner.extractor -initial_data_file extractor.input.initial_data.csv -sampling_file extractor.input.sampling.csv -output_file extractor.output.2.csv -num_samples 20 -num_replicates 3 -->
+            <param name="initial_data_file" value="extractor.input.initial_data.csv" />
+            <param name="sampling_file" value="extractor.input.sampling.csv" />
+            <param name="num_samples" value="20" />
+            <param name="num_replicates" value="3" />
+            <output name="output" ftype="csv">
+                <assert_contents>
+                    <has_n_lines n="21" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+Extractor
+==========
+Process fluoresence data
+
+]]></help>
+    <expand macro="creator"/>
+    <expand macro="citation"/>
+</tool>

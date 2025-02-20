@@ -1,0 +1,167 @@
+<tool id="icfree_learner" name="iCFree learner" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
+    <description>Active learning and model training</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+        cp '$input_param_tsv' 'param.tsv' &&
+        mkdir 'indir' &&
+        #for $i, $input in enumerate($input_data_csv)
+            #if $input
+                cp '$input' 'indir/plate.${i}.csv' &&
+            #end if
+        #end for
+        python -m icfree.learner
+            --data_folder 'indir'
+            --parameter_file 'param.tsv'
+            --output_folder 'outdir'
+            #if str($adv.name_list) != ''
+                --name_list '$adv.name_list'
+            #end if
+            #if str($adv.test) == 'true'
+                --test
+            #end if
+            --nb_rep '$adv.nb_rep'
+            #if str($adv.flatten) != ''
+                --flatten
+            #end if
+            #if str($adv.seed_cond.seed_param) == 'not_random'
+                --seed '$adv.seed_cond.seed'
+            #end if
+            --nb_new_data_predict '$adv.nb_new_data_predict'
+            --nb_new_data '$adv.nb_new_data'
+            --parameter_step '$adv.parameter_step'
+            --n_group '$adv.n_group'
+            --km '$adv.km'
+            --ks '$adv.ks'
+            --save_plot
+            --verbose
+    ]]></command>
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">.matplotlib</environment_variable>
+    </environment_variables>
+    <inputs>
+        <param name="input_param_tsv" type="data" format="tabular" label="Sampling file (X)"/>
+        <param name="input_data_csv" type="data" format="csv" multiple="true" label="Fluo/Lumi values (Y)" />
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="name_list" type="text" value="" label="Labels of the feature list" help="A comma-separated string of column names or identifiers, converted to a list of strings representing columns that contain labels (y). This separates y columns from the rest (X features). (Default: Yield1,Yield2,Yield3,Yield4,Yield5)" />
+            <param name="test" type="boolean" label="Validate the model" help="A flag for validating the model; not required to run inside the active learning loop. If not set, skip the validating step" checked="false" />
+            <param name="nb_rep" type="integer" value="100" label="Number of test repetitions for validation the model behavior" help="The number of test repetitions for validating the model behavior. 80% of data is randomly separated for training, and 20% is used for testing." />
+            <param name="flatten" type="boolean" label="Flattent feature data" help="A flag to indicate whether to flatten Y data. If set, treats each repetition in the same experiment independently; multiple same X values with different y outputs are modeled. Else, calculates the average of y across repetitions and only model with y average." />
+            <param name="nb_new_data_predict" type="integer" value="1000" label="Number of new data points generated" help="The number of new data points sampled from all possible cases." />
+            <param name="nb_new_data" type="integer" value="50" label="Number of new data points used" help="The number of new data points selected from the generated ones. These are the data points labeled after active learning loops. `nb_new_data_predict` must be greater than `nb_new_data` to be meaningful." />
+            <param name="parameter_step" type="integer" value="10" label="Step size used to decrement the maximum predefined concentration sequentially" help="The step size used to decrement the maximum predefined concentration sequentially. For example, if the maximum concentration is `max`, the sequence of concentrations is calculated as: `max - 1 * parameter_step`, `max - 2 * parameter_step`, `max - 3 * parameter_step`, and so on. Each concentration is a candidate for experimental testing. Smaller steps result in more possible combinations to sample." />
+            <param name="n_group" type="integer" value="15" label="Number of clusters" help="Parameter for the cluster margin algorithm, specifying the number of groups into which generated data will be clustered." />
+            <param name="km" type="integer" value="50" label="Number of data points for the first selection" help="Parameter for the cluster margin algorithm, specifying the number of data points for the first selection. Ensure `nb_new_data_predict > ks > km`." />
+            <param name="ks" type="integer" value="20" label="Number of data points for the second selection" help="Parameter for the cluster margin algorithm, specifying the number of data points for the second selection. This is also similar to `nb_new_data`." />
+            <!-- Seed -->
+            <conditional name="seed_cond">
+                <param name="seed_param" type="select" label="Seed" help="Choose a seed or let it as random">
+                    <option value="not_random" selected="true">fixed</option>
+                    <option value="random">random</option>
+                </param>
+                <when value="random"/>
+                <when value="not_random">
+                    <param name="seed" type="text" value="85" label="Seed value" help="Only integer allowed">
+                        <validator type="empty_field" message="Not empty, select random"/>
+                        <validator type="regex" message="Only integer allowed">^(?:\d+)$</validator>
+                    </param>
+                </when>
+            </conditional>
+        </section>
+    </inputs>
+    <outputs>
+        <data name="output_csv" format="csv" label="${tool.name} - Samples to test">
+            <discover_datasets pattern="(?P&lt;designation&gt;.*).csv" ext="csv" directory="outdir" assign_primary_output="true" />
+            <!-- <discover_datasets pattern="__designation_and_ext__" ext="csv" directory="outdir" assign_primary_output="true"/> -->
+        </data>
+        <collection name="output_png" type="list" label="${tool.name} - Plot">
+            <discover_datasets pattern="(?P&lt;name&gt;.*).png" format="png" directory="outdir" />
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <!-- python -m icfree.learner -data_folder learner -parameter_file learner.input.param.tsv -output_folder tmp -save_plot -verbose -seed 85 -->
+            <param name="input_data_csv" value="learner.input.data.1.csv,learner.input.data.2.csv" />
+            <param name="input_param_tsv" value="learner.input.param.tsv" />
+            <output name="output_csv" count="1">
+                <assert_contents>
+                    <has_n_lines n="51" />
+                </assert_contents>
+            </output>
+            <output_collection name="output_png" type="list" count="4">
+                <element name="EI selected">
+                    <assert_contents>
+                        <has_size value="77k" delta="1k"/>
+                    </assert_contents>
+                </element>
+                <element name="EI">
+                    <assert_contents>
+                        <has_size value="36k" delta="1k"/>
+                    </assert_contents>
+                </element>
+                <element name="Train_Test">
+                    <assert_contents>
+                        <has_size value="64k" delta="1k"/>
+                    </assert_contents>
+                </element>
+                <element name="Yield evolution through each active learning query">
+                    <assert_contents>
+                        <has_size value="19k" delta="1k"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <test>
+            <!-- python -m icfree.learner -data_folder learner -parameter_file learner.input.param.tsv -output_folder tmp2 -name_list "Yield1,Yield2" -nb_rep 5 -flatten -seed 85 -nb_new_data_predict 20 -nb_new_data 2 -parameter_step 2 -n_group 3 -km 5 -ks 2 -save_plot -verbose -->
+            <param name="input_data_csv" value="learner.input.data.1.csv,learner.input.data.2.csv" />
+            <param name="input_param_tsv" value="learner.input.param.tsv" />
+            <param name="name_list" value="Yield1,Yield2" />
+            <param name="nb_rep" value="5" />
+            <param name="flatten" value="true" />
+            <param name="nb_new_data_predict" value="20" />
+            <param name="nb_new_data" value="2" />
+            <param name="parameter_step" value="2" />
+            <param name="n_group" value="3" />
+            <param name="km" value="5" />
+            <param name="ks" value="2" />
+            <!-- <element name="next_sampling_ei5" file="learner.output.data.2.csv" ftype="csv" > -->
+            <output name="output_csv" count="1">
+                <assert_contents>
+                    <has_n_lines n="6" />
+                </assert_contents>
+            </output>
+            <output_collection name="output_png" type="list" count="4">
+                <element name="EI selected">
+                    <assert_contents>
+                        <has_size value="24k" delta="1k"/>
+                    </assert_contents>
+                </element>
+                <element name="EI">
+                    <assert_contents>
+                        <has_size value="36k" delta="1k"/>
+                    </assert_contents>
+                </element>
+                <element name="Train_Test">
+                    <assert_contents>
+                        <has_size value="60k" delta="1k"/>
+                    </assert_contents>
+                </element>
+                <element name="Yield evolution through each active learning query">
+                    <assert_contents>
+                        <has_size value="19k" delta="1k"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+Learner
+=======
+Active learning and model training
+
+]]></help>
+    <expand macro="creator"/>
+    <expand macro="citation"/>
+</tool>
