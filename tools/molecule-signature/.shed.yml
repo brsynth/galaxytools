@@ -1,0 +1,18 @@
+name: molecule-signature
+owner: tduigou
+description: Suite of tools for the Molecule Signature project
+long_description: |
+  "Suite of tools for the Molecule Signature project: Signature-based enumeration of molecules from morgan fingerprints."
+homepage_url: https://github.com/brsynth/molecule-signature
+remote_repository_url: https://github.com/brsynth/molecule-signature
+categories:
+  - Computational chemistry
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the Molecule Signature suite"
+suite:
+  name: suite_molecule_signature
+  description: Suite of tools for the Molecule signature project
+  long_description: |
+    "Suite of tools for the Molecule Signature project: Signature-based enumeration of molecules from morgan fingerprints."
