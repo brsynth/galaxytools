@@ -1,0 +1,39 @@
+<tool id="molecule_signature_signature" name="Molecule Signature Signature" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT">
+    <description>Create a molecule signature from a molecule</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+        molsig signature
+            --smiles '$input_smiles_str'
+            --output '$output_signature_tsv'
+    ]]></command>
+    <inputs>
+        <param name="input_smiles_str" type="text" label="SMILES of the molecule">
+            <validator type="empty_field" message="You must provide the SMILES string" />
+            <validator type="regex" message="Wildcards are not allowed">^[^*?]*$</validator>
+            <sanitizer sanitize="false" />
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output_signature_tsv" format="tabular" label="${tool.name}" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_smiles_str" value="C=C1CC[C@H]2[C@]3(C)CC[C@H]4C(C)(C)CCC[C@]4(C)[C@H]3CC[C@]2(C)[C@H]1CO" />
+            <output name="output_signature_tsv" value="signature.tsv" ftype="tabular" compare="diff" />
+        </test>
+        <test expect_failure="true">
+            <param name="input_smiles_str" value="C=C1*CC[C@H]2[C@]3(C)CC[C@H]4C(C)(C)CCC[C@]4(C)[C@H]3CC[C@]2(C)[C@H]1CO" />
+        </test>
+    </tests>
+    <help><![CDATA[
+Build signature
+===============
+Create a molecule signature from a molecule.
+
+]]></help>
+    <expand macro="creator"/>
+    <expand macro="citation"/>
+</tool>
