@@ -2,7 +2,7 @@
     <description>Retrieve the reaction rules from RetroRules</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">2.5.2</token>
+        <token name="@TOOL_VERSION@">2.6.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rrparser</requirement>
@@ -29,6 +29,12 @@
         #else:
             --outfile '$out_rules'
         #end if
+        #if str($input_conditional_ec.input_type) == "in"
+            --ec '$input_conditional_ec.input_ec_in'
+        #endif
+        #if str($input_conditional_ec.input_type) == "out"
+            --ecx '$input_conditional_ec.input_ec_out'
+        #endif
     ]]></command>
     <inputs>
         <conditional name="rules">
@@ -60,6 +66,20 @@
             <option selected="true" value="16">16</option>
         </param>
         <param name="compress" type="boolean" checked="false" label="Compress output" />
+        <conditional name="input_conditional_ec">
+            <param name="input_type" type="select" label="Filter based on EC number">
+                <option value="no" selected="True">No</option>
+                <option value="in">EC numbers to keep</option>
+                <option value="out">EC numbers to remove</option>
+            </param>
+            <when value="no" />
+            <when value="in">
+                <param name="input_ec_in" type="data" format="txt" label="File containing EC numbers" help="EC numbers on one line separted by a comma" />
+            </when>
+            <when value="out">
+                <param name="input_ec_out" type="data" format="txt" label="File containing EC numbers" help="EC numbers on one line separted by a comma" />
+            </when>
+        </conditional>
     </inputs>
     <outputs>
         <data name="out_rules" format="csv" label="${tool.name}(${rules.type}, d=$diameters)" >
@@ -86,6 +106,31 @@
             </conditional>
             <output name="out_rules" file="rules_out.csv" ftype="csv" compare="diff"/>
         </test>
+        <test>
+        <!-- test 4 -->
+            <conditional name="rules">
+                <param name="type" value="rules-file"/>
+                <param name="file" value="rules_in.csv" />
+            </conditional>
+            <conditional name="input_conditional_ec">
+                <param name="input_type" value="in"/>
+                <param name="input_ec_in" value="ec.csv"/>
+            </conditional>
+            <output name="out_rules" file="test.4.output.csv" ftype="csv" compare="diff"/>
+        </test>
+        <test>
+        <!-- test 5 -->
+            <conditional name="rules">
+                <param name="type" value="rules-file"/>
+                <param name="file" value="rules_in.csv" />
+            </conditional>
+            <conditional name="input_conditional_ec">
+                <param name="input_type" value="out"/>
+                <param name="input_ec_out" value="ec.csv"/>
+            </conditional>
+            <output name="out_rules" file="test.5.output.csv" ftype="csv" compare="diff"/>
+        </test>
+
     </tests>
     <help><![CDATA[
 RRulesParser
@@ -102,6 +147,7 @@ Input
 * **rules-file**: (string) Filename of reaction rules provided in csv or tsv format.
 * **input_format**: (string) input file format (csv: default, tsv)
 * **diameters**: (integer list) diameter of the sphere including the atoms around the reacting center (default is including all values: 2,4,6,8,10,12,14,16). The higher is the diameter, the more specific are the rules
+* **EC numbers to filter**: retain or remove some EC numbers. A file is expected containing EC numbers separated by a comma on the first line.
 
 Ouput
 -----
