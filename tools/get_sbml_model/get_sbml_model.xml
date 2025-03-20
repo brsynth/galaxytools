@@ -8,17 +8,17 @@
         <requirement type="package" version="0.1.1">taxonid</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+        #import re
         #if str($cond_src.from_src) == 'from_bigg'
+            #set hostname=re.sub(r'\s\(\w+\)', '', $cond_src.hostid.get_display_text())
             curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
+        #else
+            #set hostname="'" + $cond_src.hostname.value + "'"
+            #set model=$cond_src.input_file
         #end if
         python '$__tool_directory__/'get_infos.py
-            #if str($cond_src.from_src) == 'from_bigg'
-                '$model'
-                --bigg
-            #else
-                '${cond_src.input_file}'
-            #end if
-            --hostname '${cond_src.hostid}'
+            '$model'
+            --hostname $hostname
             --taxid '$taxid'
             --comp '$compartments'
             --biomass '$biomass'
@@ -30,13 +30,17 @@
                 <option value="from_history">Select file from the History</option>
             </param>
             <when value="from_history">
-                <param name="hostid" type="text" label="Model's fullname" help="Model extended name">
+                <param name="hostname" type="text" label="Model's fullname" help="Model extended name">
                     <validator type="empty_field" message="Organism extended name required"/>
+                </param>
+                <param name="hostid" type="text" label="Model's ID" help="Model ID">
+                    <validator type="empty_field" message="Organism ID required"/>
                 </param>
                 <param name="input_file" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
             </when>
             <when value="from_bigg">
                  <param name="hostid" type="select" label="Strain">
+                     <!-- Be careful, the text name is used for the hostname variable -->
                     <option value="iCN718">Acinetobacter baumannii AYE (iCN718)</option>
                     <option value="iYO844">Bacillus subtilis subsp. subtilis str. 168 (iYO844)</option>
                     <option value="iRC1080">Chlamydomonas reinhardtii (iRC1080)</option>
@@ -97,25 +101,25 @@
         <data name="biomass" format="tsv" label="${cond_src.hostid} (biomass reactions)" />
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="4">
             <param name="from_src" value="from_bigg" />
             <param name="hostid" value="iML1515" />
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1" />
-            <output name="taxid" md5="7c62bd818057838b3557c8d87cca47fc" />
+            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
             <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
-            <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06" />
+            <output name="biomass" md5="95c0255bd5dd8753c6dde53c0f2958ea" />
         </test>
-        <test>
+        <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
                 <param name="hostname" value="Escherichia coli str. K-12 substr. MG1655" />
                 <param name="hostid" value="e_coli_core" />
                 <param name="input_file" value="e_coli_core.xml" />
             </conditional>
-            <output name="taxid" md5="ee08b511771328e6254775a51779d421" />
+            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
             <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
             <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
-            </test>
+        </test>
     </tests>
     <help><![CDATA[
 Pick SBML Model
