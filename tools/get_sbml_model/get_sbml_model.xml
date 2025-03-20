@@ -102,8 +102,10 @@
     </outputs>
     <tests>
         <test expect_num_outputs="4">
-            <param name="from_src" value="from_bigg" />
-            <param name="hostid" value="iML1515" />
+            <conditional name="cond_src">
+                <param name="from_src" value="from_bigg" />
+                <param name="hostid" value="iML1515" />
+            </conditional>
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1" />
             <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
             <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
