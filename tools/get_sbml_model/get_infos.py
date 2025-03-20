@@ -3,6 +3,7 @@ from libsbml import (
     readSBMLFromFile
 )
 from taxonid import get_taxonid
+from requests import get as r_get
 
 
 def get_biomass_rxn(sbml_doc):
