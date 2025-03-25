@@ -1,4 +1,4 @@
-<tool id="get_sbml_model" name="Pick SBML Model" version="0.2.0" profile="21.09" license="MIT">
+<tool id="get_sbml_model" name="Pick SBML Model" version="0.3.0" profile="21.09" license="MIT">
     <description>Get an SBML model (BiGG)</description>
     <requirements>
         <requirement type="package" version="7.81.0">curl</requirement>
@@ -8,17 +8,15 @@
         <requirement type="package" version="0.1.1">taxonid</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+        #import re
         #if str($cond_src.from_src) == 'from_bigg'
-            curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
+            curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid.hostid}.xml.gz' | gunzip > '$model' &&
+        #else
+            #set model=$cond_src.input_file
         #end if
         python '$__tool_directory__/'get_infos.py
-            #if str($cond_src.from_src) == 'from_bigg'
-                '$model'
-                --bigg
-            #else
-                '${cond_src.input_file}'
-            #end if
-            --hostname '${cond_src.hostid}'
+            '$model'
+            --hostname-or-id '$cond_src.hostid.hostid'
             --taxid '$taxid'
             --comp '$compartments'
             --biomass '$biomass'
@@ -30,92 +28,124 @@
                 <option value="from_history">Select file from the History</option>
             </param>
             <when value="from_history">
-                <param name="hostid" type="text" label="Model's fullname" help="Model extended name">
-                    <validator type="empty_field" message="Organism extended name required"/>
-                </param>
                 <param name="input_file" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
+                <section name="hostid" title="Model's ID" expanded="false">
+                    <param name="hostid" type="text" label="Model's hostname or ID" help="Model extended name or ID" optional="True"/>
+                </section>
             </when>
             <when value="from_bigg">
-                 <param name="hostid" type="select" label="Strain">
-                    <option value="iCN718">Acinetobacter baumannii AYE (iCN718)</option>
-                    <option value="iYO844">Bacillus subtilis subsp. subtilis str. 168 (iYO844)</option>
-                    <option value="iRC1080">Chlamydomonas reinhardtii (iRC1080)</option>
-                    <option value="iCN900">Clostridioides difficile 630 (iCN900)</option>
-                    <option value="iHN637">Clostridium ljungdahlii DSM 13528 (iHN637)</option>
-                    <option value="iCHOv1_DG44">Cricetulus griseus (iCHOv1_DG44)</option>
-                    <option value="iCHOv1">Cricetulus griseus (iCHOv1)</option>
-                    <option value="iAF1260b">Escherichia coli str. K-12 substr. MG1655 (iAF1260b)</option>
-                    <option value="iAF1260">Escherichia coli str. K-12 substr. MG1655 (iAF1260)</option>
-                    <option value="iML1515" selected="true">Escherichia coli str. K-12 substr. MG1655 (iML1515)</option>
-                    <option value="iJO1366">Escherichia coli str. K-12 substr. MG1655 (iJO1366)</option>
-                    <option value="iJR904">Escherichia coli str. K-12 substr. MG1655 (iJR904)</option>
-                    <option value="e_coli_core">Escherichia coli str. K-12 substr. MG1655 (e_coli_core)</option>
-                    <option value="iAF987">Geobacter metallireducens GS-15 (iAF987)</option>
-                    <option value="iIT341">Helicobacter pylori 26695 (iIT341)</option>
-                    <option value="iAT_PLT_636">Homo sapiens (iAT_PLT_636)</option>
-                    <option value="Recon3D">Homo sapiens (Recon3D)</option>
-                    <option value="iAB_RBC_283">Homo sapiens (iAB_RBC_283)</option>
-                    <option value="RECON1">Homo sapiens (RECON1)</option>
-                    <option value="iYL1228">Klebsiella pneumoniae subsp. pneumoniae MGH 78578 (iYL1228)</option>
-                    <option value="iNF517">Lactococcus lactis subsp. cremoris MG1363 (iNF517)</option>
-                    <option value="iAF692">Methanosarcina barkeri str. Fusaro (iAF692)</option>
-                    <option value="iMM1415">Mus musculus (iMM1415)</option>
-                    <option value="iNJ661">Mycobacterium tuberculosis H37Rv (iNJ661)</option>
-                    <option value="iEK1008">Mycobacterium tuberculosis H37Rv (iEK1008)</option>
-                    <option value="iLB1027_lipid">Phaeodactylum tricornutum CCAP 1055/1 (iLB1027_lipid)</option>
-                    <option value="iAM_Pb448">Plasmodium berghei (iAM_Pb448)</option>
-                    <option value="iAM_Pc455">Plasmodium cynomolgi strain B (iAM_Pc455)</option>
-                    <option value="iAM_Pf480">Plasmodium falciparum 3D7 (iAM_Pf480)</option>
-                    <option value="iAM_Pk459">Plasmodium knowlesi strain H (iAM_Pk459)</option>
-                    <option value="iAM_Pv461">Plasmodium vivax Sal-1 (iAM_Pv461)</option>
-                    <option value="iJN746">Pseudomonas putida KT2440 (iJN746)</option>
-                    <option value="iJN1463">Pseudomonas putida KT2440 (iJN1463)</option>
-                    <option value="iND750">Saccharomyces cerevisiae S288C (iND750)</option>
-                    <option value="iMM904">Saccharomyces cerevisiae S288C (iMM904)</option>
-                    <option value="STM_v1_0">Salmonella enterica subsp. enterica serovar Typhimurium str. LT2 (STM_v1_0)</option>
-                    <option value="iYS1720">Salmonella pan-reactome (iYS1720)</option>
-                    <option value="iSB619">Staphylococcus aureus subsp. aureus N315 (iSB619)</option>
-                    <option value="iYS854">Staphylococcus aureus subsp. aureus USA300_TCH1516 (iYS854)</option>
-                    <option value="iJB785">Synechococcus elongatus PCC 7942 (iJB785)</option>
-                    <option value="iJN678">Synechocystis sp. PCC 6803 (iJN678)</option>
-                    <option value="iSynCJ816">Synechocystis sp. PCC 6803 (iSynCJ816)</option>
-                    <option value="iLJ478">Thermotoga maritima MSB8 (iLJ478)</option>
-                    <option value="iIS312">Trypanosoma cruzi Dm28c (iIS312)</option>
-                    <option value="iIS312_Trypomastigote">Trypanosoma cruzi Dm28c (iIS312_Trypomastigote)</option>
-                    <option value="iIS312_Epimastigote">Trypanosoma cruzi Dm28c (iIS312_Epimastigote)</option>
-                    <option value="iIS312_Amastigote">Trypanosoma cruzi Dm28c (iIS312_Amastigote)</option>
-                </param>
+                <section name="hostid" title="Model's ID" expanded="true">
+                    <param name="hostid" type="select" label="Strain">
+                        <!-- Be careful, the text name is used for the hostname variable -->
+                        <option value="iCN718">Acinetobacter baumannii AYE (iCN718)</option>
+                        <option value="iYO844">Bacillus subtilis subsp. subtilis str. 168 (iYO844)</option>
+                        <option value="iRC1080">Chlamydomonas reinhardtii (iRC1080)</option>
+                        <option value="iCN900">Clostridioides difficile 630 (iCN900)</option>
+                        <option value="iHN637">Clostridium ljungdahlii DSM 13528 (iHN637)</option>
+                        <option value="iCHOv1_DG44">Cricetulus griseus (iCHOv1_DG44)</option>
+                        <option value="iCHOv1">Cricetulus griseus (iCHOv1)</option>
+                        <option value="iAF1260b">Escherichia coli str. K-12 substr. MG1655 (iAF1260b)</option>
+                        <option value="iAF1260">Escherichia coli str. K-12 substr. MG1655 (iAF1260)</option>
+                        <option value="iML1515" selected="true">Escherichia coli str. K-12 substr. MG1655 (iML1515)</option>
+                        <option value="iJO1366">Escherichia coli str. K-12 substr. MG1655 (iJO1366)</option>
+                        <option value="iJR904">Escherichia coli str. K-12 substr. MG1655 (iJR904)</option>
+                        <option value="e_coli_core">Escherichia coli str. K-12 substr. MG1655 (e_coli_core)</option>
+                        <option value="iAF987">Geobacter metallireducens GS-15 (iAF987)</option>
+                        <option value="iIT341">Helicobacter pylori 26695 (iIT341)</option>
+                        <option value="iAT_PLT_636">Homo sapiens (iAT_PLT_636)</option>
+                        <option value="Recon3D">Homo sapiens (Recon3D)</option>
+                        <option value="iAB_RBC_283">Homo sapiens (iAB_RBC_283)</option>
+                        <option value="RECON1">Homo sapiens (RECON1)</option>
+                        <option value="iYL1228">Klebsiella pneumoniae subsp. pneumoniae MGH 78578 (iYL1228)</option>
+                        <option value="iNF517">Lactococcus lactis subsp. cremoris MG1363 (iNF517)</option>
+                        <option value="iAF692">Methanosarcina barkeri str. Fusaro (iAF692)</option>
+                        <option value="iMM1415">Mus musculus (iMM1415)</option>
+                        <option value="iNJ661">Mycobacterium tuberculosis H37Rv (iNJ661)</option>
+                        <option value="iEK1008">Mycobacterium tuberculosis H37Rv (iEK1008)</option>
+                        <option value="iLB1027_lipid">Phaeodactylum tricornutum CCAP 1055/1 (iLB1027_lipid)</option>
+                        <option value="iAM_Pb448">Plasmodium berghei (iAM_Pb448)</option>
+                        <option value="iAM_Pc455">Plasmodium cynomolgi strain B (iAM_Pc455)</option>
+                        <option value="iAM_Pf480">Plasmodium falciparum 3D7 (iAM_Pf480)</option>
+                        <option value="iAM_Pk459">Plasmodium knowlesi strain H (iAM_Pk459)</option>
+                        <option value="iAM_Pv461">Plasmodium vivax Sal-1 (iAM_Pv461)</option>
+                        <option value="iJN746">Pseudomonas putida KT2440 (iJN746)</option>
+                        <option value="iJN1463">Pseudomonas putida KT2440 (iJN1463)</option>
+                        <option value="iND750">Saccharomyces cerevisiae S288C (iND750)</option>
+                        <option value="iMM904">Saccharomyces cerevisiae S288C (iMM904)</option>
+                        <option value="STM_v1_0">Salmonella enterica subsp. enterica serovar Typhimurium str. LT2 (STM_v1_0)</option>
+                        <option value="iYS1720">Salmonella pan-reactome (iYS1720)</option>
+                        <option value="iSB619">Staphylococcus aureus subsp. aureus N315 (iSB619)</option>
+                        <option value="iYS854">Staphylococcus aureus subsp. aureus USA300_TCH1516 (iYS854)</option>
+                        <option value="iJB785">Synechococcus elongatus PCC 7942 (iJB785)</option>
+                        <option value="iJN678">Synechocystis sp. PCC 6803 (iJN678)</option>
+                        <option value="iSynCJ816">Synechocystis sp. PCC 6803 (iSynCJ816)</option>
+                        <option value="iLJ478">Thermotoga maritima MSB8 (iLJ478)</option>
+                        <option value="iIS312">Trypanosoma cruzi Dm28c (iIS312)</option>
+                        <option value="iIS312_Trypomastigote">Trypanosoma cruzi Dm28c (iIS312_Trypomastigote)</option>
+                        <option value="iIS312_Epimastigote">Trypanosoma cruzi Dm28c (iIS312_Epimastigote)</option>
+                        <option value="iIS312_Amastigote">Trypanosoma cruzi Dm28c (iIS312_Amastigote)</option>
+                    </param>
+                </section>
             </when>
         </conditional>
     </inputs>
     <outputs>
-        <data name="model" format="sbml" label="${cond_src.hostid}">
+        <data name="model" format="sbml" label="${cond_src.hostid.hostid}">
             <filter>cond_src['from_src'] == 'from_bigg'</filter>
         </data>
-        <data name="taxid" format="tsv" label="${cond_src.hostid} (taxon id)" />
-        <data name="compartments" format="tsv" label="${cond_src.hostid} (compartments)" />
-        <data name="biomass" format="tsv" label="${cond_src.hostid} (biomass reactions)" />
+        <data name="taxid" format="tsv" label="${cond_src.hostid.hostid} (taxon id)" />
+        <data name="compartments" format="tsv" label="${cond_src.hostid.hostid} (compartments)" />
+        <data name="biomass" format="tsv" label="${cond_src.hostid.hostid} (biomass reactions)" />
     </outputs>
     <tests>
-        <test>
-            <param name="from_src" value="from_bigg" />
-            <param name="hostid" value="iML1515" />
+        <test expect_num_outputs="4">
+            <conditional name="cond_src">
+                <param name="from_src" value="from_bigg" />
+                <section name="hostid">
+                    <param name="hostid" value="iML1515" />
+                </section>
+            </conditional>
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1" />
-            <output name="taxid" md5="7c62bd818057838b3557c8d87cca47fc" />
+            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
             <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
-            <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06" />
+            <output name="biomass" md5="95c0255bd5dd8753c6dde53c0f2958ea" />
         </test>
-        <test>
+        <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
-                <param name="hostname" value="Escherichia coli str. K-12 substr. MG1655" />
-                <param name="hostid" value="e_coli_core" />
+                <section name="hostid">
+                    <param name="hostid" value="Escherichia coli str. K-12 substr. MG1655" />
+                </section>
                 <param name="input_file" value="e_coli_core.xml" />
             </conditional>
-            <output name="taxid" md5="ee08b511771328e6254775a51779d421" />
+            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
             <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
             <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
-            </test>
+        </test>
+        <test expect_num_outputs="3">
+            <conditional name="cond_src">
+                <param name="from_src" value="from_history" />
+                <section name="hostid">
+                    <param name="hostid" value="e_coli_core" />
+                </section>
+                <param name="input_file" value="e_coli_core.xml" />
+            </conditional>
+            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
+        </test>
+        <test expect_num_outputs="3">
+            <conditional name="cond_src">
+                <param name="from_src" value="from_history" />
+                <section name="hostid">
+                    <param name="hostid" value="iMM1415" />
+                </section>
+                <param name="input_file" value="e_coli_core.xml" />
+            </conditional>
+            <output name="taxid" md5="9c5ebe6ee91a632cbfb244435db7ce7e" />
+            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
+        </test>
     </tests>
     <help><![CDATA[
 Pick SBML Model
