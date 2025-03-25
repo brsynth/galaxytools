@@ -101,7 +101,7 @@
         <test expect_num_outputs="4">
             <conditional name="cond_src">
                 <param name="from_src" value="from_bigg" />
-                <section name="hostid" title="Model's ID" expanded="true">
+                <section name="hostid">
                     <param name="hostid" value="iML1515" />
                 </section>
             </conditional>
@@ -113,7 +113,7 @@
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
-                <section name="hostid" title="Model's ID" expanded="true">
+                <section name="hostid">
                     <param name="hostid" value="Escherichia coli str. K-12 substr. MG1655" />
                 </section>
                 <param name="input_file" value="e_coli_core.xml" />
@@ -125,7 +125,7 @@
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
-                <section name="hostid" title="Model's ID" expanded="true">
+                <section name="hostid">
                     <param name="hostid" value="e_coli_core" />
                 </section>
                 <param name="input_file" value="e_coli_core.xml" />
@@ -137,7 +137,7 @@
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
-                <section name="hostid" title="Model's ID" expanded="true">
+                <section name="hostid">
                     <param name="hostid" value="iMM1415" />
                 </section>
                 <param name="input_file" value="e_coli_core.xml" />
