@@ -127,75 +127,75 @@
                 <param name="hostid" value="iML1515" />
             </conditional>
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1" />
-            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
-            <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
-            <output name="biomass" md5="95c0255bd5dd8753c6dde53c0f2958ea" />
+            <output name="taxid_bigg" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments_bigg" md5="e93a875a2d8efc10a880ae3ac0018236" />
+            <output name="biomass_bigg" md5="95c0255bd5dd8753c6dde53c0f2958ea" />
         </test>
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
                 <param name="input_file" value="e_coli_core.xml" />
             </conditional>
-            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
-            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
-            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
+            <output name="taxid_history" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments_history" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass_history" md5="d10baa335181450c7bffa9b4ca01754a" />
         </test>
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
                 <param name="input_file" value="e_coli_core.xml" />
-                <section name="adv" title="Advanced Options" expanded="false">
+                <section name="adv">
                     <param name="standalone" value="--standalone" />
                 </section>
             </conditional>
-            <output name="taxid" md5="b4f2c5588318a1043520ef77c1db9865" />
-            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
-            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
+            <output name="taxid_history" md5="b4f2c5588318a1043520ef77c1db9865" />
+            <output name="compartments_history" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass_history" md5="d10baa335181450c7bffa9b4ca01754a" />
         </test>
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
                 <param name="input_file" value="e_coli_core.xml" />
-                <section name="adv" title="Advanced Options" expanded="false">
+                <section name="adv">
                     <param name="taxonid" value="511145" />
                 </section>
             </conditional>
-            <output name="taxid" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
-            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
-            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
+            <output name="taxid_history" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments_history" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass_history" md5="d10baa335181450c7bffa9b4ca01754a" />
         </test>
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
                 <param name="input_file" value="e_coli_core.xml" />
-                <section name="adv" title="Advanced Options" expanded="false">
+                <section name="adv">
                     <param name="taxonid" value="83333" />
                 </section>
             </conditional>
-            <output name="taxid" md5="ec29688652dd49becf7be2a6c2469287" />
-            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
-            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
+            <output name="taxid_history" md5="ec29688652dd49becf7be2a6c2469287" />
+            <output name="compartments_history" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass_history" md5="d10baa335181450c7bffa9b4ca01754a" />
         </test>
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
                 <param name="input_file" value="iMS570_cobra_without_constraints.xml" />
             </conditional>
-            <output name="taxid" md5="b4f2c5588318a1043520ef77c1db9865" />
-            <output name="compartments" md5="973d345179c06304590bf27c7774db51" />
-            <output name="biomass" md5="08fa413cfe0ff6439378a63395f49c0f" />
+            <output name="taxid_history" md5="b4f2c5588318a1043520ef77c1db9865" />
+            <output name="compartments_history" md5="973d345179c06304590bf27c7774db51" />
+            <output name="biomass_history" md5="08fa413cfe0ff6439378a63395f49c0f" />
         </test>
         <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
                 <param name="input_file" value="iMS570_cobra_without_constraints.xml" />
-                <section name="adv" title="Advanced Options" expanded="false">
+                <section name="adv">
                     <param name="taxonid" value="e_coli_core" />
                 </section>
             </conditional>
-            <output name="taxid" md5="cfc5df6325c0f6a519eded6ee975a0c3" />
-            <output name="compartments" md5="973d345179c06304590bf27c7774db51" />
-            <output name="biomass" md5="08fa413cfe0ff6439378a63395f49c0f" />
+            <output name="taxid_history" md5="cfc5df6325c0f6a519eded6ee975a0c3" />
+            <output name="compartments_history" md5="973d345179c06304590bf27c7774db51" />
+            <output name="biomass_history" md5="08fa413cfe0ff6439378a63395f49c0f" />
         </test>
     </tests>
     <help><![CDATA[
