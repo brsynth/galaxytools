@@ -145,7 +145,7 @@
                 <param name="from_src" value="from_history" />
                 <param name="input_file" value="e_coli_core.xml" />
                 <section name="adv">
-                    <param name="standalone" value="--standalone" />
+                    <param name="standalone" value="true" />
                 </section>
             </conditional>
             <output name="taxid_history" md5="b4f2c5588318a1043520ef77c1db9865" />
