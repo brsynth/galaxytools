@@ -41,11 +41,12 @@ def get_biomass_rxn(sbml_doc):
 def args():
     parser = ArgumentParser("Returns cell informations")
     parser.add_argument("infile", type=str, help="SBML input file (xml)")
-    parser.add_argument("--hostname-or-id", type=str, help="Hostname or model ID")
-    parser.add_argument("--comp", type=str, help="Path to store cell compartments")
-    parser.add_argument("--biomass", type=str, help="Path to store biomass reaction ID")
-    parser.add_argument("--biomass-id", type=str, help="ID of biomass reaction")
-    parser.add_argument("--taxid", type=str, help="Path to store host taxonomy ID")
+    parser.add_argument("--biomassid", type=str, help="ID of biomass reaction")
+    parser.add_argument("--taxonid", type=str, help="Taxonomy ID")
+    parser.add_argument("--standalone", action="store_true", help="Standalone mode, e.g. do not retrieve taxonomy ID on Internet (true if --taxonid is provided)")
+    parser.add_argument("--compartments-outfile", type=str, help="Path to store cell compartments")
+    parser.add_argument("--biomassid-outfile", type=str, help="Path to store biomass reaction ID")
+    parser.add_argument("--taxonid-outfile", type=str, help="Path to store host taxonomy ID")
     params = parser.parse_args()
     return params
 
@@ -96,13 +97,13 @@ def entry_point():
     print("Compartments:")
     for comp in compartments:
         print(f"{comp.getId()}\t{comp.getName()}".replace("\n", " | "))
-    if params.comp:
-        with open(params.comp, "w") as f:
+    if params.compartments_outfile:
+        with open(params.compartments_outfile, "w") as f:
             f.write("#ID\tNAME\n")
             f.write(comp_str)
 
-    if params.biomass_id:
-        biomass_rxn = sbml_doc.getModel().getReaction(params.biomass_id)
+    if params.biomassid:
+        biomass_rxn = sbml_doc.getModel().getReaction(params.biomassid)
     else:
         biomass_rxn = get_biomass_rxn(sbml_doc)
     if not biomass_rxn:
@@ -111,16 +112,17 @@ def entry_point():
     else:
         biomass_id = biomass_rxn.getId()
     print(f"Biomass reaction ID: {biomass_id}")
-    if params.biomass:
-        with open(params.biomass, "w") as f:
+    if params.biomassid_outfile:
+        with open(params.biomassid_outfile, "w") as f:
             f.write("#ID\n")
             f.write(f"{biomass_id}\n")
 
-    if params.hostname_or_id:
-        taxid = get_taxon_id(params.hostname_or_id)
+    if params.taxonid:
+        taxid = params.taxonid
+    elif params.standalone:
+        taxid = -1
     else:
         model_id = sbml_doc.getModel().getId()
-        taxid = -1
         if model_id:
             taxid = get_taxon_id(sbml_doc.getModel().getId())
         if taxid == -1:
@@ -130,8 +132,8 @@ def entry_point():
                 taxid = get_taxon_id(sbml_doc.getModel().getName())
     print(f"Taxonomy ID: {taxid}")
 
-    if params.taxid:
-        with open(params.taxid, "w") as f:
+    if params.taxonid_outfile:
+        with open(params.taxonid_outfile, "w") as f:
             f.write("#ID\n")
             f.write(f"{taxid}\n")
 
