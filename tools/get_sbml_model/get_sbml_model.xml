@@ -1,27 +1,33 @@
-<tool id="get_sbml_model" name="Pick SBML Model" version="0.2.0" profile="21.09" license="MIT">
+<tool id="get_sbml_model" name="Pick SBML Model" version="0.4.0" profile="21.09" license="MIT">
     <description>Get an SBML model (BiGG)</description>
     <requirements>
         <requirement type="package" version="7.81.0">curl</requirement>
         <requirement type="package" version="1.11">gzip</requirement>
         <requirement type="package" version="5.19.2">python-libsbml</requirement>
-        <requirement type="package" version="2.29">requests</requirement>
+        <requirement type="package" version="2.31">requests</requirement>
         <requirement type="package" version="0.1.1">taxonid</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+        #import re
         #if str($cond_src.from_src) == 'from_bigg'
             curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
+        #else
+            #set model=$cond_src.input_file
         #end if
         python '$__tool_directory__/'get_infos.py
-            #if str($cond_src.from_src) == 'from_bigg'
-                '$model'
-                --bigg
-            #else
-                '${cond_src.input_file}'
-            #end if
-            --hostname '${cond_src.hostid}'
-            --taxid '$taxid'
-            --comp '$compartments'
-            --biomass '$biomass'
+            '$model'
+        #if str($cond_src.from_src) == 'from_bigg'
+            --taxonid-outfile '$taxid_bigg'
+            --compartments-outfile '$compartments_bigg'
+            --biomassid-outfile '$biomass_bigg'
+        #else
+            --biomassid '$cond_src.adv.biomassid'
+            --taxonid '$cond_src.adv.taxonid'
+            $cond_src.adv.standalone
+            --taxonid-outfile '$taxid_history'
+            --compartments-outfile '$compartments_history'
+            --biomassid-outfile '$biomass_history'
+        #end if
     ]]></command>
     <inputs>
         <conditional name="cond_src">
@@ -30,13 +36,16 @@
                 <option value="from_history">Select file from the History</option>
             </param>
             <when value="from_history">
-                <param name="hostid" type="text" label="Model's fullname" help="Model extended name">
-                    <validator type="empty_field" message="Organism extended name required"/>
-                </param>
                 <param name="input_file" type="data" format="sbml,xml" label="SBML model" help="An SBML file is expected"/>
+                <section name="adv" title="Advanced Options" expanded="false">
+                    <param name="biomassid" type="text" label="Biomass reaction ID" help="Biomass reaction ID" optional="True"/>
+                    <param name="taxonid" type="text" label="Taxonomy ID" help="Taxonomy ID" optional="True"/>
+                    <param argument="--standalone" type="boolean" truevalue="--standalone" falsevalue="" checked="false" label="Standalone mode" help="If true, do not retrieve taxonomy ID from Internet" />
+                </section>
             </when>
             <when value="from_bigg">
-                 <param name="hostid" type="select" label="Strain">
+                <param name="hostid" type="select" label="Strain">
+                    <!-- Be careful, the text name is used for the hostname variable -->
                     <option value="iCN718">Acinetobacter baumannii AYE (iCN718)</option>
                     <option value="iYO844">Bacillus subtilis subsp. subtilis str. 168 (iYO844)</option>
                     <option value="iRC1080">Chlamydomonas reinhardtii (iRC1080)</option>
@@ -92,30 +101,102 @@
         <data name="model" format="sbml" label="${cond_src.hostid}">
             <filter>cond_src['from_src'] == 'from_bigg'</filter>
         </data>
-        <data name="taxid" format="tsv" label="${cond_src.hostid} (taxon id)" />
-        <data name="compartments" format="tsv" label="${cond_src.hostid} (compartments)" />
-        <data name="biomass" format="tsv" label="${cond_src.hostid} (biomass reactions)" />
+        <data name="taxid_bigg" format="tsv" label="${cond_src.hostid} (taxon id)">
+            <filter>cond_src['from_src'] == 'from_bigg'</filter>
+        </data>
+        <data name="compartments_bigg" format="tsv" label="${cond_src.hostid} (compartments)">
+            <filter>cond_src['from_src'] == 'from_bigg'</filter>
+        </data>
+        <data name="biomass_bigg" format="tsv" label="${cond_src.hostid} (biomass reactions)">
+            <filter>cond_src['from_src'] == 'from_bigg'</filter>
+        </data>
+        <data name="taxid_history" format="tsv" label="${cond_src.input_file.name} (taxon id)">
+            <filter>cond_src['from_src'] == 'from_history'</filter>
+        </data>
+        <data name="compartments_history" format="tsv" label="${cond_src.input_file.name} (compartments)">
+            <filter>cond_src['from_src'] == 'from_history'</filter>
+        </data>
+        <data name="biomass_history" format="tsv" label="${cond_src.input_file.name} (biomass reactions)">
+            <filter>cond_src['from_src'] == 'from_history'</filter>
+        </data>
     </outputs>
     <tests>
-        <test>
-            <param name="from_src" value="from_bigg" />
-            <param name="hostid" value="iML1515" />
+        <test expect_num_outputs="4">
+            <conditional name="cond_src">
+                <param name="from_src" value="from_bigg" />
+                <param name="hostid" value="iML1515" />
+            </conditional>
             <output name="model" md5="9bf81d20cab5476700697ded95b716d1" />
-            <output name="taxid" md5="7c62bd818057838b3557c8d87cca47fc" />
-            <output name="compartments" md5="e93a875a2d8efc10a880ae3ac0018236" />
-            <output name="biomass" md5="cffb2fbdb07d1301dfdb7bb284fb7e06" />
+            <output name="taxid_bigg" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments_bigg" md5="e93a875a2d8efc10a880ae3ac0018236" />
+            <output name="biomass_bigg" md5="95c0255bd5dd8753c6dde53c0f2958ea" />
         </test>
-        <test>
+        <test expect_num_outputs="3">
             <conditional name="cond_src">
                 <param name="from_src" value="from_history" />
-                <param name="hostname" value="Escherichia coli str. K-12 substr. MG1655" />
-                <param name="hostid" value="e_coli_core" />
                 <param name="input_file" value="e_coli_core.xml" />
             </conditional>
-            <output name="taxid" md5="ee08b511771328e6254775a51779d421" />
-            <output name="compartments" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
-            <output name="biomass" md5="d10baa335181450c7bffa9b4ca01754a" />
-            </test>
+            <output name="taxid_history" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments_history" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass_history" md5="d10baa335181450c7bffa9b4ca01754a" />
+        </test>
+        <test expect_num_outputs="3">
+            <conditional name="cond_src">
+                <param name="from_src" value="from_history" />
+                <param name="input_file" value="e_coli_core.xml" />
+                <section name="adv">
+                    <param name="standalone" value="true" />
+                </section>
+            </conditional>
+            <output name="taxid_history" md5="b4f2c5588318a1043520ef77c1db9865" />
+            <output name="compartments_history" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass_history" md5="d10baa335181450c7bffa9b4ca01754a" />
+        </test>
+        <test expect_num_outputs="3">
+            <conditional name="cond_src">
+                <param name="from_src" value="from_history" />
+                <param name="input_file" value="e_coli_core.xml" />
+                <section name="adv">
+                    <param name="taxonid" value="511145" />
+                </section>
+            </conditional>
+            <output name="taxid_history" md5="6b35ad8a1c2b640af4ba738c2f5f876e" />
+            <output name="compartments_history" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass_history" md5="d10baa335181450c7bffa9b4ca01754a" />
+        </test>
+        <test expect_num_outputs="3">
+            <conditional name="cond_src">
+                <param name="from_src" value="from_history" />
+                <param name="input_file" value="e_coli_core.xml" />
+                <section name="adv">
+                    <param name="taxonid" value="83333" />
+                </section>
+            </conditional>
+            <output name="taxid_history" md5="ec29688652dd49becf7be2a6c2469287" />
+            <output name="compartments_history" md5="71dc18974a12e9bb75bb2c4cffd13edf" />
+            <output name="biomass_history" md5="d10baa335181450c7bffa9b4ca01754a" />
+        </test>
+        <test expect_num_outputs="3">
+            <conditional name="cond_src">
+                <param name="from_src" value="from_history" />
+                <param name="input_file" value="iMS570_cobra_without_constraints.xml" />
+            </conditional>
+            <output name="taxid_history" md5="b4f2c5588318a1043520ef77c1db9865" />
+            <output name="compartments_history" md5="973d345179c06304590bf27c7774db51" />
+            <output name="biomass_history" md5="08fa413cfe0ff6439378a63395f49c0f" />
+        </test>
+        <test expect_num_outputs="3">
+            <conditional name="cond_src">
+                <param name="from_src" value="from_history" />
+                <param name="input_file" value="iMS570_cobra_without_constraints.xml" />
+                <section name="adv">
+                    <param name="taxonid" value="e_coli_core" />
+                </section>
+            </conditional>
+            <output name="taxid_history" md5="cfc5df6325c0f6a519eded6ee975a0c3" />
+            <output name="compartments_history" md5="973d345179c06304590bf27c7774db51" />
+            <output name="biomass_history" md5="08fa413cfe0ff6439378a63395f49c0f" />
+        </test>
     </tests>
     <help><![CDATA[
 Pick SBML Model
