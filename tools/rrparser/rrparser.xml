@@ -35,7 +35,7 @@
         #if str($input_conditional_ec.input_type) == "out"
             --ecx '$input_conditional_ec.input_ec_out'
         #end if
-        #if str($input_scores_file) != ""
+        #if $input_scores_file
             --scores '$input_scores_file'
         #end if
     ]]></command>
