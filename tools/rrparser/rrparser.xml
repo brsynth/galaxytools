@@ -2,7 +2,7 @@
     <description>Retrieve the reaction rules from RetroRules</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">2.6.0</token>
+        <token name="@TOOL_VERSION@">2.7.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rrparser</requirement>
@@ -35,6 +35,9 @@
         #if str($input_conditional_ec.input_type) == "out"
             --ecx '$input_conditional_ec.input_ec_out'
         #end if
+        #if $input_scores_file
+            --scores '$input_scores_file'
+        #end if
     ]]></command>
     <inputs>
         <conditional name="rules">
@@ -66,6 +69,7 @@
             <option selected="true" value="16">16</option>
         </param>
         <param name="compress" type="boolean" checked="false" label="Compress output" />
+        <param name="input_scores_file" type="data" format="csv" optional="True" label="Score File" help="Filename containing rules names and scores"/>
         <conditional name="input_conditional_ec">
             <param name="input_type" type="select" label="Filter based on EC number">
                 <option value="no" selected="True">No</option>
@@ -119,7 +123,7 @@
             <output name="out_rules" file="test.4.output.csv" ftype="csv" compare="diff"/>
         </test>
         <test>
-        <!-- test 5 -->
+            <!-- python -m rrparser -rules_file rules_in.csv -input-format csv -ecx ec.csv -diameters 2,4,6,8,10,12,14,16 -output-format csv -outfile test.5.output.csv -->
             <conditional name="rules">
                 <param name="type" value="rules-file"/>
                 <param name="file" value="rules_in.csv" />
@@ -130,7 +134,19 @@
             </conditional>
             <output name="out_rules" file="test.5.output.csv" ftype="csv" compare="diff"/>
         </test>
-
+        <test>
+            <!-- python -m rrparser -rules_file rules_in.csv -input-format csv -ec ec.csv -diameters 2,4,6,8,10,12,14,16 -output-format csv -outfile test.6.output.csv -scores scores.csv -->
+            <conditional name="rules">
+                <param name="type" value="rules-file"/>
+                <param name="file" value="rules_in.csv" />
+            </conditional>
+            <conditional name="input_conditional_ec">
+                <param name="input_type" value="in"/>
+                <param name="input_ec_in" value="ec.csv"/>
+            </conditional>
+            <param name="input_scores_file" value="scores.csv" />
+            <output name="out_rules" file="test.6.output.csv" ftype="csv" compare="diff"/>
+        </test>
     </tests>
     <help><![CDATA[
 RRulesParser
@@ -148,6 +164,7 @@ Input
 * **input_format**: (string) input file format (csv: default, tsv)
 * **diameters**: (integer list) diameter of the sphere including the atoms around the reacting center (default is including all values: 2,4,6,8,10,12,14,16). The higher is the diameter, the more specific are the rules
 * **EC numbers to filter**: retain or remove some EC numbers. A file is expected containing EC numbers separated by a comma on the first line.
+* **Scores file**: file containing rules names and scores
 
 Ouput
 -----
