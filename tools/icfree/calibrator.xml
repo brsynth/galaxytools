@@ -10,8 +10,8 @@
         python -m icfree.learner.calibrator
             --output 'calibrated.csv'
             --plot '$output_graph'
-            --jove_plus '$jove_plus'
-            --jove_minus '$jove_minus'
+            --jove_plus '$ref_plus'
+            --jove_minus '$ref_minus'
             --r2_limit '$adv.r2_limit'
             #if str($adv.num_control_points) != ''
                 --num_control_points '$adv.num_control_points'
@@ -23,8 +23,8 @@
     <inputs>
         <param name="extractor_file" type="data" format="csv" label="Extracted fluo/lumi values"/>
         <param name="ref_file" type="data" format="csv" label="Reference input file" />
-        <param argument="jove_plus" type="integer" value="3" label="Line number for Jove+ (1-based index)" />
-        <param argument="jove_minus" type="integer" value="2" label="Line number for Jove- (1-based index)" />
+        <param argument="ref_plus" type="integer" value="3" label="Line number for Ref+ (1-based index)" />
+        <param argument="ref_minus" type="integer" value="2" label="Line number for Ref- (1-based index)" />
         <section name="adv" title="Advanced Options" expanded="false">
             <!-- Calibrator -->
             <param argument="r2_limit" type="float" value="0.8" label="R-squared limit for the regression" />
@@ -41,8 +41,8 @@
             <!-- python -m icfree.learner.calibrator -output calibrator.output.calibrated.1.csv -jove_plus 3 -jove_minus 2 -plot calibrator.output.1.png extractor.output.1.csv calibrator.input.ref.csv -->
             <param name="extractor_file" value="extractor.output.1.csv" />
             <param name="ref_file" value="calibrator.input.ref.csv" />
-            <param name="jove_plus" value="3" />
-            <param name="jove_minus" value="2" />
+            <param name="ref_plus" value="3" />
+            <param name="ref_minus" value="2" />
             <output name="output_calibrated" ftype="csv">
                 <assert_contents>
                     <has_n_lines n="58" />
@@ -65,8 +65,8 @@
             <param name="ref_file" value="calibrator.input.ref.csv" />
             <param name="r2_limit" value="0.9" />
             <param name="num_control_points" value="4" />
-            <param name="jove_plus" value="4" />
-            <param name="jove_minus" value="3" />
+            <param name="ref_plus" value="4" />
+            <param name="ref_minus" value="3" />
             <output name="output_calibrated" ftype="csv">
                 <assert_contents>
                     <has_n_lines n="21" />
