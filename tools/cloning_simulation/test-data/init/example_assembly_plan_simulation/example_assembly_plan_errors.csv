@@ -1,0 +1,7 @@
+assembly_name;message;suggestion;data;used_in
+construct_1;Wrong number of constructs;expected_: 1,found: 0;
+construct_1;Some parts are unused;unused_parts: partA & partB & partC & receptor;
+construct_2;Wrong number of constructs;expected_: 1,found: 0;
+construct_2;Some parts are unused;unused_parts: partA2 & partB2 & partC & receptor;
+construct_3;Wrong number of constructs;expected_: 1,found: 0;
+construct_3;Some parts are unused;unused_parts: partA & partA2 & partB & partC & receptor;

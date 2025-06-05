@@ -1,0 +1,9 @@
+name: domestication
+owner: tduigou
+categories:
+  - Systems Biology
+  - Synthetic Biology
+description: Enables rapid and accurate preparation of DNA parts for modular cloning systems, such as Golden Gate Assembly
+long_description: 'The Domestication Tool in the EGF Biofoundry, powered by Genedom, enables rapid and accurate preparation of DNA parts for modular cloning systems, such as Golden Gate Assembly'
+homepage_url: https://github.com/Edinburgh-Genome-Foundry/Examples/blob/master/templates/template1.ipynb
+remote_repository_url: https://github.com/Edinburgh-Genome-Foundry/Examples/blob/master/templates/template1.ipynb

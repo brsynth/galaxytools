@@ -1,0 +1,9 @@
+name: as_sculpt_sequences
+owner: tduigou
+categories:
+  - Systems Biology
+  - Synthetic Biology
+description: Optimize DNA sequences under constraints
+long_description: 'Sculpt Sequences is a Python library from EGF biofoundry for problem detection and sculpt the sequence using DNA Chisel'
+homepage_url: https://github.com/Edinburgh-Genome-Foundry/Examples/blob/master/templates/template1.ipynb
+remote_repository_url: https://github.com/Edinburgh-Genome-Foundry/Examples/blob/master/templates/template1.ipynb

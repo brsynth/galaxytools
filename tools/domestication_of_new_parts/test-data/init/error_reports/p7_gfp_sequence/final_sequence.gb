@@ -1,0 +1,35 @@
+LOCUS       .                        738 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   <unknown id>
+VERSION     <unknown id>
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    1..6
+                     /label="BsmBI"
+     misc_feature    8..11
+                     /label="CAGC"
+     source          12..725
+                     /organism="unspecified"
+                     /mol_type="genomic DNA"
+     misc_feature    728..731
+                     /label="AGGC"
+     misc_feature    complement(733..738)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcacag catgagcaaa ggagaagaac tattcacagg agtagtacca atactagtag
+       61 aactagacgg agatgtaaac ggacacaaat tcagcgtaag cggagaagga gaaggagatg
+      121 caacatacgg aaaactaaca ctaaaattca tatgcacaac aggaaaacta ccagtaccat
+      181 ggccaacact agtaacaaca ttcagctacg gagtacaatg cttcagcaga tacccagacc
+      241 acatgaaaca acacgacttc ttcaaaagcg caatgccaga aggatacgta caagaaagaa
+      301 caatattctt caaagacgac ggaaactaca aaacaagagc agaagtaaaa ttcgaaggag
+      361 acacactagt aaacagaata gaactaaaag gaatagactt caaagaagac ggaaacatac
+      421 taggacacaa actagaatac aactacaaca gccacaacgt atacataatg gcagacaaac
+      481 aaaaaaacgg aataaaagta aacttcaaaa taagacacaa catagaagac ggaagcgtac
+      541 aactagcaga ccactaccaa caaaacacac caataggaga tggaccagta ctactaccag
+      601 acaaccacta cctaagcaca caaagcgcac taagcaaaga cccaaacgaa aaaagagacc
+      661 acatggtact actagaattc gtaacagcag caggaataac acacggaatg gacgaactat
+      721 acaaaggagg ctgagacg
+//

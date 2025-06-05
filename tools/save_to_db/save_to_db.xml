@@ -1,0 +1,150 @@
+<tool id="save_to_db" name="Save Data To DB" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Save data to SQL DB</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="2.2.3">pandas</requirement>
+        <requirement type="package" version="2.0.40">sqlalchemy</requirement>
+        <requirement type="package" version="2.9.9">psycopg2</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        #set genbank_file_paths = ','.join([str(f) for f in $genbank_files])
+        #set $file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+        python '$__tool_directory__/save_to_db.py'
+            --input '$genbank_file_paths' 
+            --sequence_column '$sequence_column'
+            --annotation_column '$annotation_column'
+            --db_uri '$db_uri' 
+            --table '$table' 
+            --fragment_column '$fragment_column'
+            --output '$output'
+            --file_name_mapping '$file_name_mapping'
+            --json_conf '$json_conf'
+    ]]></command>
+    <inputs>
+        <param name="genbank_files" type="data_collection" collection_type="list" format="genbank" label="GenBank File(s)"/>
+        <param name="table" type="text" label="DB Table Name" optional="true" help="It can be extracted from JSON file -key:'JSON_table'-" />
+        <param name="sequence_column" type="text" label="DB Column Contains Sequence For ganbank File" optional="true" help="It can be extracted from JSON file -key:'JSON_sequence_column'-" />
+        <param name="annotation_column" type="text" label="DB Column Contains Annotation For Ganbank File" optional="true" help="It can be extracted from JSON file -key:'JSON_annotation_column'-" />
+        <param name="fragment_column" type="text" label="DB IDs Column Name" optional="true" help="It can be extracted from JSON file -key:'JSON_fragment_column'-" />
+        <param name="db_uri" type="text" label="DB Connection URI" help="postgresql://container_name:password@host:port/path/to/database (It can be extracted from JSON file -key:'JSON_db_uri'-)" optional="true" />
+        <section name='adv' title='Advance' expanded='false'>
+            <param name="json_conf" type="data" format='json' label="DB config as a json file" help="JSON file specifying the database URI, table name and the column names for annotation and sequence data" optional="true" />
+        </section>
+    </inputs>   
+    <outputs>
+        <data name="output" format="txt" label="saving report" />
+    </outputs>
+    <tests>
+    <!--Only 1 test can be execute because the fragment will be already saved for the second test and it will return error as the fragments are present in the DB (execut ../get_db_data/testMock.py to regenerate initial DB)-->
+        <!--test tool blocking from JSON -->
+        <test> 
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p7_L7Ae-Weiss" value="p7_L7Ae-Weiss.gb" />
+                    <element name="p7_gfp_sequence" value="p6_Nt-IgKLsequence.gb" />
+                    <element name="p14_CMVp" value="p6_Kozak-ATG.gb" />
+                    <element name="p16_bGHpolyA" value="p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="p18_CMVp" value="HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <param name="adv|json_conf" value="test-JSON_arg_block.json" />
+            <output name="output" file="test_raport.txt" ftype="txt" >
+                <assert_contents>
+                     <has_n_lines n="5" />
+                     <has_line_matching expression="p7_L7Ae-Weiss" />
+                     <has_line_matching expression="p6_Nt-IgKLsequence" />
+                     <has_line_matching expression="p6_Kozak-ATG" />
+                     <has_line_matching expression="p4_Kt-L7Ae-Weiss" />
+                     <has_line_matching expression="HC_Amp_ccdB" />
+                </assert_contents>
+            </output>
+        </test>
+        <!--test DB config in the tool -->
+        <test> 
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p7_L7Ae-Weiss" value="p7_L7Ae-Weiss.gb" />
+                    <element name="p7_gfp_sequence" value="p6_Nt-IgKLsequence.gb" />
+                    <element name="p14_CMVp" value="p6_Kozak-ATG.gb" />
+                    <element name="p16_bGHpolyA" value="p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="p18_CMVp" value="HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <param name="table" value="sample" />
+            <param name="sequence_column" value="sequence" />
+            <param name="annotation_column" value="annotation" />
+            <param name="fragment_column" value="fragment" />
+            <param name="db_uri" value="postgresql://postgres:RK17@localhost:5432/test_fragments_db" />
+            <output name="output" file="test_raport.txt" ftype="txt" >
+                <assert_contents>
+                     <has_n_lines n="5" />
+                     <has_line_matching expression="p7_L7Ae-Weiss" />
+                     <has_line_matching expression="p6_Nt-IgKLsequence" />
+                     <has_line_matching expression="p6_Kozak-ATG" />
+                     <has_line_matching expression="p4_Kt-L7Ae-Weiss" />
+                     <has_line_matching expression="HC_Amp_ccdB" />
+                </assert_contents>
+            </output>
+        </test>
+        <!--test DB config from JSON -->
+        <test> 
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p7_L7Ae-Weiss" value="p7_L7Ae-Weiss.gb" />
+                    <element name="p7_gfp_sequence" value="p6_Nt-IgKLsequence.gb" />
+                    <element name="p14_CMVp" value="p6_Kozak-ATG.gb" />
+                    <element name="p16_bGHpolyA" value="p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="p18_CMVp" value="HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <param name="adv|json_conf" value="test-JSON_arg.json" />
+            <output name="output" file="test_raport.txt" ftype="txt" >
+                <assert_contents>
+                     <has_n_lines n="5" />
+                     <has_line_matching expression="p7_L7Ae-Weiss" />
+                     <has_line_matching expression="p6_Nt-IgKLsequence" />
+                     <has_line_matching expression="p6_Kozak-ATG" />
+                     <has_line_matching expression="p4_Kt-L7Ae-Weiss" />
+                     <has_line_matching expression="HC_Amp_ccdB" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Save Data To DB
+===================
+
+Implemented a system to save GenBank (.gb) files in SQL DB, based on a connection via URI requests.
+The tool is tested on a locally hosted PostgreSQL database running in a Docker container.
+
+**Parameters**:
+---------------
+* **GenBank File(s)**: List of GenBaks files.
+* **DB Table Name**: Name of the target table in the PostgreSQL database.
+* **DB Column Contains Sequence For ganbank File**: Column storing sequence data, expected to start with "ORIGIN". 
+* **DB Column Contains Annotation For Ganbank File**: Column containing annotation data, to save al part before "ORIGIN" in the .gb file.
+* **DB IDs Column Name**: Column holding the unique fragment IDs.
+* **DB Connection URI**: URI used to connect to the database (e.g., postgresql://postgres:RK17@localhost:5432/test_fragments_db).
+* **DB config as a json file**: JSON file contains the DB configuration:
+    - "JSON_table": will be the key to the table name.
+    - "JSON_sequence_column":  will be the key to the sequence column.
+    - "JSON_annotation_column":  will be the key to the annotation column.
+    - "JSON_fragment_column": will be the key to the fragment column.
+    - "JSON_db_uri": will be the key to the URI.
+    - "execution": It is the key to execute or block the tool during a workflow ("True" or "False").
+* NOTE: the JSON file can be generated using the json_db_config_generating tool. 
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{save_to_db
+                author = {Ramiz Khaled},
+                title = {{save_to_db}},
+                url = {https://github.com/brsynth/},
+            }
+        </citation>
+    </citations>
+</tool>

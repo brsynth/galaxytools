@@ -1,0 +1,41 @@
+LOCUS       p3_2_CAG                 718 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   p3_2_CAG
+VERSION     p3_2_CAG
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    4..9
+                     /label="BsmBI"
+     misc_feature    11..14
+                     /label="GACT"
+     enhancer        33..412
+                     /note="CMV enhancer"
+                     /note="human cytomegalovirus immediate early enhancer"
+     promoter        414..689
+                     /note="chicken beta-actin promoter"
+     source          15..704
+                     /source="Exported"
+     misc_feature    15..704
+                     /source="p3_2_CAG"
+                     /note="From p3_2_CAG"
+     misc_feature    705..708
+                     /label="GGAC"
+     misc_feature    complement(710..715)
+                     /label="BsmBI"
+ORIGIN
+        1 ttccgtctca gactggatct gatatcatcg tcgacattga ttattgacta gttattaata
+       61 gtaatcaatt acggggtcat tagttcatag cccatatatg gagttccgcg ttacataact
+      121 tacggtaaat ggcccgcctg gctgaccgcc caacgacccc cgcccattga cgtcaataat
+      181 gacgtatgtt cccatagtaa cgccaatagg gactttccat tgacgtcaat gggtggacta
+      241 tttacggtaa actgcccact tggcagtaca tcaagtgtat catatgccaa gtacgccccc
+      301 tattgacgtc aatgacggta aatggcccgc ctggcattat gcccagtaca tgaccttatg
+      361 ggactttcct acttggcagt acatctacgt attagtcatc gctattacca tggtcgaggt
+      421 gagccccacg ttctgcttca ctctccccat ctcccccccc tccccacccc caattttgta
+      481 tttatttatt ttttaattat tttgtgcagc gatgggggcg gggggggggg gggcgcgcgc
+      541 caggcggggc ggggcggggc gaggggcggg gcggggcgag gcggagaggt gcggcggcag
+      601 ccaatcagag cggcgcgctc cgaaagtttc cttttatggc gaggcggcgg cggcggcggc
+      661 cctataaaaa gcgaagcgcg cggcgggcgg gagtcgctgc gttgggactg agacggaa
+//

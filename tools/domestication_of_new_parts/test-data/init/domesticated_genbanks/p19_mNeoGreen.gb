@@ -1,0 +1,53 @@
+LOCUS       p19_mNeoGreen            738 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   p19_mNeoGreen
+VERSION     p19_mNeoGreen
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    1..6
+                     /label="BsmBI"
+     misc_feature    8..11
+                     /label="GTGC"
+     misc_feature    12..22
+                     /note="KozaK"
+     CDS             20..22
+                     /codon_start=1
+                     /note="ATG"
+                     /translation="M"
+     CDS             23..727
+                     /codon_start=1
+                     /note="mNeonGreen"
+                     /product="bright monomeric yellow-green fluorescent protein
+                     derived from LanYFP (Shaner et al., 2013)"
+                     /translation="VSKGEEDNMASLPATHELHIFGSINGVDFDMVGQGTGNPNDGYEE
+                     LNLKSTKGDLQFSPWILVPHIGYGFHQYLPYPDGMSPFQAAMVDGSGYQVHRTMQFEDG
+                     ASLTVNYRYTYEGSHIKGEAQVKGTGFPADGPVMTNSLTAADWCRSKKTYPNDKTIIST
+                     FKWSYTTGNGKRYRSTARTTYTFAKPMAANYLKNQPMYVFRKTELKHSKTELNFKEWQK
+                     AFTDVMGMDELYK"
+     source          12..727
+                     /source="Exported"
+     misc_feature    12..727
+                     /source="p19_mNeoGreen"
+                     /note="From p19_mNeoGreen"
+     misc_feature    728..731
+                     /label="AGCG"
+     misc_feature    complement(733..738)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcagtg cccgccacca tggtgagcaa gggcgaggag gataacatgg cctctctccc
+       61 agcgacacat gagttacaca tctttggctc catcaacggt gtggactttg acatggtggg
+      121 tcagggcacc ggcaatccaa atgatggtta tgaggagtta aacctgaagt ccaccaaggg
+      181 tgacctccag ttctccccct ggattctggt ccctcatatc gggtatggct tccatcagta
+      241 cctgccctac cctgacggga tgtcgccttt ccaggccgcc atggtagatg gctccggata
+      301 ccaagtccat cgcacaatgc agtttgaaga tggtgcctcc cttactgtta actaccgcta
+      361 cacctacgag ggaagccaca tcaaaggaga ggcccaggtg aaggggactg gtttccctgc
+      421 tgacggtcct gtgatgacca actcgctgac cgctgcggac tggtgcaggt cgaagaagac
+      481 ttaccccaac gacaaaacca tcatcagtac ctttaagtgg agttacacca ctggaaatgg
+      541 caagcgctac cggagcactg cgcggaccac ctacaccttt gccaagccaa tggcggctaa
+      601 ctatctgaag aaccagccga tgtacgtgtt ccgtaagacg gagctcaagc actccaagac
+      661 cgagctcaac ttcaaggagt ggcaaaaggc ctttaccgat gtgatgggca tggacgagct
+      721 gtacaagagc gtgagacg
+//

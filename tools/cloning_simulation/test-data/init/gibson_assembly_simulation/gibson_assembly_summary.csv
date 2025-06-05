@@ -1,0 +1,4 @@
+assembly_name,construct_id,assembly_level,construct_size,number_of_parts,depends_on,homology_condition,used_in,parts
+construct_1,construct_1,1,8000,5,,"15-80bp, 0.0-+C Tm",,Frag_2 & Frag_3 & Frag_4 & Frag_5 & Frag_1
+construct_2,construct_2,1,8000,5,,"15-80bp, 0.0-+C Tm",,Frag_2 & Frag_3 & Frag_4b & Frag_5 & Frag_1
+construct_3,construct_3,1,8000,5,,"15-80bp, 0.0-+C Tm",,Frag_2 & Frag_3 & Frag_4c & Frag_5b & Frag_1
