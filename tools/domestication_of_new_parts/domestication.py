@@ -11,7 +11,8 @@ from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 
 
-def domestication(files_to_domestication, csv_file,file_name_mapping, use_file_names_as_id,
+def domestication(files_to_domestication, csv_file,
+                  file_name_mapping, use_file_names_as_id,
                   allow_edits, output_dom, gb_dom):
 
     file_to_domestication = files_to_domestication.split(',')

@@ -1,8 +1,8 @@
 import os
-import dnacauldron
 import argparse
 import pandas
 import zipfile
+import dnacauldron
 
 
 def cloning_simulation(files_to_assembly, domesticated_list,
@@ -19,9 +19,9 @@ def cloning_simulation(files_to_assembly, domesticated_list,
                               topology=topology)
     if domesticated_list:
        domesticated_files = domesticated_list.split(',')
-       repository.import_records(files = domesticated_files,
-                                use_file_names_as_ids = use_file_names_as_id,
-                                topology = topology)
+       repository.import_records(files=domesticated_files,
+                                 use_file_names_as_ids=use_file_names_as_id,
+                                 topology=topology)
 
     # refine the real record name dict
     if isinstance(file_name_mapping, str):
