@@ -1,15 +1,15 @@
 import subprocess
-import time
 import argparse
-import socket
+import time
 import os
+import socket
 import re
-import pandas as pd
 from Bio.Seq import Seq
+import pandas as pd
 from Bio.SeqRecord import SeqRecord
 from sqlalchemy import create_engine, inspect
-from sqlalchemy.sql import text
 from sqlalchemy.engine.url import make_url
+from sqlalchemy.sql import text
 from sqlalchemy.exc import OperationalError
 
 
@@ -41,7 +41,7 @@ def start_postgres_container(db_name):
 
     if container_running.stdout.strip():
         print(f"Container '{container_name}' is already running.")
-        return  
+        return
 
     # Check if container exists (stopped)
     container_exists = subprocess.run(
@@ -52,7 +52,7 @@ def start_postgres_container(db_name):
         print(f"Starting existing container '{container_name}'...")
         subprocess.run(f"docker start {container_name}", shell=True)
         print(f"PostgreSQL Docker container '{container_name}' activated.")
-        return  
+        return
 
     # If container does not exist, create and start a new one
     port = 5432 if not is_port_in_use(5432) else 5433
@@ -91,7 +91,7 @@ def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, tab
     """Fetch annotations from the database and save the result as GenBank files."""
     db_uri = fix_db_uri(db_uri)
     df = pd.read_csv(csv_file, sep=',', header=None)
-    
+
     engine = create_engine(db_uri)
     connection = engine.connect()
 
@@ -248,6 +248,7 @@ def main():
 
     # Fetch annotations from the database and save as gb
     fetch_annotations(args.input, args.sequence_column, args.annotation_columns, db_uri, args.table, args.fragment_column, args.output)
+
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,4 @@
 import psycopg2
-from psycopg2 import sql
-
 
 def create_db_and_insert_data():
     """Creates a database, a table, and inserts mock data into the PostgreSQL database."""
@@ -33,9 +31,9 @@ def create_db_and_insert_data():
 
     # Now connect to the new test database
     conn = psycopg2.connect(
-        dbname='test_fragments_db',  
+        dbname='test_fragments_db',
         user='postgres',
-        password='RK17', 
+        password='RK17',
         host='localhost',
         port='5432'
     )
@@ -1350,6 +1348,7 @@ FEATURES             Location/Qualifiers
 
     cursor.close()
     conn.close()
+
 
 if __name__ == "__main__":
     create_db_and_insert_data()
