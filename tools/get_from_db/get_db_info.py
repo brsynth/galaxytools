@@ -12,19 +12,23 @@ from sqlalchemy.sql import text
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import OperationalError
 
+
 def fix_db_uri(uri):
     """Replace __at__ with @ in the URI if needed."""
     return uri.replace("__at__", "@")
+
 
 def is_port_in_use(port):
     """Check if a TCP port is already in use on localhost."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
 
+
 def extract_db_name(uri):
     """Extract the database name from the SQLAlchemy URI."""
     url = make_url(uri)
     return url.database
+
 
 def start_postgres_container(db_name):
     """Start a PostgreSQL container with the given database name as the container name."""
@@ -67,6 +71,7 @@ def start_postgres_container(db_name):
     except subprocess.CalledProcessError as e:
         print(f"Failed to start Docker container: {e}")
 
+
 def wait_for_db(uri, timeout=60):
     """Try connecting to the DB until it works or timeout."""
     engine = create_engine(uri)
@@ -80,6 +85,7 @@ def wait_for_db(uri, timeout=60):
             print("Database not ready, retrying...")
             time.sleep(2)
     raise Exception("Database connection failed after timeout.")
+
 
 def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, table_name, fragment_column_name, output):
     """Fetch annotations from the database and save the result as GenBank files."""
@@ -219,6 +225,7 @@ def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, tab
     except Exception as e:
         print(f"Error saving GenBank files: {e}")
         return
+
 
 def main():
     parser = argparse.ArgumentParser(description="Fetch annotations from PostgreSQL database and save as JSON.")

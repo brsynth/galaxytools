@@ -5,6 +5,7 @@ import pandas
 import argparse
 import zipfile
 
+
 def cloning_simulation(files_to_assembly, domesticated_list,
                        csv_file, assembly_type, topology,
                        file_name_mapping, file_name_mapping_dom,
@@ -46,7 +47,7 @@ def cloning_simulation(files_to_assembly, domesticated_list,
             for k, v in file_name_mapping_dom.items()
         } 
         real_names.update(dom_real_names)
-        
+
     #update the records 
 
     for key, record in list(repository.collections["parts"].items()):
@@ -78,7 +79,7 @@ def cloning_simulation(files_to_assembly, domesticated_list,
         assembly_class = dnacauldron.LigaseCyclingReactionAssembly
     else:
         raise ValueError(f"Unsupported assembly type: {assembly_type}")
-    
+
     new_csvname = "assambly.csv"
     os.rename(csv_file, new_csvname)
 

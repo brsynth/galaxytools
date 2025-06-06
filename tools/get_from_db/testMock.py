@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2 import sql
 
+
 def create_db_and_insert_data():
     """Creates a database, a table, and inserts mock data into the PostgreSQL database."""
     # Connect to the PostgreSQL container (default 'postgres' database for setup)

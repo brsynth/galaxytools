@@ -11,6 +11,7 @@ from sqlalchemy.sql import text
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.exc import OperationalError
 
+
 def resolve_parameters(user_params: dict, json_params: dict, keys: list):
     resolved = {}
     for key in keys:
@@ -21,19 +22,23 @@ def resolve_parameters(user_params: dict, json_params: dict, keys: list):
             resolved[key] = json_params.get(f"JSON_{key}")
     return resolved
 
+
 def fix_db_uri(uri):
     """Replace __at__ with @ in the URI if needed."""
     return uri.replace("__at__", "@")
+
 
 def is_port_in_use(port):
     """Check if a TCP port is already in use on localhost."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
 
+
 def extract_db_name(uri):
     """Extract the database name from the SQLAlchemy URI."""
     url = make_url(uri)
     return url.database
+
 
 def start_postgres_container(db_name):
     """Start a PostgreSQL container with the given database name as the container name."""
@@ -46,7 +51,7 @@ def start_postgres_container(db_name):
 
     if container_running.stdout.strip():
         print(f"Container '{container_name}' is already running.")
-        return  
+        return
 
     # Check if container exists (stopped)
     container_exists = subprocess.run(
@@ -57,7 +62,7 @@ def start_postgres_container(db_name):
         print(f"Starting existing container '{container_name}'...")
         subprocess.run(f"docker start {container_name}", shell=True)
         print(f"PostgreSQL Docker container '{container_name}' activated.")
-        return  
+        return
 
     # If container does not exist, create and start a new one
     port = 5432 if not is_port_in_use(5432) else 5433
@@ -76,6 +81,7 @@ def start_postgres_container(db_name):
     except subprocess.CalledProcessError as e:
         print(f"Failed to start Docker container: {e}")
 
+
 def wait_for_db(uri, timeout=60):
     """Try connecting to the DB until it works or timeout."""
     engine = create_engine(uri)
@@ -89,6 +95,7 @@ def wait_for_db(uri, timeout=60):
             print("Database not ready, retrying...")
             time.sleep(2)
     raise Exception("Database connection failed after timeout.")
+
 
 def push_gb_annotations(gb_files, sequence_column, annotation_column, db_uri, table_name, fragment_column_name, output, file_name_mapping):
     """Push GenBank file content into the database if the fragment is not already present."""
@@ -178,6 +185,7 @@ def push_gb_annotations(gb_files, sequence_column, annotation_column, db_uri, ta
     except Exception as e:
         print(f"Error during GB file insertion: {e}")
         raise
+
 
 def main():
     parser = argparse.ArgumentParser(description="Fetch annotations from PostgreSQL database and save as JSON.")

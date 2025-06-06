@@ -11,6 +11,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from Bio import SeqIO
 
+
 def domestication(files_to_domestication, csv_file,file_name_mapping, use_file_names_as_id, 
                                allow_edits, output_dom, gb_dom):
 
@@ -38,8 +39,7 @@ def domestication(files_to_domestication, csv_file,file_name_mapping, use_file_n
             new_id = real_names[original_id]
             record.id = new_id
         updated_records.append(record)
-    ########################################################
-    
+
     df=pandas.read_csv(csv_file)
     EMMA_PLUS = genedom.GoldenGateDomesticator.standard_from_spreadsheet(dataframe=df)
     genedom.batch_domestication(
@@ -64,7 +64,7 @@ def domestication(files_to_domestication, csv_file,file_name_mapping, use_file_n
             print(" --> ".join(row))
     if not any_truncated:
         print("Part names were not truncated")
-        
+
     #zip compressing
     if os.path.isdir(output_dom):
         zip_path = output_dom.rstrip("/\\") + ".zip"
@@ -76,7 +76,6 @@ def domestication(files_to_domestication, csv_file,file_name_mapping, use_file_n
 
     with zipfile.ZipFile(output_dom, 'r') as zip_ref:
             zip_ref.extractall(temp_extract_dir)
-
      # Navigate into domesticated_genbanks and copy .gb files
     dom_gb_dir = os.path.join(temp_extract_dir, 'domesticated_genbanks')
     if os.path.isdir(dom_gb_dir):
@@ -90,8 +89,8 @@ def domestication(files_to_domestication, csv_file,file_name_mapping, use_file_n
     # Optional: clean up
     shutil.rmtree(temp_extract_dir)
 
-
     return output_dom
+
 
 def methylation_protection(domestication_target, output_methprot):
 
@@ -117,6 +116,7 @@ def methylation_protection(domestication_target, output_methprot):
         target_file = os.path.join(output_methprot, new_seqrecord.id + ".gb")
         with open(target_file, "w") as output_handle:
             SeqIO.write(new_seqrecord, output_handle, "genbank")
+
 
 def parse_command_line_args():
     parser = argparse.ArgumentParser(description="Domestication")

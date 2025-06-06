@@ -5,6 +5,7 @@ import dnacauldron
 import proglog
 from Bio import SeqIO
 
+
 def sculpt_sequances(files_to_sculpt, file_name_mapping, outdir_scul, outdir_unscul, use_file_names_as_id, 
                                avoid_patterns, enforce_gc_content, DnaOptimizationProblemClass,
                                 kmer_size,hairpin_constraints):
@@ -121,6 +122,7 @@ def sculpt_sequances(files_to_sculpt, file_name_mapping, outdir_scul, outdir_uns
 
     return outdir_scul, outdir_unscul
 
+
 def parse_command_line_args():
     parser = argparse.ArgumentParser(description="Evaluate manufacturability of DNA sequences.")
 
@@ -145,6 +147,7 @@ def parse_command_line_args():
 
     return parser.parse_args()
 
+
 def extract_constraints_from_args(args):
     """Extract constraints directly from the command-line arguments."""
 
@@ -165,7 +168,7 @@ if __name__ == "__main__":
 
     sculpt_sequances(
         args.files_to_sculpt, args.file_name_mapping,
-        args.outdir_scul, args.outdir_unscul, 
+        args.outdir_scul, args.outdir_unscul,
         args.use_file_names_as_id, avoid_patterns,
         gc_constraints, args.DnaOptimizationProblemClass,
         kmer_size, hairpin_constraints

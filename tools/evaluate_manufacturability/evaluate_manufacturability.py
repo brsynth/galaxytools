@@ -6,6 +6,7 @@ import dnacauldron
 import dnachisel
 import dnachisel.reports.constraints_reports as cr
 
+
 def evaluate_manufacturability(files_to_evaluate, file_name_mapping, output_tsv, output_pdf, outdir_gb, use_file_names_as_id, 
                                avoid_patterns, hairpin_constraints, gc_constraints, kmer_size):
     """Evaluate manufacturability of DNA sequences based on user-defined constraints."""
@@ -139,6 +140,7 @@ def evaluate_manufacturability(files_to_evaluate, file_name_mapping, output_tsv,
 
     return output_tsv, output_pdf, output_dir
 
+
 def parse_command_line_args():
     parser = argparse.ArgumentParser(description="Evaluate manufacturability of DNA sequences.")
 
@@ -161,6 +163,7 @@ def parse_command_line_args():
                         help="K-mer uniqueness size (e.g., '15')")
 
     return parser.parse_args()
+
 
 def extract_constraints_from_args(args):
     """Extract constraints directly from the command-line arguments."""
