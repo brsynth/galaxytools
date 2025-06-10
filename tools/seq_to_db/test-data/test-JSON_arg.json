@@ -1,0 +1,9 @@
+{
+    "JSON_table": "sample",
+    "JSON_sequence_column": "sequence",
+    "JSON_annotation_column": "annotation",
+    "JSON_fragment_column": "fragment",
+    "JSON_db_uri": "postgresql://postgres:RK17@localhost:5432/test_fragments_db",
+    "execution": "true"
+}
+  
