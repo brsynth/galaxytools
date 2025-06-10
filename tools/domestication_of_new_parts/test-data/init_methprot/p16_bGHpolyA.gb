@@ -1,0 +1,32 @@
+LOCUS       p16_bGHpolyA             285 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   p16_bGHpolyA
+VERSION     p16_bGHpolyA
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    4..9
+                     /label="BsmBI"
+     misc_feature    11..14
+                     /label="CCCT"
+     polyA_signal    47..271
+                     /note="bGH poly(A) signal"
+                     /note="bovine growth hormone polyadenylation signal"
+     source          15..271
+                     /source="Exported"
+     misc_feature    15..271
+                     /source="p16_bGHpolyA"
+                     /note="From p16_bGHpolyA"
+     misc_feature    272..275
+                     /label="GCTC"
+     misc_feature    complement(277..282)
+                     /label="BsmBI"
+ORIGIN
+        1 ttccgtctca ccctctctgg ggttcgaaat gaccgaccaa gcgacgctgt gccttctagt
+       61 tgccagccat ctgttgtttg cccctccccc gtgccttcct tgaccctgga aggtgccact
+      121 cccactgtcc tttcctaata aaatgaggaa attgcatcgc attgtctgag taggtgtcat
+      181 tctattctgg ggggtggggt ggggcaggac agcaaggggg aggattggga agacaatagc
+      241 aggcatgctg gggatgcggt gggctctatg ggctctgaga cggaa
+//

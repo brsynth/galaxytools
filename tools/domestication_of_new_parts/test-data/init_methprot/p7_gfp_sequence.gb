@@ -1,0 +1,35 @@
+LOCUS       p7_gfp_sequence          744 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   p7_gfp_sequence
+VERSION     p7_gfp_sequence
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    4..9
+                     /label="BsmBI"
+     misc_feature    11..14
+                     /label="CAGC"
+     source          15..728
+                     /organism="unspecified"
+                     /mol_type="genomic DNA"
+     misc_feature    731..734
+                     /label="AGGC"
+     misc_feature    complement(736..741)
+                     /label="BsmBI"
+ORIGIN
+        1 ttccgtctca cagcatgagc aaaggagaag aactattcac aggagtagta ccaatactag
+       61 tagaactaga cggagatgta aacggacaca aattcagcgt aagcggagaa ggagaaggag
+      121 atgcaacata cggaaaacta acactaaaat tcatatgcac aacaggaaaa ctaccagtac
+      181 catggccaac actagtaaca acattcagct acggagtaca atgcttcagc agatacccag
+      241 accacatgaa acaacacgac ttcttcaaaa gcgcaatgcc agaaggatac gtacaagaaa
+      301 gaacaatatt cttcaaagac gacggaaact acaaaacaag agcagaagta aaattcgaag
+      361 gagacacact agtaaacaga atagaactaa aaggaataga cttcaaagaa gacggaaaca
+      421 tactaggaca caaactagaa tacaactaca acagccacaa cgtatacata atggcagaca
+      481 aacaaaaaaa cggaataaaa gtaaacttca aaataagaca caacatagaa gacggaagcg
+      541 tacaactagc agaccactac caacaaaaca caccaatagg agatggacca gtactactac
+      601 cagacaacca ctacctaagc acacaaagcg cactaagcaa agacccaaac gaaaaaagag
+      661 accacatggt actactagaa ttcgtaacag cagcaggaat aacacacgga atggacgaac
+      721 tatacaaagg aggctgagac ggaa
+//

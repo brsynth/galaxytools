@@ -1,0 +1,154 @@
+LOCUS       .                       1856 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   <unknown id>
+VERSION     <unknown id>
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    1..1856
+                     /role="constraint"
+                     /label="@No BsaI"
+                     /color="#355c87"
+                     /ApEinfo_fwdcolor="#355c87"
+                     /ApEinfo_revcolor="#355c87"
+     misc_feature    1..1856
+                     /role="constraint"
+                     /label="@No NotI"
+                     /color="#355c87"
+                     /ApEinfo_fwdcolor="#355c87"
+                     /ApEinfo_revcolor="#355c87"
+     misc_feature    1..1856
+                     /role="constraint"
+                     /label="@No XbaI"
+                     /color="#355c87"
+                     /ApEinfo_fwdcolor="#355c87"
+                     /ApEinfo_revcolor="#355c87"
+     misc_feature    1..1856
+                     /role="constraint"
+                     /label="@No ClaI"
+                     /color="#355c87"
+                     /ApEinfo_fwdcolor="#355c87"
+                     /ApEinfo_revcolor="#355c87"
+     misc_feature    1..1856
+                     /role="constraint"
+                     /label="@No 8-repeats 1-mers"
+                     /color="#355c87"
+                     /ApEinfo_fwdcolor="#355c87"
+                     /ApEinfo_revcolor="#355c87"
+     misc_feature    1..1856
+                     /role="constraint"
+                     /label="@10-90% GC/50bp"
+                     /color="#355c87"
+                     /ApEinfo_fwdcolor="#355c87"
+                     /ApEinfo_revcolor="#355c87"
+     terminator      392..419
+                     /note="T7Te terminator"
+                     /note="phage T7 early transcription terminator"
+     rep_origin      complement(431..1018)
+                     /direction=LEFT
+                     /note="ori"
+                     /note="high-copy-number ColE1/pMB1/pBR322/pUC origin of
+                     replication"
+     terminator      1040..1069
+                     /note="T3Te terminator"
+                     /note="phage T3 early transcription terminator"
+     misc_feature    1143..1148
+                     /note="BsmBI"
+     source          5..1149
+                     /source="Exported"
+     misc_feature    1184..1195
+                     /note="Kozak"
+     CDS             1192..1194
+                     /codon_start=1
+                     /note="ATG"
+                     /translation="M"
+     source          1154..1196
+                     /source="Exported"
+     misc_feature    complement(1202..1207)
+                     /note="BsmBI"
+     terminator      1274..1305
+                     /note="tonB terminator"
+                     /note="bidirectional E. coli tonB-P14 transcription
+                     terminator"
+     promoter        1306..1408
+                     /note="cat promoter"
+                     /note="promoter of the E. coli cat gene"
+     source          1201..1856
+                     /source="Exported"
+     misc_feature    474
+                     /label="T=>G"
+                     /is_edit="true"
+                     /ApEinfo_fwdcolor="#ff0000"
+                     /color="#ff0000"
+     misc_feature    1224
+                     /label="A=>C"
+                     /is_edit="true"
+                     /ApEinfo_fwdcolor="#ff0000"
+                     /color="#ff0000"
+     misc_feature    1535
+                     /label="T=>G"
+                     /is_edit="true"
+                     /ApEinfo_fwdcolor="#ff0000"
+                     /color="#ff0000"
+     misc_feature    1219..1224
+                     /label="Breach from No XbaI"
+                     /color="#b2df8a"
+                     /ApEinfo_fwdcolor="#b2df8a"
+                     /ApEinfo_revcolor="#b2df8a"
+     misc_feature    469..474
+                     /label="Breach from No ClaI"
+                     /color="#e31a1c"
+                     /ApEinfo_fwdcolor="#e31a1c"
+                     /ApEinfo_revcolor="#e31a1c"
+     misc_feature    1530..1535
+                     /label="Breach from No ClaI"
+                     /color="#e31a1c"
+                     /ApEinfo_fwdcolor="#e31a1c"
+                     /ApEinfo_revcolor="#e31a1c"
+     misc_feature    1..1856
+                     /label="No XbaI"
+                     /color="#b2df8a"
+                     /ApEinfo_fwdcolor="#b2df8a"
+                     /ApEinfo_revcolor="#b2df8a"
+                     /role="constraint"
+     misc_feature    1..1856
+                     /label="No ClaI"
+                     /color="#e31a1c"
+                     /ApEinfo_fwdcolor="#e31a1c"
+                     /ApEinfo_revcolor="#e31a1c"
+                     /role="constraint"
+ORIGIN
+        1 ctcaggcgca atcacgaatg aataacggtt tggttggtgc gagtgatttt gatgacgagc
+       61 gtaatggctg gcctgttgaa caagtctgga aagaaatgca taagcttttg ccattctcac
+      121 cggattcagt cgtcactcat ggtgatttct cacttgataa ccttattttt gacgagggga
+      181 aattaatagg ttgtattgat gttggacgag tcggaatcgc agaccgatac caggatcttg
+      241 ccatcctatg gaactgcctc ggtgagtttt ctccttcatt acagaaacgg ctttttcaaa
+      301 aatatggtat tgataatcct gatatgaata aattgcagtt tcacttgatg ctcgatgagt
+      361 ttttctaatg agggcccaaa tgtaatcacc tggctcacct tcgggtgggc ctttctgcgt
+      421 tgctggcgtt tttccatagg ctccgccccc ctgacgagca tcacaaaaat cgaggctcaa
+      481 gtcagaggtg gcgaaacccg acaggactat aaagatacca ggcgtttccc cctggaagct
+      541 ccctcgtgcg ctctcctgtt ccgaccctgc cgcttaccgg atacctgtcc gcctttctcc
+      601 cttcgggaag cgtggcgctt tctcatagct cacgctgtag gtatctcagt tcggtgtagg
+      661 tcgttcgctc caagctgggc tgtgtgcacg aaccccccgt tcagcccgac cgctgcgcct
+      721 tatccggtaa ctatcgtctt gagtccaacc cggtaagaca cgacttatcg ccactggcag
+      781 cagccactgg taacaggatt agcagagcga ggtatgtagg cggtgctaca gagttcttga
+      841 agtggtggcc taactacggc tacactagaa gaacagtatt tggtatctgc gctctgctga
+      901 agccagttac ctcggaaaaa gagttggtag ctcttgatcc ggcaaacaaa ccaccgctgg
+      961 tagcggtggt ttttttgttt gcaagcagca gattacgcgc agaaaaaaag gatctcaaga
+     1021 agatcctttg attttctacc gaagaaaggc ccacccgtga aggtgagcca gtgagttgat
+     1081 tgcagtccag ttacgctgga gtctgaggct cgtcctgaat gatatcaagc ttgaattcgt
+     1141 tacgtctcgc cagaaccgtc agatccgcta gagattacgc caaccgccac catgggcagc
+     1201 cgagacgaag acgaattctc tagctatcgc tcaatactga ccatttaaat catacctgac
+     1261 ctccatagca gaaagtcaaa agcctccgac cggaggcttt tgacttgatc ggcacgtaag
+     1321 aggttccaac tttcaccata atgaaataag atcactaccg ggcgtatttt ttgagttatc
+     1381 gagattttca ggagctaagg aagctaaaat gagccatatt caacgggaaa cgtcttgctc
+     1441 gaggccgcga ttaaattcca acatggatgc tgatttatat gggtataaat gggctcgcga
+     1501 taatgtcggg caatcaggtg cgacaatcta tcgagtgtat gggaagcccg atgcgccaga
+     1561 gttgtttctg aaacatggca aaggtagcgt tgccaatgat gttacagatg agatggtcag
+     1621 gctaaactgg ctgacggaat ttatgcctct tccgaccatc aagcatttta tccgtactcc
+     1681 tgatgatgca tggttactca ccactgcgat cccagggaaa acagcattcc aggtattaga
+     1741 agaatatcct gattcaggtg aaaatattgt tgatgcgctg gcagtgttcc tgcgccggtt
+     1801 gcattcgatt cctgtttgta attgtccttt taacggcgat cgcgtatttc gtctcg
+//

@@ -1,0 +1,8 @@
+categories:
+- Synthetic Biology
+description: Save data from gb files in DB 
+long_description: 'Save fragments data in a PostgreSQL database running in a Docker container and inport it from .gb files'
+name: save_to_db
+owner: tduigou
+homepage_url: https://github.com/brsynth/galaxytools/tree/main/tools
+remote_repository_url: https://github.com/brsynth/galaxytools/tree/main/tools

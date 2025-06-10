@@ -1,0 +1,31 @@
+LOCUS       p22_PGKpolyA             257 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   p22_PGKpolyA
+VERSION     p22_PGKpolyA
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    4..9
+                     /label="BsmBI"
+     misc_feature    11..14
+                     /label="GTTG"
+     polyA_signal    38..243
+                     /note="PGK-polyA"
+     source          15..243
+                     /source="Exported"
+     misc_feature    15..243
+                     /source="p22_PGKpolyA"
+                     /note="From p22_PGKpolyA"
+     misc_feature    244..247
+                     /label="CGAA"
+     misc_feature    complement(249..254)
+                     /label="BsmBI"
+ORIGIN
+        1 ttccgtctca gttgccttga gcatctgact tctggctaaa ttgatgatct attaaacaat
+       61 aaagatgtcc acatggaagt tttttcctgt catactttgt taagaagggt gagaacagag
+      121 tacctacatt ttgaatggaa ggattggagc tacgggggtg ggggtggggt gggattagat
+      181 aaatgcctgc tctttactga aggctcttta ctattgcttt atgataatgt ttcatagttg
+      241 gatcgaatga gacggaa
+//

@@ -1,0 +1,32 @@
+LOCUS       Frag_4c                 1218 bp    DNA     circular UNK 01-JAN-1980
+DEFINITION  Frag_4c.
+ACCESSION   Frag_4c
+VERSION     Frag_4c
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 aggtaatgcg gcaggatccc gtggatccta cgcttagcct gttagggggg gggttctcct
+       61 cggcccccag ccagcgcgta ttccgcgcat tcctccgagt gcgtatcgcg caaaccacaa
+      121 gatacctctc aacgactagc ggtgaaccac caagcttgac atacgtgccc cttcggaaac
+      181 gttattagtg gtcctgagtg gtacgtcccg agtatacggg gcagcgatag taacgctaca
+      241 aatagctaga ccgacgacaa acacagcact gaatatccaa cagtggcaac gagacgctta
+      301 gaaagggaaa ctacatacca gttcaatccg ggatgacttc aaaagggtat gtttgttttg
+      361 aagcgaagct ttggttgtca ttcagttcct agagtttacg gcgctgatat ggctctagga
+      421 gtccagtgaa ttcgtcagca taagccccac atcgtaggaa attgcccggt cgtcggtcta
+      481 gcaaatgctc ggtaaactgg gagtgtacta acaccatgtc gtggtaaccc ggtggaccgg
+      541 ctactagaga catatttatt catgctcagt tgaacctgtt tcgagggggc cgagttaaca
+      601 taaagtgatt agtcacagcg cattaagata gaacagggat atagctcgtt gcatccataa
+      661 attgcccacc gtagggagaa cgccgttgga aaatgagagt taggcgatga gcggttgtcg
+      721 cccgcacaga caaaggatgc ctttataaat agtagcggcc ttgtctgcac cagacgtttg
+      781 tgggtcgacg tgctattcta gccaaaagca aaatgtatca tactacaggc aataggccct
+      841 atgctgacca aacttgggga cccttgcgcc ttctctctta cgcataacat gcataggtac
+      901 ctctactcat caggcagggc ggcgtgaggt cactatggct caagatgtgt acgactaaag
+      961 aaaggtttat gctccttccc caaggacgca tttgggactg ctacttgccc ctagcgaatt
+     1021 cactaggatt tttgtagaac catgagcgcc ctatccgata gcacagagac aatgctacaa
+     1081 gcaactgtgc atgcgctcga tcgccgtgca ttaatacgta ttatagcgta tcgtgtacgc
+     1141 taatatctta gtgcaccgca cgctggttgg atacaattcc gtgaaataat tcctgcttac
+     1201 acaggggctt tctggcgc
+//

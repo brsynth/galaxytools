@@ -1,0 +1,202 @@
+<tool id="sculpt_sequences" name="Sculpt Sequences" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Optimize DNA sequences</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="0.1.11">flametree</requirement>
+        <requirement type="package" version="1.85"> biopython </requirement>
+        <requirement type="package" version="0.1.10">proglog</requirement>
+        <requirement type="package" version="3.2.16">dnachisel</requirement>
+        <requirement type="package" version="2025.4.15">html2text</requirement>
+        <requirement type="package" version="2.0.12">dnacauldron</requirement>
+        <requirement type="package" version="2.2.3">pandas</requirement>
+        <requirement type="package" version="2.2.5">numpy</requirement>
+        <requirement type="package" version="0.3.9">pdf-reports</requirement>
+        <requirement type="package" version="0.1.8">sequenticon</requirement>
+        <requirement type="package" version="3.1.5">dna_features_viewer</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        #set avoid_patterns_list = []
+        #for $p in $rep_avoid_pattern
+            #silent avoid_patterns_list.append(str($p.avoid_pattern))
+        #end for
+        #set avoid_patterns = ','.join($avoid_patterns_list)
+        #set gc_constraints_list = []
+        #for $gc in $adv.rep_gc_constraints
+            #silent gc_constraints_list.append(str($gc.gc_min) + ';' + str($gc.gc_max) + ';' + str($gc.gc_window))
+        #end for
+        #set enforce_gc_content = ' '.join($gc_constraints_list)
+        #set hairpin_constraints_list = []
+        #for $h in $adv.rep_avoid_hairpins
+            #silent hairpin_constraints_list.append(str($h.hairpin_stem_size) + ';' + str($h.hairpin_window))
+        #end for
+        #set hairpin_constraints = ' '.join($hairpin_constraints_list)
+        #set genbank_file_paths = ','.join([str(f) for f in $genbank_files])
+        #set $file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+        mkdir 'outdir_scul' &&
+        mkdir 'outdir_unscul' &&
+        python '$__tool_directory__/sculpt_sequences.py' 
+            --files_to_sculpt '$genbank_file_paths'
+            --file_name_mapping '$file_name_mapping' 
+            --outdir_scul 'outdir_scul' 
+            --outdir_unscul 'outdir_unscul' 
+            --use_file_names_as_id '$adv.use_file_names_as_ids' 
+            --avoid_patterns '$avoid_patterns'
+            --enforce_gc_content '$enforce_gc_content'
+            --DnaOptimizationProblemClass '$DnaOptimizationProblemClass'
+            --kmer_size '$adv.kmer_size'
+            --hairpin_constraints '$hairpin_constraints'
+    ]]></command>
+    <inputs>
+        <param name="genbank_files" type="data_collection" collection_type="list" format="genbank" label="GenBank File(s)"/>
+        <param name="DnaOptimizationProblemClass" type="select" label="DnaOptimizationProblem Calss" help="select the assambly class">
+            <option value="DnaOptimizationProblem" selected="True">DnaOptimizationProblem</option>
+            <option value="CircularDnaOptimizationProblem">CircularDnaOptimizationProblem</option>
+        </param>
+        <repeat name="rep_avoid_pattern" title="Avoid Pattern Constraints">
+            <param name="avoid_pattern" type="text" label="Pattern to Avoid (e.g., BsaI_site and/or 8x1mer)" />
+        </repeat>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <repeat name="rep_gc_constraints" title="Enforce GC Content Constraints">
+                <param name="gc_min" type="float" label="Minimum GC Content" value="0.1" optional="true"/>
+                <param name="gc_max" type="float" label="Maximum GC Content" value="0.9" optional="true"/>
+                <param name="gc_window" type="integer" label="GC Content Window Size" value="50" optional="true"/>
+            </repeat>
+            <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="15" optional="true"/>
+            <repeat name="rep_avoid_hairpins" title="Avoid Hairpins">
+                <param name="hairpin_stem_size" type="integer" label="Stem Size" value="20" optional="true"/>
+                <param name="hairpin_window" type="integer" label="Window Size" value="200" optional="true"/>
+            </repeat>
+            <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
+        </section>
+    </inputs>   
+    <outputs>
+        <collection name="scul" type="list" label="scul group" >
+            <discover_datasets pattern="(?P&lt;name&gt;.*).zip" format="zip" directory="outdir_scul" />
+        </collection>
+        <collection name="unscul" type="list" label="unscul+scul gb" >
+            <discover_datasets pattern="(?P&lt;name&gt;.*).gb" format="genbank" directory="outdir_unscul" />
+        </collection>
+    </outputs>
+    <tests>
+        <test> 
+        <!-- test for DnaOptimizationProblem -->
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                    <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                    <element name="p15_Pup9_mTagBFP2roR" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                    <element name="p15_p9_BSDRPuroR" value="10_emma_genbanks/p9_BSDR.gb" />
+                    <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                    <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
+                    <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
+                    <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <param name="DnaOptimizationProblemClass" value="DnaOptimizationProblem" />
+            <param name="adv|use_file_names_as_ids" value="True" />
+            <!-- AvoidPatterns -->
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="BsaI_site" />
+            </repeat>
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="NotI_site" />
+            </repeat>
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="XbaI_site" />
+            </repeat>
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="ClaI_site" />
+            </repeat>
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="8x1mer" />
+            </repeat>
+            <!-- EnforceGCContent -->
+            <repeat name="adv|rep_gc_constraints">
+                <param name="gc_min" value="0.1" />
+                <param name="gc_max" value="0.9" />
+            </repeat>
+            <output_collection name="scul" count="10">
+            </output_collection>
+            <output_collection name="unscul" count="10">
+            </output_collection>
+        </test>
+        <test> 
+        <!-- test for CircularDnaOptimizationProblem -->
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                    <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                    <element name="p15_Pup9_mTagBFP2roR" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                    <element name="p15_p9_BSDRPuroR" value="10_emma_genbanks/p9_BSDR.gb" />
+                    <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                    <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
+                    <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
+                    <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <param name="DnaOptimizationProblemClass" value="CircularDnaOptimizationProblem" />
+            <param name="adv|use_file_names_as_ids" value="True" />
+            <!-- AvoidPatterns -->
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="BsaI_site" />
+            </repeat>
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="NotI_site" />
+            </repeat>
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="XbaI_site" />
+            </repeat>
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="ClaI_site" />
+            </repeat>
+            <repeat name="rep_avoid_pattern">
+                <param name="avoid_pattern" value="8x1mer" />
+            </repeat>
+            <!-- EnforceGCContent -->
+            <repeat name="adv|rep_gc_constraints">
+                <param name="gc_min" value="0.1" />
+                <param name="gc_max" value="0.9" />
+            </repeat>
+            <output_collection name="scul" count="10">
+            </output_collection>
+            <output_collection name="unscul" count="10">
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+Sculpt Sequences
+=================
+
+Sculpt Sequences is a Python library from the EGF Biofoundry for problem detection and sequence optimization using `dnachisel <https://github.com/Edinburgh-Genome-Foundry/DnaChisel/tree/master/dnachisel>`_ (Complete documentation available `here <https://edinburgh-genome-foundry.github.io/DnaChisel/>`_)
+
+**Parameters**:
+---------------
+* **GenBank File(s)**: List of GenBank files to be processed.
+* **DnaOptimizationProblem Class**: 
+    - "DnaOptimizationProblem": is the class to define and solve an optimization problems. Its methods implement all the solver logics.
+    - "CircularDnaOptimizationProblem": is a variant of DnaOptimizationProblem whose optimization algorithm assumes that the sequence is circular.
+* **Avoid Pattern Constraints**: is a sequence design rules that can be used as constraints. It define pattern(s) to avoid during problem optimisation.
+    This can include enzyme sites like "BsaI_site", "NotI_site", "XbaI_site"... `enzyme dict <https://github.com/biopython/biopython/blob/master/Bio/Restriction/Restriction_Dictionary.py>`_ . Custom patterns are also supported, such as "5x3mer" means "any 5 consecutive 3-nucleotide sequences — typically 5 unique 3-mers in a row.
+* **Enforce GC Content Constraints**: Define acceptable GC content ranges. For example min: 0.4, max: 0.6, window: 50 represents a 40–60% GC content requirement within a 50-base window.
+* **Avoid Hairpins**: Avoid Hairpin patterns as defined by the IDT guidelines.
+    A hairpin is defined by a sequence segment which has a reverse complement “nearby” in a given window.
+* **K-mer Uniqueness Size**: Avoid sub-sequence of length k with homologies elsewhere.
+* **Use File Names As Sequence IDs**: Recommended if the GenBank file names represent the fragment names.
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{sculpt_sequences
+                author = {Ramiz Khaled},
+                title = {{sculpt_sequences}},
+                url = {https://github.com/Edinburgh-Genome-Foundry/Examples/blob/master/templates/template1.ipynb},
+            }
+        </citation>
+    </citations>
+</tool>

@@ -1,0 +1,41 @@
+LOCUS       p18_CMVp                 565 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   p18_CMVp
+VERSION     p18_CMVp
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    1..6
+                     /label="BsmBI"
+     misc_feature    8..11
+                     /label="CGGT"
+     enhancer        13..315
+                     /note="CMV enhancer"
+                     /note="human cytomegalovirus immediate early enhancer"
+     promoter        316..518
+                     /note="CMV promoter"
+                     /note="human cytomegalovirus (CMV) immediate early
+                     promoter"
+     source          12..554
+                     /source="Exported"
+     misc_feature    12..554
+                     /source="p18_CMVp"
+                     /note="From p18_CMVp"
+     misc_feature    555..558
+                     /label="GTGC"
+     misc_feature    complement(560..565)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcacgg tcgttacata acttacggta aatggcccgc ctggctgacc gcccaacgac
+       61 ccccgcccat tgacgtcaat aatgacgtat gttcccatag taacgccaat agggactttc
+      121 cattgacgtc aatgggtgga gtatttacgg taaactgccc acttggcagt acatcaagtg
+      181 tatcatatgc caagtacgcc ccctattgac gtcaatgacg gtaaatggcc cgcctggcat
+      241 tatgcccagt acatgacctt atgggacttt cctacttggc agtacatcta cgtattagtc
+      301 atcgctatta ccatggtgat gcggttttgg cagtacatca atgggcgtgg atagcggttt
+      361 gactcacggg gatttccaag tctccacccc attgacgtca atgggagttt gttttggcac
+      421 caaaatcaac gggactttcc aaaatgtcgt aacaactccg ccccattgac gcaaatgggc
+      481 ggtaggcgtg tacggtggga ggtctatata agcagagcta attcgtcgac tggatccggt
+      541 accgaggaga tctggtgctg agacg
+//

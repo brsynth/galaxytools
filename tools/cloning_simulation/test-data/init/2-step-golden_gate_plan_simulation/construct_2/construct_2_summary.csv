@@ -1,0 +1,2 @@
+assembly_name,construct_id,assembly_level,construct_size,number_of_parts,depends_on,enzymes,used_in,parts
+construct_2,construct_2,1,6910,5,,BsaI,construct_4,part_A & part_G & part_H & part_I & part_F
