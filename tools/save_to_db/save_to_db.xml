@@ -39,7 +39,7 @@
     </outputs>
     <tests>
     <!--Only 1 test can be execute because the fragment will be already saved for the second test and it will return error as the fragments are present in the DB (execut ../get_db_data/testMock.py to regenerate initial DB)-->
-        <!--test tool blocking from JSON -->
+        <!--test tool blocking from JSON. It is commented because it should faild as it is a test to validate that the tool can be blocked from json file -->
         <test> 
             <param name="genbank_files">
                 <collection type="list">
@@ -89,7 +89,7 @@
                 </assert_contents>
             </output>
         </test>
-        <!--test DB config from JSON -->
+        <!--test DB config from JSON. It is commented because the save can be done only on time then the fragment willl be in the DB and it will return a failure. to run the test comment the test above (one saving test in the run)-->
         <test> 
             <param name="genbank_files">
                 <collection type="list">

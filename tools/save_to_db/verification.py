@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, text
 
-db_uri = "postgresql://postgres:RK17@localhost:5432/test_fragments_db" #adapt with your URI's DB
+db_uri = "postgresql://postgres:RK17@localhost:5432/test_fragments_db"  # adapt with your URI's DB
 engine = create_engine(db_uri)
 
 with engine.connect() as conn:

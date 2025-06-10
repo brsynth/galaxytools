@@ -1,7 +1,7 @@
-import os
 import argparse
-import pandas
+import os
 import zipfile
+import pandas
 import dnacauldron
 
 

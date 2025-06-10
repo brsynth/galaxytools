@@ -1,14 +1,13 @@
 import subprocess
-import time
 import argparse
-import socket
+import time
 import os
+import socket
 import re
-import pandas as pd
 import json
 from sqlalchemy import create_engine, inspect
-from sqlalchemy.sql import text
 from sqlalchemy.engine.url import make_url
+from sqlalchemy.sql import text
 from sqlalchemy.exc import OperationalError
 
 
@@ -169,10 +168,10 @@ def push_gb_annotations(gb_files, sequence_column, annotation_column, db_uri, ta
                 placeholders = ", ".join([f":{key}" for key in values.keys()])
                 insert_stmt = text(f"INSERT INTO {table_name} ({col_names}) VALUES ({placeholders})")
 
-                #print(f"Inserting into DB: {values}")  # Debugging print statement
-                result = connection.execute(insert_stmt, values)
+                # print(f"Inserting into DB: {values}")  # Debugging print statement
+                connection.execute(insert_stmt, values)
 
-                #print(f"Insert result: {result.rowcount if hasattr(result, 'rowcount') else 'N/A'}")  # Debugging the row count
+                # print(f"Insert result: {result.rowcount if hasattr(result, 'rowcount') else 'N/A'}")  # Debugging the row count
 
             print(f"Inserted {len(insert_rows)} fragments.")
 
@@ -221,22 +220,22 @@ def main():
     keys = ["table", "sequence_column", "annotation_column", "fragment_column", "db_uri"]
     resolved = resolve_parameters(user_params, json_config, keys)
 
-    # Unpack resolved parameters
+ # Unpack resolved parameters
     table = resolved["table"]
     sequence_column = resolved["sequence_column"]
     annotation_column = resolved["annotation_column"]
     fragment_column = resolved["fragment_column"]
     db_uri = fix_db_uri(resolved["db_uri"])
 
-    # Prepare gb files
+ # Prepare gb files
     gb_file_list = [f.strip() for f in args.input.split(",") if f.strip()]
 
-    # Start and wait for DB
+ # Start and wait for DB
     db_name = extract_db_name(db_uri)
     start_postgres_container(db_name)
     wait_for_db(db_uri)
 
-    # Push annotations
+ # Push annotations
     push_gb_annotations(
         gb_file_list,
         sequence_column,
@@ -247,6 +246,7 @@ def main():
         args.output,
         args.file_name_mapping
     )
+
 
 if __name__ == "__main__":
     main()
