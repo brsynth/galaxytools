@@ -201,7 +201,14 @@ def main():
     parser.add_argument("--output", required=True, help="Text report")
     parser.add_argument("--file_name_mapping", required=True, help="real fragments names")
     parser.add_argument("--json_conf", required=False, help="JSON config file with DB parameters")
+    parser.add_argument("--execution_enable", required=True, help="enabbe or desable execution directly from the tool option")
     args = parser.parse_args()
+
+    # enabbe or desable execution based on galaxy param (execution_enable)
+
+    if args.execution_enable == 'false':
+        print("Execution disabled. 'Send Requenst to DB' is set to 'false'")
+        return
 
     # Load JSON config if provided
     json_config = {}

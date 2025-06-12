@@ -1,8 +1,8 @@
 <tool id="seq_to_db" name="Save Sequence Data In DB" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Save fragment's sequence in an accessible database and import it from .gb files</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@TOOL_VERSION@">0.2.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="2.2.3">pandas</requirement>
@@ -22,6 +22,7 @@
             --output '$output'
             --file_name_mapping '$file_name_mapping'
             --json_conf '$json_conf'
+            --execution_enable '$execution_enable'
     ]]></command>
     <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank" label="GenBank File(s)"/>
@@ -29,8 +30,9 @@
         <param name="sequence_column" type="text" label="DB Column Contains Sequence For ganbank File" optional="true" help="It can be extracted from JSON file -key:'JSON_sequence_column'-" />
         <param name="annotation_column" type="text" label="DB Column Contains Annotation For Ganbank File" optional="true" help="It can be extracted from JSON file -key:'JSON_annotation_column'-" />
         <param name="fragment_column" type="text" label="DB IDs Column Name" optional="true" help="It can be extracted from JSON file -key:'JSON_fragment_column'-" />
-        <param name="db_uri" type="text" label="DB Connection URI" help="postgresql://container_name:password@host:port/path/to/database (It can be extracted from JSON file -key:'JSON_db_uri'-)" optional="true" />
+        <param name="db_uri" type="text" label="DB Connection URI" help="postgresql://(user_name or container_name):password@host:port/path/to/database (It can be extracted from JSON file -key:'JSON_db_uri'-)" optional="true" />
         <section name='adv' title='Advance' expanded='false'>
+            <param name="execution_enable" type="boolean" checked='true' label="Send Requenst to DB" help="enable or desable the interaction with the DB (can be usefull in workflows)" />
             <param name="json_conf" type="data" format='json' label="DB config as a json file" help="JSON file specifying the database URI, table name and the column names for annotation and sequence data" optional="true" />
         </section>
     </inputs>   
@@ -38,7 +40,34 @@
         <data name="output" format="txt" label="saving report" />
     </outputs>
     <tests>
-    <!--Only 1 test can be execute because the fragment will be already saved for the second test and it will return error as the fragments are present in the DB (execut ../get_db_data/testMock.py to regenerate initial DB)-->
+        <!--test tool blocking from galaxy. It is commented because it should faild as it is a test to validate that the tool can be blocked from json file -->
+        <test> 
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p7_L7Ae-Weiss" value="p7_L7Ae-Weiss.gb" />
+                    <element name="p7_gfp_sequence" value="p6_Nt-IgKLsequence.gb" />
+                    <element name="p14_CMVp" value="p6_Kozak-ATG.gb" />
+                    <element name="p16_bGHpolyA" value="p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="p18_CMVp" value="HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <param name="table" value="sample" />
+            <param name="sequence_column" value="sequence" />
+            <param name="annotation_column" value="annotation" />
+            <param name="fragment_column" value="fragment" />
+            <param name="db_uri" value="postgresql://postgres:RK17@localhost:5432/test_fragments_db" />
+            <param name="adv|execution_enable" value="false" />
+            <output name="output" file="test_raport.txt" ftype="txt" >
+                <assert_contents>
+                     <has_n_lines n="5" />
+                     <has_line_matching expression="p7_L7Ae-Weiss" />
+                     <has_line_matching expression="p6_Nt-IgKLsequence" />
+                     <has_line_matching expression="p6_Kozak-ATG" />
+                     <has_line_matching expression="p4_Kt-L7Ae-Weiss" />
+                     <has_line_matching expression="HC_Amp_ccdB" />
+                </assert_contents>
+            </output>
+        </test>
         <!--test tool blocking from JSON. It is commented because it should faild as it is a test to validate that the tool can be blocked from json file -->
         <test> 
             <param name="genbank_files">
@@ -62,6 +91,7 @@
                 </assert_contents>
             </output>
         </test>
+        <!--Only 1 test can be execute because the fragment will be already saved for the second test and it will return error as the fragments are present in the DB (execut ../get_db_data/testMock.py to regenerate initial DB)-->
         <!--test DB config in the tool -->
         <test> 
             <param name="genbank_files">
@@ -128,6 +158,7 @@ Implemented a system to save GenBank (.gb) files in an accessible DB, based on a
 * **DB Column Contains Annotation For Ganbank File**: Column containing annotation data, to save al part before "ORIGIN" in the .gb file.
 * **DB IDs Column Name**: Column holding the unique fragment IDs.
 * **DB Connection URI**: URI used to connect to the database (e.g., postgresql://postgres:pass@localhost:5432/test_fragments_db).
+* **Send Requenst to DB**: Enable or Desable the interaction with the DB (can be usefull in workflows).
 * **DB config as a json file**: JSON file contains the DB configuration:
     - "JSON_table": will be the key to the table name.
     - "JSON_sequence_column":  will be the key to the sequence column.
