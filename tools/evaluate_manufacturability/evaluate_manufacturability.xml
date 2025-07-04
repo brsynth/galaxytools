@@ -1,8 +1,8 @@
 <tool id="evaluate_manufacturability" name="Evaluate Manufacturability" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Evaluate DNA manufacturability with customizable constraints</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@TOOL_VERSION@">0.2.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="0.1.11">flametree</requirement>
@@ -17,50 +17,48 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #set genbank_file_paths = ','.join([str(f) for f in $genbank_files])
-        #set avoid_patterns_list = []
-        #for $p in $rep_avoid_pattern
-            #silent avoid_patterns_list.append(str($p.avoid_pattern))
+
+        #set avoid_list = [line.strip() for line in str($avoid_patterns).strip().split('\n') if line.strip()]
+        #set avoid_patterns = ','.join(avoid_list)
+
+        #set hairpin_lines = [line.strip() for line in str($adv.hairpin_constraints).strip().split('\n') if line.strip()]
+        #set hairpin_parts = []
+        #for $line in $hairpin_lines
+            #set tokens = dict([item.strip().split('=', 1) for item in $line.split(',')])
+            #silent hairpin_parts.append(tokens['stem_size'] + ';' + tokens['hairpin_window'])
         #end for
-        #set avoid_patterns = ','.join($avoid_patterns_list)
-        #set hairpin_constraints_list = []
-        #for $h in $adv.rep_avoid_hairpins
-            #silent hairpin_constraints_list.append(str($h.hairpin_stem_size) + ';' + str($h.hairpin_window))
+        #set hairpin_constraints = ' '.join(hairpin_parts)
+
+        #set gc_lines = [line.strip() for line in str($adv.gc_constraints).strip().split('\n') if line.strip()]
+        #set gc_parts = []
+        #for $line in $gc_lines
+            #set tokens = dict([item.strip().split('=', 1) for item in $line.split(',')])
+            #silent gc_parts.append(tokens['mini'] + ';' + tokens['maxi'] + ';' + tokens['window'])
         #end for
-        #set hairpin_constraints = ' '.join($hairpin_constraints_list)
-        #set gc_constraints_list = []
-        #for $gc in $adv.rep_gc_constraints
-            #silent gc_constraints_list.append(str($gc.gc_min) + ';' + str($gc.gc_max) + ';' + str($gc.gc_window))
-        #end for
-        #set gc_constraints = ' '.join($gc_constraints_list)
-        #set $file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+        #set gc_constraints = ' '.join(gc_parts)
+
+        #set file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+
         mkdir 'outdir_dir' &&
-        python '$__tool_directory__/evaluate_manufacturability.py' 
-            --files_to_evaluate '$genbank_file_paths' 
+        python '$__tool_directory__/evaluate_manufacturability.py'
+            --files_to_evaluate '$genbank_file_paths'
             --file_name_mapping '$file_name_mapping'
-            --output_pdf '$report_pdf' 
-            --output_tsv '$report_tsv' 
-            --outdir_gb 'outdir_dir' 
-            --use_file_names_as_id '$adv.use_file_names_as_ids' 
+            --output_pdf '$report_pdf'
+            --output_tsv '$report_tsv'
+            --outdir_gb 'outdir_dir'
+            --use_file_names_as_id '$adv.use_file_names_as_ids'
             --avoid_patterns '$avoid_patterns'
-            --hairpin_constraints '$hairpin_constraints'
-            --gc_constraints '$gc_constraints' 
+            --hairpin_constraints '$adv.hairpin_constraints'
+            --gc_constraints '$adv.gc_constraints'
             --kmer_size '$adv.kmer_size'
     ]]></command>
+
     <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank File(s)"/>
-        <repeat name="rep_avoid_pattern" title="Avoid Pattern Constraints">
-            <param name="avoid_pattern" type="text" label="Pattern to Avoid (e.g., BsaI_site and/or 8x1mer)" />
-        </repeat>
+        <param name="avoid_patterns" type="text" area="true" label="Pattern to Avoid (e.g., BsaI_site and/or 8x1mer)" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <repeat name="rep_avoid_hairpins" title="Avoid Hairpins">
-                <param name="hairpin_stem_size" type="integer" label="Stem Size" value="20" optional="true"/>
-                <param name="hairpin_window" type="integer" label="Window Size" value="200" optional="true"/>
-            </repeat>
-            <repeat name="rep_gc_constraints" title="Enforce GC Content Constraints">
-                <param name="gc_min" type="float" label="Minimum GC Content" value="0.1" optional="true"/>
-                <param name="gc_max" type="float" label="Maximum GC Content" value="0.9" optional="true"/>
-                <param name="gc_window" type="integer" label="GC Content Window Size" value="100" optional="true"/>
-            </repeat>
+            <param name="hairpin_constraints" type="text" area="true" title="Avoid Hairpins" optional="true"/>
+            <param name="gc_constraints" type="text" area="true" title="Enforce GC Content Constraints" optional="true"/>
             <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="15" optional="true"/>
             <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
         </section>
@@ -93,43 +91,18 @@
             </param>
             <param name="adv|use_file_names_as_ids" value="True" />
             <!-- AvoidPatterns -->
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="BsaI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="BsmBI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="BbsI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="SapI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="8x1mer" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="5x3mer" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="9x2mer" />
-            </repeat>
+            <param name="avoid_patterns" value="BsaI_site
+            BsmBI_site
+            BbsI_site
+            SapI_site
+            8x1mer
+            5x3mer
+            9x2mer" />
             <!-- AvoidHairpins -->
-            <repeat name="adv|rep_avoid_hairpins">
-                <param name="hairpin_stem_size" value="20" />
-                <param name="hairpin_window" value="200" />
-            </repeat>
+            <param name="adv|hairpin_constraints" value='stem_size=20, hairpin_window=200'/>
             <!-- EnforceGCContent -->
-            <repeat name="adv|rep_gc_constraints">
-                <param name="gc_min" value="0.3" />
-                <param name="gc_max" value="0.7" />
-                <param name="gc_window" value="100" />
-            </repeat>
-            <repeat name="adv|rep_gc_constraints">
-                <param name="gc_min" value="0.1" />
-                <param name="gc_max" value="0.9" />
-                <param name="gc_window" value="100" />
-            </repeat>
+            <param name="adv|gc_constraints" value="mini=0.3, maxi=0.7, window=100
+            mini=0.1, maxi=0.9, window=100"/>
             <!-- UniquifyAllKmers -->
             <param name="adv|kmer_size" value="15" />
             <!-- Expecting pdf output -->
