@@ -55,11 +55,11 @@
 
     <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank File(s)"/>
-        <param name="avoid_patterns" type="text" area="true" label="Pattern to Avoid (e.g., BsaI_site and/or 8x1mer)" />
+        <param name="avoid_patterns" type="text" area="true" label="Pattern to Avoid" helps="Each pattern on a line" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="hairpin_constraints" type="text" area="true" title="Avoid Hairpins" optional="true"/>
-            <param name="gc_constraints" type="text" area="true" title="Enforce GC Content Constraints" optional="true"/>
-            <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="15" optional="true"/>
+            <param name="hairpin_constraints" type="text" area="true" label="Hairpins Constraints" optional="true" help="e.g. (you can add others Hairpins Constraints on a new line): stem_size=20, hairpin_window=200"/>
+            <param name="gc_constraints" type="text" area="true" label="Enforce GC Content Constraints" optional="true" help="e.g. (you can add others Enforce GC Content Constraints on a new line): mini=0.3, maxi=0.7, window=100"/>
+            <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="" optional="true" help="e.g.: 15"/>
             <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
         </section>
     </inputs>   
@@ -108,7 +108,7 @@
             <!-- Expecting pdf output -->
             <output name="report_pdf" ftype="pdf">
                 <assert_contents>
-                    <has_size min="1"/>
+                    <has_size min="86"/>
                 </assert_contents>
             </output>
             <!-- Expecting tsv output -->
@@ -182,12 +182,15 @@ Get plots of patterns impacting synthesis and assembly difficulty deppanding on 
 ---------------
 * **GenBank File(s)**: List of GenBank files to be processed.
 * **Avoid Pattern Constraints**: 
-    It is a sequence design rules that can be used as constraints. It define pattern(s) to avoid during problem optimisation.
-    This can include enzyme sites like "BsaI_site", "NotI_site", "XbaI_site"... `enzyme dict <https://github.com/biopython/biopython/blob/master/Bio/Restriction/Restriction_Dictionary.py>`_ . Custom patterns are also supported, such as "5x3mer" means "any 5 consecutive 3-nucleotide sequences — typically 5 unique 3-mers in a row.
-* **Enforce GC Content Constraints**: Define acceptable GC content ranges. For example min: 0.4, max: 0.6, window: 50 represents a 40–60% GC content requirement within a 50-base window.
+    It is a sequence design rules that can be used as constraints. It define pattern(s) to avoid during problem optimisation 
+    This can include enzyme sites like "BsaI_site", "NotI_site", "XbaI_site"... `enzyme dict <https://github.com/biopython/biopython/blob/master/Bio/Restriction/Restriction_Dictionary.py>`_ . Custom patterns are also supported, such as "5x3mer" means "any 5 consecutive 3-nucleotide sequences — typically 5-repeats 3-mers in a row.
+* **Enforce GC Content Constraints**: 
+    Define acceptable GC content ranges. For example min=0.4, max=0.6, window=50 represents a 40–60% GC content requirement within a 50-base window.
+    (Parameters: `EnforceGCContent_params <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#enforcegccontent>`_ )
 * **Avoid Hairpins**: 
     Avoid Hairpin patterns as defined by the IDT guidelines.
     A hairpin is defined by a sequence segment which has a reverse complement “nearby” in a given window.
+    (Parameters: `AvoidHairpins <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#avoidhairpins>`_ ).
 * **K-mer Uniqueness Size**: Avoid sub-sequence of length k with homologies elsewhere.
 * **Use File Names As Sequence IDs**: Recommended if the GenBank file names represent the fragment names.
     ]]></help>
