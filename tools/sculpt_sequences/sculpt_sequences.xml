@@ -1,8 +1,8 @@
 <tool id="sculpt_sequences" name="Sculpt Sequences" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Optimize DNA sequences</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@TOOL_VERSION@">0.2.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="0.1.11">flametree</requirement>
@@ -18,23 +18,18 @@
         <requirement type="package" version="3.1.5">dna_features_viewer</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        #set avoid_patterns_list = []
-        #for $p in $rep_avoid_pattern
-            #silent avoid_patterns_list.append(str($p.avoid_pattern))
-        #end for
-        #set avoid_patterns = ','.join($avoid_patterns_list)
-        #set gc_constraints_list = []
-        #for $gc in $adv.rep_gc_constraints
-            #silent gc_constraints_list.append(str($gc.gc_min) + ';' + str($gc.gc_max) + ';' + str($gc.gc_window))
-        #end for
-        #set enforce_gc_content = ' '.join($gc_constraints_list)
-        #set hairpin_constraints_list = []
-        #for $h in $adv.rep_avoid_hairpins
-            #silent hairpin_constraints_list.append(str($h.hairpin_stem_size) + ';' + str($h.hairpin_window))
-        #end for
-        #set hairpin_constraints = ' '.join($hairpin_constraints_list)
+        #set avoid_list = [line.strip() for line in str($avoid_patterns).strip().split('\n') if line.strip()]
+        #set avoid_patterns = ','.join($avoid_list)
+
+        #set hairpin_lines = [line.strip() for line in str($adv.hairpin_constraints).strip().split('\n') if line.strip()]
+        #set hairpin_constraints = '__cn__'.join($hairpin_lines)
+
+        #set gc_lines = [line.strip() for line in str($adv.gc_constraints).strip().split('\n') if line.strip()]
+        #set gc_constraints = '__cn__'.join($gc_lines)
+
         #set genbank_file_paths = ','.join([str(f) for f in $genbank_files])
         #set $file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+        
         mkdir 'outdir_scul' &&
         mkdir 'outdir_unscul' &&
         python '$__tool_directory__/sculpt_sequences.py' 
@@ -44,10 +39,10 @@
             --outdir_unscul 'outdir_unscul' 
             --use_file_names_as_id '$adv.use_file_names_as_ids' 
             --avoid_patterns '$avoid_patterns'
-            --enforce_gc_content '$enforce_gc_content'
+            --gc_constraints '$adv.gc_constraints'
             --DnaOptimizationProblemClass '$DnaOptimizationProblemClass'
             --kmer_size '$adv.kmer_size'
-            --hairpin_constraints '$hairpin_constraints'
+            --hairpin_constraints '$adv.hairpin_constraints'
     ]]></command>
     <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank" label="GenBank File(s)"/>
@@ -55,20 +50,11 @@
             <option value="DnaOptimizationProblem" selected="True">DnaOptimizationProblem</option>
             <option value="CircularDnaOptimizationProblem">CircularDnaOptimizationProblem</option>
         </param>
-        <repeat name="rep_avoid_pattern" title="Avoid Pattern Constraints">
-            <param name="avoid_pattern" type="text" label="Pattern to Avoid (e.g., BsaI_site and/or 8x1mer)" />
-        </repeat>
+        <param name="avoid_patterns" type="text" area="true" label="Pattern to Avoid" helps="Each pattern on a line" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <repeat name="rep_gc_constraints" title="Enforce GC Content Constraints">
-                <param name="gc_min" type="float" label="Minimum GC Content" value="0.1" optional="true"/>
-                <param name="gc_max" type="float" label="Maximum GC Content" value="0.9" optional="true"/>
-                <param name="gc_window" type="integer" label="GC Content Window Size" value="50" optional="true"/>
-            </repeat>
-            <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="15" optional="true"/>
-            <repeat name="rep_avoid_hairpins" title="Avoid Hairpins">
-                <param name="hairpin_stem_size" type="integer" label="Stem Size" value="20" optional="true"/>
-                <param name="hairpin_window" type="integer" label="Window Size" value="200" optional="true"/>
-            </repeat>
+            <param name="hairpin_constraints" type="text" area="true" label="Hairpins Constraints" optional="true" help="e.g. (you can add others Hairpins Constraints on a new line): stem_size=20, hairpin_window=200"/>
+            <param name="gc_constraints" type="text" area="true" label="Enforce GC Content Constraints" optional="true" help="e.g. (you can add others Enforce GC Content Constraints on a new line): mini=0.3, maxi=0.7, window=100"/>
+            <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="" optional="true" help="e.g.: 15"/>
             <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
         </section>
     </inputs>   
@@ -100,26 +86,13 @@
             <param name="DnaOptimizationProblemClass" value="DnaOptimizationProblem" />
             <param name="adv|use_file_names_as_ids" value="True" />
             <!-- AvoidPatterns -->
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="BsaI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="NotI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="XbaI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="ClaI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="8x1mer" />
-            </repeat>
+            <param name="avoid_patterns" value="BsaI_site
+            NotI_site
+            XbaI_site
+            ClaI_site
+            8x1mer" />
             <!-- EnforceGCContent -->
-            <repeat name="adv|rep_gc_constraints">
-                <param name="gc_min" value="0.1" />
-                <param name="gc_max" value="0.9" />
-            </repeat>
+            <param name="adv|gc_constraints" value="mini=0.1, maxi=0.9, window=50"/>
             <output_collection name="scul" count="10">
             </output_collection>
             <output_collection name="unscul" count="10">
@@ -144,26 +117,16 @@
             <param name="DnaOptimizationProblemClass" value="CircularDnaOptimizationProblem" />
             <param name="adv|use_file_names_as_ids" value="True" />
             <!-- AvoidPatterns -->
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="BsaI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="NotI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="XbaI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="ClaI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="8x1mer" />
-            </repeat>
+            <param name="avoid_patterns" value="BsaI_site
+            NotI_site
+            XbaI_site
+            ClaI_site
+            8x1mer" />
             <!-- EnforceGCContent -->
-            <repeat name="adv|rep_gc_constraints">
-                <param name="gc_min" value="0.1" />
-                <param name="gc_max" value="0.9" />
-            </repeat>
+            <param name="adv|gc_constraints" value="mini=0.1, maxi=0.9
+            mini-0.3, maxi=0.7, window=50"/>
+            <param name="adv|hairpin_constraints" value="stem_size=20, hairpin_window=200
+            stem_size=10, hairpin_window=100"/>
             <output_collection name="scul" count="10">
             </output_collection>
             <output_collection name="unscul" count="10">
@@ -184,9 +147,12 @@ Sculpt Sequences is a Python library from the EGF Biofoundry for problem detecti
     - "CircularDnaOptimizationProblem": is a variant of DnaOptimizationProblem whose optimization algorithm assumes that the sequence is circular.
 * **Avoid Pattern Constraints**: is a sequence design rules that can be used as constraints. It define pattern(s) to avoid during problem optimisation.
     This can include enzyme sites like "BsaI_site", "NotI_site", "XbaI_site"... `enzyme dict <https://github.com/biopython/biopython/blob/master/Bio/Restriction/Restriction_Dictionary.py>`_ . Custom patterns are also supported, such as "5x3mer" means "any 5 consecutive 3-nucleotide sequences — typically 5 unique 3-mers in a row.
-* **Enforce GC Content Constraints**: Define acceptable GC content ranges. For example min: 0.4, max: 0.6, window: 50 represents a 40–60% GC content requirement within a 50-base window.
+* **Enforce GC Content Constraints**:
+    Define acceptable GC content ranges. For example min: 0.4, max: 0.6, window: 50 represents a 40–60% GC content requirement within a 50-base window.
+    (Parameters: `EnforceGCContent_params <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#enforcegccontent>`_ )
 * **Avoid Hairpins**: Avoid Hairpin patterns as defined by the IDT guidelines.
     A hairpin is defined by a sequence segment which has a reverse complement “nearby” in a given window.
+    (Parameters: `AvoidHairpins_params <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#avoidhairpins>`_ ).
 * **K-mer Uniqueness Size**: Avoid sub-sequence of length k with homologies elsewhere.
 * **Use File Names As Sequence IDs**: Recommended if the GenBank file names represent the fragment names.
     ]]></help>

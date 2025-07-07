@@ -1,10 +1,21 @@
 import argparse
 import os
+import re
 import dnacauldron
 import dnachisel
 from Bio import SeqIO
 import proglog
 
+
+def smart_number(val):
+        try:
+            float_val = float(val)
+            if float_val.is_integer():
+                return int(float_val)
+            else:
+                return float_val
+        except ValueError:
+            raise ValueError(f"Invalid number: {val}")
 
 
 def sculpt_sequances(files_to_sculpt, file_name_mapping, outdir_scul, outdir_unscul, use_file_names_as_id,
@@ -21,33 +32,63 @@ def sculpt_sequances(files_to_sculpt, file_name_mapping, outdir_scul, outdir_uns
 
     constraint_list = []
 
+ # avoid_patterns pearsing
     for pattern in avoid_patterns:
         constraint_list.append(dnachisel.AvoidPattern(pattern))
         print(f"AvoidPattern constraint: {pattern}")
 
+ # gc_constraints pearsing
     for constraint in enforce_gc_content:
-        try:
-            mini, maxi, window = map(float, constraint.split(';'))
-            constraint_list.append(dnachisel.EnforceGCContent(mini=mini, maxi=maxi, window=int(window)))
-            print(f"GC constraint: mini={mini}, maxi={maxi}, window={window}")
-        except ValueError:
-            print(f"Skipping invalid GC constraint: {constraint}")
+        constraints = [c.strip() for c in constraint.split('  ') if c.strip()] 
+        for line in constraints:
+            if not line:
+                continue
+            print(f"GC constraint: {line}")
 
+            try:
+                pairs = [kv.strip() for kv in line.split(',')]
+                params = {}
+                for pair in pairs:
+                    key, val = pair.split('=')
+                    key = key.strip()
+                    val = val.strip()
+                    params[key] = smart_number(val)
+
+                constraint_list.append(dnachisel.EnforceGCContent(**params))
+
+            except Exception as e:
+                print(f"Skipping invalid gc_constraints: {line} ({e})")
+
+ # hairpin_constraints pearsing
     for constraint in hairpin_constraints:
-        try:
-            stem_size, hairpin_window = map(int, constraint.split(';'))
-            constraint_list.append(dnachisel.AvoidHairpins(stem_size=stem_size, hairpin_window=hairpin_window))
-            print(f"Hairpin constraint: stem_size={stem_size}, hairpin_window={hairpin_window}")
-        except ValueError:
-            print(f"Skipping invalid hairpin constraint: {constraint}")
+        constraints = [c.strip() for c in constraint.split('  ') if c.strip()]
+        for line in constraints:
+            if not line:
+                continue
+            print(f"Hairpin constraint: {line}")
 
+            try:
+                pairs = [kv.strip() for kv in line.split(',')]
+                params = {}
+                for pair in pairs:
+                    key, val = pair.split('=')
+                    key = key.strip()
+                    val = val.strip()
+                    params[key] = smart_number(val)
+                    
+                constraint_list.append(dnachisel.AvoidHairpins(**params))
+
+            except Exception as e:
+                print(f"Skipping invalid hairpin_constraints: {line} ({e})")
+
+ # k_size pearsing
     for k_size in kmer_size:
         try:
             constraint_list.append(dnachisel.UniquifyAllKmers(k=int(k_size)))
             print(f"k-mer size is: {k_size}")
         except ValueError:
             print(f"Skipping invalid k-mer size: {k_size}")
-
+    
  #   refine the real record name dict
     if isinstance(file_name_mapping, str):
         file_name_mapping = dict(
@@ -136,7 +177,7 @@ def parse_command_line_args():
                         help="Use file names as IDs (True/False)")
     parser.add_argument("--avoid_patterns", required=True,
                         help="List of patterns to avoid (comma-separated, e.g., 'BsaI_site,BsmBI_site')")
-    parser.add_argument("--enforce_gc_content", required=True,
+    parser.add_argument("--gc_constraints", required=True,
                         help="GC content constraints as 'min;max;window' (space-separated, e.g., '0.3;0.7;100 0.1;0.3;100')")
     parser.add_argument("--DnaOptimizationProblemClass", required=True,
                         help="the class to use for DnaOptimizationProblem")
@@ -151,21 +192,28 @@ def parse_command_line_args():
 def extract_constraints_from_args(args):
     """Extract constraints directly from the command-line arguments."""
 
-    avoid_patterns = args.avoid_patterns.split(',')
+    split_pattern = r'(?:__cn__|\s{2,})'
 
-    gc_constraints = [gc.strip() for gc in args.enforce_gc_content.split(' ')]
+    # 1. Avoid patterns (split by any whitespace)
+    avoid_patterns = re.split(split_pattern, args.avoid_patterns.strip()) if args.avoid_patterns.strip() else []
 
-    kmer_size = [int(k) for k in args.kmer_size.split(',')]
+    # 2. Hairpin constraint: one dictionary (print as string later)
+    hairpin_constraints = re.split(split_pattern,args.hairpin_constraints.strip()) if args.hairpin_constraints.strip() else []
 
-    hairpin_constraints = [hp.strip() for hp in args.hairpin_constraints.split(' ')]
+    # 3. GC constraints: split by 2+ spaces or newlines
+    gc_constraints = re.split(split_pattern, args.gc_constraints.strip()) if args.gc_constraints.strip() else []
 
-    return avoid_patterns,  gc_constraints, kmer_size, hairpin_constraints
+    # 4. k-mer size: single value or list
+    kmer_size = [int(k.strip()) for k in args.kmer_size.strip().split(',') if k.strip()] if args.kmer_size.strip() else []
+    
+    return avoid_patterns, hairpin_constraints, gc_constraints, kmer_size
+
 
 
 if __name__ == "__main__":
     args = parse_command_line_args()
 
-    avoid_patterns, gc_constraints, kmer_size, hairpin_constraints = extract_constraints_from_args(args)
+    avoid_patterns, hairpin_constraints, gc_constraints, kmer_size, = extract_constraints_from_args(args)
 
     sculpt_sequances(
         args.files_to_sculpt, args.file_name_mapping,
