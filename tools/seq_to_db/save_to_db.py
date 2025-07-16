@@ -11,17 +11,6 @@ from sqlalchemy.sql import text
 from sqlalchemy.exc import OperationalError
 
 
-def resolve_parameters(user_params: dict, json_params: dict, keys: list):
-    resolved = {}
-    for key in keys:
-        # Prefer user parameter if it's provided (not None or empty string)
-        if key in user_params and user_params[key]:
-            resolved[key] = user_params[key]
-        else:
-            resolved[key] = json_params.get(f"JSON_{key}")
-    return resolved
-
-
 def fix_db_uri(uri):
     """Replace __at__ with @ in the URI if needed."""
     return uri.replace("__at__", "@")
@@ -193,70 +182,76 @@ def push_gb_annotations(gb_files, sequence_column, annotation_column, db_uri, ta
 def main():
     parser = argparse.ArgumentParser(description="Fetch annotations from PostgreSQL database and save as JSON.")
     parser.add_argument("--input", required=True, help="Input gb files")
-    parser.add_argument("--sequence_column", required=True, help="DB column contains sequence for ganbank file")
-    parser.add_argument("--annotation_column", required=True, help="DB column contains head for ganbank file")
-    parser.add_argument("--db_uri", required=True, help="Database URI connection string")
-    parser.add_argument("--table", required=True, help="Table name in the database")
-    parser.add_argument("--fragment_column", required=True, help="Fragment column name in the database")
-    parser.add_argument("--output", required=True, help="Text report")
-    parser.add_argument("--file_name_mapping", required=True, help="real fragments names")
+    parser.add_argument("--use_json_paramers", required=False, help="Use parameters from JSON: true/false")
+    parser.add_argument("--sequence_column", required=False, help="DB column contains sequence for GenBank file")
+    parser.add_argument("--annotation_column", required=False, help="DB column contains head for GenBank file")
+    parser.add_argument("--db_uri", required=False, help="Database URI connection string")
+    parser.add_argument("--table", required=False, help="Table name in the database")
+    parser.add_argument("--fragment_column", required=False, help="Fragment column name in the database")
+    parser.add_argument("--output", required=False, help="Text report")
+    parser.add_argument("--file_name_mapping", required=False, help="Real fragment names")
     parser.add_argument("--json_conf", required=False, help="JSON config file with DB parameters")
-    parser.add_argument("--execution_enable", required=True, help="enabbe or desable execution directly from the tool option")
+    parser.add_argument("--execution_enable", required=False, help="Enable or disable execution")
+    parser.add_argument("--json_generating", required=False, help="Generate JSON: true/false")
+    parser.add_argument("--json_output", required=False, help="Output path for generated JSON")
+
     args = parser.parse_args()
 
-    # enabbe or desable execution based on galaxy param (execution_enable)
-
     if args.execution_enable == 'false':
-        print("Execution disabled. 'Send Requenst to DB' is set to 'false'")
+        print("Execution disabled. 'Send Request to DB' is set to 'false'")
         return
 
-    # Load JSON config if provided
-    json_config = {}
-    if args.json_conf != 'None' or '':
+    config_params = {}
+    use_json = args.use_json_paramers == 'true'
+    generate_json = args.json_generating == 'true'
+
+    if use_json:
+        if not args.json_conf:
+            raise ValueError("You must provide --json_conf when --use_json_paramers is 'true'")
         with open(args.json_conf, "r") as f:
-            json_config = json.load(f)
-        if "execution" in json_config and json_config["execution"] == "false":
-            print("Execution was blocked by config (execution = false)")
+            config_params = json.load(f)
+        if config_params.get("execution", "") == "false":
+            print("Execution blocked by config (execution = false)")
             return
+    else:
+        config_params = {
+            "table": args.table,
+            "sequence_column": args.sequence_column,
+            "annotation_column": args.annotation_column,
+            "fragment_column": args.fragment_column,
+            "db_uri": args.db_uri,
+            "execution": args.execution_enable
+        }
 
-    # Prefer user input; fallback to JSON_ values if not provided
-    user_params = {
-        "table": args.table,
-        "sequence_column": args.sequence_column,
-        "annotation_column": args.annotation_column,
-        "fragment_column": args.fragment_column,
-        "db_uri": args.db_uri
-    }
+    if generate_json:
+        if not args.json_output:
+            raise ValueError("You must provide --json_output when --json_generating is 'true'")
+        with open(args.json_output, "w") as f:
+            json.dump(config_params, f, indent=2)
+        print(f"JSON configuration written to: {args.json_output}")
 
-    keys = ["table", "sequence_column", "annotation_column", "fragment_column", "db_uri"]
-    resolved = resolve_parameters(user_params, json_config, keys)
+    # Extract final resolved parameters
+    table = config_params["table"]
+    sequence_column = config_params["sequence_column"]
+    annotation_column = config_params["annotation_column"]
+    fragment_column = config_params["fragment_column"]
+    db_uri = fix_db_uri(config_params["db_uri"])
 
- # Unpack resolved parameters
-    table = resolved["table"]
-    sequence_column = resolved["sequence_column"]
-    annotation_column = resolved["annotation_column"]
-    fragment_column = resolved["fragment_column"]
-    db_uri = fix_db_uri(resolved["db_uri"])
-
- # Prepare gb files
     gb_file_list = [f.strip() for f in args.input.split(",") if f.strip()]
 
- # Start and wait for DB
-    # db_name = extract_db_name(db_uri)
-    # start_postgres_container(db_name)
+    # Connect to DB
     MAX_RETRIES = 3
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             wait_for_db(db_uri)
-            break  # Success
+            break
         except Exception as e:
             if attempt == MAX_RETRIES:
                 print(f"Attempt {attempt} failed: Could not connect to database at {db_uri}.")
                 raise e
-            else:
-                time.sleep(2)
+            time.sleep(2)
 
- # Push annotations
+    # Push annotations
     push_gb_annotations(
         gb_file_list,
         sequence_column,
