@@ -1,0 +1,8 @@
+{
+  "execution": true,
+  "db_uri": "postgresql://postgres:RK17@localhost:5432/test_fragments_db",
+  "table": "sample",
+  "fragment_column": "fragment",
+  "sequence_column": "sequence",
+  "annotation_column": "annotation"
+}
