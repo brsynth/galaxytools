@@ -1,8 +1,8 @@
 <tool id="evaluate_manufacturability" name="Evaluate Manufacturability" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Evaluate DNA manufacturability with customizable constraints</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">3</token>
-        <token name="@TOOL_VERSION@">0.4.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@TOOL_VERSION@">0.2.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="0.1.11">flametree</requirement>
@@ -62,7 +62,7 @@
         <conditional name='json_use'>
             <param name="use_json_param" type="boolean" checked="false" label="Use parameter from a JSON file" />
             <when value="false">
-                <param name="avoid_patterns" type="text" area="true" label="Pattern to Avoid" help="Each pattern on a line" />
+                <param name="avoid_patterns" type="text" area="true" label="Avoid Pattern Constraints" help="Each pattern on a line" />
                 <param name="hairpin_constraints" type="text" area="true" label="Hairpins Constraints" optional="true" help="e.g. (you can add others Hairpins Constraints on a new line): stem_size=20, hairpin_window=200"/>
                 <param name="gc_constraints" type="text" area="true" label="Enforce GC Content Constraints" optional="true" help="e.g. (you can add others Enforce GC Content Constraints on a new line): mini=0.3, maxi=0.7, window=100"/>
                 <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="" optional="true" help="e.g.: 15"/>
@@ -282,16 +282,22 @@ Get plots of patterns impacting synthesis and assembly difficulty deppanding on 
 **Parameters**:
 ---------------
 * **GenBank File(s)**: List of GenBank files to be processed.
+* **Use parameter from a JSON file**: 
+    Yes/No parameter to indicate if user want to set parameter manually or using a json file
+    If Yes, user should provide a JSON file contains all parameters
 * **Avoid Pattern Constraints**: 
     It is a sequence design rules that can be used as constraints. It define pattern(s) to avoid during problem optimisation 
     This can include enzyme sites like "BsaI_site", "NotI_site", "XbaI_site"... `enzyme dict <https://github.com/biopython/biopython/blob/master/Bio/Restriction/Restriction_Dictionary.py>`_ . Custom patterns are also supported, such as "5x3mer" means "any 5 consecutive 3-nucleotide sequences — typically 5-repeats 3-mers in a row.
+    In case on using more than one pattern, each one msut be on a ligne.
 * **Enforce GC Content Constraints**: 
     Define acceptable GC content ranges. For example min=0.4, max=0.6, window=50 represents a 40–60% GC content requirement within a 50-base window.
     (Parameters: `EnforceGCContent_params <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#enforcegccontent>`_ )
+    In case on using more than one combination, each one msut be on a ligne.
 * **Avoid Hairpins**: 
     Avoid Hairpin patterns as defined by the IDT guidelines.
     A hairpin is defined by a sequence segment which has a reverse complement “nearby” in a given window.
     (Parameters: `AvoidHairpins__params <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#avoidhairpins>`_ ).
+    In case on using more than one combination, each one msut be on a ligne.
 * **K-mer Uniqueness Size**: Avoid sub-sequence of length k with homologies elsewhere.
 * **Use File Names As Sequence IDs**: Recommended if the GenBank file names represent the fragment names.
     ]]></help>
