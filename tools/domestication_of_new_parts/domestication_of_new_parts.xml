@@ -1,8 +1,8 @@
 <tool id="domestication_of_new_parts" name="Domestication Of New Parts" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Adding the flanking enzyme sites to each DNA part</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@TOOL_VERSION@">0.2.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="0.1.11">flametree</requirement>
@@ -18,41 +18,46 @@
     <command detect_errors="exit_code"><![CDATA[
         #set genbank_file_paths = ','.join([str(f) for f in $genbank_files])
         #set $file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
-        mkdir 'metoutdir_gb' && mkdir 'outdir_zip' && mkdir 'outdir_gb'&&
+        mkdir 'outdir_zip' && mkdir 'outdir_gb'&&
         cp '$domestication_csv' 'domestication_csv.csv' &&
         python '$__tool_directory__/domestication.py'
             --files_to_domestication '$genbank_file_paths'
+            --use_json_paramers '$json_use.use_json_paramers'
             --csv_file 'domestication_csv.csv'
             --file_name_mapping '$file_name_mapping'
-            --use_file_names_as_id '$adv.use_file_names_as_ids'
-            --allow_edits '$adv.allow_edits'
+            --use_file_names_as_id '$use_file_names_as_ids'
+            --allow_edits '$allow_edits'
+            #if not $json_use.use_json_paramers:
+                --methylation_protection '$json_use.methylation_protection'
+            #else:
+                --json_conf '$json_use.json_conf'
+            #end if
             --output_dom 'output_zip.zip'
-            --output_gb_dom 'outdir_gb'
-            --output_methprot 'metoutdir_gb'
-            --methylation_protection '$methylation_protection' &&
+            --output_gb_dom 'outdir_gb' &&
         cp 'output_zip.zip' '$domesticated_zip'
     ]]></command>
     <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank" label="GenBank File(s)"/>
-        <param name="domestication_csv" type="data" format="csv" label="Deomestication csv"/>
-        <param name="methylation_protection" type="boolean" checked="False" label="Enabel Methylation Protection"/>
-        <section name="adv" title="Advanced Options" expanded="false">
-            <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
-            <param name="allow_edits" type="boolean" checked="True" label="Allow Sequence Edits" help="If False, sequences cannot be edited by the domesticator, only extended
+        <conditional name="json_use">
+            <param name="use_json_paramers" type="boolean" checked='false' label="Use parameters from JSON" help="extract parameters from json file" />
+            <when value="false">
+                <param name="methylation_protection" type="boolean" checked="False" label="Enabel Methylation Protection"/>
+            </when>
+            <when value="true">
+                <param name="json_conf" type="data" format='json' label="DB config as a json file" help="JSON file specifying the database URI, table name and the column names for annotation and sequence data" optional="false" />
+            </when>
+        </conditional>
+        <param name="domestication_csv" type="data" format="csv" label="Assembly Standard csv"/>
+        <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
+        <param name="allow_edits" type="boolean" checked="True" label="Allow Sequence Edits" help="If False, sequences cannot be edited by the domesticator, only extended
       with flanks. If a sequence has for instance forbidden restriction sites,
       the domesticaton will fail for this sequence (and this will be noted in
       the report."/>
-        </section>
     </inputs>   
     <outputs>
         <data format="zip" name="domesticated_zip" label="domestication results"/>
         <collection name="domesticated_gb" type="list" label="Domesticated GenBank Files">
-            <filter>methylation_protection == False</filter>
             <discover_datasets pattern="(?P&lt;name&gt;.*).gb" format="genbank" directory="outdir_gb" />
-        </collection>
-        <collection name="methprot_gb" type="list" label="GenBank Files methylation protected">
-            <filter>methylation_protection == True</filter>
-            <discover_datasets pattern="(?P&lt;name&gt;.*).gb" format="genbank" directory="metoutdir_gb" />
         </collection>
     </outputs>
     <tests>
@@ -70,9 +75,12 @@
                 </collection>
             </param>
             <param name="domestication_csv" value="EMMA.csv" />
-            <param name='methylation_protection' value='false' />
-            <param name="adv|use_file_names_as_ids" value="True" />
-            <param name="adv|allow_edits" value="True" />
+            <conditional name="json_use">
+                <param name="use_json_paramers" value="false" />
+                <param name='methylation_protection' value='false' />
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
+            <param name="allow_edits" value="True" />
             <output name="domesticated_zip" ftype='zip'>
                 <assert_contents>
                     <has_archive_member path=".*" n="24"/>
@@ -133,9 +141,12 @@
                 </collection>
             </param>
             <param name="domestication_csv" value="EMMA.csv" />
-            <param name="methylation_protection" value="true" />
-            <param name="adv|use_file_names_as_ids" value="True" />
-            <param name="adv|allow_edits" value="True" />
+            <conditional name="json_use">
+                <param name="use_json_paramers" value="false" />
+                <param name='methylation_protection' value='true' />
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
+            <param name="allow_edits" value="True" />
             <output name="domesticated_zip" ftype='zip'>
                 <assert_contents>
                     <has_archive_member path=".*" n="24"/>
@@ -144,7 +155,73 @@
                     </has_archive_member>
                 </assert_contents>
             </output>
-            <output_collection name="methprot_gb" type="list" count="7">
+            <output_collection name="domesticated_gb" type="list" count="7">
+                <element name="p14_CMVp">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+                <element name="p16_bGHpolyA">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+                <element name="p18_CMVp">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+                 <element name="p19_mNeoGreen">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+                <element name="p22_PGKpolyA">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+                <element name="p3_2_CAG">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+                <element name="p7_gfp_sequence">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <!--test with methylation protection-->
+        <test expect_num_outputs="2"> 
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p3_2_CAG" value="EMMA_undomesticated_parts/p3_2_CAG.gb" />
+                    <element name="p7_gfp_sequence" value="EMMA_undomesticated_parts/p7_gfp_sequence.gb" />
+                    <element name="p14_CMVp" value="EMMA_undomesticated_parts/p14_CMVp.gb" />
+                    <element name="p16_bGHpolyA" value="EMMA_undomesticated_parts/p16_bGHpolyA.gb" />
+                    <element name="p18_CMVp" value="EMMA_undomesticated_parts/p18_CMVp.gb" />
+                    <element name="p19_mNeoGreen" value="EMMA_undomesticated_parts/p19_mNeoGreen.gb" />
+                    <element name="p22_PGKpolyA" value="EMMA_undomesticated_parts/p22_PGKpolyA.gb" />
+                </collection>
+            </param>
+            <param name="domestication_csv" value="EMMA.csv" />
+            <conditional name="json_use">
+                <param name="use_json_paramers" value="true" />
+                <param name='json_conf' value='test_json_workflow2.json' />
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
+            <param name="allow_edits" value="True" />
+            <output name="domesticated_zip" ftype='zip'>
+                <assert_contents>
+                    <has_archive_member path=".*" n="24"/>
+                    <has_archive_member path="order_ids.csv">
+                        <has_n_lines n="8" />
+                    </has_archive_member>
+                </assert_contents>
+            </output>
+            <output_collection name="domesticated_gb" type="list" count="7">
                 <element name="p14_CMVp">
                     <assert_contents>
                      <has_n_lines min="20" />
