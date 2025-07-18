@@ -44,7 +44,7 @@
                 <param name="methylation_protection" type="boolean" checked="False" label="Enabel Methylation Protection"/>
             </when>
             <when value="true">
-                <param name="json_conf" type="data" format='json' label="DB config as a json file" help="JSON file specifying the database URI, table name and the column names for annotation and sequence data" optional="false" />
+                <param name="json_conf" type="data" format='json' label="JSON parameters file" help="JSON file contain tool parameters" optional="false" />
             </when>
         </conditional>
         <param name="domestication_csv" type="data" format="csv" label="Assembly Standard csv"/>
