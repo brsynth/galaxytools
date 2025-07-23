@@ -4,8 +4,6 @@
     "hairpin_constraints": "stem_size=20, hairpin_window=200\nstem_size=10, hairpin_window=100",
     "gc_constraints": "mini=0.1, maxi=0.9\nmini=0.3, maxi=0.7, window=50",
     "kmer_size": "15",
-    "methylation_protection":"methylation_protection",
-    "allow_edits":"True",
     "assembly_plan_name": "Type2sRestrictionAssembly",
     "topology": "circular",
     "enzyme": "auto",
