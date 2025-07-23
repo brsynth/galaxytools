@@ -1,8 +1,8 @@
 <tool id="evaluate_manufacturability" name="Evaluate Manufacturability" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Evaluate DNA manufacturability with customizable constraints</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@TOOL_VERSION@">0.2.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="0.1.11">flametree</requirement>
@@ -17,53 +17,61 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #set genbank_file_paths = ','.join([str(f) for f in $genbank_files])
-        #set avoid_patterns_list = []
-        #for $p in $rep_avoid_pattern
-            #silent avoid_patterns_list.append(str($p.avoid_pattern))
-        #end for
-        #set avoid_patterns = ','.join($avoid_patterns_list)
-        #set hairpin_constraints_list = []
-        #for $h in $adv.rep_avoid_hairpins
-            #silent hairpin_constraints_list.append(str($h.hairpin_stem_size) + ';' + str($h.hairpin_window))
-        #end for
-        #set hairpin_constraints = ' '.join($hairpin_constraints_list)
-        #set gc_constraints_list = []
-        #for $gc in $adv.rep_gc_constraints
-            #silent gc_constraints_list.append(str($gc.gc_min) + ';' + str($gc.gc_max) + ';' + str($gc.gc_window))
-        #end for
-        #set gc_constraints = ' '.join($gc_constraints_list)
-        #set $file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+        #set file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+
+        #if str($json_use.use_json_param) == "false":
+            #set avoid_list = [line.strip() for line in str($json_use.avoid_patterns).strip().split('\n') if line.strip()]
+            #set avoid_patterns = ','.join(avoid_list)
+
+            #set hairpin_lines = [line.strip() for line in str($json_use.hairpin_constraints).strip().split('\n') if line.strip()]
+            #set hairpin_constraints = '__cn__'.join($hairpin_lines)
+
+            #set gc_lines = [line.strip() for line in str($json_use.gc_constraints).strip().split('\n') if line.strip()]
+            #set gc_constraints = '__cn__'.join($gc_lines)
+
+            #set kmer_size = $json_use.kmer_size
+        #else:
+            #set avoid_patterns = ''
+            #set hairpin_constraints = ''
+            #set gc_constraints = ''
+            #set kmer_size = ''
+        #end if
+
         mkdir 'outdir_dir' &&
-        python '$__tool_directory__/evaluate_manufacturability.py' 
-            --files_to_evaluate '$genbank_file_paths' 
+        python '$__tool_directory__/evaluate_manufacturability.py'
+            --use_json_param '$json_use.use_json_param'
+            --files_to_evaluate '$genbank_file_paths'
             --file_name_mapping '$file_name_mapping'
-            --output_pdf '$report_pdf' 
-            --output_tsv '$report_tsv' 
-            --outdir_gb 'outdir_dir' 
-            --use_file_names_as_id '$adv.use_file_names_as_ids' 
+            --output_pdf '$report_pdf'
+            --output_tsv '$report_tsv'
+            --outdir_gb 'outdir_dir'
+            --use_file_names_as_id '$use_file_names_as_ids'
             --avoid_patterns '$avoid_patterns'
             --hairpin_constraints '$hairpin_constraints'
-            --gc_constraints '$gc_constraints' 
-            --kmer_size '$adv.kmer_size'
+            --gc_constraints '$gc_constraints'
+            --kmer_size '$kmer_size'
+            #if $json_use.use_json_param:
+                --json_params '$json_use.json_params'
+            #else:
+                --json_params ''
+            #end if
     ]]></command>
+
     <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank File(s)"/>
-        <repeat name="rep_avoid_pattern" title="Avoid Pattern Constraints">
-            <param name="avoid_pattern" type="text" label="Pattern to Avoid (e.g., BsaI_site and/or 8x1mer)" />
-        </repeat>
-        <section name="adv" title="Advanced Options" expanded="false">
-            <repeat name="rep_avoid_hairpins" title="Avoid Hairpins">
-                <param name="hairpin_stem_size" type="integer" label="Stem Size" value="20" optional="true"/>
-                <param name="hairpin_window" type="integer" label="Window Size" value="200" optional="true"/>
-            </repeat>
-            <repeat name="rep_gc_constraints" title="Enforce GC Content Constraints">
-                <param name="gc_min" type="float" label="Minimum GC Content" value="0.1" optional="true"/>
-                <param name="gc_max" type="float" label="Maximum GC Content" value="0.9" optional="true"/>
-                <param name="gc_window" type="integer" label="GC Content Window Size" value="100" optional="true"/>
-            </repeat>
-            <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="15" optional="true"/>
-            <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
-        </section>
+        <conditional name='json_use'>
+            <param name="use_json_param" type="boolean" checked="false" label="Use parameter from a JSON file" />
+            <when value="false">
+                <param name="avoid_patterns" type="text" area="true" label="Avoid Pattern Constraints" help="Each pattern on a line" />
+                <param name="hairpin_constraints" type="text" area="true" label="Hairpins Constraints" optional="true" help="e.g. (you can add others Hairpins Constraints on a new line): stem_size=20, hairpin_window=200"/>
+                <param name="gc_constraints" type="text" area="true" label="Enforce GC Content Constraints" optional="true" help="e.g. (you can add others Enforce GC Content Constraints on a new line): mini=0.3, maxi=0.7, window=100"/>
+                <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="" optional="true" help="e.g.: 15"/>
+            </when>
+            <when value="true">
+                <param name="json_params" type="data" format="json" optional="true" label="JSON parameters file" help="Contains tool's parameters" />
+            </when>
+        </conditional>
+        <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
     </inputs>   
     <outputs>
         <data name="report_pdf" format="pdf" label="Manufacturability Report (PDF)" />
@@ -91,51 +99,117 @@
                     <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
                 </collection>
             </param>
-            <param name="adv|use_file_names_as_ids" value="True" />
-            <!-- AvoidPatterns -->
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="BsaI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="BsmBI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="BbsI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="SapI_site" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="8x1mer" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="5x3mer" />
-            </repeat>
-            <repeat name="rep_avoid_pattern">
-                <param name="avoid_pattern" value="9x2mer" />
-            </repeat>
-            <!-- AvoidHairpins -->
-            <repeat name="adv|rep_avoid_hairpins">
-                <param name="hairpin_stem_size" value="20" />
-                <param name="hairpin_window" value="200" />
-            </repeat>
-            <!-- EnforceGCContent -->
-            <repeat name="adv|rep_gc_constraints">
-                <param name="gc_min" value="0.3" />
-                <param name="gc_max" value="0.7" />
-                <param name="gc_window" value="100" />
-            </repeat>
-            <repeat name="adv|rep_gc_constraints">
-                <param name="gc_min" value="0.1" />
-                <param name="gc_max" value="0.9" />
-                <param name="gc_window" value="100" />
-            </repeat>
-            <!-- UniquifyAllKmers -->
-            <param name="adv|kmer_size" value="15" />
+            <param name="use_file_names_as_ids" value="True" />
+            <conditional name='json_use'>
+                <param name="use_json_param" value="false" />
+                <!-- AvoidPatterns -->
+                <param name="avoid_patterns" value="BsaI_site
+                BsmBI_site
+                BbsI_site
+                SapI_site
+                8x1mer
+                5x3mer
+                9x2mer" />
+                <!-- AvoidHairpins -->
+                <param name="hairpin_constraints" value='stem_size=20, hairpin_window=200'/>
+                <!-- EnforceGCContent -->
+                <param name="gc_constraints" value="mini=0.3, maxi=0.7, window=100
+                mini=0.1, maxi=0.9, window=100"/>
+                <!-- UniquifyAllKmers -->
+                <param name="kmer_size" value="15" />
+            </conditional>
             <!-- Expecting pdf output -->
             <output name="report_pdf" ftype="pdf">
                 <assert_contents>
-                    <has_size min="1"/>
+                    <has_size min="86"/>
+                </assert_contents>
+            </output>
+            <!-- Expecting tsv output -->
+            <output name="report_tsv" ftype="tsv">
+                <assert_contents>
+                    <has_n_lines n="11" />
+                    <has_n_columns n="12" />
+                </assert_contents>
+            </output>
+            <output_collection name="annotated_gb" type="list" count="10">
+                <element name="HC_Amp_ccdB">
+                    <assert_contents>
+                     <has_n_lines n="150" />
+                    </assert_contents>
+                </element>
+                <element name="p15_PuroR">
+                    <assert_contents>
+                     <has_n_lines n="150" />
+                    </assert_contents>
+                </element>
+                <element name="p4_Kt-L7Ae-Weiss">
+                    <assert_contents>
+                     <has_n_lines n="120" />
+                    </assert_contents>
+                </element>
+                <element name="p6_Kozak-ATG">
+                    <assert_contents>
+                     <has_n_lines n="124" />
+                    </assert_contents>
+                </element>
+                <element name="p6_Nt-IgKLsequence">
+                    <assert_contents>
+                     <has_n_lines n="131" />
+                    </assert_contents>
+                </element>
+                <element name="p7_L7Ae-Weiss">
+                    <assert_contents>
+                     <has_n_lines n="130" />
+                    </assert_contents>
+                </element>
+                <element name="p8_Linker1">
+                    <assert_contents>
+                     <has_n_lines n="117" />
+                    </assert_contents>
+                </element>
+                <element name="p9_BSDR">
+                    <assert_contents>
+                     <has_n_lines n="136" />
+                    </assert_contents>
+                </element>
+                <element name="p9_mTagBFP2">
+                    <assert_contents>
+                     <has_n_lines n="147" />
+                    </assert_contents>
+                </element>
+                <element name="p9_PuroR">
+                    <assert_contents>
+                     <has_n_lines n="138" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <!-- parameters from json -->
+        <test> 
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                    <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                    <element name="p9_mTagBFP2" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                    <element name="p9_BSDR" value="10_emma_genbanks/p9_BSDR.gb" />
+                    <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                    <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
+                    <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
+                    <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <param name="use_file_names_as_ids" value="True" />
+            <conditional name='json_use'>
+                <param name="use_json_param" value="true" />
+                <!-- JSON -->
+                <param name="json_params" value="test_json.json" />
+            </conditional>
+            <!-- Expecting pdf output -->
+            <output name="report_pdf" ftype="pdf">
+                <assert_contents>
+                    <has_size min="86"/>
                 </assert_contents>
             </output>
             <!-- Expecting tsv output -->
@@ -208,13 +282,22 @@ Get plots of patterns impacting synthesis and assembly difficulty deppanding on 
 **Parameters**:
 ---------------
 * **GenBank File(s)**: List of GenBank files to be processed.
+* **Use parameter from a JSON file**: 
+    Yes/No parameter to indicate if user want to set parameter manually or using a json file
+    If Yes, user should provide a JSON file contains all parameters
 * **Avoid Pattern Constraints**: 
-    It is a sequence design rules that can be used as constraints. It define pattern(s) to avoid during problem optimisation.
-    This can include enzyme sites like "BsaI_site", "NotI_site", "XbaI_site"... `enzyme dict <https://github.com/biopython/biopython/blob/master/Bio/Restriction/Restriction_Dictionary.py>`_ . Custom patterns are also supported, such as "5x3mer" means "any 5 consecutive 3-nucleotide sequences — typically 5 unique 3-mers in a row.
-* **Enforce GC Content Constraints**: Define acceptable GC content ranges. For example min: 0.4, max: 0.6, window: 50 represents a 40–60% GC content requirement within a 50-base window.
+    It is a sequence design rules that can be used as constraints. It define pattern(s) to avoid during problem optimisation 
+    This can include enzyme sites like "BsaI_site", "NotI_site", "XbaI_site"... `enzyme dict <https://github.com/biopython/biopython/blob/master/Bio/Restriction/Restriction_Dictionary.py>`_ . Custom patterns are also supported, such as "5x3mer" means "any 5 consecutive 3-nucleotide sequences — typically 5-repeats 3-mers in a row.
+    In case on using more than one pattern, each one msut be on a ligne.
+* **Enforce GC Content Constraints**: 
+    Define acceptable GC content ranges. For example min=0.4, max=0.6, window=50 represents a 40–60% GC content requirement within a 50-base window.
+    (Parameters: `EnforceGCContent_params <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#enforcegccontent>`_ )
+    In case on using more than one combination, each one msut be on a ligne.
 * **Avoid Hairpins**: 
     Avoid Hairpin patterns as defined by the IDT guidelines.
     A hairpin is defined by a sequence segment which has a reverse complement “nearby” in a given window.
+    (Parameters: `AvoidHairpins__params <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#avoidhairpins>`_ ).
+    In case on using more than one combination, each one msut be on a ligne.
 * **K-mer Uniqueness Size**: Avoid sub-sequence of length k with homologies elsewhere.
 * **Use File Names As Sequence IDs**: Recommended if the GenBank file names represent the fragment names.
     ]]></help>

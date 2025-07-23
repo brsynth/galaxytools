@@ -1,5 +1,6 @@
 import argparse
 import os
+import json
 import zipfile
 import pandas
 import dnacauldron
@@ -133,12 +134,14 @@ def parse_command_line_args():
                         help="Allow sequence edits")
     parser.add_argument("--output_dom", required=True,
                         help="zip output for domestication results")
-    parser.add_argument("--output_methprot", required=True,
-                        help="gb output for methylation protection")
     parser.add_argument("--output_gb_dom", required=True,
-                        help="gb output for mdomesticated gb files")
-    parser.add_argument("--methylation_protection", type=lambda x: x.lower() == 'true', default=False,
+                        help="gb output for domesticated gb files")
+    parser.add_argument("--methylation_protection", type=lambda x: x.lower() == 'true', default=False, required=False, 
                         help="Enable methyl protection (true/false)")
+    parser.add_argument("--use_json_paramers", required=False,
+                        help="Use parameters from JSON: true/false")
+    parser.add_argument("--json_conf", required=False, 
+                        help="JSON config file with DB parameters")
 
     return parser.parse_args()
 
@@ -146,13 +149,31 @@ def parse_command_line_args():
 if __name__ == "__main__":
     args = parse_command_line_args()
 
+    config_params = {}
+    use_json = args.use_json_paramers == 'true'
+
+    if use_json:
+        if not args.json_conf:
+            raise ValueError("You must provide --json_conf when --use_json_paramers is 'true'")
+        with open(args.json_conf, "r") as f:
+            config_params = json.load(f)
+    else:
+        config_params = {
+            "methylation_protection": args.methylation_protection
+        }
+
+    param_methylation_protection = config_params["methylation_protection"]
+
     domestication(
         args.files_to_domestication, args.csv_file,
         args.file_name_mapping, args.use_file_names_as_id,
         args.allow_edits, args.output_dom, args.output_gb_dom
     )
 
-    if args.methylation_protection:
+    if param_methylation_protection:
+        print ("methylation protection process")
         methylation_protection(
-            args.output_dom, args.output_methprot
+            args.output_dom, args.output_gb_dom
         )
+    else: 
+        print ("no methylation protection process")

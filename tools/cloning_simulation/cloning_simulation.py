@@ -1,5 +1,6 @@
 import argparse
 import os
+import json
 import zipfile
 import pandas
 import dnacauldron
@@ -143,9 +144,9 @@ def parse_command_line_args():
                         help="output of domestication (ganbank list)")
     parser.add_argument("--assembly_csv", required=True,
                         help="csv assembly")
-    parser.add_argument('--assembly_plan_name', type=str,
+    parser.add_argument('--assembly_plan_name', type=str, required=False,
                         help='type of assembly')
-    parser.add_argument('--topology', type=str,
+    parser.add_argument('--topology', type=str, required=False,
                         help='"circular" or "linear"')
     parser.add_argument('--file_name_mapping', type=str,
                         help='Mapping of Galaxy filenames to original filenames')
@@ -157,10 +158,14 @@ def parse_command_line_args():
                         help="dir output for cloning simulation results")
     parser.add_argument("--output_simulation", required=True,
                         help="zip output for cloning simulation results")
-    parser.add_argument('--enzyme', type=str,
+    parser.add_argument('--enzyme', type=str,required=False,
                         help='enzyme to use')
     parser.add_argument("--outdir_gb", required=True,
                         help="dir output constructs gb files")
+    parser.add_argument("--use_json_paramers", required=True,
+                         help="Use parameters from JSON: true/false")
+    parser.add_argument("--json_conf", required=False,
+                         help="JSON config file with DB parameters")
  
     return parser.parse_args()
 
@@ -168,10 +173,28 @@ def parse_command_line_args():
 if __name__ == "__main__":
     args = parse_command_line_args()
 
+    #json param checking 
+    config_params = {}
+    use_json = args.use_json_paramers == 'true'
+    if use_json:
+        if not args.json_conf:
+            raise ValueError("You must provide --json_conf when --use_json_paramers is 'true'")
+        with open(args.json_conf, "r") as f:
+            config_params = json.load(f)
+    else:
+        config_params = {
+            "assembly_plan_name": args.assembly_plan_name,
+            "topology": args.topology,
+            "enzyme": args.enzyme
+        }
+    assembly_plan_name = config_params["assembly_plan_name"]
+    topology = config_params["topology"]
+    enzyme = config_params["enzyme"]
+
     cloning_simulation(
         args.parts_files, args.domesticated_seq,
-        args.assembly_csv, args.assembly_plan_name, args.topology,
+        args.assembly_csv, assembly_plan_name, topology,
         args.file_name_mapping, args.file_name_mapping_dom,
         args.use_file_names_as_id, args.outdir_simulation,
-        args.output_simulation, args.enzyme, args.outdir_gb
+        args.output_simulation, enzyme, args.outdir_gb
     )

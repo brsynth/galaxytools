@@ -1,0 +1,12 @@
+{
+    "avoid_patterns": "BsaI_site\nBsmBI_site\nBbsI_site\nSapI_site\n8x1mer\n5x3mer\n9x2mer",
+    "hairpin_constraints": "stem_size=20, hairpin_window=200",
+    "gc_constraints": "mini=0.3, maxi=0.7, window=100\nmini=0.1, maxi=0.9, window=100",
+    "kmer_size": "15",
+    "execution": "true",
+    "db_uri": "postgresql://postgres:RK17@localhost:5432/test_fragments_db",
+    "table": "sample",
+    "fragment_column": "fragment",
+    "sequence_column": "sequence",
+    "annotation_column": "annotation"
+}

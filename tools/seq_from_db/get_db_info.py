@@ -1,6 +1,7 @@
 import subprocess
 import argparse
 import time
+import json
 import os
 import socket
 import re
@@ -235,16 +236,42 @@ def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, tab
 def main():
     parser = argparse.ArgumentParser(description="Fetch annotations from PostgreSQL database and save as JSON.")
     parser.add_argument("--input", required=True, help="Input CSV file")
-    parser.add_argument("--sequence_column", required=True, help="DB column contains sequence for ganbank file")
-    parser.add_argument("--annotation_columns", required=True, help="DB column contains head for ganbank file")
-    parser.add_argument("--db_uri", required=True, help="Database URI connection string")
-    parser.add_argument("--table", required=True, help="Table name in the database")
-    parser.add_argument("--fragment_column", required=True, help="Fragment column name in the database")
+    parser.add_argument("--use_json_paramers", required=True, help="Use parameters from JSON: true/false")
+    parser.add_argument("--sequence_column", required=False, help="DB column contains sequence for ganbank file")
+    parser.add_argument("--annotation_columns", required=False, help="DB column contains head for ganbank file")
+    parser.add_argument("--db_uri", required=False, help="Database URI connection string")
+    parser.add_argument("--table", required=False, help="Table name in the database")
+    parser.add_argument("--fragment_column", required=False, help="Fragment column name in the database")
     parser.add_argument("--output", required=True, help="Output dir for gb files")
+    parser.add_argument("--json_conf", required=False, help="JSON config file with DB parameters")
     args = parser.parse_args()
+    
+    # get param and chek for json
+    config_params = {}
+    use_json = args.use_json_paramers == 'true'
+    if use_json:
+        if not args.json_conf:
+            raise ValueError("You must provide --json_conf when --use_json_paramers is 'true'")
+        with open(args.json_conf, "r") as f:
+            config_params = json.load(f)
+    else:
+        config_params = {
+            "table": args.table,
+            "sequence_column": args.sequence_column,
+            "annotation_column": args.annotation_columns,
+            "fragment_column": args.fragment_column,
+            "db_uri": args.db_uri,
+        }
+
+    # Extract final resolved parameters
+    table = config_params["table"]
+    sequence_column = config_params["sequence_column"]
+    annotation_column = config_params["annotation_column"]
+    fragment_column = config_params["fragment_column"]
+    db_uri = fix_db_uri(config_params["db_uri"])
 
     # Wait until the database is ready
-    db_uri = fix_db_uri(args.db_uri)
+    db_uri = fix_db_uri(db_uri)
     # db_name = extract_db_name(db_uri)
     # start_postgres_container(db_name)
     MAX_RETRIES = 3
@@ -260,8 +287,7 @@ def main():
                 time.sleep(2)
 
     # Fetch annotations from the database and save as gb
-    fetch_annotations(args.input, args.sequence_column, args.annotation_columns, db_uri, args.table, args.fragment_column, args.output)
-
+    fetch_annotations(args.input, sequence_column, annotation_column, db_uri, table, fragment_column, args.output)
 
 if __name__ == "__main__":
     main()

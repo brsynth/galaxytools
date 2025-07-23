@@ -1,0 +1,92 @@
+<tool id="parameters_maystro_workflow_1" name="Workflow-1 Parameters Maystro" version="@TOOL_VERSION@" profile="21.09">
+    <description>Store parameters of workflow-1 to be used again</description>
+    <macros>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+    </macros>
+    <command detect_errors="exit_code"><![CDATA[
+    #if $user_json and str($user_json) != 'None':
+        cp '$user_json' '$output_json'
+    #else
+        python3 -c "import json; params = {
+        'assembly_plan_name': '$assembly_plan_name',
+        'topology': '$topology',
+        'enzyme': '$enzyme',
+        'execution': '$execution',
+        'db_uri': '$db_uri',
+        'table': '$table_name',
+        'fragment_column': '$fragment_column',
+        'sequence_column': '$sequence_column',
+        'annotation_column': '$annotation_column'
+        }; f = open('$output_json', 'w'); json.dump(params, f, indent=4); f.close()" && echo DEBG && cat '$output_json'
+    #end if
+    && echo DEBG && cat '$output_json'
+    ]]></command>
+    <inputs>
+        <param name="assembly_plan_name" type="select" label="Assembly Calss" help="select the assambly class">
+            <option value="Type2sRestrictionAssembly" selected="True">GoldenGate_assembly</option>
+            <option value="GibsonAssembly">Gibson_assembly</option>
+            <option value="BASICAssembly">BASIC_assembly</option>
+            <option value="BioBrickStandardAssembly">biobrick_assembly</option>
+            <option value="LigaseCyclingReactionAssembly">lcr_assembly</option>
+        </param>
+        <param name="topology" type="select" label="Assambly Topology" help="select circular or linear topology">
+            <option value="linear">linear</option>
+            <option value="circular" selected="True">circular</option>
+        </param>
+        <param name="enzyme" type="text" label="Enzyme" value="auto"/>
+        <param name="execution" type="boolean" label="Save To DB ?" checked ='false' optional="true" help="If True data will be saved in the DB" />
+        <param name="db_uri" type="text" optional="true" help='Only if Input Your Parameters As JSON is FALSE' />
+        <param name="table_name" type="text" optional="true" help='table name in DB' />
+        <param name="fragment_column" type="text" optional="true" help='Fragmnet column in DB' />
+        <param name="sequence_column" type="text" optional="true" help='Sequence column in DB' />
+        <param name="annotation_column" type="text" optional="true" help='Annotation column in DB' />
+        <param name="user_json" type="data" format="json" optional="true" help='Only if Input Your Parameters As JSON is TRUE' />
+    </inputs>   
+    <outputs>
+        <data name="output_json" format="json" label="Workflow-1 Parameters"/>
+    </outputs>
+    <tests>
+        <!--manual parameters set-->
+        <test> 
+            <param name="assembly_plan_name" value="Type2sRestrictionAssembly" />
+            <param name="topology" value='circular'/>
+            <param name="enzyme" value="auto"/>
+            <param name="execution" value="true" />
+            <param name="db_uri" value="postgresql://postgres:RK17@localhost:5432/test_fragments_db" />
+            <param name="table_name" value="sample" />
+            <param name="fragment_column" value="fragment" />
+            <param name="sequence_column" value="sequence" />
+            <param name="annotation_column" value="annotation" />
+            <output name="output_json">
+                <assert_contents>
+                    <has_n_lines n="11" />
+                </assert_contents>
+            </output>
+        </test>
+        <!--JSON parameters set-->
+        <test> 
+            <param name="user_json" value='test-JSON_workflow1.json'/>
+            <output name="output_json">
+                <assert_contents>
+                    <has_n_lines n="11" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+Parameters Maystro for workflow-1
+=================================
+
+Store and Generate a JSON file to be used as workflow-1 configuration. This JSON file can later be used as input to pass workflow-1 parameters
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{parameters_maystro_workflow_1
+                author = {Ramiz Khaled},
+                title = {{parameters_maystro_workflow_1}},
+                url = {https://github.com/brsynth/},
+            }
+        </citation>
+    </citations>
+</tool>

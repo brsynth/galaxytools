@@ -1,8 +1,8 @@
 <tool id="cloning_simulation" name="Cloning Simulation" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>A cloning simulator for synthetic biology</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@TOOL_VERSION@">0.2.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="0.1.11">flametree</requirement>
@@ -31,36 +31,47 @@
             --parts_files '$genbank_file_paths'
             --domesticated_seq '$domesticated_input_paths'
             --assembly_csv 'assembly_csv.csv'
-            --assembly_plan_name '$assembly_plan_name'
             --file_name_mapping '$file_name_mapping'
             --file_name_mapping_dom '$file_name_mapping_dom'
-            --use_file_names_as_id '$adv.use_file_names_as_ids'
+            --use_json_paramers '$json_use.use_json_paramers'
+            #if not $json_use.use_json_paramers:
+                --enzyme '$json_use.enzyme'
+                --topology '$json_use.topology'
+                --assembly_plan_name '$json_use.assembly_plan_name'
+            #else:
+                --json_conf '$json_use.json_conf'
+            #end if
+            --use_file_names_as_id '$use_file_names_as_ids'
             --outdir_simulation 'outdir_zip'
             --outdir_gb 'outdir_gb'
-            --output_simulation 'output_zip.zip'
-            --enzyme '$adv.enzyme'
-            --topology '$topology' &&
+            --output_simulation 'output_zip.zip' &&
         cp 'output_zip.zip' '$output_zip'
     ]]></command>
     <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank and/or Fasta File(s)" optional="True"/>
         <param name="assembly_csv" type="data" format="csv" label="Assemby csv"/>
         <param name="domesticated_input" type="data_collection" collection_type="list" format="genbank" label="Domesticated GenBank" optional="True"/>
-        <param name="assembly_plan_name" type="select" label="Assembly Calss" help="select the assambly class">
-            <option value="Type2sRestrictionAssembly" selected="True">GoldenGate_assembly</option>
-            <option value="GibsonAssembly">Gibson_assembly</option>
-            <option value="BASICAssembly">BASIC_assembly</option>
-            <option value="BioBrickStandardAssembly">biobrick_assembly</option>
-            <option value="LigaseCyclingReactionAssembly">lcr_assembly</option>
-        </param>
-        <param name="topology" type="select" label="Assambly Topology" help="select circular or linear topology">
-            <option value="linear">linear</option>
-            <option value="circular" selected="True">circular</option>
-        </param>
-        <section name="adv" title="Advanced Options" expanded="false">
-            <param name="enzyme" type="text" label="Enzyme" value="auto" optional="True"/>
-            <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
-        </section>
+        <conditional name="json_use">
+            <param name="use_json_paramers" type="boolean" checked='false' label="Use parameters from JSON" help="extract parameters from json file" />
+            <when value="false">
+                <param name="assembly_plan_name" type="select" label="Assembly Calss" help="select the assambly class">
+                    <option value="Type2sRestrictionAssembly" selected="True">GoldenGate_assembly</option>
+                    <option value="GibsonAssembly">Gibson_assembly</option>
+                    <option value="BASICAssembly">BASIC_assembly</option>
+                    <option value="BioBrickStandardAssembly">biobrick_assembly</option>
+                    <option value="LigaseCyclingReactionAssembly">lcr_assembly</option>
+                </param>
+                <param name="topology" type="select" label="Assambly Topology" help="select circular or linear topology">
+                    <option value="linear">linear</option>
+                    <option value="circular" selected="True">circular</option>
+                </param>
+                <param name="enzyme" type="text" label="Enzyme" value="auto" optional="True"/>
+            </when>
+            <when value="true">
+                <param name="json_conf" type="data" format='json' label="DB config as a json file" help="JSON file specifying the database URI, table name and the column names for annotation and sequence data" optional="false" />
+            </when>
+        </conditional>
+        <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
     </inputs>   
     <outputs>
         <data format="zip" name="output_zip" label="simulation results (zip)"/>
@@ -88,9 +99,12 @@
                 </collection>
             </param>
             <param name="assembly_csv" value="2-step_golden_gate_parts/2-step-golden_gate_plan.csv" />
-            <param name='assembly_plan_name' value='Type2sRestrictionAssembly' />
-            <param name="topology" value="circular"/>
-            <param name="adv|use_file_names_as_ids" value="True" />
+            <conditional nam="json_use">
+                <param name='use_json_paramers' value='false' />
+                <param name='assembly_plan_name' value='Type2sRestrictionAssembly' />
+                <param name="topology" value="circular"/>
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
             <output name="output_zip" ftype='zip'>
                 <assert_contents>
                     <has_archive_member path=".*" n="62"/>
@@ -130,9 +144,12 @@
                 </collection>
             </param>
             <param name="assembly_csv" value="Gibson_assembly_dataset/gibson_assembly.csv" />
-            <param name='assembly_plan_name' value='GibsonAssembly' />
-            <param name="topology" value="circular"/>
-            <param name="adv|use_file_names_as_ids" value="True" />
+            <conditional nam="json_use">
+                <param name='use_json_paramers' value='false' />
+                <param name='assembly_plan_name' value='GibsonAssembly' />
+                <param name="topology" value="circular"/>
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
             <output name="output_zip" ftype='zip'>
                 <assert_contents>
                     <has_archive_member path=".*" n="78"/>
@@ -168,9 +185,12 @@
                 </collection>
             </param>
             <param name="assembly_csv" value="lcr_assembly_dataset/assembly_plan.csv" />
-            <param name='assembly_plan_name' value='LigaseCyclingReactionAssembly' />
-            <param name="topology" value="circular"/>
-            <param name="adv|use_file_names_as_ids" value="True" />
+            <conditional nam="json_use">
+                <param name='use_json_paramers' value='false' />
+                <param name='assembly_plan_name' value='LigaseCyclingReactionAssembly' />
+                <param name="topology" value="circular"/>
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
             <output name="output_zip" ftype='zip'>
                 <assert_contents>
                     <has_archive_member path=".*" n="68"/>
@@ -194,9 +214,12 @@
                 </collection>
             </param>
             <param name="assembly_csv" value="BASIC_assembly_dataset/basic_assembly.csv" />
-            <param name='assembly_plan_name' value='BASICAssembly' />
-            <param name="topology" value="circular"/>
-            <param name="adv|use_file_names_as_ids" value="True" />
+            <conditional nam="json_use">
+                <param name='use_json_paramers' value='false' />
+                <param name='assembly_plan_name' value='BASICAssembly' />
+                <param name="topology" value="circular"/>
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
             <output name="output_zip" ftype='zip'>
                 <assert_contents>
                     <has_archive_member path=".*" n="47"/>
@@ -220,9 +243,12 @@
                 </collection>
             </param>
             <param name="assembly_csv" value="BioBrick_assembly_dataset/hierarchical_biobrick.csv" />
-            <param name='assembly_plan_name' value='BioBrickStandardAssembly' />
-            <param name="topology" value="circular"/>
-            <param name="adv|use_file_names_as_ids" value="True" />
+            <conditional nam="json_use">
+                <param name='use_json_paramers' value='false' />
+                <param name='assembly_plan_name' value='BioBrickStandardAssembly' />
+                <param name="topology" value="circular"/>
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
             <output name="output_zip" ftype='zip'>
                 <assert_contents>
                     <has_archive_member path=".*" n="47"/>
@@ -263,7 +289,12 @@
                 </collection>
             </param>
             <param name="assembly_csv" value="2-step_golden_gate_parts/2-step-golden_gate_plan.csv" />
-            <param name='assembly_plan_name' value='Type2sRestrictionAssembly' />
+            <conditional nam="json_use">
+                <param name='use_json_paramers' value='false' />   
+                <param name='assembly_plan_name' value='Type2sRestrictionAssembly' />
+                <param name="topology" value="circular"/>
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
             <param name="domesticated_input">
                 <collection type="list">
                     <element name="part_H" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_H.gb" />
@@ -273,8 +304,6 @@
                     <element name="part_L" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_L.gb" />
                 </collection>
             </param>
-            <param name="topology" value="circular"/>
-            <param name="adv|use_file_names_as_ids" value="True" />
             <output name="output_zip" ftype='zip'>
                 <assert_contents>
                     <has_archive_member path=".*" n="62"/>
@@ -325,9 +354,67 @@
                 </collection>
             </param>
             <param name="assembly_csv" value="2-step_golden_gate_parts/2-step-golden_gate_plan.csv" />
-            <param name='assembly_plan_name' value='Type2sRestrictionAssembly' />
-            <param name="topology" value="circular"/>
-            <param name="adv|use_file_names_as_ids" value="True" />
+            <conditional nam="json_use">
+                <param name='use_json_paramers' value='false' />
+                <param name='assembly_plan_name' value='Type2sRestrictionAssembly' />
+                <param name="topology" value="circular"/>
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
+            <output name="output_zip" ftype='zip'>
+                <assert_contents>
+                    <has_archive_member path=".*" n="62"/>
+                    <has_archive_member path="assambly_simulation/assembly_plan_graph.pdf">
+                        <has_size min="5"/>
+                    </has_archive_member>
+                </assert_contents>
+            </output>
+            <output_collection name="construct_gb" type="list" count="4">
+                <element name="construct_1">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+                <element name="construct_2">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+                <element name="construct_3">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+                 <element name="construct_4">
+                    <assert_contents>
+                     <has_n_lines min="20" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <!--test JSON param-->
+        <test> 
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="part_A" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_A.gb" />
+                    <element name="part_B" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_B.gb" />
+                    <element name="part_C" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_C.gb" />
+                    <element name="part_D" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_D.gb" />
+                    <element name="part_E" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_E.gb" />
+                    <element name="part_F" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_F.gb" />
+                    <element name="part_G" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_G.gb" />
+                    <element name="part_H" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_H.gb" />
+                    <element name="part_I" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_I.gb" />
+                    <element name="part_J" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_J.gb" />
+                    <element name="part_K" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_K.gb" />
+                    <element name="part_L" value="2-step_golden_gate_parts/parts_for_2-step_golden_gate/part_L.gb" />
+                </collection>
+            </param>
+            <param name="assembly_csv" value="2-step_golden_gate_parts/2-step-golden_gate_plan.csv" />
+            <conditional nam="json_use">
+                <param name="use_json_paramers" value='true'/>
+                <param name="json_conf" value="test-JSON.json" />
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
             <output name="output_zip" ftype='zip'>
                 <assert_contents>
                     <has_archive_member path=".*" n="62"/>
@@ -369,6 +456,7 @@ The Cloning Simulation tool is based on the DnaCauldron package developed by the
 
 **Parameters**:
 ---------------
+* **Use parameters from JSON**: Yes/No parameter to ask user if he wants to set parameters manually or using JSON file.
 * **Assemby csv**: csv file containes the construct names with their parts. (Without Header)
 * **GenBank files**: Upload all the parts sequences for your assembli(es). Don't forget the receptor vector(s).
 * **Domesticated GenBank**: Dimesticated GenBank list (Optional)

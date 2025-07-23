@@ -1,8 +1,8 @@
 <tool id="seq_form_db" name="Get sequences Data From DB" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Import fragment's data from an accessible DB and export it as .gb files</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@TOOL_VERSION@">0.2.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="2.2.3">pandas</requirement>
@@ -13,21 +13,34 @@
     <command detect_errors="exit_code"><![CDATA[
         mkdir 'outdir' &&
         python '$__tool_directory__/get_db_info.py'
-            --input '$input' 
-            --sequence_column '$sequence_column'
-            --annotation_columns '$annotation_columns'
-            --db_uri '$db_uri' 
-            --table '$table' 
-            --fragment_column '$fragment_column'
+            --input '$input'
+            --use_json_paramers '$json_use.use_json_paramers'
+            #if not $json_use.use_json_paramers:
+                --sequence_column '$json_use.sequence_column'
+                --annotation_columns '$json_use.annotation_columns'
+                --db_uri '$json_use.db_uri' 
+                --table '$json_use.table' 
+                --fragment_column '$json_use.fragment_column'
+            #else:
+                --json_conf '$json_use.json_conf'
+            #end if
             --output 'outdir'
     ]]></command>
     <inputs> 
         <param name="input" type="data" format="csv" label="Input CSV File" />
-        <param name="table" type="text" label="DB Table Name" optional="false" />
-        <param name="sequence_column" type="text" label="DB Column Contains Sequence For ganbank File" optional="false" />
-        <param name="annotation_columns" type="text" label="DB Column Contains Annotation For Ganbank File" optional="false" />
-        <param name="fragment_column" type="text" label="DB IDs Column Name" optional="false" />
-        <param name="db_uri" type="text" label="DB Connection URI" help="postgresql://container_name:password@host:port/path/to/database" optional="false" />
+        <conditional name="json_use">
+            <param name="use_json_paramers" type="boolean" checked='false' label="Use parameters from JSON" help="extract parameters from json file" />
+            <when value="false">
+                <param name="table" type="text" label="DB Table Name" optional="false" />
+                <param name="sequence_column" type="text" label="DB Column Contains Sequence For ganbank File" optional="false" />
+                <param name="annotation_columns" type="text" label="DB Column Contains Annotation For Ganbank File" optional="false" />
+                <param name="fragment_column" type="text" label="DB IDs Column Name" optional="false" />
+                <param name="db_uri" type="text" label="DB Connection URI" help="postgresql://user_name:password@host:port/path/to/database" optional="false" />
+            </when>
+            <when value="true">
+                <param name="json_conf" type="data" format='json' label="DB config as a json file" help="JSON file specifying the database URI, table name and the column names for annotation and sequence data" optional="false" />
+            </when>
+        </conditional>
     </inputs>    
     <outputs>
         <collection name="output_gb" type="list" label="GenBank Files collection" >
@@ -35,14 +48,87 @@
         </collection>
     </outputs>
     <tests>
-    <!--python get_db_info.py -input 'test-data/test_input.csv' -sequence_column 'sequence' -annotation_column 'annotation' -db_uri 'postgresql://postgres:RK17@localhost:5432/test_fragments_db' -table 'sample' -fragment_column 'fragment' -output 'test-data/output'-->
+    <!--manual parameters-->
         <test> 
             <param name="input" value="2-step-golden_gate_plan.csv" />
-            <param name="table" value="sample" />
-            <param name="sequence_column" value="sequence" />
-            <param name="annotation_columns" value="annotation" />
-            <param name="fragment_column" value="fragment" />
-            <param name="db_uri" value="postgresql://postgres:RK17@localhost:5432/test_fragments_db" />
+            <conditional name="json_use">
+                <param name='use_json_paramers' value='false' />
+                <param name="table" value="sample" />
+                <param name="sequence_column" value="sequence" />
+                <param name="annotation_columns" value="annotation" />
+                <param name="fragment_column" value="fragment" />
+                <param name="db_uri" value="postgresql://postgres:RK17@localhost:5432/test_fragments_db" />
+            </conditional>
+            <output_collection name="output_gb" type="list" count="12">
+                <element name="part_A">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_B">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_C">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_D">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_E">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_F">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_G">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_H">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_I">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_J">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_K">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_L">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <!--JSON parameters-->
+        <test> 
+            <param name="input" value="2-step-golden_gate_plan.csv" />
+            <conditional name="json_use">
+                <param name="use_json_paramers" value='true'/>
+                <param name="json_conf" value="test-JSON.json" />
+            </conditional>
             <output_collection name="output_gb" type="list" count="12">
                 <element name="part_A">
                     <assert_contents>
@@ -116,12 +202,13 @@ Implemented a system to generate GenBank (.gb) files for ADN fragments in CSV in
 
 **Parameters**:
 ---------------
-* **Input CSV File**: Assembly csv contains construct IDs in the first column and their corresponding fragments in the following columns. (Without Header)
+* **Use parameters from JSON**: Yes/No parameter to ask user if he wants to set parameters manually or using JSON file.
+* **Input CSV File**: Assembly CSV contains construct IDs in the first column and their corresponding fragments in the following columns. (Without Header)
 * **DB Table Name**: Name of the target table in the database.
 * **DB Column Contains Sequence For ganbank File**: Column storing sequence data, expected to start with "ORIGIN". 
 * **DB Column Contains Annotation For Ganbank File**: Column containing annotation data, starting with "FEATURES" and including "LOCUS" information. Other metadata is optional.
 * **DB IDs Column Name**: Column holding the unique fragment IDs.
-* **DB Connection URI**: URI used to connect to the database (e.g., postgresql://postgres:pass@localhost:5432/test_fragments_db).
+* **DB Connection URI**: URI used to connect to the database (e.g., postgresql://user_name:pass@localhost:5432/test_fragments_db).
     ]]></help>
     <citations>
         <citation type="bibtex">

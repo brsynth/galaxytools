@@ -3,7 +3,5 @@
   "sequence_column": "sequence",
   "annotation_column": "annotation",
   "fragment_column": "fragment",
-  "db_uri": "postgresql://postgres:RK17@localhost:5432/test_fragments_db",
-  "execution": "false"
+  "db_uri": "postgresql://postgres:RK17@localhost:5432/test_fragments_db"
 }
-  
