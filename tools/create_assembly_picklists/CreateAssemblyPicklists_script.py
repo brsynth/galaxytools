@@ -59,6 +59,12 @@ def fix_and_rename_paths(paths):
     return fixed_paths
 
 
+def parse_optional_float(x):
+    if x == '':
+        return None
+    return float(x)
+
+
 def did_you_mean(name, other_names, limit=5, min_score=50):  # test
     results = process.extract(name, list(other_names), limit=limit)
     return [e for (e, score) in results if score >= min_score]
@@ -378,9 +384,9 @@ def main():
     parser.add_argument("--parts_files", help="Directory with parts data or file with part sizes")
     parser.add_argument("--picklist", type=str, help="Path to the assembly plan CSV or Excel file")
     parser.add_argument("--source_plate", help="Source plate file (CSV or Excel)")
-    parser.add_argument("--backbone_name", help="Name of the backbone")
+    parser.add_argument("--backbone_name", required=False, help="Name of the backbone")
     parser.add_argument("--result_zip", help="Name of the output zip file")
-    parser.add_argument("--part_backbone_ratio", type=float, help="Part to backbone molar ratio")
+    parser.add_argument("--part_backbone_ratio", type=parse_optional_float, required=False, help="Part to backbone molar ratio")
     parser.add_argument("--quantity_unit", choices=["fmol", "nM", "ng"], help="Quantity unit")
     parser.add_argument("--part_quantity", type=float, help="Quantity of each part")
     parser.add_argument("--buffer_volume", type=float, help="Buffer volume in µL")
@@ -486,7 +492,8 @@ def main():
         volume_rounding=2.5e-9,  # not using parameter from form
         minimal_dispense_volume=5e-9,  # Echo machine's minimum dispense -
     )
-    backbone_name_list = backbone_name.split(",")
+    if backbone_name != '' and backbone_name != 'Non':
+        backbone_name_list = backbone_name.split(",")
     source_plate = plate_from_content_spreadsheet(source_plate_path)
 
     for well in source_plate.iter_wells():
@@ -497,16 +504,17 @@ def main():
         quantities.pop(part)
         quantities[part.replace(" ", "_")] = quantity
 
-        if part in backbone_name_list:
-            # This section multiplies the backbone concentration with the
-            # part:backbone molar ratio. This tricks the calculator into making
-            # a picklist with the desired ratio.
-            # For example, a part:backbone = 2:1 will multiply the
-            # backbone concentration by 2, therefore half as much of it will be
-            # added to the well.
-            quantities[part.replace(" ", "_")] = quantity * part_backbone_ratio
-        else:
-            quantities[part.replace(" ", "_")] = quantity
+        if backbone_name != '' and backbone_name != 'Non':
+            if part in backbone_name_list:
+                # This section multiplies the backbone concentration with the
+                # part:backbone molar ratio. This tricks the calculator into making
+                # a picklist with the desired ratio.
+                # For example, a part:backbone = 2:1 will multiply the
+                # backbone concentration by 2, therefore half as much of it will be
+                # added to the well.
+                quantities[part.replace(" ", "_")] = quantity * part_backbone_ratio
+            else:
+                quantities[part.replace(" ", "_")] = quantity
 
     source_plate.name = "Source"
     if destination_plate:

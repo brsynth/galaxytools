@@ -38,8 +38,8 @@
             --parts_files '$renamed_paths'
             --picklist '$picklist'
             --source_plate 'source_plate.xlsx'
-            --backbone_name '$backbone_name'
-            --part_backbone_ratio '$part_backbone_ratio'
+            --backbone_name '$adv.backbone_name'
+            --part_backbone_ratio '$adv.part_backbone_ratio'
             --quantity_unit '$quantity_unit'
             --part_quantity '$part_quantity'
             --buffer_volume '$buffer_volume'
@@ -49,23 +49,25 @@
         cp 'picklist.zip' '$output_zip' 
     ]]></command>
     <inputs>
-        <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank and/or Fasta File(s)" optional="True"/>
+        <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank and/or Fasta File(s)" />
         <param name="picklist" type="data" format="xlsx,xls,csv" label="Assembly Plan (csv or excel)"/>
         <param name="source_plate" type="data" format="xlsx,xls" label="Source Plate (excel)"/>
-        <param name="backbone_name" type="text" area="True" label="Backbone Name(s)" />
-        <param name="part_backbone_ratio" type="float" max="1.0" label="Backbone Name(s)" />
         <param name="quantity_unit" type="select" label="Part quantity unit">
             <option value="fmol" selected="true">femto-mole</option>
             <option value="nM">nano-molar</option>
             <option value="ng">nano-gram</option>
         </param>
-        <param name="part_quantity" type="float" value="1.3" label="Part quantity" />
-        <param name="buffer_volume" type="float" value="0.3" label="Buffer volume (µL)" />
-        <param name="total_volume" type="float" value="1.0" label="Total volume (µL)" />
+        <param name="part_quantity" type="float" value="1.3" min="0" label="Part quantity" />
+        <param name="buffer_volume" type="float" value="0.3" min="0" label="Buffer volume (µL)" />
+        <param name="total_volume" type="float" value="1.0" min="0" label="Total volume (µL)" />
         <param name="dispenser" type="select" label="Dispenser Machine">
             <option value="labcyte_echo" selected="true">Labcyte ECHO</option>
             <option value="tecan_evo">Tecab EVO</option>
         </param>
+        <section name="adv" title="advance" expanded="false">
+            <param name="backbone_name" type="text" area="True" label="Backbone Name(s)" optional='true'/>
+            <param name="part_backbone_ratio" type="float" value='1.0' min="0" max="1.0" label="Backbone Molar Ratio" optional='true' />
+        </section>
     </inputs>   
     <outputs>
         <data format="zip" name="output_zip" label="picklist (zip)"/>
@@ -171,8 +173,6 @@
             </param>
             <param name="picklist" value="example_picklist.xls" />
             <param name="source_plate" value="example_echo_plate.xlsx"/>
-            <param name="backbone_name" value="HC_Amp_ccdB" />
-            <param name="part_backbone_ratio" value="1" />
             <param name="quantity_unit" value="fmol" />
             <param name="part_quantity" value="1.3" />
             <param name="buffer_volume" value="0.3" />
@@ -193,6 +193,12 @@ create_assembly_picklists
 Provide a source plate map and an assembly plan, get a robotic picklist spreadsheet for Tecan EVO or Labcyte Echo.
 `Read more... <https://github.com/Edinburgh-Genome-Foundry/Plateo/blob/master/README.rst>`_ 
 
+**Advance parameter**:
+---------------------
+* **Backbone Name(s)**: It can be one backbone or more than one (one name by line)
+* **Backbone Molar Ratio**: between 0.0 and 1.0
+This section is to multiplie the backbone concentration with the part:backbone molar ratio. This tricks the calculator into making a picklist with the desired ratio. For example, a part:backbone = 2:1 will multiply the backbone concentration by 2, therefore half as much of it will be added to the well.
+**If Part quantity unit is ng**: Backbone Molar Ratio calculation is not performed in this case.
     ]]></help>
     <citations>
         <citation type="bibtex">
