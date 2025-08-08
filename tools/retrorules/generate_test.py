@@ -1,10 +1,7 @@
-import argparse
 import hashlib
-import json
-import logging
 import subprocess
 import tempfile
-from typing import Dict, List
+from typing import List
 
 
 def compute_md5(path: str):

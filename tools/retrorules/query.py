@@ -1,8 +1,8 @@
 import argparse
 import json
 import logging
-from typing import Dict, List
 import sys
+from typing import Dict, List
 
 import requests
 
