@@ -236,7 +236,7 @@
 RetroRules
 ==========
 
-Querying the RetroRules REST API
+Querying the `RetroRules <https://retrorules.org/>`_ REST API
     ]]></help>
     <creator>
         <organization name="BioRetroSynth" url="https://github.com/brsynth" />
