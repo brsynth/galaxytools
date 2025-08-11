@@ -1,0 +1,11 @@
+Missing fragment in DB:
+p15_PuroR
+p9_PuroR
+p9_mTagBFP2
+p9_BSDR
+p8_Linker1
+p7_L7Ae-Weiss
+p6_Nt-IgKLsequence
+p6_Kozak-ATG
+p4_Kt-L7Ae-Weiss
+HC_Amp_ccdB

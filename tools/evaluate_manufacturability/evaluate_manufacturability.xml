@@ -1,8 +1,8 @@
 <tool id="evaluate_manufacturability" name="Evaluate Manufacturability" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Evaluate DNA manufacturability with customizable constraints</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">1</token>
-        <token name="@TOOL_VERSION@">0.2.0</token>
+        <token name="@VERSION_SUFFIX@">2</token>
+        <token name="@TOOL_VERSION@">0.3.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="0.1.11">flametree</requirement>
@@ -16,8 +16,22 @@
         <requirement type="package" version="3.1.5">openpyxl</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        #set genbank_file_paths = ','.join([str(f) for f in $genbank_files])
-        #set file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+        #if $setting.mode == 'wkf':
+            #if $setting.genbank_files:
+                #set genbank_file_paths = ','.join([str(f) for f in $setting.genbank_files])
+                #set file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $setting.genbank_files])
+            #else: 
+                #set genbank_file_paths = ''
+                #set file_name_mapping = ''
+            #end if
+            #set DB_genbank_file_paths = ','.join([str(file) for file in $setting.DB_genbank_files])
+            #set DB_file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $setting.DB_genbank_files])
+        #else:
+            #set genbank_file_paths = ','.join([str(f) for f in $setting.genbank_files])
+            #set file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $setting.genbank_files])
+            #set DB_genbank_file_paths = ''
+            #set DB_file_name_mapping = ''
+        #end if
 
         #if str($json_use.use_json_param) == "false":
             #set avoid_list = [line.strip() for line in str($json_use.avoid_patterns).strip().split('\n') if line.strip()]
@@ -42,6 +56,16 @@
             --use_json_param '$json_use.use_json_param'
             --files_to_evaluate '$genbank_file_paths'
             --file_name_mapping '$file_name_mapping'
+            --mode '$mode'
+            #if $setting.mode=='wkf':
+                --DB_report '$setting.DB_report'
+                --DB_genbank_files '$DB_genbank_file_paths'
+                --DB_file_name_mapping '$DB_file_name_mapping'
+            #else:
+                --DB_report ''
+                --DB_genbank_files ''
+                --DB_file_name_mapping ''
+            #end if
             --output_pdf '$report_pdf'
             --output_tsv '$report_tsv'
             --outdir_gb 'outdir_dir'
@@ -54,11 +78,24 @@
                 --json_params '$json_use.json_params'
             #else:
                 --json_params ''
-            #end if
+            #end if && echo 'DEBUG' && "$DB_genbank_files"
     ]]></command>
 
     <inputs>
-        <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank File(s)"/>
+        <conditional name='setting'>
+            <param name="mode" type="select" label="Mode">
+                <option value="std" selected="true">Standard</option>
+                <option value="wkf">Workflow</option>
+            </param>
+            <when value="std">
+                <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank File(s)"/>
+            </when>
+            <when value="wkf">
+                <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank File(s)" optional="true"/>
+                <param name="DB_genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="DB GenBank File(s)"/>
+                <param name="DB_report" type="data" format="txt" label="Missing Fragments Report" help="text file report" />
+            </when>
+        </conditional>
         <conditional name='json_use'>
             <param name="use_json_param" type="boolean" checked="false" label="Use parameter from a JSON file" />
             <when value="false">
@@ -85,20 +122,7 @@
     impossible to run it in conda env with this comand because there is a step to extract the the file name in galaxy (.dat) in line 83 of the python code-->
     <tests>
         <test> 
-            <param name="genbank_files">
-                <collection type="list">
-                    <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
-                    <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
-                    <element name="p9_mTagBFP2" value="10_emma_genbanks/p9_mTagBFP2.gb" />
-                    <element name="p9_BSDR" value="10_emma_genbanks/p9_BSDR.gb" />
-                    <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
-                    <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
-                    <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
-                    <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
-                    <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
-                    <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
-                </collection>
-            </param>
+            
             <param name="use_file_names_as_ids" value="True" />
             <conditional name='json_use'>
                 <param name="use_json_param" value="false" />
@@ -118,6 +142,23 @@
                 <!-- UniquifyAllKmers -->
                 <param name="kmer_size" value="15" />
             </conditional>
+            <conditional name='setting'>
+                <param name="mode" value="std"/>
+                <param name="genbank_files">
+                    <collection type="list">
+                        <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                        <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                        <element name="p9_mTagBFP2" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                        <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
+                        <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
+                        <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
+                        <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                        <element name="p9_BSDR" value="10_emma_genbanks/p9_BSDR.gb" />
+                        <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
+                        <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    </collection>
+                </param>
+            </conditional>
             <!-- Expecting pdf output -->
             <output name="report_pdf" ftype="pdf">
                 <assert_contents>
@@ -125,7 +166,7 @@
                 </assert_contents>
             </output>
             <!-- Expecting tsv output -->
-            <output name="report_tsv" ftype="tsv">
+            <output name="report_tsv" file='manufacturability_report.tsv' ftype="tsv">
                 <assert_contents>
                     <has_n_lines n="11" />
                     <has_n_columns n="12" />
@@ -186,25 +227,28 @@
         </test>
         <!-- parameters from json -->
         <test> 
-            <param name="genbank_files">
-                <collection type="list">
-                    <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
-                    <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
-                    <element name="p9_mTagBFP2" value="10_emma_genbanks/p9_mTagBFP2.gb" />
-                    <element name="p9_BSDR" value="10_emma_genbanks/p9_BSDR.gb" />
-                    <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
-                    <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
-                    <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
-                    <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
-                    <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
-                    <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
-                </collection>
-            </param>
             <param name="use_file_names_as_ids" value="True" />
             <conditional name='json_use'>
                 <param name="use_json_param" value="true" />
                 <!-- JSON -->
                 <param name="json_params" value="test_json.json" />
+            </conditional>
+            <conditional name='setting'>
+                <param name="mode" value="std"/>
+                <param name="genbank_files">
+                    <collection type="list">
+                        <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                        <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                        <element name="p9_mTagBFP2" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                        <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
+                        <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
+                        <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
+                        <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                        <element name="p9_BSDR" value="10_emma_genbanks/p9_BSDR.gb" />
+                        <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
+                        <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    </collection>
+                </param>
             </conditional>
             <!-- Expecting pdf output -->
             <output name="report_pdf" ftype="pdf">
@@ -213,7 +257,7 @@
                 </assert_contents>
             </output>
             <!-- Expecting tsv output -->
-            <output name="report_tsv" ftype="tsv">
+            <output name="report_tsv" file='manufacturability_report.tsv' ftype="tsv">
                 <assert_contents>
                     <has_n_lines n="11" />
                     <has_n_columns n="12" />
@@ -272,6 +316,288 @@
                 </element>
             </output_collection>
         </test>
+        <!--test wkf mode simulation-->
+        <!--NO missing-->
+        <test> 
+            <param name="use_file_names_as_ids" value="True" />
+            <conditional name='json_use'>
+                <param name="use_json_param" value="false" />
+                <!-- AvoidPatterns -->
+                <param name="avoid_patterns" value="BsaI_site
+                BsmBI_site
+                BbsI_site
+                SapI_site
+                8x1mer
+                5x3mer
+                9x2mer" />
+                <!-- AvoidHairpins -->
+                <param name="hairpin_constraints" value='stem_size=20, hairpin_window=200'/>
+                <!-- EnforceGCContent -->
+                <param name="gc_constraints" value="mini=0.3, maxi=0.7, window=100
+                mini=0.1, maxi=0.9, window=100"/>
+                <!-- UniquifyAllKmers -->
+                <param name="kmer_size" value="15" />
+            </conditional>
+            <conditional name='setting'>
+                <param name="mode" value="wkf"/>
+                <param name="DB_genbank_files">
+                    <collection type="list">
+                        <element name="p3_2_CAG" value="DB_genbank_simulation/p3_2_CAG.gb" />
+                        <element name="p16_bGHpolyA" value="DB_genbank_simulation/p16_bGHpolyA.gb" />
+                        <element name="p19_mNeoGreen" value="DB_genbank_simulation/p19_mNeoGreen.gb" />
+                    </collection>
+                </param>
+                <param name="DB_report" value="NO_missing.txt" />
+            </conditional>
+            <output_collection name="annotated_gb" type="list" count="3">
+                <element name="p16_bGHpolyA">
+                    <assert_contents>
+                     <has_n_lines n="24" />
+                    </assert_contents>
+                </element>
+                <element name="p19_mNeoGreen">
+                    <assert_contents>
+                     <has_n_lines n="44" />
+                    </assert_contents>
+                </element>
+                <element name="p3_2_CAG">
+                    <assert_contents>
+                     <has_n_lines n="33" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <!--missing with no providing gb fragment files-->
+        <!--should return error (faild)-->
+        <test> 
+            <param name="use_file_names_as_ids" value="True" />
+            <conditional name='json_use'>
+                <param name="use_json_param" value="false" />
+                <!-- AvoidPatterns -->
+                <param name="avoid_patterns" value="BsaI_site
+                BsmBI_site
+                BbsI_site
+                SapI_site
+                8x1mer
+                5x3mer
+                9x2mer" />
+                <!-- AvoidHairpins -->
+                <param name="hairpin_constraints" value='stem_size=20, hairpin_window=200'/>
+                <!-- EnforceGCContent -->
+                <param name="gc_constraints" value="mini=0.3, maxi=0.7, window=100
+                mini=0.1, maxi=0.9, window=100"/>
+                <!-- UniquifyAllKmers -->
+                <param name="kmer_size" value="15" />
+            </conditional>
+            <conditional name='setting'>
+                <param name="mode" value="wkf"/>
+                <param name="genbank_files">
+                    <collection type="list">
+                        <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                        <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                        <element name="p9_mTagBFP2" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                        <element name="p9_BSDR" value="10_emma_genbanks/p9_BSDR.gb" />
+                        <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                        <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    </collection>
+                </param>
+                <param name="DB_genbank_files">
+                    <collection type="list">
+                        <element name="p3_2_CAG" value="DB_genbank_simulation/p3_2_CAG.gb" />
+                        <element name="p16_bGHpolyA" value="DB_genbank_simulation/p16_bGHpolyA.gb" />
+                        <element name="p19_mNeoGreen" value="DB_genbank_simulation/p19_mNeoGreen.gb" />
+                    </collection>
+                </param>
+                <param name="DB_report" value="missing.txt" />
+            </conditional>
+            <!-- Expecting pdf output -->
+            <output name="report_pdf" ftype="pdf">
+                <assert_contents>
+                    <has_size min="86"/>
+                </assert_contents>
+            </output>
+            <!-- Expecting tsv output -->
+            <output name="report_tsv" ftype="tsv">
+                <assert_contents>
+                    <has_n_lines n="11" />
+                    <has_n_columns n="12" />
+                </assert_contents>
+            </output>
+            <output_collection name="annotated_gb" type="list" count="10">
+                <element name="HC_Amp_ccdB">
+                    <assert_contents>
+                     <has_n_lines n="150" />
+                    </assert_contents>
+                </element>
+                <element name="p15_PuroR">
+                    <assert_contents>
+                     <has_n_lines n="150" />
+                    </assert_contents>
+                </element>
+                <element name="p4_Kt-L7Ae-Weiss">
+                    <assert_contents>
+                     <has_n_lines n="120" />
+                    </assert_contents>
+                </element>
+                <element name="p6_Kozak-ATG">
+                    <assert_contents>
+                     <has_n_lines n="124" />
+                    </assert_contents>
+                </element>
+                <element name="p6_Nt-IgKLsequence">
+                    <assert_contents>
+                     <has_n_lines n="131" />
+                    </assert_contents>
+                </element>
+                <element name="p7_L7Ae-Weiss">
+                    <assert_contents>
+                     <has_n_lines n="130" />
+                    </assert_contents>
+                </element>
+                <element name="p3_2_CAG">
+                    <assert_contents>
+                     <has_n_lines n="138" />
+                    </assert_contents>
+                </element>
+                <element name="p16_bGHpolyA">
+                    <assert_contents>
+                     <has_n_lines n="138" />
+                    </assert_contents>
+                </element>
+                <element name="p19_mNeoGreen">
+                    <assert_contents>
+                     <has_n_lines n="138" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <!--missing with providing gb fragment files-->
+        <test> 
+            <param name="use_file_names_as_ids" value="True" />
+            <conditional name='json_use'>
+                <param name="use_json_param" value="false" />
+                <!-- AvoidPatterns -->
+                <param name="avoid_patterns" value="BsaI_site
+                BsmBI_site
+                BbsI_site
+                SapI_site
+                8x1mer
+                5x3mer
+                9x2mer" />
+                <!-- AvoidHairpins -->
+                <param name="hairpin_constraints" value='stem_size=20, hairpin_window=200'/>
+                <!-- EnforceGCContent -->
+                <param name="gc_constraints" value="mini=0.3, maxi=0.7, window=100
+                mini=0.1, maxi=0.9, window=100"/>
+                <!-- UniquifyAllKmers -->
+                <param name="kmer_size" value="15" />
+            </conditional>
+            <conditional name='setting'>
+                <param name="mode" value="wkf"/>
+                <param name="genbank_files">
+                    <collection type="list">
+                        <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                        <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                        <element name="p9_mTagBFP2" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                        <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
+                        <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
+                        <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
+                        <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                        <element name="p9_BSDR" value="10_emma_genbanks/p9_BSDR.gb" />
+                        <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
+                        <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    </collection>
+                </param>
+                <param name="DB_genbank_files">
+                    <collection type="list">
+                        <element name="p3_2_CAG" value="DB_genbank_simulation/p3_2_CAG.gb" />
+                        <element name="p16_bGHpolyA" value="DB_genbank_simulation/p16_bGHpolyA.gb" />
+                        <element name="p19_mNeoGreen" value="DB_genbank_simulation/p19_mNeoGreen.gb" />
+                    </collection>
+                </param>
+                <param name="DB_report" value="missing.txt" />
+            </conditional>
+            <!-- Expecting pdf output -->
+            <output name="report_pdf" ftype="pdf">
+                <assert_contents>
+                    <has_size min="86"/>
+                </assert_contents>
+            </output>
+            <!-- Expecting tsv output -->
+            <output name="report_tsv" file='manufacturability_report.tsv' ftype="tsv">
+                <assert_contents>
+                    <has_n_lines n="11" />
+                    <has_n_columns n="12" />
+                </assert_contents>
+            </output>
+            <output_collection name="annotated_gb" type="list" count="13">
+                <element name="HC_Amp_ccdB">
+                    <assert_contents>
+                     <has_n_lines n="150" />
+                    </assert_contents>
+                </element>
+                <element name="p15_PuroR">
+                    <assert_contents>
+                     <has_n_lines n="150" />
+                    </assert_contents>
+                </element>
+                <element name="p4_Kt-L7Ae-Weiss">
+                    <assert_contents>
+                     <has_n_lines n="120" />
+                    </assert_contents>
+                </element>
+                <element name="p6_Kozak-ATG">
+                    <assert_contents>
+                     <has_n_lines n="124" />
+                    </assert_contents>
+                </element>
+                <element name="p6_Nt-IgKLsequence">
+                    <assert_contents>
+                     <has_n_lines n="131" />
+                    </assert_contents>
+                </element>
+                <element name="p7_L7Ae-Weiss">
+                    <assert_contents>
+                     <has_n_lines n="130" />
+                    </assert_contents>
+                </element>
+                <element name="p8_Linker1">
+                    <assert_contents>
+                     <has_n_lines n="117" />
+                    </assert_contents>
+                </element>
+                <element name="p9_BSDR">
+                    <assert_contents>
+                     <has_n_lines n="136" />
+                    </assert_contents>
+                </element>
+                <element name="p9_mTagBFP2">
+                    <assert_contents>
+                     <has_n_lines n="147" />
+                    </assert_contents>
+                </element>
+                <element name="p9_PuroR">
+                    <assert_contents>
+                     <has_n_lines n="138" />
+                    </assert_contents>
+                </element>
+                <element name="p3_2_CAG">
+                    <assert_contents>
+                     <has_n_lines n="33" />
+                    </assert_contents>
+                </element>
+                <element name="p16_bGHpolyA">
+                    <assert_contents>
+                     <has_n_lines n="24" />
+                    </assert_contents>
+                </element>
+                <element name="p19_mNeoGreen">
+                    <assert_contents>
+                     <has_n_lines n="44" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
     </tests>
     <help><![CDATA[
 Evaluate Manufacturability
@@ -281,6 +607,10 @@ Get plots of patterns impacting synthesis and assembly difficulty deppanding on 
 
 **Parameters**:
 ---------------
+* **Mode**: 
+    This option allows you to choose the mode in which the tool will be executed:
+        - Standard: Runs the tool as a standalone application.
+        - Workflow: Adds additional options to make the tool more flexible and interactive within a workflow.
 * **GenBank File(s)**: List of GenBank files to be processed.
 * **Use parameter from a JSON file**: 
     Yes/No parameter to indicate if user want to set parameter manually or using a json file
@@ -300,6 +630,20 @@ Get plots of patterns impacting synthesis and assembly difficulty deppanding on 
     In case on using more than one combination, each one msut be on a ligne.
 * **K-mer Uniqueness Size**: Avoid sub-sequence of length k with homologies elsewhere.
 * **Use File Names As Sequence IDs**: Recommended if the GenBank file names represent the fragment names.
+
+**DEMO **
+----------
+
+ Executes the tool in standard mode using default parameters tailored to the test dataset.
+
+ To start a demo you need to download the test dataset and the defaulte parameter aapted:
+
+ - **GenBank File(s):** `Download GenBank files <https://files.osf.io/v1/resources/235de/providers/osfstorage/6894678c16b49a3aaeb067c9/?zip=>`_
+
+    **Note:** Make GenBank files as a collection list.  
+    `How to make collection <https://training.galaxyproject.org/training-material/topics/galaxy-interface/tutorials/collections/tutorial.html>`_
+ 
+ - **Default Parameters:** Thy are provided `here <https://osf.io/download/689467ddc9ee0bb750f62d86/>`_ as JSON file (Enabel the Use parameter from a JSON file option)
     ]]></help>
     <citations>
         <citation type="bibtex">
