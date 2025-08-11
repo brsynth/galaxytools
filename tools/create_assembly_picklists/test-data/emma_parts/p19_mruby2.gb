@@ -1,0 +1,99 @@
+LOCUS       .                       2532 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   <unknown id>
+VERSION     <unknown id>
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     terminator      392..419
+                     /note="T7Te terminator"
+                     /note="phage T7 early transcription terminator"
+     rep_origin      complement(431..1018)
+                     /direction=LEFT
+                     /note="ori"
+                     /note="high-copy-number ColE1/pMB1/pBR322/pUC origin of
+                     replication"
+     terminator      1040..1069
+                     /note="T3Te terminator"
+                     /note="phage T3 early transcription terminator"
+     misc_feature    1143..1148
+                     /note="BsmBI"
+     source          5..1149
+                     /source="Exported"
+     misc_feature    1154..1164
+                     /note="KozaK"
+     CDS             1162..1164
+                     /codon_start=1
+                     /note="ATG"
+                     /translation="M"
+     CDS             1165..1872
+                     /codon_start=1
+                     /note="mRuby2"
+                     /product="monomeric red fluorescent protein derived from
+                     mRuby, with improved photophysical properties (Lam et al.,
+                     2012)"
+                     /translation="VSKGEELIKENMRMKVVMEGSVNGHQFKCTGEGEGNPYMGTQTMR
+                     IKVIEGGPLPFAFDILATSFMYGSRTFIKYPKGIPDFFKQSFPEGFTWERVTRYEDGGV
+                     VTVMQDTSLEDGCLVYHVQVRGVNFPSNGPVMQKKTKGWEPNTEMMYPADGGLRGYTHM
+                     ALKVDGGGHLSCSFVTTYRSKKTVGNIKMPGIHAVDHRLERLEESDNEMFVVQREHAVA
+                     KFAGLGGGMDELYK"
+     source          1154..1872
+                     /source="Exported"
+     misc_feature    complement(1878..1883)
+                     /note="BsmBI"
+     terminator      1950..1981
+                     /note="tonB terminator"
+                     /note="bidirectional E. coli tonB-P14 transcription
+                     terminator"
+     promoter        1982..2084
+                     /note="cat promoter"
+                     /note="promoter of the E. coli cat gene"
+     source          1877..2532
+                     /source="Exported"
+ORIGIN
+        1 ctcaggcgca atcacgaatg aataacggtt tggttggtgc gagtgatttt gatgacgagc
+       61 gtaatggctg gcctgttgaa caagtctgga aagaaatgca taagcttttg ccattctcac
+      121 cggattcagt cgtcactcat ggtgatttct cacttgataa ccttattttt gacgagggga
+      181 aattaatagg ttgtattgat gttggacgag tcggaatcgc agaccgatac caggatcttg
+      241 ccatcctatg gaactgcctc ggtgagtttt ctccttcatt acagaaacgg ctttttcaaa
+      301 aatatggtat tgataatcct gatatgaata aattgcagtt tcacttgatg ctcgatgagt
+      361 ttttctaatg agggcccaaa tgtaatcacc tggctcacct tcgggtgggc ctttctgcgt
+      421 tgctggcgtt tttccatagg ctccgccccc ctgacgagca tcacaaaaat cgatgctcaa
+      481 gtcagaggtg gcgaaacccg acaggactat aaagatacca ggcgtttccc cctggaagct
+      541 ccctcgtgcg ctctcctgtt ccgaccctgc cgcttaccgg atacctgtcc gcctttctcc
+      601 cttcgggaag cgtggcgctt tctcatagct cacgctgtag gtatctcagt tcggtgtagg
+      661 tcgttcgctc caagctgggc tgtgtgcacg aaccccccgt tcagcccgac cgctgcgcct
+      721 tatccggtaa ctatcgtctt gagtccaacc cggtaagaca cgacttatcg ccactggcag
+      781 cagccactgg taacaggatt agcagagcga ggtatgtagg cggtgctaca gagttcttga
+      841 agtggtggcc taactacggc tacactagaa gaacagtatt tggtatctgc gctctgctga
+      901 agccagttac ctcggaaaaa gagttggtag ctcttgatcc ggcaaacaaa ccaccgctgg
+      961 tagcggtggt ttttttgttt gcaagcagca gattacgcgc agaaaaaaag gatctcaaga
+     1021 agatcctttg attttctacc gaagaaaggc ccacccgtga aggtgagcca gtgagttgat
+     1081 tgcagtccag ttacgctgga gtctgaggct cgtcctgaat gatatcaagc ttgaattcgt
+     1141 tacgtctcgg tgcccgccac catggtgtct aagggcgaag agctgatcaa ggaaaatatg
+     1201 cgtatgaagg tggtcatgga aggttcggtc aacggccacc aattcaaatg cacaggtgaa
+     1261 ggagaaggca atccgtacat gggaactcaa accatgagga tcaaagtcat cgagggagga
+     1321 cccctgccat ttgcctttga cattcttgcc acgtcgttca tgtatggcag ccgtactttt
+     1381 atcaagtacc cgaaaggcat tcctgatttc tttaaacagt cctttcctga gggttttact
+     1441 tgggaaagag ttacgagata cgaagatggt ggagtcgtca ccgtcatgca ggacaccagc
+     1501 cttgaggatg gctgtctcgt ttaccacgtc caagtcagag gggtaaactt tccctccaat
+     1561 ggtcccgtga tgcagaagaa gaccaagggt tgggagccta atacagagat gatgtatcca
+     1621 gcagatggtg gtctgagggg atacactcat atggcactga aagttgatgg tggtggccat
+     1681 ctgtcttgct ctttcgtaac aacttacagg tcaaaaaaga ccgtcgggaa catcaagatg
+     1741 cccggtatcc atgccgttga tcaccgcctg gaaaggttag aggaaagtga caatgaaatg
+     1801 ttcgtagtac aacgcgaaca cgcagttgcc aagttcgccg ggcttggtgg tgggatggac
+     1861 gagctgtaca agagcgcgag acgaagacga attctctaga tatcgctcaa tactgaccat
+     1921 ttaaatcata cctgacctcc atagcagaaa gtcaaaagcc tccgaccgga ggcttttgac
+     1981 ttgatcggca cgtaagaggt tccaactttc accataatga aataagatca ctaccgggcg
+     2041 tattttttga gttatcgaga ttttcaggag ctaaggaagc taaaatgagc catattcaac
+     2101 gggaaacgtc ttgctcgagg ccgcgattaa attccaacat ggatgctgat ttatatgggt
+     2161 ataaatgggc tcgcgataat gtcgggcaat caggtgcgac aatctatcga ttgtatggga
+     2221 agcccgatgc gccagagttg tttctgaaac atggcaaagg tagcgttgcc aatgatgtta
+     2281 cagatgagat ggtcaggcta aactggctga cggaatttat gcctcttccg accatcaagc
+     2341 attttatccg tactcctgat gatgcatggt tactcaccac tgcgatccca gggaaaacag
+     2401 cattccaggt attagaagaa tatcctgatt caggtgaaaa tattgttgat gcgctggcag
+     2461 tgttcctgcg ccggttgcat tcgattcctg tttgtaattg tccttttaac ggcgatcgcg
+     2521 tatttcgtct cg
+//

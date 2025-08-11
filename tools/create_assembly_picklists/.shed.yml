@@ -1,0 +1,9 @@
+name: create_assembly_picklists
+owner: tduigou
+categories:
+  - Systems Biology
+  - Synthetic Biology
+description: Provide a source plate map and an assembly plan, get a robotic picklist spreadsheet for Tecan EVO or Labcyte Echo
+long_description: Provide a source plate map and an assembly plan, get a robotic picklist spreadsheet for Tecan EVO or Labcyte Echo
+homepage_url: https://github.com/Edinburgh-Genome-Foundry/CUBA/blob/master/backend/app/views/create_assembly_picklists/CreateAssemblyPicklistsView.py
+remote_repository_url: https://github.com/Edinburgh-Genome-Foundry/Plateo
