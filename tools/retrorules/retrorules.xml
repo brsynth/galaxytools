@@ -1,0 +1,247 @@
+<tool id="retrorules" name="RetroRules" version="0.1.1" profile="21.09" license="MIT">
+    <description>Querying the RetroRules REST API</description>
+    <requirements>
+        <requirement type="package" version="2">requests</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python '$__tool_directory__/'query.py
+        #if str($cond_src.from_src) == 'from_ec_number'
+            ec-number
+            --input-ec-number-str '$cond_src.ec_number'
+        #elif str($cond_src.from_src) == 'from_substrate'
+            substrate
+            --input-substrate-str '$cond_src.substrate'
+        #elif str($cond_src.from_src) == 'from_reaction_id'
+            reaction-id
+            --input-reaction-id-str '$cond_src.reaction_id'
+            --input-repository-str '$cond_src.repositories'
+        #elif str($cond_src.from_src) == 'from_inchi'
+            inchi
+            --input-inchi-str '$cond_src.inchi'
+        #elif str($cond_src.from_src) == 'from_repository'
+            repository
+            --input-repository-str '$cond_src.repositories'
+        #elif str($cond_src.from_src) == 'from_smarts_id'
+            #set smart_ids = []
+            #for $x in $cond_src.rep_smarts
+                #silent smart_ids.append(str($x.smart_id))
+            #end for
+            #set smart_id = ' '.join($smart_ids)
+            smarts-id
+            --input-smarts-id-str $smart_id
+        #end if
+        --input-min-diameter-int '$adv.min_diameter'
+        --output-data-json '$output_json'
+    ]]></command>
+    <inputs>
+        <conditional name="cond_src">
+            <param name="from_src" type="select" label="Select source">
+                <option value="from_ec_number" selected="True">Query with EC number</option>
+                <option value="from_substrate">Query with a Substrate label</option>
+                <option value="from_reaction_id">Query with a Reaction ID</option>
+                <option value="from_inchi">Query with an InChI</option>
+                <option value="from_repository">Query with a Repository name</option>
+                <option value="from_smarts_id">Query with Smarts ID(s)</option>
+            </param>
+            <when value="from_ec_number">
+                <param name="ec_number" type="text" label="EC number">
+                    <validator type="empty_field" message="EC number is required" />
+                </param>
+            </when>
+            <when value="from_substrate">
+                <param name="substrate" type="text" label="Substrate">
+                    <validator type="empty_field" message="Substrate is required" />
+                </param>
+            </when>
+            <when value="from_reaction_id">
+                <param name="reaction_id" type="text" label="Reaction ID">
+                    <validator type="empty_field" message="Reaction ID is required" />
+                </param>
+                <param name="repositories" type="select" label="Select Repository">
+                    <option value="mnx" selected="True">MetaNetX</option>
+                    <option value="bigg">BiGG</option>
+                    <option value="kegg">KEGG</option>
+                    <option value="metacyc">MetaCyc</option>
+                    <option value="reactome">Reactome</option>
+                    <option value="rhea">Rhea</option>
+                    <option value="sabiork">Sabio-RK</option>
+                    <option value="seed">SEED</option>
+                </param>
+            </when>
+            <when value="from_inchi">
+                <param name="inchi" type="text" label="InChI">
+                    <validator type="empty_field" message="InChI is required" />
+                    <validator type="regex" message="Must start by: InChI=">^InChI=</validator>
+                </param>
+            </when>
+            <when value="from_repository">
+                <param name="repositories" type="select" label="Select Repository">
+                    <option value="mnx" selected="True">MetaNetX</option>
+                    <option value="bigg">BiGG</option>
+                    <option value="kegg">KEGG</option>
+                    <option value="metacyc">MetaCyc</option>
+                    <option value="reactome">Reactome</option>
+                    <option value="rhea">Rhea</option>
+                    <option value="sabiork">Sabio-RK</option>
+                    <option value="seed">SEED</option>
+                </param>
+            </when>
+            <when value="from_smarts_id">
+                <repeat name="rep_smarts" title="Smarts ID">
+                    <param name="smart_id" type="text" label="Smart ID">
+                        <validator type="empty_field" message="Not empty" />
+                    </param>
+                </repeat>
+            </when>
+        </conditional>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param argument="min_diameter" type="integer" value="12" min="1" max="16"
+                label="Diameter minimal" />
+        </section>
+    </inputs>
+    <outputs>
+        <data name="output_json" format="json" label="${tool.name} (min diameter: ${min_diameter})" />
+    </outputs>
+    <tests>
+        <!-- EC number -->
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_ec_number" />
+                <param name="ec_number" value="1.1.1.1" />
+            </conditional>
+            <output name="output_json" md5="f69b2476a8c058f53b06a042af7c6f66" />
+        </test>
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_ec_number" />
+                <param name="ec_number" value="1.1.1.1" />
+            </conditional>
+            <section name="adv">
+                <param name="min_diameter" value="16" />
+            </section>
+            <output name="output_json" md5="e398ac4713bb1cba178245e32cc229da" />
+        </test>
+        <!-- Substrate -->
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_substrate" />
+                <param name="substrate" value="pyruvate" />
+            </conditional>
+            <output name="output_json" md5="c5127296be366c2baa4d3018cb6e81e9" />
+        </test>
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_substrate" />
+                <param name="substrate" value="pyruvate" />
+            </conditional>
+            <section name="adv">
+                <param name="min_diameter" value="16" />
+            </section>
+            <output name="output_json" md5="c5127296be366c2baa4d3018cb6e81e9" />
+        </test>
+        <!-- Reaction ID -->
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_reaction_id" />
+                <param name="reaction_id" value="MNXR104443" />
+                <param name="repositories" value="mnx" />
+            </conditional>
+            <output name="output_json" md5="e8606927b9241018922cbe0f0dd4ec38" />
+        </test>
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_reaction_id" />
+                <param name="reaction_id" value="MNXR104443" />
+                <param name="repositories" value="mnx" />
+            </conditional>
+            <section name="adv">
+                <param name="min_diameter" value="1" />
+            </section>
+            <output name="output_json" md5="03dace646bde812e26b19a99a6a277af" />
+        </test>
+        <!-- InChI -->
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_inchi" />
+                <param name="inchi"
+                    value="InChI=1S/C4H4O5/c5-2(4(8)9)1-3(6)7/h1H2,(H,6,7)(H,8,9)/p-2" />
+            </conditional>
+            <output name="output_json" md5="00e002eb01255c6d1123f32868cce74f" />
+        </test>
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_inchi" />
+                <param name="inchi"
+                    value="InChI=1S/C4H4O5/c5-2(4(8)9)1-3(6)7/h1H2,(H,6,7)(H,8,9)/p-2" />
+            </conditional>
+            <section name="adv">
+                <param name="min_diameter" value="1" />
+            </section>
+            <output name="output_json" md5="43d43fdc2cbe52382889f956cc6b0fb8" />
+        </test>
+        <!-- Repository -->
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_repository" />
+                <param name="repositories" value="kegg" />
+            </conditional>
+            <output name="output_json" md5="52e297a9db6a3985b9d6a2084265f5a1" />
+        </test>
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_repository" />
+                <param name="repositories" value="kegg" />
+            </conditional>
+            <section name="adv">
+                <param name="min_diameter" value="16" />
+            </section>
+            <output name="output_json" md5="4be2682c4502e2a8793e38e9b47eec11" />
+        </test>
+        <!-- Smarts ID -->
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_smarts_id" />
+                <repeat name="rep_smarts">
+                    <param name="smart_id" value="RR00239878" />
+                </repeat>
+            </conditional>
+            <output name="output_json" md5="a72d4fdb9ef1427dcdd8fe9536563252" />
+        </test>
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_smarts_id" />
+                <repeat name="rep_smarts">
+                    <param name="smart_id" value="RR00239878" />
+                </repeat>
+            </conditional>
+            <section name="adv">
+                <param name="min_diameter" value="16" />
+            </section>
+            <output name="output_json" md5="a72d4fdb9ef1427dcdd8fe9536563252" />
+        </test>
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_smarts_id" />
+                <repeat name="rep_smarts">
+                    <param name="smart_id" value="RR00239877" />
+                </repeat>
+                <repeat name="rep_smarts">
+                    <param name="smart_id" value="RR00239878" />
+                </repeat>
+            </conditional>
+            <output name="output_json" md5="88a77dd3b53d619f6b55952a9a90fc1b" />
+        </test>
+    </tests>
+    <help><![CDATA[
+RetroRules
+==========
+
+Querying the `RetroRules <https://retrorules.org/>`_ REST API
+    ]]></help>
+    <creator>
+        <organization name="BioRetroSynth" url="https://github.com/brsynth" />
+    </creator>
+    <citations>
+        <citation type="doi">10.1093/nar/gky940</citation>
+    </citations>
+</tool>

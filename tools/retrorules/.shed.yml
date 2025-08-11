@@ -1,0 +1,8 @@
+categories:
+  - Computational chemistry
+description: Querying the RetroRules REST API
+long_description: Querying the RetroRules REST API
+name: retrorules
+owner: tduigou
+homepage_url: https://retrorules.org/doc/api
+remote_repository_url: https://github.com/brsynth/galaxytools
