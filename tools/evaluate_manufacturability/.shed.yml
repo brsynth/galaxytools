@@ -1,0 +1,9 @@
+name: evaluate_manufacturability
+owner: tduigou
+categories:
+  - Systems Biology
+  - Synthetic Biology
+description: Evaluate DNA manufacturability with customizable constraints
+long_description: 'his tool evaluates DNA manufacturability by checking sequence constraints and outputs reports highlighting any issues found'
+homepage_url: https://github.com/Edinburgh-Genome-Foundry/Examples/blob/master/templates/template1.ipynb
+remote_repository_url: https://github.com/Edinburgh-Genome-Foundry/Examples/blob/master/templates/template1.ipynb

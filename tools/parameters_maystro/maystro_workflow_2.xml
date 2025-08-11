@@ -1,0 +1,126 @@
+<tool id="parameters_maystro_workflow_2" name="Workflow-2 Parameters Maystro" version="@TOOL_VERSION@" profile="21.09">
+    <description>Store parameters of workflow-2 to be used again</description>
+    <macros>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+    </macros>
+    <command detect_errors="exit_code"><![CDATA[
+    #if $user_json and str($user_json) != 'None':
+        cp '$user_json' '$output_json'
+    #else
+        python3 -c "import json; params = {
+        'DnaOptimizationProblemClass': '$DnaOptimizationProblemClass',
+        'methylation_protection': '$methylation_protection',
+        'allow_edits': '$allow_edits',
+        'avoid_patterns': '$avoid_patterns',
+        'hairpin_constraints': '$hairpin_constraints',
+        'gc_constraints': '$gc_constraints',
+        'kmer_size': '$kmer_size',
+        'assembly_plan_name': '$assembly_plan_name',
+        'topology': '$topology',
+        'enzyme': '$enzyme',
+        'execution': '$execution',
+        'db_uri': '$db_uri',
+        'table': '$table_name',
+        'fragment_column': '$fragment_column',
+        'sequence_column': '$sequence_column',
+        'annotation_column': '$annotation_column'
+        }; f = open('$output_json', 'w'); json.dump(params, f, indent=4); f.close()" && echo DEBG && cat '$output_json'
+    #end if
+    && echo DEBG && cat '$output_json'
+    ]]></command>
+    <inputs>
+        <param name="DnaOptimizationProblemClass" type="select" label="DnaOptimizationProblem Calss" help="select the assambly class">
+            <option value="DnaOptimizationProblem" selected="True">DnaOptimizationProblem</option>
+            <option value="CircularDnaOptimizationProblem">CircularDnaOptimizationProblem</option>
+        </param>
+        <param name="avoid_patterns" type="text" area="true" optional="true" label="Avoid Patterns (one per line)" />
+        <param name="hairpin_constraints" type="text" area="true" label="Hairpins Constraints" optional="true" help="e.g. (you can add others Hairpins Constraints on a new line): stem_size=20, hairpin_window=200"/>
+        <param name="gc_constraints" type="text" area="true" label="Enforce GC Content Constraints" optional="true" help="e.g. (you can add others Enforce GC Content Constraints on a new line): mini=0.3, maxi=0.7, window=100"/>
+        <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="" optional="true" help="e.g.: 15"/>
+        <param name="methylation_protection" type="boolean" checked="False" label="Enabel Methylation Protection"/>
+        <param name="allow_edits" type="boolean" checked="True" label="Allow Sequence Edits" help="If False, sequences cannot be edited by the domesticator, only extended
+      with flanks. If a sequence has for instance forbidden restriction sites,
+      the domesticaton will fail for this sequence (and this will be noted in
+      the report."/>
+        <param name="assembly_plan_name" type="select" label="Assembly Calss" help="select the assambly class">
+            <option value="Type2sRestrictionAssembly" selected="True">GoldenGate_assembly</option>
+            <option value="GibsonAssembly">Gibson_assembly</option>
+            <option value="BASICAssembly">BASIC_assembly</option>
+            <option value="BioBrickStandardAssembly">biobrick_assembly</option>
+            <option value="LigaseCyclingReactionAssembly">lcr_assembly</option>
+        </param>
+        <param name="topology" type="select" label="Assambly Topology" help="select circular or linear topology">
+            <option value="linear">linear</option>
+            <option value="circular" selected="True">circular</option>
+        </param>
+        <param name="enzyme" type="text" label="Enzyme" value="auto"/>
+        <section name="DB" title="DB conf" expanded='true'>
+            <param name="execution" type="boolean" label="Save To DB ?" checked ='false' optional="true" help="If True data will be saved in the DB" />
+            <param name="db_uri" type="text" optional="true" help='Only if Input Your Parameters As JSON is FALSE' />
+            <param name="table_name" type="text" optional="true" help='table name in DB' />
+            <param name="fragment_column" type="text" optional="true" help='Fragmnet column in DB' />
+            <param name="sequence_column" type="text" optional="true" help='Sequence column in DB' />
+            <param name="annotation_column" type="text" optional="true" help='Annotation column in DB' />
+            <param name="user_json" type="data" format="json" optional="true" help='Only if Input Your Parameters As JSON is TRUE' />
+        </section>
+    </inputs>   
+    <outputs>
+        <data name="output_json" format="json" label="Workflow-2 Parameters"/>
+    </outputs>
+    <tests>
+        <!--manual parameters set-->
+        <test>
+            <param name="DnaOptimizationProblemClass" value="DnaOptimizationProblem"/>
+
+            <param name="avoid_patterns" value="BsaI_site
+            nNotI_site
+            nXbaI_site
+            nClaI_site
+            n8x1mer" />
+            <param name="hairpin_constraints" value='stem_size=20, hairpin_window=200'/>
+            <param name="gc_constraints" value="mini=0.3, maxi=0.7, window=100
+            mini=0.1, maxi=0.9, window=100"/>
+            <param name="kmer_size" value="15" />
+            <param name="methylation_protection" value="true"/>
+            <param name="assembly_plan_name" value="Type2sRestrictionAssembly" />
+            <param name="topology" value='circular'/>
+            <param name="enzyme" value="auto"/>
+            <param name="execution" value="true" />
+            <param name="db_uri" value="postgresql://postgres:RK17@localhost:5432/test_fragments_db" />
+            <param name="table_name" value="sample" />
+            <param name="fragment_column" value="fragment" />
+            <param name="sequence_column" value="sequence" />
+            <param name="annotation_column" value="annotation" />
+            <output name="output_json">
+                <assert_contents>
+                    <has_n_lines n="18" />
+                </assert_contents>
+            </output>
+        </test>
+        <!--JSON parameters set-->
+        <test> 
+            <param name="user_json" value='test_json_workflow2.json'/>
+            <output name="output_json">
+                <assert_contents>
+                    <has_n_lines n="18" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+Parameters Maystro for workflow-2
+=================================
+
+Store and Generate a JSON file to be used as workflow-2 configuration. This JSON file can later be used as input to pass workflow-2 parameters
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{parameters_maystro_workflow_2
+                author = {Ramiz Khaled},
+                title = {{parameters_maystro_workflow_2}},
+                url = {https://github.com/brsynth/},
+            }
+        </citation>
+    </citations>
+</tool>

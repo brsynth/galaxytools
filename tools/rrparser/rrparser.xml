@@ -1,7 +1,7 @@
-<tool id="rrparser" name="RRules Parser" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09" license="MIT">
+<tool id="rrparser" name="RRules Parser" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="24.2" license="MIT">
     <description>Retrieve the reaction rules from RetroRules</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">4</token>
         <token name="@TOOL_VERSION@">2.7.0</token>
     </macros>
     <requirements>
@@ -20,23 +20,23 @@
             --rules_file '$rules.file'
             --input-format '$rules.input_format'
         #end if
-        --diameters '$diameters'
+        --diameters '$adv.diameters'
         --output-format csv
         --rules-dir "\${TMPDIR:-.}"
-        #if str($compress) == "true":
+        #if str($adv.compress) == "true":
             --outfile '$out_rules'.csv.gz
             && mv '$out_rules'.csv.gz '$out_rules'
         #else:
             --outfile '$out_rules'
         #end if
-        #if str($input_conditional_ec.input_type) == "in"
-            --ec '$input_conditional_ec.input_ec_in'
+        #if str($adv.input_conditional_ec.input_type) == "in"
+            --ec '$adv.input_conditional_ec.input_ec_in'
         #end if
-        #if str($input_conditional_ec.input_type) == "out"
-            --ecx '$input_conditional_ec.input_ec_out'
+        #if str($adv.input_conditional_ec.input_type) == "out"
+            --ecx '$adv.input_conditional_ec.input_ec_out'
         #end if
-        #if $input_scores_file
-            --scores '$input_scores_file'
+        #if $adv.input_scores_file
+            --scores '$adv.input_scores_file'
         #end if
     ]]></command>
     <inputs>
@@ -58,32 +58,35 @@
                 </param>
             </when>
         </conditional>
-        <param argument="--diameters" type="select" display="checkboxes" multiple="True" label="Select the diameters of the reactions rules" help=" Diameter of the sphere including the atoms around the reacting center (default is including all values: 2,4,6,8,10,12,14,16). The higher is the diameter, the more specific are the rules">
-            <option selected="true" value="2">2</option>
-            <option selected="true" value="4">4</option>
-            <option selected="true" value="6">6</option>
-            <option selected="true" value="8">8</option>
-            <option selected="true" value="10">10</option>
-            <option selected="true" value="12">12</option>
-            <option selected="true" value="14">14</option>
-            <option selected="true" value="16">16</option>
-        </param>
-        <param name="compress" type="boolean" checked="false" label="Compress output" />
-        <param name="input_scores_file" type="data" format="csv" optional="True" label="Score File" help="Filename containing rules names and scores"/>
-        <conditional name="input_conditional_ec">
-            <param name="input_type" type="select" label="Filter based on EC number">
-                <option value="no" selected="True">No</option>
-                <option value="in">EC numbers to keep</option>
-                <option value="out">EC numbers to remove</option>
+        <section name="adv" title="Advanced Options" expanded="false" >
+            <param name="compress" type="boolean" checked="false" label="Compress output" />
+            <param name="input_scores_file" type="data" format="csv" optional="True" label="Score File" help="Filename containing rules names and scores" />
+            <conditional name="input_conditional_ec">
+                <param name="input_type" type="select" label="Filter based on EC number">
+                    <option value="no" selected="True">No</option>
+                    <option value="in">EC numbers to keep</option>
+                    <option value="out">EC numbers to remove</option>
+                </param>
+                <when value="no" />
+                <when value="in">
+                    <param name="input_ec_in" type="data" format="txt" label="File containing EC numbers" help="EC numbers on one line separted by a comma" />
+                </when>
+                <when value="out">
+                    <param name="input_ec_out" type="data" format="txt" label="File containing EC numbers" help="EC numbers on one line separted by a comma" />
+                </when>
+            </conditional>
+            <param argument="--diameters" type="select" display="checkboxes" multiple="True" label="Select the diameters of the reactions rules" help=" Diameter of the sphere including the atoms around the reacting center (default is including all values: 2,4,6,8,10,12,14,16). The higher is the diameter, the more specific are the rules">
+                <option selected="true" value="2">2</option>
+                <option selected="true" value="4">4</option>
+                <option selected="true" value="6">6</option>
+                <option selected="true" value="8">8</option>
+                <option selected="true" value="10">10</option>
+                <option selected="true" value="12">12</option>
+                <option selected="true" value="14">14</option>
+                <option selected="true" value="16">16</option>
             </param>
-            <when value="no" />
-            <when value="in">
-                <param name="input_ec_in" type="data" format="csv" label="File containing EC numbers" help="EC numbers on one line separted by a comma" />
-            </when>
-            <when value="out">
-                <param name="input_ec_out" type="data" format="csv" label="File containing EC numbers" help="EC numbers on one line separted by a comma" />
-            </when>
-        </conditional>
+        </section>
+        
     </inputs>
     <outputs>
         <data name="out_rules" format="csv" label="${tool.name}(${rules.type}, d=$diameters)" >
@@ -99,7 +102,9 @@
         </test>
         <test>
         <!-- test 2: check if identical outputs are produced with diameters=2,4,6-->
-            <param name="diameters" value="2,4,6"/>
+            <section name="adv">   
+                <param name="diameters" value="2,4,6"/>
+            </section>
             <output name="out_rules" md5="12a55e1a3c7822a35ed799afa59b2aa2"/>
         </test>
         <test>
@@ -116,36 +121,38 @@
                 <param name="type" value="rules-file"/>
                 <param name="file" value="rules_in.csv" />
             </conditional>
-            <conditional name="input_conditional_ec">
-                <param name="input_type" value="in"/>
-                <param name="input_ec_in" value="ec.csv"/>
-            </conditional>
+            <section name="adv">
+                <conditional name="input_conditional_ec">
+                    <param name="input_type" value="in"/>
+                    <param name="input_ec_in" value="ec.txt"/>
+                </conditional>
+            </section>
             <output name="out_rules" file="test.4.output.csv" ftype="csv" compare="diff"/>
         </test>
         <test>
-            <!-- python -m rrparser -rules_file rules_in.csv -input-format csv -ecx ec.csv -diameters 2,4,6,8,10,12,14,16 -output-format csv -outfile test.5.output.csv -->
+            <!-- python -m rrparser -rules_file rules_in.csv -input-format csv -ecx ec.txt -diameters 2,4,6,8,10,12,14,16 -output-format csv -outfile test.5.output.csv -->
             <conditional name="rules">
                 <param name="type" value="rules-file"/>
                 <param name="file" value="rules_in.csv" />
             </conditional>
-            <conditional name="input_conditional_ec">
-                <param name="input_type" value="out"/>
-                <param name="input_ec_out" value="ec.csv"/>
-            </conditional>
+            <section name="adv">
+                <conditional name="input_conditional_ec">
+                    <param name="input_type" value="out"/>
+                    <param name="input_ec_out" value="ec.txt"/>
+                </conditional>
+            </section>
             <output name="out_rules" file="test.5.output.csv" ftype="csv" compare="diff"/>
         </test>
         <test>
-            <!-- python -m rrparser -rules_file rules_in.csv -input-format csv -ec ec.csv -diameters 2,4,6,8,10,12,14,16 -output-format csv -outfile test.6.output.csv -scores scores.csv -->
+            <!-- python -m rrparser -rules_file rules_in.csv -input-format csv -diameters 2,4,6,8,10,12,14,16 -output-format csv -outfile rules_scores.csv -scores scores.csv -->
             <conditional name="rules">
                 <param name="type" value="rules-file"/>
                 <param name="file" value="rules_in.csv" />
             </conditional>
-            <conditional name="input_conditional_ec">
-                <param name="input_type" value="in"/>
-                <param name="input_ec_in" value="ec.csv"/>
-            </conditional>
-            <param name="input_scores_file" value="scores.csv" />
-            <output name="out_rules" file="test.6.output.csv" ftype="csv" compare="diff"/>
+            <section name="adv" >
+                <param name="input_scores_file" value="scores.csv" />
+            </section>
+            <output name="out_rules" file="rules_scores.csv" ftype="csv" compare="diff"/>
         </test>
     </tests>
     <help><![CDATA[

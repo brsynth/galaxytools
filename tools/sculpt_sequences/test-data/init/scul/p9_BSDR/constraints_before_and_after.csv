@@ -1,0 +1,7 @@
+constraint,start,end,before,after,edits,% edited
+No BsaI,0,2214,PASS,PASS,5,0.23
+No NotI,0,2214,FAIL,PASS,5,0.23
+No XbaI,0,2214,FAIL,PASS,5,0.23
+No ClaI,0,2214,FAIL,PASS,5,0.23
+No 8-repeats 1-mers,0,2214,PASS,PASS,5,0.23
+10-90% GC/50bp,0,2214,PASS,PASS,5,0.23

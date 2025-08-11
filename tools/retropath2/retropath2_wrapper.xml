@@ -1,7 +1,7 @@
 <tool id="retropath2" name="RetroPath2.0" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09" license="MIT">
     <description>Build a reaction network from a set of source compounds to a set of sink compounds</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
         <token name="@TOOL_VERSION@">3.3.1</token>
     </macros>
     <requirements>
@@ -24,6 +24,10 @@
         <regex match="No solution has been found" source="both" level="warning" description="No solution has been found" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
+        #if $sink.emptysink:
+            echo '"Name","InChI"' > empty_sink.csv &&
+            #set $sinkfile = "empty_sink.csv"
+        #end if
         python -m retropath2_wrapper
             '$sinkfile'
             '$rulesfile'
@@ -37,10 +41,10 @@
             --dmax '$adv.dmax'
             --mwmax_source '$adv.mwmax_source'
             --kinstall "\${TMPDIR:-.}"
-            #if str($adv.network) == "true":
+            #if not $adv.network:
                 --no-network
             #end if
-            #if str($adv.quiet) == "true":
+            #if not $sink.error_codes:
                 --quiet
             #end if
             --msc_timeout '$adv.timeout' &&
@@ -52,7 +56,16 @@
     ]]></command>
     <inputs>
         <param name="rulesfile" type="data" format="csv,tar" label="Rules File" help="File containing reaction rules which reflect the enzymatic potential of the chassis organism."/>
-        <param name="sinkfile" type="data" format="csv" label="Sink File" help=" Sink file which comprises all compounds that are considered as granted in your system."/>
+        <conditional name="sink">
+            <param name="emptysink" type="boolean" checked="false" label="Empty sink" />
+            <when value="false">
+                <param name="sinkfile" type="data" format="csv" label="Sink File" help="Sink file which comprises all compounds that are considered as granted in your system."/>
+                <param name="error_codes" type="boolean" checked="true" label="Return error codes" />
+            </when>
+            <when value="true">
+                <param name="error_codes" type="boolean" checked="false" label="Return error codes" />
+            </when>
+        </conditional>
         <param name="source_inchi" type="text" label="Source InChI" optional="false" help="InChI of compound to produce.">
             <validator type="empty_field" message="You must provide the InChI string"/>
         </param>
@@ -72,8 +85,7 @@
             <param name="dmax" type="integer" value="1000" min="0" max="1000" label="Maximum rule diameter" help="Maximum rule diameter of the sphere including the atoms around the reacting center. The higher is the diameter, the more specific are the rules."/>
             <param name="mwmax_source" type="integer" value="1000" min="0" max="2000" label="Molecular weight of source (Da)" help="The molecular weight cutoff (in Da), above which initial source (ie target) and intermediate compounds will be filtered out." />
             <param name="timeout" type="integer" value="60" min="30" max="600" label="Timeout (min)" help="Maximal time of RetroPath2.0 execution (60 minutes by default)." />
-            <param name="network" type="boolean" checked="false" label="Do not use network" />
-            <param name="quiet" type="boolean" checked="false" label="Do not return error codes" />
+            <param name="network" type="boolean" checked="true" label="Use network" />
         </section>
     </inputs>
     <outputs>
@@ -87,9 +99,21 @@
         <test>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
             <param name="rulesfile" value="rules.csv" />
-            <param name="sinkfile" value="sink.csv" />
+            <conditional name="sink">
+                <param name="emptysink" value="false" />
+                <param name="sinkfile" value="sink.csv" />
+            </conditional>
             <param name="source_inchi" value="InChI=1S/C40H56/c1-33(2)19-13-23-37(7)27-17-31-39(9)29-15-25-35(5)21-11-12-22-36(6)26-16-30-40(10)32-18-28-38(8)24-14-20-34(3)4/h11-12,15-22,25-32H,13-14,23-24H2,1-10H3/b12-11+,25-15+,26-16+,31-17+,32-18+,35-21+,36-22+,37-27+,38-28+,39-29+,40-30+" />
             <output name="Reaction_Network" file="results_retropath2.csv" ftype="csv" compare="diff"/>
+        </test>
+        <test>
+        <!-- test 2: check empty sink file -->
+            <param name="rulesfile" value="rules.csv" />
+            <conditional name="sink">
+                <param name="emptysink" value="true" />
+            </conditional>
+            <param name="source_inchi" value="InChI=1S/C40H56/c1-33(2)19-13-23-37(7)27-17-31-39(9)29-15-25-35(5)21-11-12-22-36(6)26-16-30-40(10)32-18-28-38(8)24-14-20-34(3)4/h11-12,15-22,25-32H,13-14,23-24H2,1-10H3/b12-11+,25-15+,26-16+,31-17+,32-18+,35-21+,36-22+,37-27+,38-28+,39-29+,40-30+" />
+            <output name="Reaction_Network" file="results_emptysink.csv" ftype="csv" compare="diff"/>
         </test>
     </tests>
     <help><![CDATA[

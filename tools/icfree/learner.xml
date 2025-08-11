@@ -93,22 +93,22 @@
             <output_collection name="output_png" type="list" count="4">
                 <element name="EI selected">
                     <assert_contents>
-                        <has_size value="77k" delta="1k"/>
+                        <has_size value="78848" delta="1024"/>
                     </assert_contents>
                 </element>
                 <element name="EI">
                     <assert_contents>
-                        <has_size value="36k" delta="1k"/>
+                        <has_size value="36864" delta="1024"/>
                     </assert_contents>
                 </element>
                 <element name="Train_Test">
                     <assert_contents>
-                        <has_size value="64k" delta="1k"/>
+                        <has_size value="65536" delta="1024"/>
                     </assert_contents>
                 </element>
                 <element name="Yield evolution through each active learning query">
                     <assert_contents>
-                        <has_size value="19k" delta="1k"/>
+                        <has_size value="19" delta="1"/>
                     </assert_contents>
                 </element>
             </output_collection>
@@ -135,22 +135,22 @@
             <output_collection name="output_png" type="list" count="4">
                 <element name="EI selected">
                     <assert_contents>
-                        <has_size value="24k" delta="1k"/>
+                        <has_size value="24576" delta="1024"/>
                     </assert_contents>
                 </element>
                 <element name="EI">
                     <assert_contents>
-                        <has_size value="36k" delta="1k"/>
+                        <has_size value="36864" delta="1024"/>
                     </assert_contents>
                 </element>
                 <element name="Train_Test">
                     <assert_contents>
-                        <has_size value="60k" delta="1k"/>
+                        <has_size value="61440" delta="1024"/>
                     </assert_contents>
                 </element>
                 <element name="Yield evolution through each active learning query">
                     <assert_contents>
-                        <has_size value="19k" delta="1k"/>
+                        <has_size value="19456" delta="1024"/>
                     </assert_contents>
                 </element>
             </output_collection>

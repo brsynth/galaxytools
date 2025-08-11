@@ -1,0 +1,42 @@
+LOCUS       Frag_1                  1810 bp    DNA     circular UNK 01-JAN-1980
+DEFINITION  Frag_1.
+ACCESSION   Frag_1
+VERSION     Frag_1
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 ctccacctgc gtctatcgta cagtgctaaa atggcagcag atagtgaaac ttccgctaag
+       61 ctagcccctc agggtacact gcaccgaggc gtgctgtcaa tacttgatta agtcgggttg
+      121 tcggggacct gccgtcacgc ttccgagtgt atatccggat ttagttgacg tcatacagag
+      181 gcactaagaa gaataaacgc ttacctccag caatcgtgta gtgtcaggtg tacgttctcc
+      241 cttgcgccgt tcggcaagcg tccggtgtcg ggctgcaagg aataaatctt tatggaccag
+      301 aggggcttgt ttcctcatat gggtgcgtgc acttatacga ttcaaaggtg gatatggccg
+      361 cataacacgt agccaggcta tagtcccgcg gcctaattcc ttcgagtgcg ggtgcctgtt
+      421 tttgtttttc ctttacgaca cgaaccgctc taacctgctc tatttcgcca cgttccagtg
+      481 aacctcttag cctaccgccc acgtacggtg ggacgcgtcg agcagttaag gtactgtgga
+      541 gaaatcgttc aatattagaa aacaggcggt gtacgaatta ctgtgtcccg gtgttgcccg
+      601 tttaacggct gccgtggtca taccgtgagg caccacgagg ggatgctacg caacatgcga
+      661 ggtgtaatca gcagggaaga tcccggggat cgaaagcggt ccgcgatttg cgaccgatat
+      721 gcataaggtg tcatttatat tacacctacg acactggtac cggctcacag ccaaatgcac
+      781 agtctcaaga tagaattcgc aaaaattagg cttatcgggc gcttactctt tgttacactt
+      841 ctggtctgtg agtgacgccc tgtgtcccat cactgcatgt gaggatgcgt gtactgcacc
+      901 tgtgaattac agacgtttcc ctaccagggc gctacgttat aatgttcggt tgcaaccctc
+      961 tatagggtga tctcgacata ccactatggt ttgcgcgtct cgggtgcttt tggcgagggc
+     1021 caggtacggc ggtgagacag cgtattttgc gaatagggta ttcggacgca cggtgtatag
+     1081 ctcttggaaa acgactcttc gacgggcgtg tagaagtagc caagcagttc ggttgttatc
+     1141 actaaatgcg gaccatgtgc agccgtttag gagaggagtc tgcaatggat cagctggtca
+     1201 gattgtacca ctcggttgag cctaaggcac ttcaggtgct cggattgtaa tgaaccctca
+     1261 ggttacgccg ttgcgctgag atcccacaag ccataagcaa tgagaatcga gcagctatcg
+     1321 aattacgcag cacttgctga tgaactgggt gcacctaaag cgcccgataa aacggaggga
+     1381 gtgaggtaac tactacattg cgagtagtgc gaggggcctc cgagactaca ttagagcagc
+     1441 catgccgaat acgacaaaat ctatagcctt gcgaacgtag gggactgatt tatggacaac
+     1501 aggaccgaaa caagttggag ccacaacgga gctatggacg ttttcactat tgatgggtgg
+     1561 cttgcgtccg catcccaggt ttctctggtt aattttcatg acgattcttt gtggtacgat
+     1621 ccaggcataa gatagggcac ctaacccgat actgtgaact tatatgacgg ctgaacatgc
+     1681 cctaatagtc tgccaaaagg gaaacctata acggctctaa acgggccccg ggtacgtaac
+     1741 agcaatgttc ctgtccacca aggcgttttt agtaaccgcc gatcgatctc gatcgaattc
+     1801 cgttttacgc
+//

@@ -1,0 +1,19 @@
+name: workflows_parameters_maystro
+owner: tduigou
+description: Suite of tools that work on saving and distributing parameters in workflows
+long_description: |
+  Suite of tools that work on saving and distributing parameters in workflows
+homepage_url: https://github.com/brsynth
+remote_repository_url: https://github.com/brsynth/galaxytools/tree/main/tools/parameters_maystro
+categories:
+  - Synthetic Biology
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the workflows parameters maystro suite"
+suite:
+  name: suite_workflows_parameters_maystro
+  description: Suite of tools that work on saving and distributing parameters in workflows
+  long_description: |
+    Suite of tools that work on saving and distributing parameters in workflows
+  type: repository_suite_definition

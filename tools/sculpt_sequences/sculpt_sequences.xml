@@ -1,0 +1,225 @@
+<tool id="sculpt_sequences" name="Sculpt Sequences" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Optimize DNA sequences</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@TOOL_VERSION@">0.2.0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="0.1.11">flametree</requirement>
+        <requirement type="package" version="1.85"> biopython </requirement>
+        <requirement type="package" version="0.1.10">proglog</requirement>
+        <requirement type="package" version="3.2.16">dnachisel</requirement>
+        <requirement type="package" version="2025.4.15">html2text</requirement>
+        <requirement type="package" version="2.0.12">dnacauldron</requirement>
+        <requirement type="package" version="2.2.3">pandas</requirement>
+        <requirement type="package" version="2.2.5">numpy</requirement>
+        <requirement type="package" version="0.3.9">pdf-reports</requirement>
+        <requirement type="package" version="0.1.8">sequenticon</requirement>
+        <requirement type="package" version="3.1.5">dna_features_viewer</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        #if str($json_use.use_json_param) == "false":
+            #set avoid_list = [line.strip() for line in str($avoid_patterns).strip().split('\n') if line.strip()]
+            #set avoid_patterns = ','.join($avoid_list)
+
+            #set hairpin_lines = [line.strip() for line in str($json_use.hairpin_constraints).strip().split('\n') if line.strip()]
+            #set hairpin_constraints = '__cn__'.join($hairpin_lines)
+
+            #set gc_lines = [line.strip() for line in str($json_use.gc_constraints).strip().split('\n') if line.strip()]
+            #set gc_constraints = '__cn__'.join($gc_lines)
+
+            #set kmer_size = $json_use.kmer_size
+
+         #else:
+            #set avoid_patterns = ''
+            #set hairpin_constraints = ''
+            #set gc_constraints = ''
+            #set kmer_size = ''
+        #end if
+
+        #set genbank_file_paths = ','.join([str(f) for f in $genbank_files])
+        #set $file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+        
+        mkdir 'outdir_scul' &&
+        mkdir 'outdir_unscul' &&
+        python '$__tool_directory__/sculpt_sequences.py' 
+            --use_json_param '$json_use.use_json_param'
+            --files_to_sculpt '$genbank_file_paths'
+            --file_name_mapping '$file_name_mapping' 
+            --outdir_scul 'outdir_scul' 
+            --outdir_unscul 'outdir_unscul' 
+            --use_file_names_as_id '$use_file_names_as_ids' 
+            --avoid_patterns '$avoid_patterns'
+            --gc_constraints '$gc_constraints'
+            --kmer_size '$kmer_size'
+            --hairpin_constraints '$hairpin_constraints'
+            #if $json_use.use_json_param:
+                --json_params '$json_use.json_params'
+            #else:
+                --json_params ''
+                --DnaOptimizationProblemClass '$json_use.DnaOptimizationProblemClass'
+            #end if
+    ]]></command>
+    <inputs>
+        <param name="genbank_files" type="data_collection" collection_type="list" format="genbank" label="GenBank File(s)"/>
+        <conditional name='json_use'>
+            <param name="use_json_param" type="boolean" checked="false" label="Use parameter from a JSON file" />
+            <when value="false">
+                <param name="DnaOptimizationProblemClass" type="select" label="DnaOptimizationProblem Calss" help="select the assambly class">
+                    <option value="DnaOptimizationProblem" selected="True">DnaOptimizationProblem</option>
+                    <option value="CircularDnaOptimizationProblem">CircularDnaOptimizationProblem</option>
+                </param>
+                <param name="avoid_patterns" type="text" area="true" label="Avoid Pattern Constraints" help="Each pattern on a line" />
+                <param name="hairpin_constraints" type="text" area="true" label="Hairpins Constraints" optional="true" help="e.g. (you can add others Hairpins Constraints on a new line): stem_size=20, hairpin_window=200"/>
+                <param name="gc_constraints" type="text" area="true" label="Enforce GC Content Constraints" optional="true" help="e.g. (you can add others Enforce GC Content Constraints on a new line): mini=0.3, maxi=0.7, window=100"/>
+                <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="" optional="true" help="e.g.: 15"/>
+            </when>
+            <when value="true">
+                <param name="json_params" type="data" format="json" optional="true" label="JSON parameters file" help="Contains tool's parameters" />
+            </when>
+        </conditional>
+        <param name="use_file_names_as_ids" type="boolean" checked="True" label="Use File Names As Sequence IDs" />
+    </inputs>   
+    <outputs>
+        <collection name="scul" type="list" label="scul group" >
+            <discover_datasets pattern="(?P&lt;name&gt;.*).zip" format="zip" directory="outdir_scul" />
+        </collection>
+        <collection name="unscul" type="list" label="unscul+scul gb" >
+            <discover_datasets pattern="(?P&lt;name&gt;.*).gb" format="genbank" directory="outdir_unscul" />
+        </collection>
+    </outputs>
+    <tests>
+        <test> 
+            <!-- test for DnaOptimizationProblem -->
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                    <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                    <element name="p15_Pup9_mTagBFP2roR" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                    <element name="p15_p9_BSDRPuroR" value="10_emma_genbanks/p9_BSDR.gb" />
+                    <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                    <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
+                    <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
+                    <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <conditional name="json_use">
+                <param name="use_json_param" value="false" />
+                <param name="DnaOptimizationProblemClass" value="DnaOptimizationProblem" />
+                <!-- AvoidPatterns -->
+                <param name="avoid_patterns" value="BsaI_site
+                NotI_site
+                XbaI_site
+                ClaI_site
+                8x1mer" />
+                <!-- EnforceGCContent -->
+                <param name="gc_constraints" value="mini=0.1, maxi=0.9, window=50"/>
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
+            <output_collection name="scul" count="10">
+            </output_collection>
+            <output_collection name="unscul" count="10">
+            </output_collection>
+        </test>
+        <test> 
+            <!-- test for CircularDnaOptimizationProblem -->
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                    <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                    <element name="p15_Pup9_mTagBFP2roR" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                    <element name="p15_p9_BSDRPuroR" value="10_emma_genbanks/p9_BSDR.gb" />
+                    <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                    <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
+                    <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
+                    <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <conditional name="json_use">
+                <param name="use_json_param" value="false" />
+                <param name="DnaOptimizationProblemClass" value="CircularDnaOptimizationProblem" />
+                <!-- AvoidPatterns -->
+                <param name="avoid_patterns" value="BsaI_site
+                NotI_site
+                XbaI_site
+                ClaI_site
+                8x1mer" />
+                <!-- EnforceGCContent -->
+                <param name="gc_constraints" value="mini=0.1, maxi=0.9
+                mini=0.3, maxi=0.7, window=50"/>
+                <param name="hairpin_constraints" value="stem_size=20, hairpin_window=200
+                stem_size=10, hairpin_window=100"/>
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
+            <output_collection name="scul" count="10">
+            </output_collection>
+            <output_collection name="unscul" count="10">
+            </output_collection>
+        </test>
+        <test>
+            <!-- test json params -->
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="p15_PuroR" value="10_emma_genbanks/p15_PuroR.gb" />
+                    <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
+                    <element name="p15_Pup9_mTagBFP2roR" value="10_emma_genbanks/p9_mTagBFP2.gb" />
+                    <element name="p15_p9_BSDRPuroR" value="10_emma_genbanks/p9_BSDR.gb" />
+                    <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
+                    <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
+                    <element name="p6_Nt-IgKLsequence" value="10_emma_genbanks/p6_Nt-IgKLsequence.gb" />
+                    <element name="p6_Kozak-ATG" value="10_emma_genbanks/p6_Kozak-ATG.gb" />
+                    <element name="p4_Kt-L7Ae-Weiss" value="10_emma_genbanks/p4_Kt-L7Ae-Weiss.gb" />
+                    <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
+                </collection>
+            </param>
+            <conditional name="json_use">
+                <param name="use_json_param" value="true" />
+                <param name="json_params" value="test_json_workflow2.json" />
+            </conditional>
+            <param name="use_file_names_as_ids" value="True" />
+            <output_collection name="scul" count="10">
+            </output_collection>
+            <output_collection name="unscul" count="10">
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+Sculpt Sequences
+=================
+
+Sculpt Sequences is a Python library from the EGF Biofoundry for problem detection and sequence optimization using `dnachisel <https://github.com/Edinburgh-Genome-Foundry/DnaChisel/tree/master/dnachisel>`_ (Complete documentation available `here <https://edinburgh-genome-foundry.github.io/DnaChisel/>`_)
+
+**Parameters**:
+---------------
+* **GenBank File(s)**: List of GenBank files to be processed.
+* **Use parameter from a JSON file**: 
+    Yes/No parameter to indicate if user want to set parameter manually or using a json file
+    If Yes, user should provide a JSON file contains all parameters
+* **DnaOptimizationProblem Class**: 
+    - "DnaOptimizationProblem": is the class to define and solve an optimization problems. Its methods implement all the solver logics.
+    - "CircularDnaOptimizationProblem": is a variant of DnaOptimizationProblem whose optimization algorithm assumes that the sequence is circular.
+* **Avoid Pattern Constraints**: is a sequence design rules that can be used as constraints. It define pattern(s) to avoid during problem optimisation.
+    This can include enzyme sites like "BsaI_site", "NotI_site", "XbaI_site"... `enzyme dict <https://github.com/biopython/biopython/blob/master/Bio/Restriction/Restriction_Dictionary.py>`_ . Custom patterns are also supported, such as "5x3mer" means "any 5 consecutive 3-nucleotide sequences — typically 5 unique 3-mers in a row.
+* **Enforce GC Content Constraints**:
+    Define acceptable GC content ranges. For example min: 0.4, max: 0.6, window: 50 represents a 40–60% GC content requirement within a 50-base window.
+    (Parameters: `EnforceGCContent_params <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#enforcegccontent>`_ )
+* **Avoid Hairpins**: Avoid Hairpin patterns as defined by the IDT guidelines.
+    A hairpin is defined by a sequence segment which has a reverse complement “nearby” in a given window.
+    (Parameters: `AvoidHairpins_params <https://edinburgh-genome-foundry.github.io/DnaChisel/ref/builtin_specifications#avoidhairpins>`_ ).
+* **K-mer Uniqueness Size**: Avoid sub-sequence of length k with homologies elsewhere.
+* **Use File Names As Sequence IDs**: Recommended if the GenBank file names represent the fragment names.
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{sculpt_sequences
+                author = {Ramiz Khaled},
+                title = {{sculpt_sequences}},
+                url = {https://github.com/Edinburgh-Genome-Foundry/Examples/blob/master/templates/template1.ipynb},
+            }
+        </citation>
+    </citations>
+</tool>

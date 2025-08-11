@@ -1,0 +1,33 @@
+LOCUS       Exported                 714 bp    DNA     linear   UNK 29-AUG-2019
+DEFINITION  natural linear DNA.
+ACCESSION   p7_gfp_sequence
+VERSION     p7_gfp_sequence
+KEYWORDS    .
+SOURCE      natural DNA sequence
+  ORGANISM  unspecified
+            .
+REFERENCE   1  (bases 1 to 714)
+  AUTHORS   .
+  TITLE     Direct Submission
+  JOURNAL   Exported Thursday, Aug 29, 2019 from SnapGene Viewer 4.3.9
+            https://www.snapgene.com
+FEATURES             Location/Qualifiers
+     source          1..714
+                     /organism="unspecified"
+                     /mol_type="genomic DNA"
+     misc_feature    1..714
+                     /label="@cds"
+ORIGIN
+        1 atgagcaaag gagaagaact attcacagga gtagtaccaa tactagtaga actagacgga
+       61 gacgtaaacg gacacaaatt cagcgtaagc ggagaaggag aaggagacgc aacatacgga
+      121 aaactaacac taaaattcat atgcacaaca ggaaaactac cagtaccatg gccaacacta
+      181 gtaacaacat tcagctacgg agtacaatgc ttcagcagat acccagacca catgaaacaa
+      241 cacgacttct tcaaaagcgc aatgccagaa ggatacgtac aagaaagaac aatattcttc
+      301 aaagacgacg gaaactacaa aacaagagca gaagtaaaat tcgaaggaga cacactagta
+      361 aacagaatag aactaaaagg aatagacttc aaagaagacg gaaacatact aggacacaaa
+      421 ctagaataca actacaacag ccacaacgta tacataatgg cagacaaaca aaaaaacgga
+      481 ataaaagtaa acttcaaaat aagacacaac atagaagacg gaagcgtaca actagcagac
+      541 cactaccaac aaaacacacc aataggagac ggaccagtac tactaccaga caaccactac
+      601 ctaagcacac aaagcgcact aagcaaagac ccaaacgaaa aaagagacca catggtacta
+      661 ctagaattcg taacagcagc aggaataaca cacggaatgg acgaactata caaa
+//

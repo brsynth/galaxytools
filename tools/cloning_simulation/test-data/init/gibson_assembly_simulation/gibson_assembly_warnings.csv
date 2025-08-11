@@ -1,0 +1,4 @@
+assembly_name;message;suggestion;data;used_in
+construct_4;Part(s) with single-sided sticky end;parts: Frag_1 & Frag_4;
+construct_5;Part(s) with single-sided sticky end;parts: Frag_1 & Frag_4 & Frag_4b;
+construct_5;Warning: parts at graph forking positions;parts: Frag_3;

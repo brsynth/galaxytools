@@ -1,0 +1,41 @@
+LOCUS       p14_CMVp                 565 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   p14_CMVp
+VERSION     p14_CMVp
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    1..6
+                     /label="BsmBI"
+     misc_feature    8..11
+                     /label="CTAC"
+     source          complement(12..554)
+                     /source="Exported"
+     promoter        complement(48..250)
+                     /note="CMV promoter"
+                     /note="human cytomegalovirus (CMV) immediate early
+                     promoter"
+     enhancer        complement(251..553)
+                     /note="CMV enhancer"
+                     /note="human cytomegalovirus immediate early enhancer"
+     misc_feature    12..554
+                     /source="p14_CMVp"
+                     /note="From p14_CMVp"
+     misc_feature    555..558
+                     /label="GCAA"
+     misc_feature    complement(560..565)
+                     /label="BsmBI"
+ORIGIN
+        1 cgtctcacta ccagatctcc tcggtaccgg atccagtcga cgaattagct ctgcttatat
+       61 agacctccca ccgtacacgc ctaccgccca tttgcgtcaa tggggcggag ttgttacgac
+      121 attttggaaa gtcccgttga ttttggtgcc aaaacaaact cccattgacg tcaatggggt
+      181 ggagacttgg aaatccccgt gagtcaaacc gctatccacg cccattgatg tactgccaaa
+      241 accgcatcac catggtaata gcgatgacta atacgtagat gtactgccaa gtaggaaagt
+      301 cccataaggt catgtactgg gcataatgcc aggcgggcca tttaccgtca ttgacgtcaa
+      361 tagggggcgt acttggcata tgatacactt gatgtactgc caagtgggca gtttaccgta
+      421 aatactccac ccattgacgt caatggaaag tccctattgg cgttactatg ggaacatacg
+      481 tcattattga cgtcaatggg cgggggtcgt tgggcggtca gccaggcggg ccatttaccg
+      541 taagttatgt aacggcaatg agacg
+//

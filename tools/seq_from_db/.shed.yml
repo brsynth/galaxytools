@@ -1,0 +1,8 @@
+categories:
+- Synthetic Biology
+description: Get fragments data from DB as gb files
+long_description: 'Import fragments data from a PostgreSQL database running in a Docker container and export it as .gb files'
+name: seq_from_db
+owner: tduigou
+homepage_url: https://github.com/brsynth/galaxytools/tree/main/tools
+remote_repository_url: https://github.com/brsynth/galaxytools/tree/main/tools
