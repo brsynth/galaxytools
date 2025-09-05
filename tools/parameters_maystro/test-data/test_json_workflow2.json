@@ -12,5 +12,6 @@
     "table": "sample",
     "fragment_column": "fragment",
     "sequence_column": "sequence",
-    "annotation_column": "annotation"
+    "annotation_column": "annotation",
+    "methylation_protection": "true"
 }
