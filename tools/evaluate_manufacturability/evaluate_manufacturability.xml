@@ -397,6 +397,7 @@
                         <element name="p9_PuroR" value="10_emma_genbanks/p9_PuroR.gb" />
                         <element name="p9_mTagBFP2" value="10_emma_genbanks/p9_mTagBFP2.gb" />
                         <element name="p9_BSDR" value="10_emma_genbanks/p9_BSDR.gb" />
+                         <element name="HC_Amp_ccdB" value="10_emma_genbanks/HC_Amp_ccdB.gb" />
                         <element name="p8_Linker1" value="10_emma_genbanks/p8_Linker1.gb" />
                         <element name="p7_L7Ae-Weiss" value="10_emma_genbanks/p7_L7Ae-Weiss.gb" />
                     </collection>

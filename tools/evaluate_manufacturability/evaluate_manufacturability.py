@@ -308,13 +308,11 @@ if __name__ == "__main__":
             lines = [line.strip() for line in f.readlines() if line.strip()]
 
         if not lines:
-            print("ERROR: DB_report file is empty.")
-            sys.exit(1)
+            skip_evaluation = True
+            
+        else:
 
-        header = lines[0]
-        if header.startswith("Missing fragment in DB:"):
-
-            missing_fragments = lines[1:]
+            missing_fragments = lines[0:]
 
            # Parse file_name_mapping
             if isinstance(args.file_name_mapping, str):
@@ -338,11 +336,6 @@ if __name__ == "__main__":
             else:
                 use_DB_files = True  # Append after evaluation
 
-        elif header.startswith("NO missing fragments in DB"):
-            skip_evaluation = True
-        else:
-            print(f"ERROR: Invalid header in DB_report: '{header}'")
-            sys.exit(1)
     ###
 
     # Default values from command-line
