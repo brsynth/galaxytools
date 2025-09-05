@@ -1,4 +1,8 @@
-Sample-1,ACP10001AaCbbBS,NEW20001BbDccKT,XYZ10003AaCbbBS
-Sample-2,CFP10002AaCbbBS,ACP10001AaCbbBS,ALT30005CcEddLM
-Sample-3,XYZ10003AaCbbBS,ALT30005CcEddLM,ACP10001AaCbbBS
-Sample-4,QWE10004AaCbbBS,NEW20001BbDccKT,CFP10002AaCbbBS
+Sample-1,ACP10001AaCbbBS,NEW20001BbDccKT,XYZ10003AaCbbBS,,,
+Sample-2,CFP10002AaCbbBS,ACP10001AaCbbBS,ALT30005CcEddLM,,,
+Sample-3,XYZ10003AaCbbBS,ALT30005CcEddLM,ACP10001AaCbbBS,,,
+Sample-4,QWE10004AaCbbBS,NEW20001BbDccKT,CFP10002AaCbbBS,,,
+construct_3,construct_1,part_L,part_J,part_K,,
+construct_4,construct_2,part_L,part_J,part_K,,
+construct_1,part_A,part_B,part_C,part_D,part_E,part_F
+construct_2,part_A,part_G,part_H,part_I,part_F,

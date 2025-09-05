@@ -1,8 +1,8 @@
 <tool id="seq_form_db" name="Get sequences Data From DB" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Import fragment's data from an accessible DB and export it as .gb files</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">1</token>
-        <token name="@TOOL_VERSION@">0.2.0</token>
+        <token name="@VERSION_SUFFIX@">2</token>
+        <token name="@TOOL_VERSION@">0.3.0</token>
     </macros>
     <requirements>
         <requirement type="package" version="2.2.3">pandas</requirement>
@@ -25,6 +25,7 @@
                 --json_conf '$json_use.json_conf'
             #end if
             --output 'outdir'
+            --report '$report'
     ]]></command>
     <inputs> 
         <param name="input" type="data" format="csv" label="Input CSV File" />
@@ -46,6 +47,7 @@
         <collection name="output_gb" type="list" label="GenBank Files collection" >
             <discover_datasets pattern="(?P&lt;name&gt;.*).gb" format="genbank" directory="outdir" />
         </collection>
+        <data name='report' format='txt' label='missing fragments' />
     </outputs>
     <tests>
     <!--manual parameters-->
@@ -121,6 +123,11 @@
                     </assert_contents>
                 </element>
             </output_collection>
+            <output name='report'>
+                <assert_contents>
+                    <has_n_lines n="0" />
+                </assert_contents>
+            </output>
         </test>
         <!--JSON parameters-->
         <test> 
@@ -191,6 +198,96 @@
                     </assert_contents>
                 </element>
             </output_collection>
+            <output name='report'>
+                <assert_contents>
+                    <has_n_lines n="0" />
+                </assert_contents>
+            </output>
+        </test>
+        <!--test missing fragments-->
+        <test> 
+            <param name="input" value="test_missing_input.csv" />
+            <conditional name="json_use">
+                <param name='use_json_paramers' value='false' />
+                <param name="table" value="sample" />
+                <param name="sequence_column" value="sequence" />
+                <param name="annotation_columns" value="annotation" />
+                <param name="fragment_column" value="fragment" />
+                <param name="db_uri" value="postgresql://postgres:RK17@localhost:5432/test_fragments_db" />
+            </conditional>
+            <output_collection name="output_gb" type="list" count="12">
+                <element name="part_A">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_B">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_C">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_D">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_E">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_F">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_G">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_H">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_I">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_J">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_K">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+                <element name="part_L">
+                    <assert_contents>
+                     <has_n_lines min="10" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output name='report'>
+                <assert_contents>
+                    <has_n_lines n="6" />
+                    <has_line_matching expression="ACP10001AaCbbBS" />
+                    <has_line_matching expression="NEW20001BbDccKT" />
+                    <has_line_matching expression="XYZ10003AaCbbBS" />
+                    <has_line_matching expression="CFP10002AaCbbBS" />
+                    <has_line_matching expression="ALT30005CcEddLM" />
+                    <has_line_matching expression="QWE10004AaCbbBS" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     

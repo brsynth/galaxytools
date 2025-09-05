@@ -8,6 +8,10 @@
         cp '$user_json' '$output_json'
     #else
         python3 -c "import json; params = {
+        'avoid_patterns': '$avoid_patterns',
+        'hairpin_constraints': '$hairpin_constraints',
+        'gc_constraints': '$gc_constraints',
+        'kmer_size': '$kmer_size',
         'assembly_plan_name': '$assembly_plan_name',
         'topology': '$topology',
         'enzyme': '$enzyme',
@@ -22,6 +26,10 @@
     && echo DEBG && cat '$output_json'
     ]]></command>
     <inputs>
+        <param name="avoid_patterns" type="text" area="true" optional="true" label="Avoid Patterns (one per line)" />
+        <param name="hairpin_constraints" type="text" area="true" label="Hairpins Constraints" optional="true" help="e.g. (you can add others Hairpins Constraints on a new line): stem_size=20, hairpin_window=200"/>
+        <param name="gc_constraints" type="text" area="true" label="Enforce GC Content Constraints" optional="true" help="e.g. (you can add others Enforce GC Content Constraints on a new line): mini=0.3, maxi=0.7, window=100"/>
+        <param name="kmer_size" type="integer" label="K-mer Uniqueness Size" value="" optional="true" help="e.g.: 15"/>
         <param name="assembly_plan_name" type="select" label="Assembly Calss" help="select the assambly class">
             <option value="Type2sRestrictionAssembly" selected="True">GoldenGate_assembly</option>
             <option value="GibsonAssembly">Gibson_assembly</option>
@@ -47,7 +55,18 @@
     </outputs>
     <tests>
         <!--manual parameters set-->
-        <test> 
+        <test>
+            <param name="avoid_patterns" value="BsaI_site
+            BsmBI_site
+            BbsI_site
+            SapI_site
+            8x1mer
+            5x3mer
+            9x2mer" />
+            <param name="hairpin_constraints" value='stem_size=20, hairpin_window=200'/>
+            <param name="gc_constraints" value="mini=0.3, maxi=0.7, window=100
+            mini=0.1, maxi=0.9, window=100"/>
+            <param name="kmer_size" value="15" />
             <param name="assembly_plan_name" value="Type2sRestrictionAssembly" />
             <param name="topology" value='circular'/>
             <param name="enzyme" value="auto"/>
@@ -59,7 +78,7 @@
             <param name="annotation_column" value="annotation" />
             <output name="output_json">
                 <assert_contents>
-                    <has_n_lines n="11" />
+                    <has_n_lines n="15" />
                 </assert_contents>
             </output>
         </test>
@@ -68,7 +87,7 @@
             <param name="user_json" value='test-JSON_workflow1.json'/>
             <output name="output_json">
                 <assert_contents>
-                    <has_n_lines n="11" />
+                    <has_n_lines n="15" />
                 </assert_contents>
             </output>
         </test>

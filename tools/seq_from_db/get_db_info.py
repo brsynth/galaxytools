@@ -93,7 +93,7 @@ def wait_for_db(uri, timeout=60):
     raise Exception("Database connection failed after timeout.")
 
 
-def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, table_name, fragment_column_name, output):
+def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, table_name, fragment_column_name, output, output_report):
     """Fetch annotations from the database and save the result as GenBank files."""
     db_uri = fix_db_uri(db_uri)
     df = pd.read_csv(csv_file, sep=',', header=None)
@@ -130,10 +130,14 @@ def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, tab
 
             db_fragments = set(fragment_map.keys())
             missing_fragments = sorted(list(csv_fragments - db_fragments))
-            if missing_fragments:
-                raise ValueError(
-                    f" Missing fragments in DB: {', '.join(missing_fragments)}"
-                )
+
+            # Write report file
+            with open(output_report, "w") as report_file:
+                if missing_fragments:
+                    for frag in missing_fragments:
+                        report_file.write(f"{frag}\n")
+                else:
+                    report_file.write("")
 
             # === CONTINUE WITH GB FILE CREATION ===
             for _, row in df.iterrows():
@@ -164,8 +168,14 @@ def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, tab
     try:
         for annotated_row in annotated_data:
             backbone_id = annotated_row["Backbone"]
+
             for fragment in annotated_row["Fragments"]:
                 fragment_id = fragment["id"]
+
+                # Skip generation for missing fragments
+                if fragment_id in missing_fragments:
+                    continue
+
                 sequence = fragment.get(sequence_column, "")
                 annotation = fragment.get(annotation_columns, "")
 
@@ -182,7 +192,7 @@ def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, tab
                     k: str(fragment[k]) for k in annotation_columns if k in fragment
                 }
 
-                # LOCUS line extraction from annotation (copy-paste the LOCUS from annotation)
+                # LOCUS line extraction from annotation
                 locus_line_match = re.search(r"LOCUS\s+.+", annotation)
                 if locus_line_match:
                     locus_line = locus_line_match.group()
@@ -190,41 +200,36 @@ def fetch_annotations(csv_file, sequence_column, annotation_columns, db_uri, tab
                     print(f"LOCUS info missing for fragment {fragment_id}")
                     locus_line = f"LOCUS       {fragment_id: <20} {len(sequence)} bp    DNA     linear   UNK 01-JAN-2025"
 
-                # Format sequence as per GenBank standards (with ORIGIN and line breaks)
+                # Format sequence
                 if "ORIGIN" in sequence:
                     origin_block = sequence.strip()
                 else:
-                    # Format sequence as per GenBank standards (with ORIGIN and line breaks)
                     formatted_sequence = "ORIGIN\n"
                     seq_str = str(record.seq)
-                    for i in range(0, len(seq_str), 60):  # 60 bases per line
+                    for i in range(0, len(seq_str), 60):
                         line_seq = seq_str[i:i + 60]
                         formatted_sequence += f"{str(i + 1).rjust(9)} { ' '.join([line_seq[j:j+10] for j in range(0, len(line_seq), 10)]) }\n"
                     origin_block = formatted_sequence.strip()
 
-                # Find and copy the FEATURES section directly from annotation
+                # Extract FEATURES section
                 features_section = ""
                 features_start = annotation.find("FEATURES")
                 if features_start != -1:
                     features_section = annotation[features_start:]
 
-                # Writing the GenBank file
+                # Write GenBank file
                 if not os.path.exists(output):
                     os.makedirs(output)
 
                 gb_filename = os.path.join(output, f"{fragment_id}.gb")
                 with open(gb_filename, "w") as f:
-                    # Write the LOCUS line
                     f.write(locus_line + "\n")
-                    # Write DEFINITION, ACCESSION, and other annotations
                     f.write(f"DEFINITION  {record.description}\n")
                     f.write(f"ACCESSION   {record.id}\n")
                     f.write(f"VERSION     DB\n")
                     f.write(f"KEYWORDS    .\n")
                     f.write(f"SOURCE      .\n")
-                    # Write the FEATURES section directly from annotation
                     f.write(features_section)
-                    # Write the ORIGIN section
                     f.write(origin_block + "\n")
                     f.write("//\n")
 
@@ -244,6 +249,7 @@ def main():
     parser.add_argument("--fragment_column", required=False, help="Fragment column name in the database")
     parser.add_argument("--output", required=True, help="Output dir for gb files")
     parser.add_argument("--json_conf", required=False, help="JSON config file with DB parameters")
+    parser.add_argument("--report", required=True, help="Output report for fragments checking in DB")
     args = parser.parse_args()
     
     # get param and chek for json
@@ -287,7 +293,7 @@ def main():
                 time.sleep(2)
 
     # Fetch annotations from the database and save as gb
-    fetch_annotations(args.input, sequence_column, annotation_column, db_uri, table, fragment_column, args.output)
+    fetch_annotations(args.input, sequence_column, annotation_column, db_uri, table, fragment_column, args.output, args.report)
 
 if __name__ == "__main__":
     main()

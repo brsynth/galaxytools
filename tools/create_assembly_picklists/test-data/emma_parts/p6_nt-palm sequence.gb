@@ -1,0 +1,81 @@
+LOCUS       .                       1883 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   <unknown id>
+VERSION     <unknown id>
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     terminator      392..419
+                     /note="T7Te terminator"
+                     /note="phage T7 early transcription terminator"
+     rep_origin      complement(431..1018)
+                     /direction=LEFT
+                     /note="ori"
+                     /note="high-copy-number ColE1/pMB1/pBR322/pUC origin of
+                     replication"
+     terminator      1040..1069
+                     /note="T3Te terminator"
+                     /note="phage T3 early transcription terminator"
+     misc_feature    1143..1148
+                     /note="BsmBI"
+     source          5..1149
+                     /source="Exported"
+     misc_feature    1154..1161
+                     /note="Kozak"
+     CDS             1162..1164
+                     /codon_start=1
+                     /note="ATG"
+                     /translation="M"
+     CDS             1165..1221
+                     /codon_start=1
+                     /note="Palmitoylation sequence"
+                     /translation="LCCMRRTKQVEKNDDDQKI"
+     source          1154..1223
+                     /source="Exported"
+     misc_feature    complement(1229..1234)
+                     /note="BsmBI"
+     terminator      1301..1332
+                     /note="tonB terminator"
+                     /note="bidirectional E. coli tonB-P14 transcription
+                     terminator"
+     promoter        1333..1435
+                     /note="cat promoter"
+                     /note="promoter of the E. coli cat gene"
+     source          1228..1883
+                     /source="Exported"
+ORIGIN
+        1 ctcaggcgca atcacgaatg aataacggtt tggttggtgc gagtgatttt gatgacgagc
+       61 gtaatggctg gcctgttgaa caagtctgga aagaaatgca taagcttttg ccattctcac
+      121 cggattcagt cgtcactcat ggtgatttct cacttgataa ccttattttt gacgagggga
+      181 aattaatagg ttgtattgat gttggacgag tcggaatcgc agaccgatac caggatcttg
+      241 ccatcctatg gaactgcctc ggtgagtttt ctccttcatt acagaaacgg ctttttcaaa
+      301 aatatggtat tgataatcct gatatgaata aattgcagtt tcacttgatg ctcgatgagt
+      361 ttttctaatg agggcccaaa tgtaatcacc tggctcacct tcgggtgggc ctttctgcgt
+      421 tgctggcgtt tttccatagg ctccgccccc ctgacgagca tcacaaaaat cgatgctcaa
+      481 gtcagaggtg gcgaaacccg acaggactat aaagatacca ggcgtttccc cctggaagct
+      541 ccctcgtgcg ctctcctgtt ccgaccctgc cgcttaccgg atacctgtcc gcctttctcc
+      601 cttcgggaag cgtggcgctt tctcatagct cacgctgtag gtatctcagt tcggtgtagg
+      661 tcgttcgctc caagctgggc tgtgtgcacg aaccccccgt tcagcccgac cgctgcgcct
+      721 tatccggtaa ctatcgtctt gagtccaacc cggtaagaca cgacttatcg ccactggcag
+      781 cagccactgg taacaggatt agcagagcga ggtatgtagg cggtgctaca gagttcttga
+      841 agtggtggcc taactacggc tacactagaa gaacagtatt tggtatctgc gctctgctga
+      901 agccagttac ctcggaaaaa gagttggtag ctcttgatcc ggcaaacaaa ccaccgctgg
+      961 tagcggtggt ttttttgttt gcaagcagca gattacgcgc agaaaaaaag gatctcaaga
+     1021 agatcctttg attttctacc gaagaaaggc ccacccgtga aggtgagcca gtgagttgat
+     1081 tgcagtccag ttacgctgga gtctgaggct cgtcctgaat gatatcaagc ttgaattcgt
+     1141 tacgtctcgc cagccgccac catgctgtgc tgcatgcgcc gcaccaagca ggtggagaag
+     1201 aacgacgacg accagaagat cggcagccga gacgaagacg aattctctag atatcgctca
+     1261 atactgacca tttaaatcat acctgacctc catagcagaa agtcaaaagc ctccgaccgg
+     1321 aggcttttga cttgatcggc acgtaagagg ttccaacttt caccataatg aaataagatc
+     1381 actaccgggc gtattttttg agttatcgag attttcagga gctaaggaag ctaaaatgag
+     1441 ccatattcaa cgggaaacgt cttgctcgag gccgcgatta aattccaaca tggatgctga
+     1501 tttatatggg tataaatggg ctcgcgataa tgtcgggcaa tcaggtgcga caatctatcg
+     1561 attgtatggg aagcccgatg cgccagagtt gtttctgaaa catggcaaag gtagcgttgc
+     1621 caatgatgtt acagatgaga tggtcaggct aaactggctg acggaattta tgcctcttcc
+     1681 gaccatcaag cattttatcc gtactcctga tgatgcatgg ttactcacca ctgcgatccc
+     1741 agggaaaaca gcattccagg tattagaaga atatcctgat tcaggtgaaa atattgttga
+     1801 tgcgctggca gtgttcctgc gccggttgca ttcgattcct gtttgtaatt gtccttttaa
+     1861 cggcgatcgc gtatttcgtc tcg
+//

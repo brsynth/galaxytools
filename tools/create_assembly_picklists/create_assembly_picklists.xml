@@ -1,0 +1,371 @@
+<tool id="create_assembly_picklists" name="Create Assembly Picklists" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Provide a source plate map and an assembly plan, get a robotic picklist spreadsheet for Tecan EVO or Labcyte Echo</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="0.18.0">fuzzywuzzy</requirement>
+        <requirement type="package" version="0.3.4">bandwagon</requirement>
+        <requirement type="package" version="1.85">biopython</requirement>
+        <requirement type="package" version="0.2.2">crazydoc</requirement>
+        <requirement type="package" version="2.0.12">dnacauldron</requirement>
+        <requirement type="package" version="3.2.16">dnachisel</requirement>
+        <requirement type="package" version="0.1.11">flametree</requirement>
+        <requirement type="package" version="0.3.1">plateo</requirement>
+        <requirement type="package" version="0.1.23">snapgene-reader</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        #set genbank_file_paths = ','.join([str(f) for f in $genbank_files])
+        #set file_name_mapping = ",".join(["%s:%s" % (file.file_name, file.name) for file in $genbank_files])
+        
+        #set backbone_list = [line.strip() for line in str($backbone_name).strip().split('\n') if line.strip()]
+        #set backbone_name = ','.join(backbone_list)
+
+        mkdir renamed_parts &&
+        touch 'picklist.zip' &&
+        touch 'source_plate.xlsx' &&
+
+        #for $file in $genbank_files
+            cp '$file.file_name' 'renamed_parts/$file.name' &&
+        #end for
+
+        #set renamed_paths = ','.join(['renamed_parts/%s' % file.name for file in $genbank_files])
+    
+        cp '$source_plate' 'source_plate.xlsx' &&
+
+        python '$__tool_directory__/CreateAssemblyPicklists_script.py'
+            --parts_files '$renamed_paths'
+            --picklist '$picklist'
+            --source_plate 'source_plate.xlsx'
+            --backbone_name '$setting.adv.backbone_name'
+            --part_backbone_ratio '$setting.adv.part_backbone_ratio'
+            --quantity_unit '$setting.quantity_unit'
+            --part_quantity '$setting.part_quantity'
+            --buffer_volume '$setting.buffer_volume'
+            --total_volume '$setting.total_volume'
+            --dispenser '$setting.dispenser'
+            --result_zip 'picklist.zip' &&
+        cp 'picklist.zip' '$output_zip' 
+    ]]></command>
+    <inputs>
+        <conditional name='setting'>
+            <param name="mode" type="select" label="Mode">
+                <option value="std" selected="true">Standard</option>
+                <option value="demo">DEMO</option>
+            </param>
+            <when value="std">
+                <param name="quantity_unit" type="select" label="Part quantity unit">
+                    <option value="fmol" selected="true">femto-mole</option>
+                    <option value="nM">nano-molar</option>
+                    <option value="ng">nano-gram</option>
+                </param>
+                <param name="part_quantity" type="float" value="1.3" min="0" label="Part quantity" />
+                <param name="buffer_volume" type="float" value="0.3" min="0" label="Buffer volume (µL)" />
+                <param name="total_volume" type="float" value="1.0" min="0" label="Total volume (µL)" />
+                <param name="dispenser" type="select" label="Dispenser Machine">
+                    <option value="labcyte_echo" selected="true">Labcyte ECHO</option>
+                    <option value="tecan_evo">Tecab EVO</option>
+                </param>
+                <section name="adv" title="advance" expanded="false">
+                    <param name="backbone_name" type="text" area="True" label="Backbone Name(s)" optional='true'/>
+                    <param name="part_backbone_ratio" type="float" value='1.0' min="0" max="1.0" label="Backbone Molar Ratio" optional='true' />
+                </section>
+            </when>
+            <when value="demo">
+                <param name="quantity_unit" type="select" label="Part quantity unit">
+                    <option value="fmol" selected="true">femto-mole</option>
+                    <option value="nM">nano-molar</option>
+                    <option value="ng">nano-gram</option>
+                </param>
+                <param name="part_quantity" type="float" value="1.3" min="0" label="Part quantity" />
+                <param name="buffer_volume" type="float" value="0.3" min="0" label="Buffer volume (µL)" />
+                <param name="total_volume" type="float" value="1.0" min="0" label="Total volume (µL)" />
+                <param name="dispenser" type="select" label="Dispenser Machine">
+                    <option value="labcyte_echo" selected="true">Labcyte ECHO</option>
+                    <option value="tecan_evo">Tecab EVO</option>
+                </param>
+                <section name="adv" title="advance" expanded="false">
+                    <param name="backbone_name" type="text" area="True" value='HC_Amp_ccdB' label="Backbone Name(s)" optional='true'/>
+                    <param name="part_backbone_ratio" type="float" value='1.0' min="0" max="1.0" label="Backbone Molar Ratio" optional='true' />
+                </section>
+            </when>
+        </conditional>
+        <param name="genbank_files" type="data_collection" collection_type="list" format="genbank,fasta" label="GenBank File(s)" />
+        <param name="picklist" type="data" format="xlsx,xls,csv" label="Assembly Plan (csv or excel)"/>
+        <param name="source_plate" type="data" format="xlsx,xls" label="Source Plate (excel)"/>
+    </inputs>   
+    <outputs>
+        <data format="zip" name="output_zip" label="picklist (zip)"/>
+    </outputs>
+    <tests>
+        <!--test type2s_assembly class-->
+        <!--python CreateAssemblyPicklists_script.py parts_files "test-data/emma_parts/HC_Amp_ccdB.gb,test-data/emma_parts/conn a-c.gb,test-data/emma_parts/conn b-e.gb,test-data/emma_parts/conn b-l.gb,test-data/emma_parts/conn d-e.gb,test-data/emma_parts/conn d-f.gb,test-data/emma_parts/conn h-ha.gb,test-data/emma_parts/conn h-j.gb,test-data/emma_parts/conn h-k.gb,test-data/emma_parts/conn j-k.gb,test-data/emma_parts/conn l-n.gb,test-data/emma_parts/conn l-r.gb,test-data/emma_parts/conn l-w.gb,test-data/emma_parts/conn l-y.gb,test-data/emma_parts/conn q-r.gb,test-data/emma_parts/conn r-w.gb,test-data/emma_parts/conn t-v.gb,test-data/emma_parts/conn w-x.gb,test-data/emma_parts/conn w-y.gb,test-data/emma_parts/conn w-z.gb,test-data/emma_parts/conn y-z.gb,test-data/emma_parts/p10_tet-aptazyme.gb,test-data/emma_parts/p11_sv40polya.gb,test-data/emma_parts/p14_cmvp.gb,test-data/emma_parts/p14_sv40p.gb,test-data/emma_parts/p15_puror.gb,test-data/emma_parts/p16_bghpolya.gb,test-data/emma_parts/p18_cmvp.gb,test-data/emma_parts/p18_ef1ap.gb,test-data/emma_parts/p19_mneogreen.gb,test-data/emma_parts/p19_mruby2.gb,test-data/emma_parts/p19_mtagbfp2.gb,test-data/emma_parts/p19_tet-on-3g.gb,test-data/emma_parts/p1_5'-itr-pb.gb,test-data/emma_parts/p1_5'ha-haavs1.gb,test-data/emma_parts/p20_ct-minute-nes.gb,test-data/emma_parts/p20_ct-nes.gb,test-data/emma_parts/p20_linker3.gb,test-data/emma_parts/p20_p2a.gb,test-data/emma_parts/p21_dmra.gb,test-data/emma_parts/p21_mkate2.gb,test-data/emma_parts/p21_mneogreen.gb,test-data/emma_parts/p21_mruby2.gb,test-data/emma_parts/p21_mtagbfp2.gb,test-data/emma_parts/p21_puror.gb,test-data/emma_parts/p22_pgkpolya.gb,test-data/emma_parts/p23_insulatorfb.gb,test-data/emma_parts/p24_3'ha_haavs1.gb,test-data/emma_parts/p24_3'pb.gb,test-data/emma_parts/p25_sv40-ori.gb,test-data/emma_parts/p2_insulatorfb.gb,test-data/emma_parts/p3_cagp.gb,test-data/emma_parts/p3_cmvp_tet.gb,test-data/emma_parts/p3_ef1ap.gb,test-data/emma_parts/p3_tre3gp.gb,test-data/emma_parts/p4_kt-l7ae -weiss.gb,test-data/emma_parts/p4_lac-o.gb,test-data/emma_parts/p5_attb-bxb1.gb,test-data/emma_parts/p5_attp-bxb1.gb,test-data/emma_parts/p5_k1-k1.gb,test-data/emma_parts/p5_kt-weiss.gb,test-data/emma_parts/p6_atg_boxc.gb,test-data/emma_parts/p6_kozak-atg.gb,test-data/emma_parts/p6_nt-igkl sequence.gb,test-data/emma_parts/p6_nt-mls.gb,test-data/emma_parts/p6_nt-myristoylation signal.gb,test-data/emma_parts/p6_nt-palm sequence.gb,test-data/emma_parts/p6_nt-sv40_nls.gb,test-data/emma_parts/p7_bxb1.gb,test-data/emma_parts/p7_l7ae-weiss.gb,test-data/emma_parts/p7_l7ae.gb,test-data/emma_parts/p7_laci.gb,test-data/emma_parts/p7_mcherry.gb,test-data/emma_parts/p7_mkate2.gb,test-data/emma_parts/p7_mneogreen.gb,test-data/emma_parts/p7_mruby2.gb,test-data/emma_parts/p7_mtagbfp2.gb,test-data/emma_parts/p8_linker1.gb,test-data/emma_parts/p8_linker2.gb,test-data/emma_parts/p8_p2a.gb,test-data/emma_parts/p8a_ct-kdel.gb,test-data/emma_parts/p8b_ires2.gb,test-data/emma_parts/p9_a-tubulin.gb,test-data/emma_parts/p9_bsdr.gb,test-data/emma_parts/p9_dmrc.gb,test-data/emma_parts/p9_firefly luciferase.gb,test-data/emma_parts/p9_mneogreen.gb,test-data/emma_parts/p9_mruby2.gb,test-data/emma_parts/p9_mtagbfp2.gb,test-data/emma_parts/p9_neor.gb,test-data/emma_parts/p9_puror.gb" backbone_name 'HC_Amp_ccdb' part_backbone_ratio '1.0' quantity_unit 'fmol' part_quantity '1.3' buffer_volume '0.3' total_volume '1.0' dispenser 'labcyte_echo' result_zip 'picklist.zip' picklist 'test-data/example_picklist.xls' source_plate 'test-data/example_echo_plate.xlsx'-->
+        <test> 
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="HC_Amp_ccdB" value="emma_parts/HC_Amp_ccdB.gb" />
+                    <element name="conn a-c" value="emma_parts/conn a-c.gb" />
+                    <element name="conn b-e" value="emma_parts/conn b-e.gb" />
+                    <element name="conn b-l" value="emma_parts/conn b-l.gb" />
+                    <element name="conn d-e" value="emma_parts/conn d-e.gb" />
+                    <element name="conn d-f" value="emma_parts/conn d-f.gb" />
+                    <element name="conn h-ha" value="emma_parts/conn h-ha.gb" />
+                    <element name="conn h-j" value="emma_parts/conn h-j.gb" />
+                    <element name="conn h-k" value="emma_parts/conn h-k.gb" />
+                    <element name="conn j-k" value="emma_parts/conn j-k.gb" />
+                    <element name="conn l-n" value="emma_parts/conn l-n.gb" />
+                    <element name="conn l-r" value="emma_parts/conn l-r.gb" />
+                    <element name="conn l-w" value="emma_parts/conn l-w.gb" />
+                    <element name="conn l-y" value="emma_parts/conn l-y.gb" />
+                    <element name="conn q-r" value="emma_parts/conn q-r.gb" />
+                    <element name="conn r-w" value="emma_parts/conn r-w.gb" />
+                    <element name="conn t-v" value="emma_parts/conn t-v.gb" />
+                    <element name="conn w-x" value="emma_parts/conn w-x.gb" />
+                    <element name="conn w-y" value="emma_parts/conn w-y.gb" />
+                    <element name="conn w-z" value="emma_parts/conn w-z.gb" />
+                    <element name="conn y-z" value="emma_parts/conn y-z.gb" />
+                    <element name="p10_tet-aptazyme" value="emma_parts/p10_tet-aptazyme.gb" />
+                    <element name="p11_sv40polya" value="emma_parts/p11_sv40polya.gb" />
+                    <element name="p14_cmvp" value="emma_parts/p14_cmvp.gb" />
+                    <element name="p14_sv40p" value="emma_parts/p14_sv40p.gb" />
+                    <element name="p15_puror" value="emma_parts/p15_puror.gb" />
+                    <element name="p16_bghpolya" value="emma_parts/p16_bghpolya.gb" />
+                    <element name="p18_cmvp" value="emma_parts/p18_cmvp.gb" />
+                    <element name="p18_ef1ap" value="emma_parts/p18_ef1ap.gb" />
+                    <element name="p19_mneogreen" value="emma_parts/p19_mneogreen.gb" />
+                    <element name="p19_mruby2" value="emma_parts/p19_mruby2.gb" />
+                    <element name="p19_mtagbfp2" value="emma_parts/p19_mtagbfp2.gb" />
+                    <element name="p19_tet-on-3g" value="emma_parts/p19_tet-on-3g.gb" />
+                    <element name="p1_5'-itr-pb" value="emma_parts/p1_5'-itr-pb.gb" />
+                    <element name="p1_5'ha-haavs1" value="emma_parts/p1_5'ha-haavs1.gb" />
+                    <element name="p20_ct-minute-nes" value="emma_parts/p20_ct-minute-nes.gb" />
+                    <element name="p20_ct-nes" value="emma_parts/p20_ct-nes.gb" />
+                    <element name="p20_linker3" value="emma_parts/p20_linker3.gb" />
+                    <element name="p20_p2a" value="emma_parts/p20_p2a.gb" />
+                    <element name="p21_dmra" value="emma_parts/p21_dmra.gb" />
+                    <element name="p21_mkate2" value="emma_parts/p21_mkate2.gb" />
+                    <element name="p21_mneogreen" value="emma_parts/p21_mneogreen.gb" />
+                    <element name="p21_mruby2" value="emma_parts/p21_mruby2.gb" />
+                    <element name="p21_mtagbfp2" value="emma_parts/p21_mtagbfp2.gb" />
+                    <element name="p21_puror" value="emma_parts/p21_puror.gb" />
+                    <element name="p22_pgkpolya" value="emma_parts/p22_pgkpolya.gb" />
+                    <element name="p23_insulatorfb" value="emma_parts/p23_insulatorfb.gb" />
+                    <element name="p24_3'ha_haavs1" value="emma_parts/p24_3'ha_haavs1.gb" />
+                    <element name="p24_3'pb" value="emma_parts/p24_3'pb.gb" />
+                    <element name="p25_sv40-ori" value="emma_parts/p25_sv40-ori.gb" />
+                    <element name="p2_insulatorfb" value="emma_parts/p2_insulatorfb.gb" />
+                    <element name="p3_cagp" value="emma_parts/p3_cagp.gb" />
+                    <element name="p3_cmvp_tet" value="emma_parts/p3_cmvp_tet.gb" />
+                    <element name="p3_ef1ap" value="emma_parts/p3_ef1ap.gb" />
+                    <element name="p3_tre3gp" value="emma_parts/p3_tre3gp.gb" />
+                    <element name="p4_kt-l7ae -weiss" value="emma_parts/p4_kt-l7ae -weiss.gb" />
+                    <element name="p4_lac-o" value="emma_parts/p4_lac-o.gb" />
+                    <element name="p5_attb-bxb1" value="emma_parts/p5_attb-bxb1.gb" />
+                    <element name="p5_attp-bxb1" value="emma_parts/p5_attp-bxb1.gb" />
+                    <element name="p5_k1-k1" value="emma_parts/p5_k1-k1.gb" />
+                    <element name="p5_kt-weiss" value="emma_parts/p5_kt-weiss.gb" />
+                    <element name="p6_atg_boxc" value="emma_parts/p6_atg_boxc.gb" />
+                    <element name="p6_kozak-atg" value="emma_parts/p6_kozak-atg.gb" />
+                    <element name="p6_nt-igkl sequence" value="emma_parts/p6_nt-igkl sequence.gb" />
+                    <element name="p6_nt-mls" value="emma_parts/p6_nt-mls.gb" />
+                    <element name="p6_nt-myristoylation signal" value="emma_parts/p6_nt-myristoylation signal.gb" />
+                    <element name="p6_nt-palm sequence" value="emma_parts/p6_nt-palm sequence.gb" />
+                    <element name="p6_nt-sv40_nls" value="emma_parts/p6_nt-sv40_nls.gb" />
+                    <element name="p7_bxb1" value="emma_parts/p7_bxb1.gb" />
+                    <element name="p7_l7ae-weiss" value="emma_parts/p7_l7ae-weiss.gb" />
+                    <element name="p7_l7ae" value="emma_parts/p7_l7ae.gb" />
+                    <element name="p7_laci" value="emma_parts/p7_laci.gb" />
+                    <element name="p7_mcherry" value="emma_parts/p7_mcherry.gb" />
+                    <element name="p7_mkate2" value="emma_parts/p7_mkate2.gb" />
+                    <element name="p7_mneogreen" value="emma_parts/p7_mneogreen.gb" />
+                    <element name="p7_mruby2" value="emma_parts/p7_mruby2.gb" />
+                    <element name="p7_mtagbfp2" value="emma_parts/p7_mtagbfp2.gb" />
+                    <element name="p8_linker1" value="emma_parts/p8_linker1.gb" />
+                    <element name="p8_linker2" value="emma_parts/p8_linker2.gb" />
+                    <element name="p8_p2a" value="emma_parts/p8_p2a.gb" />
+                    <element name="p8a_ct-kdel" value="emma_parts/p8a_ct-kdel.gb" />
+                    <element name="p8b_ires2" value="emma_parts/p8b_ires2.gb" />
+                    <element name="p9_a-tubulin" value="emma_parts/p9_a-tubulin.gb" />
+                    <element name="p9_bsdr" value="emma_parts/p9_bsdr.gb" />
+                    <element name="p9_dmrc" value="emma_parts/p9_dmrc.gb" />
+                    <element name="p9_firefly luciferase" value="emma_parts/p9_firefly luciferase.gb" />
+                    <element name="p9_mneogreen" value="emma_parts/p9_mneogreen.gb" />
+                    <element name="p9_mruby2" value="emma_parts/p9_mruby2.gb" />
+                    <element name="p9_mtagbfp2" value="emma_parts/p9_mtagbfp2.gb" />
+                    <element name="p9_neor" value="emma_parts/p9_neor.gb" />
+                    <element name="p9_puror" value="emma_parts/p9_puror.gb" />
+                </collection>
+            </param>
+            <param name="picklist" value="example_picklist.xls" />
+            <param name="source_plate" value="example_echo_plate.xlsx"/>
+            <conditional name='setting'>
+                <param name="mode" value="std" />
+                <param name="quantity_unit" value="fmol" />
+                <param name="part_quantity" value="1.3" />
+                <param name="buffer_volume" value="0.3" />
+                <param name="total_volume" value="1.0" />
+                <param name="dispenser" value="labcyte_echo" />
+            </conditional>
+            <output name="output_zip" ftype='zip'>
+                <assert_contents>
+                    <has_archive_member path=".*" n="5"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!--test demo-->
+        <test> 
+            <param name="genbank_files">
+                <collection type="list">
+                    <element name="HC_Amp_ccdB" value="emma_parts/HC_Amp_ccdB.gb" />
+                    <element name="conn a-c" value="emma_parts/conn a-c.gb" />
+                    <element name="conn b-e" value="emma_parts/conn b-e.gb" />
+                    <element name="conn b-l" value="emma_parts/conn b-l.gb" />
+                    <element name="conn d-e" value="emma_parts/conn d-e.gb" />
+                    <element name="conn d-f" value="emma_parts/conn d-f.gb" />
+                    <element name="conn h-ha" value="emma_parts/conn h-ha.gb" />
+                    <element name="conn h-j" value="emma_parts/conn h-j.gb" />
+                    <element name="conn h-k" value="emma_parts/conn h-k.gb" />
+                    <element name="conn j-k" value="emma_parts/conn j-k.gb" />
+                    <element name="conn l-n" value="emma_parts/conn l-n.gb" />
+                    <element name="conn l-r" value="emma_parts/conn l-r.gb" />
+                    <element name="conn l-w" value="emma_parts/conn l-w.gb" />
+                    <element name="conn l-y" value="emma_parts/conn l-y.gb" />
+                    <element name="conn q-r" value="emma_parts/conn q-r.gb" />
+                    <element name="conn r-w" value="emma_parts/conn r-w.gb" />
+                    <element name="conn t-v" value="emma_parts/conn t-v.gb" />
+                    <element name="conn w-x" value="emma_parts/conn w-x.gb" />
+                    <element name="conn w-y" value="emma_parts/conn w-y.gb" />
+                    <element name="conn w-z" value="emma_parts/conn w-z.gb" />
+                    <element name="conn y-z" value="emma_parts/conn y-z.gb" />
+                    <element name="p10_tet-aptazyme" value="emma_parts/p10_tet-aptazyme.gb" />
+                    <element name="p11_sv40polya" value="emma_parts/p11_sv40polya.gb" />
+                    <element name="p14_cmvp" value="emma_parts/p14_cmvp.gb" />
+                    <element name="p14_sv40p" value="emma_parts/p14_sv40p.gb" />
+                    <element name="p15_puror" value="emma_parts/p15_puror.gb" />
+                    <element name="p16_bghpolya" value="emma_parts/p16_bghpolya.gb" />
+                    <element name="p18_cmvp" value="emma_parts/p18_cmvp.gb" />
+                    <element name="p18_ef1ap" value="emma_parts/p18_ef1ap.gb" />
+                    <element name="p19_mneogreen" value="emma_parts/p19_mneogreen.gb" />
+                    <element name="p19_mruby2" value="emma_parts/p19_mruby2.gb" />
+                    <element name="p19_mtagbfp2" value="emma_parts/p19_mtagbfp2.gb" />
+                    <element name="p19_tet-on-3g" value="emma_parts/p19_tet-on-3g.gb" />
+                    <element name="p1_5'-itr-pb" value="emma_parts/p1_5'-itr-pb.gb" />
+                    <element name="p1_5'ha-haavs1" value="emma_parts/p1_5'ha-haavs1.gb" />
+                    <element name="p20_ct-minute-nes" value="emma_parts/p20_ct-minute-nes.gb" />
+                    <element name="p20_ct-nes" value="emma_parts/p20_ct-nes.gb" />
+                    <element name="p20_linker3" value="emma_parts/p20_linker3.gb" />
+                    <element name="p20_p2a" value="emma_parts/p20_p2a.gb" />
+                    <element name="p21_dmra" value="emma_parts/p21_dmra.gb" />
+                    <element name="p21_mkate2" value="emma_parts/p21_mkate2.gb" />
+                    <element name="p21_mneogreen" value="emma_parts/p21_mneogreen.gb" />
+                    <element name="p21_mruby2" value="emma_parts/p21_mruby2.gb" />
+                    <element name="p21_mtagbfp2" value="emma_parts/p21_mtagbfp2.gb" />
+                    <element name="p21_puror" value="emma_parts/p21_puror.gb" />
+                    <element name="p22_pgkpolya" value="emma_parts/p22_pgkpolya.gb" />
+                    <element name="p23_insulatorfb" value="emma_parts/p23_insulatorfb.gb" />
+                    <element name="p24_3'ha_haavs1" value="emma_parts/p24_3'ha_haavs1.gb" />
+                    <element name="p24_3'pb" value="emma_parts/p24_3'pb.gb" />
+                    <element name="p25_sv40-ori" value="emma_parts/p25_sv40-ori.gb" />
+                    <element name="p2_insulatorfb" value="emma_parts/p2_insulatorfb.gb" />
+                    <element name="p3_cagp" value="emma_parts/p3_cagp.gb" />
+                    <element name="p3_cmvp_tet" value="emma_parts/p3_cmvp_tet.gb" />
+                    <element name="p3_ef1ap" value="emma_parts/p3_ef1ap.gb" />
+                    <element name="p3_tre3gp" value="emma_parts/p3_tre3gp.gb" />
+                    <element name="p4_kt-l7ae -weiss" value="emma_parts/p4_kt-l7ae -weiss.gb" />
+                    <element name="p4_lac-o" value="emma_parts/p4_lac-o.gb" />
+                    <element name="p5_attb-bxb1" value="emma_parts/p5_attb-bxb1.gb" />
+                    <element name="p5_attp-bxb1" value="emma_parts/p5_attp-bxb1.gb" />
+                    <element name="p5_k1-k1" value="emma_parts/p5_k1-k1.gb" />
+                    <element name="p5_kt-weiss" value="emma_parts/p5_kt-weiss.gb" />
+                    <element name="p6_atg_boxc" value="emma_parts/p6_atg_boxc.gb" />
+                    <element name="p6_kozak-atg" value="emma_parts/p6_kozak-atg.gb" />
+                    <element name="p6_nt-igkl sequence" value="emma_parts/p6_nt-igkl sequence.gb" />
+                    <element name="p6_nt-mls" value="emma_parts/p6_nt-mls.gb" />
+                    <element name="p6_nt-myristoylation signal" value="emma_parts/p6_nt-myristoylation signal.gb" />
+                    <element name="p6_nt-palm sequence" value="emma_parts/p6_nt-palm sequence.gb" />
+                    <element name="p6_nt-sv40_nls" value="emma_parts/p6_nt-sv40_nls.gb" />
+                    <element name="p7_bxb1" value="emma_parts/p7_bxb1.gb" />
+                    <element name="p7_l7ae-weiss" value="emma_parts/p7_l7ae-weiss.gb" />
+                    <element name="p7_l7ae" value="emma_parts/p7_l7ae.gb" />
+                    <element name="p7_laci" value="emma_parts/p7_laci.gb" />
+                    <element name="p7_mcherry" value="emma_parts/p7_mcherry.gb" />
+                    <element name="p7_mkate2" value="emma_parts/p7_mkate2.gb" />
+                    <element name="p7_mneogreen" value="emma_parts/p7_mneogreen.gb" />
+                    <element name="p7_mruby2" value="emma_parts/p7_mruby2.gb" />
+                    <element name="p7_mtagbfp2" value="emma_parts/p7_mtagbfp2.gb" />
+                    <element name="p8_linker1" value="emma_parts/p8_linker1.gb" />
+                    <element name="p8_linker2" value="emma_parts/p8_linker2.gb" />
+                    <element name="p8_p2a" value="emma_parts/p8_p2a.gb" />
+                    <element name="p8a_ct-kdel" value="emma_parts/p8a_ct-kdel.gb" />
+                    <element name="p8b_ires2" value="emma_parts/p8b_ires2.gb" />
+                    <element name="p9_a-tubulin" value="emma_parts/p9_a-tubulin.gb" />
+                    <element name="p9_bsdr" value="emma_parts/p9_bsdr.gb" />
+                    <element name="p9_dmrc" value="emma_parts/p9_dmrc.gb" />
+                    <element name="p9_firefly luciferase" value="emma_parts/p9_firefly luciferase.gb" />
+                    <element name="p9_mneogreen" value="emma_parts/p9_mneogreen.gb" />
+                    <element name="p9_mruby2" value="emma_parts/p9_mruby2.gb" />
+                    <element name="p9_mtagbfp2" value="emma_parts/p9_mtagbfp2.gb" />
+                    <element name="p9_neor" value="emma_parts/p9_neor.gb" />
+                    <element name="p9_puror" value="emma_parts/p9_puror.gb" />
+                </collection>
+            </param>
+            <param name="picklist" value="example_picklist.xls" />
+            <param name="source_plate" value="example_echo_plate.xlsx"/>
+            <conditional name='setting'>
+                <param name="mode" value="demo" />
+            </conditional>
+            <output name="output_zip" ftype='zip'>
+                <assert_contents>
+                    <has_archive_member path=".*" n="5"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    
+<help><![CDATA[
+create_assembly_picklists
+=========================
+
+Provide a source plate map and an assembly plan, get a robotic picklist spreadsheet for Tecan EVO or Labcyte Echo.
+`Read more... <https://github.com/Edinburgh-Genome-Foundry/Plateo/blob/master/README.rst>`_
+
+**Advanced parameters:**
+------------------------
+
+- **Backbone Name(s):** It can be one backbone or more than one (one name per line).
+- **Backbone Molar Ratio:** Between 0.0 and 1.0. This multiplies the backbone concentration with the part:backbone molar ratio.
+  For example, a part:backbone = 2:1 will multiply the backbone concentration by 2, so half as much of it will be added.
+  **Note:** If the part quantity unit is ng, this calculation is not performed.
+
+**Mode:**
+---------
+
+This option allows you to choose how the tool runs:
+
+- **Standard**: Runs the tool as a standalone application.
+- **DEMO**: Runs the tool with demo data.
+
+Demo data:
+
+- **GenBank File(s):** `Download GenBank files <https://files.osf.io/v1/resources/x2sj3/providers/osfstorage/689496483e21964670f62efc/?zip=>`_
+  
+  **Note:** Make GenBank files as a collection list.  
+  `How to make collection <https://training.galaxyproject.org/training-material/topics/galaxy-interface/tutorials/collections/tutorial.html>`_
+
+- **Assembly Plan (CSV or Excel):** `Download Assembly Plan <https://osf.io/download/6894965a96fb8cc5376b0c92/>`_
+
+- **Source Plate (Excel):** `Download Source Plate <https://osf.io/download/6894965b7d01c1cf281b52d3/>`_
+]]></help>
+
+
+    <citations>
+        <citation type="bibtex">
+            @unpublished{create_assembly_picklists
+                author = {Ramiz Khaled},
+                title = {{create_assembly_picklists}},
+                url = {https://github.com/Edinburgh-Genome-Foundry/CUBA/blob/master/backend/app/views/create_assembly_picklists/CreateAssemblyPicklistsView.py},
+            }
+        </citation>
+    </citations>
+</tool>
