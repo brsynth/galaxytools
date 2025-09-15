@@ -1,12 +1,16 @@
-<tool id="retrorules" name="RetroRules" version="1.0+galaxy1" profile="21.09" license="MIT">
+<tool id="retrorules" name="RetroRules" version="1.0+galaxy2" profile="21.09" license="MIT">
     <description>Querying the RetroRules REST API</description>
     <requirements>
         <requirement type="package" version="2">requests</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         python '$__tool_directory__/'query.py
-        #if str($cond_src.from_src) == 'from_templates'
-            templates
+        #if str($cond_src.from_src) == 'from_templates' or str($cond_src.from_src) == 'from_templates_count'
+            #if str($cond_src.from_src) == 'from_templates'
+                templates
+            #elif str($cond_src.from_src) == 'from_templates_count'
+                templates-count
+            #end if
             --input-smarts-str '$cond_src.smarts'
             #set template_ids = []
             #for $x in $cond_src.rep_template_ids
@@ -34,11 +38,13 @@
                 #set dedup = 'true'
             #end if
             --input-dedup-str $dedup
-            #if str($cond_src.limit) != ''
-                --input-limit-int '$cond_src.limit'
-            #end if
-            #if str($cond_src.offset) != ''
-                --input-offset-int '$cond_src.offset'
+            #if str($cond_src.from_src) == 'from_templates'
+                #if str($cond_src.limit) != ''
+                    --input-limit-int '$cond_src.limit'
+                #end if
+                #if str($cond_src.offset) != ''
+                    --input-offset-int '$cond_src.offset'
+                #end if
             #end if
         #elif str($cond_src.from_src) == 'from_templates_summary'
             templates-summary
@@ -51,10 +57,11 @@
     ]]></command>
     <inputs>
         <conditional name="cond_src">
-            <param name="from_src" type="select" label="Select entry point">
+            <param name="from_src" type="select" multiple="False" label="Select entry point">
                 <option value="from_templates" selected="True">Search templates</option>
                 <option value="from_templates_summary">Summarize a template</option>
                 <option value="from_templates_sources">List source reactions for a template</option>
+                <option value="from_templates_count">Count templates</option>
             </param>
             <when value="from_templates">
                 <param name="smarts" type="text" value="" label="Exact SMARTS">
@@ -92,7 +99,7 @@
                     <option value="false">False</option>
                 </param>
                 <param name="dedup" type="boolean" checked="True"
-                    label="By default deduplicated templates are returne" />
+                    label="By default deduplicated templates are returned" />
                 <param name="limit" type="integer" min="1" optional="True"
                     label="Limit number of returned templates" />
                 <param name="offset" type="integer" min="0" optional="True"
@@ -108,6 +115,44 @@
                     <validator type="empty_field" message="Template ID is required" />
                 </param>
             </when>
+            <when value="from_templates_count">
+                <param name="smarts" type="text" value="" label="Exact SMARTS">
+                    <sanitizer sanitize="false" />
+                </param>
+                <repeat name="rep_template_ids" title="Template">
+                    <param name="template_id" type="text" label="ID">
+                        <validator type="empty_field" message="Not empty" />
+                    </param>
+                </repeat>
+                <repeat name="rep_reaction_ids" title="Reaction">
+                    <param name="reaction_id" type="text" label="ID">
+                        <validator type="empty_field" message="Not empty" />
+                    </param>
+                </repeat>
+                <param name="from_datasets" type="select" multiple="False"
+                    label="Select a specific database">
+                    <option value="any" selected="True">Any</option>
+                    <option value="metanetx">MetaNetX</option>
+                    <option value="rhea">Rhea</option>
+                    <option value="uspto">USPTO</option>
+                </param>
+                <param name="from_chemical_domain" type="select" multiple="False"
+                    label="Chemical domain">
+                    <option value="any" selected="True">Any</option>
+                    <option value="biochem">Biochem</option>
+                    <option value="orgchem">Orgchem</option>
+                </param>
+                <param name="ec_number" type="text" value="" label="EC number to filter templates" />
+                <param name="min_radius" type="integer" min="0" max="10" optional="True"
+                    label="Single radius filter" />
+                <param name="from_valid" type="select" multiple="False" label="Filter by validity">
+                    <option value="true" selected="True">True</option>
+                    <option value="any">Any</option>
+                    <option value="false">False</option>
+                </param>
+                <param name="dedup" type="boolean" checked="True"
+                    label="By default deduplicated templates are returned" />
+            </when>
         </conditional>
     </inputs>
     <outputs>
@@ -118,7 +163,7 @@
         <test>
             <conditional name="cond_src">
                 <param name="from_src" value="from_templates" />
-                <param name="smarts" value="O]-[C](=[O])" />
+                <param name="smarts" value="[O]-[C](=[O])" />
                 <param name="limit" value="5" />
             </conditional>
             <output name="output_json" md5="0e4a782a2868c4b85a96f7c1d4ecaef8" />
@@ -138,6 +183,14 @@
                 <param name="template_id" value="RR:03-27BC85-19184A-A71018" />
             </conditional>
             <output name="output_json" md5="33768abfc48aa896bfdfb736a3001950" />
+        </test>
+        <!-- Templates count -->
+        <test>
+            <conditional name="cond_src">
+                <param name="from_src" value="from_templates_count" />
+                <param name="smarts" value="[O]-[C](=[O])" />
+            </conditional>
+            <output name="output_json" md5="375fc61f8b47a81687dc567d3501f921" />
         </test>
     </tests>
     <help><![CDATA[

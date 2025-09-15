@@ -63,7 +63,7 @@ if __name__ == "__main__":
     print("templates-count")
     smarts_str = "[O]-[C](=[O])"
     cmd = ["--input-smarts-str", smarts_str]
-    value = run_cmd(subcommand="templates", sub_cmd=cmd)
+    value = run_cmd(subcommand="templates-count", sub_cmd=cmd)
     print("Test:", " ".join(cmd), "md5:", value)
 
     print("=" * 50)
