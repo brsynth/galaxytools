@@ -1,4 +1,4 @@
-<tool id="retrorules" name="RetroRules" version="0.1.1" profile="21.09" license="MIT">
+<tool id="retrorules" name="RetroRules" version="0.7+galaxy3" profile="21.09" license="MIT">
     <description>Querying the RetroRules REST API</description>
     <requirements>
         <requirement type="package" version="2">requests</requirement>
@@ -95,12 +95,12 @@
             </when>
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="min_diameter" type="integer" value="12" min="1" max="16"
+            <param name="min_diameter" type="integer" value="12" min="1" max="16"
                 label="Diameter minimal" />
         </section>
     </inputs>
     <outputs>
-        <data name="output_json" format="json" label="${tool.name} (min diameter: ${min_diameter})" />
+        <data name="output_json" format="json" label="${tool.name} (min diameter: ${adv.min_diameter})" />
     </outputs>
     <tests>
         <!-- EC number -->
@@ -236,7 +236,7 @@
 RetroRules
 ==========
 
-Querying the `RetroRules <https://retrorules.org/>`_ REST API
+Querying the `RetroRules <https://retrorules.org/>`_ REST API (version 0.7)
     ]]></help>
     <creator>
         <organization name="BioRetroSynth" url="https://github.com/brsynth" />

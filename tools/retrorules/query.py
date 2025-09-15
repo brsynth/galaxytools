@@ -75,7 +75,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Query RetroRules API via command-line endpoints."
     )
-    subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers = parser.add_subparsers(dest="command")
 
     # Subcommand: EC number
     parser_ecn = subparsers.add_parser("ec-number", help="From EC number")
