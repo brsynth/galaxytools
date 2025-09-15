@@ -100,7 +100,7 @@
         </section>
     </inputs>
     <outputs>
-        <data name="output_json" format="json" label="${tool.name} (min diameter: ${min_diameter})" />
+        <data name="output_json" format="json" label="${tool.name} (min diameter: ${adv.min_diameter})" />
     </outputs>
     <tests>
         <!-- EC number -->
