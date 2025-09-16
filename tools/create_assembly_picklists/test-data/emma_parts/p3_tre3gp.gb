@@ -1,0 +1,115 @@
+LOCUS       .                       2209 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   <unknown id>
+VERSION     <unknown id>
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     terminator      392..419
+                     /note="T7Te terminator"
+                     /note="phage T7 early transcription terminator"
+     rep_origin      complement(431..1018)
+                     /direction=LEFT
+                     /note="ori"
+                     /note="high-copy-number ColE1/pMB1/pBR322/pUC origin of
+                     replication"
+     terminator      1040..1069
+                     /note="T3Te terminator"
+                     /note="phage T3 early transcription terminator"
+     misc_feature    1143..1148
+                     /note="BsmBI"
+     source          5..1149
+                     /source="Exported"
+     promoter        1171..1549
+                     /note="TRE3G promoter"
+                     /note="3rd-generation Tet-responsive promoter that can be
+                     activated by binding of Tet-On(R) 3G"
+     protein_bind    1179..1197
+                     /bound_moiety="tetracycline repressor TetR"
+                     /gene="tetO"
+                     /note="tet operator"
+                     /note="bacterial operator O2 for the tetR and tetA genes"
+     protein_bind    1215..1233
+                     /bound_moiety="tetracycline repressor TetR"
+                     /gene="tetO"
+                     /note="tet operator"
+                     /note="bacterial operator O2 for the tetR and tetA genes"
+     protein_bind    1251..1269
+                     /bound_moiety="tetracycline repressor TetR"
+                     /gene="tetO"
+                     /note="tet operator"
+                     /note="bacterial operator O2 for the tetR and tetA genes"
+     protein_bind    1287..1305
+                     /bound_moiety="tetracycline repressor TetR"
+                     /gene="tetO"
+                     /note="tet operator"
+                     /note="bacterial operator O2 for the tetR and tetA genes"
+     protein_bind    1323..1341
+                     /bound_moiety="tetracycline repressor TetR"
+                     /gene="tetO"
+                     /note="tet operator"
+                     /note="bacterial operator O2 for the tetR and tetA genes"
+     protein_bind    1359..1377
+                     /bound_moiety="tetracycline repressor TetR"
+                     /gene="tetO"
+                     /note="tet operator"
+                     /note="bacterial operator O2 for the tetR and tetA genes"
+     protein_bind    1395..1413
+                     /bound_moiety="tetracycline repressor TetR"
+                     /gene="tetO"
+                     /note="tet operator"
+                     /note="bacterial operator O2 for the tetR and tetA genes"
+     source          1154..1549
+                     /source="Exported"
+     misc_feature    complement(1555..1560)
+                     /note="BsmBI"
+     terminator      1627..1658
+                     /note="tonB terminator"
+                     /note="bidirectional E. coli tonB-P14 transcription
+                     terminator"
+     promoter        1659..1761
+                     /note="cat promoter"
+                     /note="promoter of the E. coli cat gene"
+     source          1554..2209
+                     /source="Exported"
+ORIGIN
+        1 ctcaggcgca atcacgaatg aataacggtt tggttggtgc gagtgatttt gatgacgagc
+       61 gtaatggctg gcctgttgaa caagtctgga aagaaatgca taagcttttg ccattctcac
+      121 cggattcagt cgtcactcat ggtgatttct cacttgataa ccttattttt gacgagggga
+      181 aattaatagg ttgtattgat gttggacgag tcggaatcgc agaccgatac caggatcttg
+      241 ccatcctatg gaactgcctc ggtgagtttt ctccttcatt acagaaacgg ctttttcaaa
+      301 aatatggtat tgataatcct gatatgaata aattgcagtt tcacttgatg ctcgatgagt
+      361 ttttctaatg agggcccaaa tgtaatcacc tggctcacct tcgggtgggc ctttctgcgt
+      421 tgctggcgtt tttccatagg ctccgccccc ctgacgagca tcacaaaaat cgatgctcaa
+      481 gtcagaggtg gcgaaacccg acaggactat aaagatacca ggcgtttccc cctggaagct
+      541 ccctcgtgcg ctctcctgtt ccgaccctgc cgcttaccgg atacctgtcc gcctttctcc
+      601 cttcgggaag cgtggcgctt tctcatagct cacgctgtag gtatctcagt tcggtgtagg
+      661 tcgttcgctc caagctgggc tgtgtgcacg aaccccccgt tcagcccgac cgctgcgcct
+      721 tatccggtaa ctatcgtctt gagtccaacc cggtaagaca cgacttatcg ccactggcag
+      781 cagccactgg taacaggatt agcagagcga ggtatgtagg cggtgctaca gagttcttga
+      841 agtggtggcc taactacggc tacactagaa gaacagtatt tggtatctgc gctctgctga
+      901 agccagttac ctcggaaaaa gagttggtag ctcttgatcc ggcaaacaaa ccaccgctgg
+      961 tagcggtggt ttttttgttt gcaagcagca gattacgcgc agaaaaaaag gatctcaaga
+     1021 agatcctttg attttctacc gaagaaaggc ccacccgtga aggtgagcca gtgagttgat
+     1081 tgcagtccag ttacgctgga gtctgaggct cgtcctgaat gatatcaagc ttgaattcgt
+     1141 tacgtctcgg actttatacg aagttatctc gagtttactc cctatcagtg atagagaacg
+     1201 tatgaagagt ttactcccta tcagtgatag agaacgtatg cagactttac tccctatcag
+     1261 tgatagagaa cgtataagga gtttactccc tatcagtgat agagaacgta tgaccagttt
+     1321 actccctatc agtgatagag aacgtatcta cagtttactc cctatcagtg atagagaacg
+     1381 tatatccagt ttactcccta tcagtgatag agaacgtata agctttaggc gtgtacggtg
+     1441 ggcgcctata aaagcagagc tcgtttagtg aaccgtcaga tcgcctggag caattccaca
+     1501 acacttttgt cttataccaa ctttccgtac cacttcctac cctcgtaaag gaccgagacg
+     1561 aagacgaatt ctctagatat cgctcaatac tgaccattta aatcatacct gacctccata
+     1621 gcagaaagtc aaaagcctcc gaccggaggc ttttgacttg atcggcacgt aagaggttcc
+     1681 aactttcacc ataatgaaat aagatcacta ccgggcgtat tttttgagtt atcgagattt
+     1741 tcaggagcta aggaagctaa aatgagccat attcaacggg aaacgtcttg ctcgaggccg
+     1801 cgattaaatt ccaacatgga tgctgattta tatgggtata aatgggctcg cgataatgtc
+     1861 gggcaatcag gtgcgacaat ctatcgattg tatgggaagc ccgatgcgcc agagttgttt
+     1921 ctgaaacatg gcaaaggtag cgttgccaat gatgttacag atgagatggt caggctaaac
+     1981 tggctgacgg aatttatgcc tcttccgacc atcaagcatt ttatccgtac tcctgatgat
+     2041 gcatggttac tcaccactgc gatcccaggg aaaacagcat tccaggtatt agaagaatat
+     2101 cctgattcag gtgaaaatat tgttgatgcg ctggcagtgt tcctgcgccg gttgcattcg
+     2161 attcctgttt gtaattgtcc ttttaacggc gatcgcgtat ttcgtctcg
+//

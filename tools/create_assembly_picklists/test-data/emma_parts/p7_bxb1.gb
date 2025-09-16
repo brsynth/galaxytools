@@ -1,0 +1,107 @@
+LOCUS       .                       3312 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   <unknown id>
+VERSION     <unknown id>
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     CDS             5..1501
+                     /codon_start=1
+                     /note="BxB1 intergase - human codon optimised"
+                     /translation="RALVVIRLSRVTDATTSPERQLESCQQLCAQRGWDVVGVAEDLDV
+                     SGAVDPFDRKRRPNLARWLAFEEQPFDVIVAYRVDRLTRSIRHLQQLVHWAEDHKKLVV
+                     SATEAHFDTTTPFAAVVIALMGTVAQMELEAIKERNRSAAHFNIRAGKYRGSLPPWGYL
+                     PTRVDGEWRLVPDPVQRERILEVYHRVVDNHEPLHLVAHDLNRRGVLSPKDYFAQLQGR
+                     EPQGREWSATALKRSMISEAMLGYATLNGKTVRDDDGAPLVRAEPILTREQLEALRAEL
+                     VKTSRAKPAVSTPSLLLRVLFCAVCGEPAYKFAGGGRKHPRYRCRSMGFPKHCGNGTVA
+                     MAEWDAFCEEQVLDLLGDAERLEKVWVAGSDSAVELAEVNAELVDLTSLIGSPAYRAGS
+                     PQREALDARIAALAARQEELEGLEARPSGWEWRETGQRFGDWWREQDTAAKNTWLRSMN
+                     VRLTFDVRGGLTRTIDFGDLQEYEQHLRLGSVVERLHTGMS"
+     source          5..1503
+                     /source="Exported"
+     misc_feature    complement(1509..1514)
+                     /note="BsmBI"
+     terminator      1581..1612
+                     /note="tonB terminator"
+                     /note="bidirectional E. coli tonB-P14 transcription
+                     terminator"
+     promoter        1613..1715
+                     /note="cat promoter"
+                     /note="promoter of the E. coli cat gene"
+     source          1508..2163
+                     /source="Exported"
+     terminator      2555..2582
+                     /note="T7Te terminator"
+                     /note="phage T7 early transcription terminator"
+     rep_origin      complement(2594..3181)
+                     /direction=LEFT
+                     /note="ori"
+                     /note="high-copy-number ColE1/pMB1/pBR322/pUC origin of
+                     replication"
+     terminator      3203..3232
+                     /note="T3Te terminator"
+                     /note="phage T3 early transcription terminator"
+     misc_feature    3306..3311
+                     /note="BsmBI"
+     source          2168..3312
+                     /source="Exported"
+ORIGIN
+        1 cagcagagca ctggtggtca tccgactgag tagggtcaca gacgcaacaa caagccccga
+       61 acggcagctc gaaagctgtc agcagctgtg tgcccagcga ggatgggacg tggtcggagt
+      121 ggcagaggat ctggacgtga gcggcgctgt cgatccattc gacagaaagc ggaggcccaa
+      181 cctggcaagg tggctggctt tcgaggaaca gccctttgat gtgatcgtcg cctacagagt
+      241 ggacaggctg acacgctcta ttcgacatct gcagcagctg gtgcattggg ccgaggacca
+      301 caagaaactg gtggtcagtg caactgaagc ccacttcgat accacaactc cttttgccgc
+      361 tgtggtcatc gcactgatgg gcaccgtggc ccagatggag ctggaagcta tcaaggagcg
+      421 aaaccggagt gcagcccatt tcaatattcg ggccgggaaa tacagaggat cactgccccc
+      481 ttggggctat ctgcctaccc gggtggatgg ggagtggaga ctggtgccag accccgtcca
+      541 gagagagagg attctggaag tgtaccacag ggtggtcgat aaccacgaac cactgcatct
+      601 ggtcgcccac gacctgaata ggcgcggcgt gctgagccca aaagattatt ttgctcagct
+      661 gcagggaagg gagccacagg gacgagaatg gtccgctacc gccctgaagc ggagcatgat
+      721 cagtgaggct atgctgggct acgcaactct gaatgggaaa accgtccggg acgatgacgg
+      781 agcaccactg gtgagggctg agcctattct gacacgcgag cagctggaag ctctgcgggc
+      841 agaactggtg aaaacctcca gagccaaacc tgccgtgagc accccaagcc tgctgctgag
+      901 ggtgctgttc tgcgccgtct gtggggagcc agcatacaag tttgccggcg ggggaagaaa
+      961 acatccccgc tatcgatgcc ggtctatggg attccctaag cactgtggaa acggcactgt
+     1021 ggctatggcc gagtgggacg ccttttgtga ggaacaggtg ctggatctgc tgggcgacgc
+     1081 cgagaggctg gaaaaagtgt gggtcgctgg cagcgactcc gctgtggagc tggcagaagt
+     1141 caatgccgag ctggtggatc tgacctccct gatcggatct cctgcatata gggcaggctc
+     1201 accacagcga gaagctctgg acgcacgaat tgctgcactg gcagctcgac aggaggaact
+     1261 ggaggggctg gaagcacgac ctagcggatg ggagtggcga gaaacaggcc agcggtttgg
+     1321 ggattggtgg agagagcagg acacagcagc caagaacact tggctgagaa gtatgaatgt
+     1381 caggctgact ttcgatgtgc gcggcgggct gacccgaaca atcgattttg gcgacctgca
+     1441 ggagtatgaa cagcacctga gactggggag cgtggtcgaa agactgcaca ctgggatgtc
+     1501 atcaggccga gacgaagacg aattctctag atatcgctca atactgacca tttaaatcat
+     1561 acctgacctc catagcagaa agtcaaaagc ctccgaccgg aggcttttga cttgatcggc
+     1621 acgtaagagg ttccaacttt caccataatg aaataagatc actaccgggc gtattttttg
+     1681 agttatcgag attttcagga gctaaggaag ctaaaatgag ccatattcaa cgggaaacgt
+     1741 cttgctcgag gccgcgatta aattccaaca tggatgctga tttatatggg tataaatggg
+     1801 ctcgcgataa tgtcgggcaa tcaggtgcga caatctatcg attgtatggg aagcccgatg
+     1861 cgccagagtt gtttctgaaa catggcaaag gtagcgttgc caatgatgtt acagatgaga
+     1921 tggtcaggct aaactggctg acggaattta tgcctcttcc gaccatcaag cattttatcc
+     1981 gtactcctga tgatgcatgg ttactcacca ctgcgatccc agggaaaaca gcattccagg
+     2041 tattagaaga atatcctgat tcaggtgaaa atattgttga tgcgctggca gtgttcctgc
+     2101 gccggttgca ttcgattcct gtttgtaatt gtccttttaa cggcgatcgc gtatttcgtc
+     2161 tcgctcaggc gcaatcacga atgaataacg gtttggttgg tgcgagtgat tttgatgacg
+     2221 agcgtaatgg ctggcctgtt gaacaagtct ggaaagaaat gcataagctt ttgccattct
+     2281 caccggattc agtcgtcact catggtgatt tctcacttga taaccttatt tttgacgagg
+     2341 ggaaattaat aggttgtatt gatgttggac gagtcggaat cgcagaccga taccaggatc
+     2401 ttgccatcct atggaactgc ctcggtgagt tttctccttc attacagaaa cggctttttc
+     2461 aaaaatatgg tattgataat cctgatatga ataaattgca gtttcacttg atgctcgatg
+     2521 agtttttcta atgagggccc aaatgtaatc acctggctca ccttcgggtg ggcctttctg
+     2581 cgttgctggc gtttttccat aggctccgcc cccctgacga gcatcacaaa aatcgatgct
+     2641 caagtcagag gtggcgaaac ccgacaggac tataaagata ccaggcgttt ccccctggaa
+     2701 gctccctcgt gcgctctcct gttccgaccc tgccgcttac cggatacctg tccgcctttc
+     2761 tcccttcggg aagcgtggcg ctttctcata gctcacgctg taggtatctc agttcggtgt
+     2821 aggtcgttcg ctccaagctg ggctgtgtgc acgaaccccc cgttcagccc gaccgctgcg
+     2881 ccttatccgg taactatcgt cttgagtcca acccggtaag acacgactta tcgccactgg
+     2941 cagcagccac tggtaacagg attagcagag cgaggtatgt aggcggtgct acagagttct
+     3001 tgaagtggtg gcctaactac ggctacacta gaagaacagt atttggtatc tgcgctctgc
+     3061 tgaagccagt tacctcggaa aaagagttgg tagctcttga tccggcaaac aaaccaccgc
+     3121 tggtagcggt ggtttttttg tttgcaagca gcagattacg cgcagaaaaa aaggatctca
+     3181 agaagatcct ttgattttct accgaagaaa ggcccacccg tgaaggtgag ccagtgagtt
+     3241 gattgcagtc cagttacgct ggagtctgag gctcgtcctg aatgatatca agcttgaatt
+     3301 cgttacgtct cg
+//
