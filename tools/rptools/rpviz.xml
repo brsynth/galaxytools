@@ -28,8 +28,8 @@
     <inputs>
         <conditional name="input_type_conditional">
             <param name="input_type" type="select" label="Source SBML format">
-                <option value="tar" selected="True">TAR</option>
-                <option value="sbml">Collection</option>
+                <option value="sbml" selected="True">Collection</option>
+                <option value="tar">TAR</option>
                 <option value="single_sbml">single SBML</option>
             </param>
             <when value="tar">
