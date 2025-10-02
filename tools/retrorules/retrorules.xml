@@ -166,7 +166,7 @@
                 <param name="smarts" value="[O]-[C](=[O])" />
                 <param name="limit" value="5" />
             </conditional>
-            <output name="output_json" md5="0e4a782a2868c4b85a96f7c1d4ecaef8" />
+            <output name="output_json" md5="e8655d2abbd9e3cc9ff140d93306efbe" />
         </test>
         <!-- Templates summary -->
         <test>
@@ -174,7 +174,7 @@
                 <param name="from_src" value="from_templates_summary" />
                 <param name="template_id" value="RR:03-27BC85-19184A-A71018" />
             </conditional>
-            <output name="output_json" md5="8cde1ac45b324c9893f70254587feb30" />
+            <output name="output_json" md5="5373a8046c866466c8bfb13ec7b9efff" />
         </test>
         <!-- Templates sources -->
         <test>
@@ -182,7 +182,7 @@
                 <param name="from_src" value="from_templates_sources" />
                 <param name="template_id" value="RR:03-27BC85-19184A-A71018" />
             </conditional>
-            <output name="output_json" md5="33768abfc48aa896bfdfb736a3001950" />
+            <output name="output_json" md5="d4d9a63e18ca8c2a7a07590b3b6f7476" />
         </test>
         <!-- Templates count -->
         <test>
