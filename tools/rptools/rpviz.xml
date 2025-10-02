@@ -1,9 +1,10 @@
-<tool id="rptools_rpviz" name="Visualize pathways" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+<tool id="rptools_rpviz" name="Visualize pathways" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@"
+    profile="21.09">
     <description>Visualize pathways from the RetroPath Suite</description>
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements"/>
+    <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
         #set input_folder="input_folder"
         mkdir -p '$input_folder' &&
@@ -28,47 +29,49 @@
     <inputs>
         <conditional name="input_type_conditional">
             <param name="input_type" type="select" label="Source SBML format">
-                <option value="tar" selected="True">TAR</option>
-                <option value="sbml">Collection</option>
+                <option value="sbml" selected="True">Collection</option>
+                <option value="tar">TAR</option>
                 <option value="single_sbml">single SBML</option>
             </param>
             <when value="tar">
                 <param name="input_tar" type="data" format="tar" label="Source SBML" />
             </when>
             <when value="sbml">
-                <param name="input_sbml" type="data_collection" format="sbml" collection_type="list" label="Source SBML" />
+                <param name="input_sbml" type="data_collection" format="sbml" collection_type="list"
+                    label="Source SBML" />
             </when>
             <when value="single_sbml">
                 <param name="input_single_sbml" type="data" format="sbml" label="Source SBML" />
             </when>
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="cofactor_file" type="data" format="tsv" optional="true" label="Cofactor file" help="File listing structures to consider as cofactors."/>
+            <param name="cofactor_file" type="data" format="tsv" optional="true"
+                label="Cofactor file" help="File listing structures to consider as cofactors." />
         </section>
     </inputs>
     <outputs>
-        <data name="html_file" format="html" label="Rpviz: Pathways Visualization"/>
+        <data name="html_file" format="html" label="Rpviz: Pathways Visualization" />
     </outputs>
     <tests>
         <test>
-        <!-- test 1: check if identical html output is produced (single sbml input) -->
+            <!-- test 1: check if identical html output is produced (single sbml input) -->
             <conditional name="input_type_conditional">
-                <param name="input_type" value="single_sbml"/>
+                <param name="input_type" value="single_sbml" />
                 <param name="input_single_sbml" value="lycopene_CrtEBI_from_selenzy.xml" />
             </conditional>
-            <output name="html_file" >
+            <output name="html_file">
                 <assert_contents>
                     <has_size value="1296252" delta="1000" />
                 </assert_contents>
             </output>
         </test>
         <test>
-        <!-- test 2: check if identical html output is produced (tar input) -->
+            <!-- test 2: check if identical html output is produced (tar input) -->
             <conditional name="input_type_conditional">
-                <param name="input_type" value="tar"/>
+                <param name="input_type" value="tar" />
                 <param name="input_tar" value="as_tar_inputs.tgz" />
             </conditional>
-            <output name="html_file" >
+            <output name="html_file">
                 <assert_contents>
                     <has_size value="1604488" delta="1000" />
                 </assert_contents>
@@ -97,7 +100,7 @@ Output
 
 * **Pathways Visualization**\ : HTML output for pathway's visualization.
     ]]></help>
-    <expand macro="creator"/>
+    <expand macro="creator" />
     <citations>
         <citation type="doi">10.1038/s41467-022-32661-x</citation>
     </citations>
