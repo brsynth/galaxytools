@@ -17,11 +17,11 @@ def from_templates(
     chemical_domain_str: str,
     ec_number_str: str,
     min_radius_int: int,
-    valid_str: str,    
+    valid_str: str,
     dedup_str: str,
     limit_int: int,
     offset_int: int,
-    ) -> Tuple:
+) -> Tuple:
     url = f"{BASE_URL}/templates"
     params = []
     if smarts_str:
@@ -48,15 +48,18 @@ def from_templates(
         params.append(("offset", str(offset_int)))
     return url, params
 
+
 def from_templates_summary(template_id_str: str) -> Tuple:
     url = f"{BASE_URL}/templates/{template_id_str}/summary"
     params = {}
     return url, params
 
+
 def from_templates_sources(template_id_str: str) -> Tuple:
     url = f"{BASE_URL}/templates/{template_id_str}/sources"
     params = {}
     return url, params
+
 
 def from_templates_count(
     smarts_str: str,
@@ -66,9 +69,9 @@ def from_templates_count(
     chemical_domain_str: str,
     ec_number_str: str,
     min_radius_int: int,
-    valid_str: str,    
+    valid_str: str,
     dedup_str: str,
-    ) -> Tuple:
+) -> Tuple:
     url = f"{BASE_URL}/templates_count"
     params = []
     if smarts_str:
@@ -91,6 +94,7 @@ def from_templates_count(
         params.append(("dedup", dedup_str))
     return url, params
 
+
 def from_templates_export(
     generation_token_str: str,
     smarts_str: str,
@@ -100,9 +104,9 @@ def from_templates_export(
     chemical_domain_str: str,
     ec_number_str: str,
     min_radius_int: int,
-    valid_str: str,    
+    valid_str: str,
     dedup_str: str,
-    ) -> Tuple:
+) -> Tuple:
     url = f"{BASE_URL}/templates_export"
     params = []
     if generation_token_str:
@@ -127,18 +131,22 @@ def from_templates_export(
         params.append(("dedup", dedup_str))
     return url, params
 
+
 def query(url: str, params: Dict):
     response = requests.get(url, params=params)
     response.raise_for_status()
     return response
 
+
 def write_json(path: str, data: Dict):
     with open(path, "w") as fd:
         json.dump(data, fd, indent=4)
 
+
 def write_tab(path: str, data: str):
     with open(path, "w") as fd:
         fd.write(data)
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -215,7 +223,7 @@ def main():
         required=True,
         help="Path to output JSON file",
     )
-    
+
     # Subcommand: templates-sources
     parser_tem_sou = subparsers.add_parser("templates-sources", help="From templates-sources")
     parser_tem_sou.add_argument("--input-template-id-str", required=True, help="Template ID")

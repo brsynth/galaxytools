@@ -49,7 +49,7 @@ if __name__ == "__main__":
     cmd = ["--input-template-id-str", template_id]
     value = run_cmd(subcommand="templates-summary", sub_cmd=cmd)
     print("Test:", " ".join(cmd), "md5:", value)
-    
+
     print("=" * 50)
 
     print("templates-sources")
@@ -57,9 +57,9 @@ if __name__ == "__main__":
     cmd = ["--input-template-id-str", template_id]
     value = run_cmd(subcommand="templates-sources", sub_cmd=cmd)
     print("Test:", " ".join(cmd), "md5:", value)
-    
+
     print("=" * 50)
-    
+
     print("templates-count")
     smarts_str = "[O]-[C](=[O])"
     cmd = ["--input-smarts-str", smarts_str]
