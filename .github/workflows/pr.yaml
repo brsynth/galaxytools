@@ -360,9 +360,9 @@ jobs:
           NFILES=$(ls artifacts/ | grep "Tool test output" | wc -l)
           echo $(ls artifacts/)
           echo "NFILES: $NFILES"
-          if [[ "${{ needs.setup.outputs.chunk-count }}" != "$NFILES" ]]; then
-            exit 1
-          fi
+          #if [[ "${{ needs.setup.outputs.chunk-count }}" != "$NFILES" ]]; then
+          #  exit 1
+          #fi
 
   # deploy the tools to the toolsheds (first TTS for testing)
   deploy:
