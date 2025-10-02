@@ -2,73 +2,150 @@ import argparse
 import json
 import logging
 import sys
-from typing import Dict, List
+from typing import Dict, Tuple
 
 import requests
 
-BASE_URL = "https://retrorules.org/api/v0.7"
+BASE_URL = "https://retrorules.org/api"
 
 
-def from_ec_number(ec_number: str, min_diameter: int = None) -> List:
-    url = f"{BASE_URL}/ecnumber"
-    params = [("input", ec_number)]
-    if min_diameter:
-        params.append(("minDiameter", str(min_diameter)))
+def from_templates(
+    smarts_str: str,
+    template_ids_str: str,
+    reaction_ids_str: str,
+    datasets_str: str,
+    chemical_domain_str: str,
+    ec_number_str: str,
+    min_radius_int: int,
+    valid_str: str,
+    dedup_str: str,
+    limit_int: int,
+    offset_int: int,
+) -> Tuple:
+    url = f"{BASE_URL}/templates"
+    params = []
+    if smarts_str:
+        params.append(("q", smarts_str))
+    if template_ids_str:
+        params.append(("template_ids", ",".join(template_ids_str)))
+    if reaction_ids_str:
+        params.append(("reaction_ids", ",".join(reaction_ids_str)))
+    if datasets_str and datasets_str != "any":
+        params.append(("datasets", datasets_str))
+    if chemical_domain_str and chemical_domain_str != "any":
+        params.append(("chemical_domain", chemical_domain_str))
+    if ec_number_str:
+        params.append(("ec", ec_number_str))
+    if min_radius_int is not None:
+        params.append(("min_radius", str(min_radius_int)))
+    if valid_str and valid_str != "any":
+        params.append(("valid", valid_str))
+    if dedup_str and dedup_str != "any":
+        params.append(("dedup", dedup_str))
+    if limit_int:
+        params.append(("limit", str(limit_int)))
+    if offset_int:
+        params.append(("offset", str(offset_int)))
     return url, params
 
 
-def from_substrate(substrate: str, min_diameter: int = None) -> List:
-    url = f"{BASE_URL}/substrate"
-    params = [("input", substrate)]
-    if min_diameter:
-        params.append(("minDiameter", str(min_diameter)))
+def from_templates_summary(template_id_str: str) -> Tuple:
+    url = f"{BASE_URL}/templates/{template_id_str}/summary"
+    params = {}
     return url, params
 
 
-def from_reaction_id(
-    reaction_id: str, repository: str, min_diameter: int = None
-) -> List:
-    url = f"{BASE_URL}/reactionid"
-    params = [("input", reaction_id)]
-    params.append(("repo", repository))
-    if min_diameter:
-        params.append(("minDiameter", str(min_diameter)))
+def from_templates_sources(template_id_str: str) -> Tuple:
+    url = f"{BASE_URL}/templates/{template_id_str}/sources"
+    params = {}
     return url, params
 
 
-def from_inchi(inchi: str, min_diameter: int = None) -> List:
-    url = f"{BASE_URL}/inchi"
-    params = [("input", inchi)]
-    if min_diameter:
-        params.append(("minDiameter", str(min_diameter)))
+def from_templates_count(
+    smarts_str: str,
+    template_ids_str: str,
+    reaction_ids_str: str,
+    datasets_str: str,
+    chemical_domain_str: str,
+    ec_number_str: str,
+    min_radius_int: int,
+    valid_str: str,
+    dedup_str: str,
+) -> Tuple:
+    url = f"{BASE_URL}/templates_count"
+    params = []
+    if smarts_str:
+        params.append(("q", smarts_str))
+    if template_ids_str:
+        params.append(("template_ids", ",".join(template_ids_str)))
+    if reaction_ids_str:
+        params.append(("reaction_ids", ",".join(reaction_ids_str)))
+    if datasets_str and datasets_str != "any":
+        params.append(("datasets", datasets_str))
+    if chemical_domain_str and chemical_domain_str != "any":
+        params.append(("chemical_domain", chemical_domain_str))
+    if ec_number_str:
+        params.append(("ec", ec_number_str))
+    if min_radius_int is not None:
+        params.append(("min_radius", str(min_radius_int)))
+    if valid_str and valid_str != "any":
+        params.append(("valid", valid_str))
+    if dedup_str and dedup_str != "any":
+        params.append(("dedup", dedup_str))
     return url, params
 
 
-def from_repository(repository: str, min_diameter: int = None) -> List:
-    url = f"{BASE_URL}/repo"
-    params = [("input", repository)]
-    if min_diameter:
-        params.append(("minDiameter", str(min_diameter)))
+def from_templates_export(
+    generation_token_str: str,
+    smarts_str: str,
+    template_ids_str: str,
+    reaction_ids_str: str,
+    datasets_str: str,
+    chemical_domain_str: str,
+    ec_number_str: str,
+    min_radius_int: int,
+    valid_str: str,
+    dedup_str: str,
+) -> Tuple:
+    url = f"{BASE_URL}/templates_export"
+    params = []
+    if generation_token_str:
+        params.append(("gen_token", generation_token_str))
+    if smarts_str:
+        params.append(("q", smarts_str))
+    if template_ids_str:
+        params.append(("template_ids", ",".join(template_ids_str)))
+    if reaction_ids_str:
+        params.append(("reaction_ids", ",".join(reaction_ids_str)))
+    if datasets_str and datasets_str != "any":
+        params.append(("datasets", datasets_str))
+    if chemical_domain_str and chemical_domain_str != "any":
+        params.append(("chemical_domain", chemical_domain_str))
+    if ec_number_str:
+        params.append(("ec", ec_number_str))
+    if min_radius_int is not None:
+        params.append(("min_radius", str(min_radius_int)))
+    if valid_str and valid_str != "any":
+        params.append(("valid", valid_str))
+    if dedup_str and dedup_str != "any":
+        params.append(("dedup", dedup_str))
     return url, params
 
 
-def from_smarts_id(smarts_ids: List[str], min_diameter: int = None) -> List:
-    url = f"{BASE_URL}/smartsid"
-    params = [("input", smart_id) for smart_id in smarts_ids]
-    if min_diameter:
-        params.append(("minDiameter", str(min_diameter)))
-    return url, params
-
-
-def query(url: str, params: Dict) -> Dict:
+def query(url: str, params: Dict):
     response = requests.get(url, params=params)
     response.raise_for_status()
-    return response.json()
+    return response
 
 
 def write_json(path: str, data: Dict):
     with open(path, "w") as fd:
         json.dump(data, fd, indent=4)
+
+
+def write_tab(path: str, data: str):
+    with open(path, "w") as fd:
+        fd.write(data)
 
 
 def main():
@@ -77,61 +154,196 @@ def main():
     )
     subparsers = parser.add_subparsers(dest="command")
 
-    # Subcommand: EC number
-    parser_ecn = subparsers.add_parser("ec-number", help="From EC number")
-    parser_ecn.add_argument(
-        "--input-ec-number-str", required=True, help="EC number such as 1.1.1.1"
+    # Subcommand: templates
+    parser_tem = subparsers.add_parser("templates", help="From templates")
+    parser_tem.add_argument("--input-smarts-str", help="Exact SMARTS")
+    parser_tem.add_argument(
+        "--input-template-ids-str",
+        nargs="*",
+        help="Space separated list of template IDs",
     )
-    parser_ecn.add_argument("--input-min-diameter-int", type=int, help="Min diameter")
-    parser_ecn.add_argument(
-        "--output-data-json", required=True, help="Output results, JSON format"
+    parser_tem.add_argument(
+        "--input-reaction-ids-str",
+        nargs="*",
+        help="Space separated list of reaction IDs",
+    )
+    parser_tem.add_argument(
+        "--input-datasets-str",
+        default="any",
+        choices=["any", "metanetx", "rhea", "uspto"],
+        help="Select a specific database",
+    )
+    parser_tem.add_argument(
+        "--input-chemical-domain-str",
+        default="any",
+        choices=["any", "biochem", "orgchem"],
+    )
+    parser_tem.add_argument(
+        "--input-ec-number-str",
+        help="EC number to filter templates",
+    )
+    parser_tem.add_argument(
+        "--input-min-radius-int",
+        type=int,
+        help="Single radius of the template",
+    )
+    parser_tem.add_argument(
+        "--input-valid-str",
+        default="true",
+        choices=["any", "true", "false"],
+        help="By default only valid templates are returned",
+    )
+    parser_tem.add_argument(
+        "--input-dedup-str",
+        default="true",
+        choices=["true", "false"],
+        help="By default deduplicated templates are returned",
+    )
+    parser_tem.add_argument(
+        "--input-limit-int",
+        type=int,
+        help="Limit number of returned templates",
+    )
+    parser_tem.add_argument(
+        "--input-offset-int",
+        type=int,
+        help="Offset the list of returned templates",
+    )
+    parser_tem.add_argument(
+        "--output-data-json",
+        required=True,
+        help="Path to output JSON file",
     )
 
-    # Subcommand: Substrate
-    parser_sub = subparsers.add_parser("substrate", help="From substrate")
-    parser_sub.add_argument(
-        "--input-substrate-str", required=True, help="Substrate label"
-    )
-    parser_sub.add_argument("--input-min-diameter-int", type=int, help="Min diameter")
-    parser_sub.add_argument(
-        "--output-data-json", required=True, help="Output results, JSON format"
-    )
-
-    # Subcommand: Reaction ID
-    parser_rea = subparsers.add_parser("reaction-id", help="From Reaction ID")
-    parser_rea.add_argument(
-        "--input-reaction-id-str", required=True, help="Reaction ID"
-    )
-    parser_rea.add_argument("--input-repository-str", required=True, help="Repository")
-    parser_rea.add_argument("--input-min-diameter-int", type=int, help="Min diameter")
-    parser_rea.add_argument(
-        "--output-data-json", required=True, help="Output results, JSON format"
+    # Subcommand: templates-summary
+    parser_tem_sum = subparsers.add_parser("templates-summary", help="From templates-summary")
+    parser_tem_sum.add_argument("--input-template-id-str", required=True, help="Template ID")
+    parser_tem_sum.add_argument(
+        "--output-data-json",
+        required=True,
+        help="Path to output JSON file",
     )
 
-    # Subcommand: InChI
-    parser_inc = subparsers.add_parser("inchi", help="From InChI")
-    parser_inc.add_argument("--input-inchi-str", required=True, help="InChI")
-    parser_inc.add_argument("--input-min-diameter-int", type=int, help="Min diameter")
-    parser_inc.add_argument(
-        "--output-data-json", required=True, help="Output results, JSON format"
+    # Subcommand: templates-sources
+    parser_tem_sou = subparsers.add_parser("templates-sources", help="From templates-sources")
+    parser_tem_sou.add_argument("--input-template-id-str", required=True, help="Template ID")
+    parser_tem_sou.add_argument(
+        "--output-data-json",
+        required=True,
+        help="Path to output JSON file",
     )
 
-    # Subcommand: Repository
-    parser_rep = subparsers.add_parser("repository", help="From Repository")
-    parser_rep.add_argument("--input-repository-str", required=True, help="InChI")
-    parser_rep.add_argument("--input-min-diameter-int", type=int, help="Min diameter")
-    parser_rep.add_argument(
-        "--output-data-json", required=True, help="Output results, JSON format"
+    # Subcommand: templates-count
+    parser_cou = subparsers.add_parser("templates-count", help="From templates-count")
+    parser_cou.add_argument("--input-smarts-str", help="Exact SMARTS")
+    parser_cou.add_argument(
+        "--input-template-ids-str",
+        nargs="*",
+        help="Space separated list of template IDs",
+    )
+    parser_cou.add_argument(
+        "--input-reaction-ids-str",
+        nargs="*",
+        help="Space separated list of reaction IDs",
+    )
+    parser_cou.add_argument(
+        "--input-datasets-str",
+        default="any",
+        choices=["any", "metanetx", "rhea", "uspto"],
+        help="Select a specific database",
+    )
+    parser_cou.add_argument(
+        "--input-chemical-domain-str",
+        default="any",
+        choices=["any", "biochem", "orgchem"],
+    )
+    parser_cou.add_argument(
+        "--input-ec-number-str",
+        help="EC number to filter templates",
+    )
+    parser_cou.add_argument(
+        "--input-min-radius-int",
+        type=int,
+        help="Single radius of the template",
+    )
+    parser_cou.add_argument(
+        "--input-valid-str",
+        default="true",
+        choices=["any", "true", "false"],
+        help="By default only valid templates are returned",
+    )
+    parser_cou.add_argument(
+        "--input-dedup-str",
+        default="true",
+        choices=["true", "false"],
+        help="By default deduplicated templates are returned",
+    )
+    parser_cou.add_argument(
+        "--output-data-json",
+        required=True,
+        help="Path to output JSON file",
     )
 
-    # Subcommand: Smarts ID
-    parser_sma = subparsers.add_parser("smarts-id", help="From Smarts ID")
-    parser_sma.add_argument(
-        "--input-smarts-id-str", nargs="+", required=True, help="Smarts ID"
+    # Subcommand: templates-export
+    parser_exp = subparsers.add_parser("templates-export", help="From templates-export")
+    parser_exp.add_argument(
+        "--input-generation-token-str",
+        help="Generation token from RetroRules web interface",
     )
-    parser_sma.add_argument("--input-min-diameter-int", type=int, help="Min diameter")
-    parser_sma.add_argument(
-        "--output-data-json", required=True, help="Output results, JSON format"
+    parser_exp.add_argument("--input-smarts-str", help="Exact SMARTS")
+    parser_exp.add_argument(
+        "--input-template-ids-str",
+        nargs="*",
+        help="Space separated list of template IDs",
+    )
+    parser_exp.add_argument(
+        "--input-reaction-ids-str",
+        nargs="*",
+        help="Space separated list of reaction IDs",
+    )
+    parser_exp.add_argument(
+        "--input-datasets-str",
+        default="any",
+        choices=["any", "metanetx", "rhea", "uspto"],
+        help="Select a specific database",
+    )
+    parser_exp.add_argument(
+        "--input-chemical-domain-str",
+        default="any",
+        choices=["any", "biochem", "orgchem"],
+    )
+    parser_exp.add_argument(
+        "--input-ec-number-str",
+        help="EC number to filter templates",
+    )
+    parser_exp.add_argument(
+        "--input-min-radius-int",
+        type=int,
+        help="Single radius of the template",
+    )
+    parser_exp.add_argument(
+        "--input-valid-str",
+        default="true",
+        choices=["any", "true", "false"],
+        help="By default only valid templates are returned",
+    )
+    parser_exp.add_argument(
+        "--input-dedup-str",
+        default="true",
+        choices=["true", "false"],
+        help="By default deduplicated templates are returned",
+    )
+    parser_exp.add_argument(
+        "--output-data-json",
+        help="Path to output JSON file",
+    )
+    parser_exp.add_argument(
+        "--output-data-csv",
+        help="Path to output CSV file",
+    )
+    parser_exp.add_argument(
+        "--output-data-tsv",
+        help="Path to output TSV file",
     )
 
     logging.info("Query RetroRules - start")
@@ -140,46 +352,67 @@ def main():
     try:
         logging.info("Build arguments")
         url, params = "", {}
-        if args.command == "ec-number":
-            url, params = from_ec_number(
-                ec_number=args.input_ec_number_str,
-                min_diameter=args.input_min_diameter_int,
+        if args.command == "templates":
+            url, params = from_templates(
+                smarts_str=args.input_smarts_str,
+                template_ids_str=args.input_template_ids_str,
+                reaction_ids_str=args.input_reaction_ids_str,
+                datasets_str=args.input_datasets_str,
+                chemical_domain_str=args.input_chemical_domain_str,
+                ec_number_str=args.input_ec_number_str,
+                min_radius_int=args.input_min_radius_int,
+                valid_str=args.input_valid_str,
+                dedup_str=args.input_dedup_str,
+                limit_int=args.input_limit_int,
+                offset_int=args.input_offset_int,
             )
-        elif args.command == "substrate":
-            url, params = from_substrate(
-                substrate=args.input_substrate_str,
-                min_diameter=args.input_min_diameter_int,
+        elif args.command == "templates-summary":
+            url, _ = from_templates_summary(
+                template_id_str=args.input_template_id_str,
             )
-        elif args.command == "reaction-id":
-            url, params = from_reaction_id(
-                reaction_id=args.input_reaction_id_str,
-                repository=args.input_repository_str,
-                min_diameter=args.input_min_diameter_int,
+        elif args.command == "templates-sources":
+            url, _ = from_templates_sources(
+                template_id_str=args.input_template_id_str,
             )
-        elif args.command == "inchi":
-            url, params = from_inchi(
-                inchi=args.input_inchi_str,
-                min_diameter=args.input_min_diameter_int,
+        elif args.command == "templates-count":
+            url, params = from_templates_count(
+                smarts_str=args.input_smarts_str,
+                template_ids_str=args.input_template_ids_str,
+                reaction_ids_str=args.input_reaction_ids_str,
+                datasets_str=args.input_datasets_str,
+                chemical_domain_str=args.input_chemical_domain_str,
+                ec_number_str=args.input_ec_number_str,
+                min_radius_int=args.input_min_radius_int,
+                valid_str=args.input_valid_str,
+                dedup_str=args.input_dedup_str,
             )
-        elif args.command == "repository":
-            url, params = from_repository(
-                repository=args.input_repository_str,
-                min_diameter=args.input_min_diameter_int,
-            )
-        elif args.command == "smarts-id":
-            url, params = from_smarts_id(
-                smarts_ids=args.input_smarts_id_str,
-                min_diameter=args.input_min_diameter_int,
+        elif args.command == "templates-export":
+            url, params = from_templates_export(
+                generation_token_str=args.input_generation_token_str,
+                smarts_str=args.input_smarts_str,
+                template_ids_str=args.input_template_ids_str,
+                reaction_ids_str=args.input_reaction_ids_str,
+                datasets_str=args.input_datasets_str,
+                chemical_domain_str=args.input_chemical_domain_str,
+                ec_number_str=args.input_ec_number_str,
+                min_radius_int=args.input_min_radius_int,
+                valid_str=args.input_valid_str,
+                dedup_str=args.input_dedup_str,
             )
         else:
             parser.print_help()
             sys.exit(1)
 
         logging.info("Query API")
-        data = query(url=url, params=params)
+        response = query(url=url, params=params)
 
         logging.info("Write data")
-        write_json(path=args.output_data_json, data=data)
+        if "output_data_json" in vars(args) and args.output_data_json:
+            write_json(path=args.output_data_json, data=response.json())
+        if "output_data_csv" in vars(args) and args.output_data_csv:
+            write_tab(path=args.output_data_csv, data=response.text)
+        if "output_data_tsv" in vars(args) and args.output_data_tsv:
+            write_tab(path=args.output_data_tsv, data=response.text)
     except requests.HTTPError as e:
         logging.error(f"HTTP error: {e.response.status_code} - {e.response.text}")
         sys.exit(1)
