@@ -98,7 +98,7 @@
                     <validator type="empty_field" message="Not empty" />
                 </param>
             </repeat>
-            <param name="cmpfile" type="data" tabular="tabular"
+            <param name="cmpfile" type="data" format="tabular"
                 optional="True" label="List of compounds" help="File with name of compounds" />
             <param
                 name="target" type="text" value="TARGET_0000000001"
