@@ -20,7 +20,7 @@ on:
       - '*'
 env:
   GALAXY_FORK: galaxyproject
-  GALAXY_BRANCH: release_24.1
+  GALAXY_BRANCH: release_25.0
   MAX_CHUNKS: 4
   MAX_FILE_SIZE: 1M
 concurrency:
@@ -129,14 +129,14 @@ jobs:
         path: ~/.cache/pip
         key: pip_cache_py_${{ matrix.python-version }}_gxy_${{ needs.setup.outputs.galaxy-head-sha }}
 
-    - name: Set fail level for pull request
-      if: ${{ github.event_name == 'pull_request' }}
-      run:
-        echo "FAIL_LEVEL=warn" >> "$GITHUB_ENV"
-    - name: Set fail level for merge
+    - name: Set skip version check for push event (i.e. merge to main)
       if: ${{ github.event_name != 'pull_request' }}
       run:
-        echo "FAIL_LEVEL=error" >> "$GITHUB_ENV"
+        echo "EXTRA_SKIP=--skip version_bumped" >> "$GITHUB_ENV"
+    - name: Set no skip vor pull_request events
+      if: ${{ github.event_name == 'pull_request' }}
+      run:
+        echo "EXTRA_SKIP=" >> "$GITHUB_ENV"
     - name: Planemo lint
       uses: galaxyproject/planemo-ci-action@v1
       id: lint
@@ -145,6 +145,7 @@ jobs:
         fail-level: warn
         repository-list: ${{ needs.setup.outputs.repository-list }}
         tool-list: ${{ needs.setup.outputs.tool-list }}
+        additional-planemo-options: ${{ env.EXTRA_SKIP }}
     - uses: actions/upload-artifact@v4
       if: ${{ failure() }}
       with:
@@ -178,10 +179,6 @@ jobs:
       run: pip install flake8 flake8-import-order
     - name: Flake8
       run: echo '${{ needs.setup.outputs.repository-list }}' | xargs -d '\n' flake8 --output-file pylint_report.txt --tee
-    - name: Test
-      run: |
-        echo "Repository list:"
-        echo "${{ needs.setup.outputs.repository-list }}"
     - uses: actions/upload-artifact@v4
       if: ${{ failure() }}
       with:
@@ -191,11 +188,11 @@ jobs:
   lintr:
     name: Lint R scripts
     needs: setup
-    if: ${{ github.event_name == 'pull_request' && needs.setup.outputs.repository-list != '' }}
+    if: ${{ needs.setup.outputs.repository-list != '' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [ubuntu-24.04]
         r-version: ['release']
     steps:
     - uses: actions/checkout@v5
@@ -325,7 +322,7 @@ jobs:
   combine_outputs:
     name: Combine chunked test results
     needs: [setup, test]
-    if: ${{ needs.setup.outputs.repository-list != '' && github.event.pull_request.merged == false }}
+    if: ${{ always() && needs.setup.outputs.repository-list != '' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -371,7 +368,7 @@ jobs:
   deploy:
     name: Deploy
     needs: [setup, lint, combine_outputs]
-    if: ${{ github.ref == 'refs/heads/stable' && github.repository_owner == 'brsynth'}}
+    if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'galaxyproject' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -408,7 +405,7 @@ jobs:
   deploy-report:
     name: Report deploy status
     needs: [deploy]
-    if: ${{ github.ref == 'refs/heads/stable' && github.repository_owner == 'brsynth' && github.event.pull_request.merged == true && needs.deploy.result != 'success' }}
+    if: ${{ always() && needs.deploy.result != 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'galaxyproject' }}
     runs-on: ubuntu-latest
     steps:
     # report to the PR if deployment failed
@@ -420,6 +417,7 @@ jobs:
     - name: Create comment
       uses: peter-evans/create-or-update-comment@v4
       with:
+        token: ${{ secrets.PAT }}
         issue-number: ${{ steps.getpr.outputs.number }}
         body: |
           Attention: deployment ${{ needs.deploy.result }}!
