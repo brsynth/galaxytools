@@ -21,8 +21,8 @@
         --lower_flux_bound '$adv.lower_flux_bound'
         --max_subpaths_filter '$adv.max_subpaths_filter'
         --data-type '$adv.datatype'
-        #if $adv.cofactors
-            --cofactors '$adv.cofactors'
+        #if $adv.cofile
+            --cofactors '$adv.cofile'
         #end if
     ]]></command>
     <inputs>
