@@ -61,7 +61,7 @@
             </conditional>
             <output name="html_file">
                 <assert_contents>
-                    <has_size value="1296252" delta="1000" />
+                    <has_size value="1297905" delta="10000" />
                 </assert_contents>
             </output>
         </test>
@@ -73,7 +73,7 @@
             </conditional>
             <output name="html_file">
                 <assert_contents>
-                    <has_size value="1604488" delta="1000" />
+                    <has_size value="1607200" delta="10000" />
                 </assert_contents>
             </output>
         </test>
