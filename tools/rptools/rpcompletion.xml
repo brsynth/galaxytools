@@ -40,7 +40,7 @@
             <param argument="lower_flux_bound" type="integer" value="-10000" min="-10000"
                 max="10000" label="Lower flux bound"
                 help="Lower flux bound value to be used in outputted SBML models (fbc SBML package) for new reactions created." />
-            <param name="datatype" type="select" label="Data type">
+            <param name="datatype" type="select" label="Cache data">
                 <option value="mnx4.4" selected="True">mnx4.4</option>
                 <option value="mnx3.1">mnx3.1</option>
             </param>
