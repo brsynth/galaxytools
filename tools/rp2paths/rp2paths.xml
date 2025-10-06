@@ -18,12 +18,11 @@
         python -m rp2paths --no-color all
         '$rp2_pathways'
         --outdir out
-        --timeout '$path_enum.timeout' 
         #if str($general.forward) == 'true'
             --forward
         #end if
         #if $cofactor_removal.cofile
-            --cofile '$adv.cofactor_removal'
+            --cofile '$cofactor_removal.cofile'
         #end if
         #if str($scope.mindepth) == 'true'
             --minDepth
@@ -31,6 +30,7 @@
         #if $scope.sink
             --customsinkfile '$scope.sink'
         #end if
+        --timeout '$path_enum.timeout'
         --maxsteps '$path_enum.maxsteps'
         --maxpaths '$path_enum.maxpaths'
         #if str($path_enum.unfold) == 'true'
