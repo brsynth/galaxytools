@@ -110,7 +110,7 @@
         <section name="dev" title="Dev" expanded="false">
             <param
                 name="target" type="text" value="TARGET_0000000001"
-                label="Target compound internal ID"
+                label="Target compound internal ID (Internal)"
                 help="This internal ID specifies which compound should be considered as the targeted compound. The default behavior is to consider as the target the first compound used as a source compound in a first iteration of a metabolic exploration. Let this value as it is except if you know what you are doing" />
         </section>
     </inputs>
