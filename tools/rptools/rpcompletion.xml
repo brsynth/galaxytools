@@ -13,9 +13,11 @@
             description="The sink file is empty or not found" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
-        #if $sink.emptysink:
+        #if str($sink.emptysink) == 'empty':
             echo '"Name","InChI"' > empty_sink.csv &&
-            #set $sinkfile = "empty_sink.csv"
+            #set sinkfile = "empty_sink.csv"
+        #elif
+            #set sinkfile = $sink.sinkfile
         #end if
         python -m rptools.rpcompletion
         '$rp2_pathways'
@@ -39,14 +41,17 @@
         <param name="rp2paths_compounds" type="data" format="tabular" label="RP2paths compounds" />
         <param name="rp2_pathways" type="data" format="csv" label="RetroPath2.0 metabolic network" />
         <conditional name="sink">
-            <param name="emptysink" type="boolean" checked="false" label="Empty sink" />
-            <when value="false">
+            <param name="emptysink" type="select" label="Empty sink">
+                <option value="provided" selected="True">Provided</option>
+                <option value="empty">Empty</option>
+            </param>
+            <when value="provided">
                 <param name="sinkfile" type="data" format="csv" label="Sink File"
                     help="Sink file which comprises all compounds that are considered as granted in your system." />
                 <param name="error_codes" type="boolean" checked="true"
                     label="Return error codes" />
             </when>
-            <when value="true">
+            <when value="empty">
                 <param name="error_codes" type="boolean" checked="false"
                     label="Return error codes" />
             </when>
@@ -80,7 +85,10 @@
             <param name="rp2paths_pathways" value="4-rp2paths_pathways.csv" />
             <param name="rp2paths_compounds" value="3-rp2paths_compounds.tsv" />
             <param name="rp2_pathways" value="1-rp2_metnet.csv" />
-            <param name="sink" value="2-sink.csv" />
+            <conditional name="sink">
+                <param name="emptysink" value="provided" />
+                <param name="sinkfile" value="2-sink.csv" />
+            </conditional>
             <output_collection name="pathways" type="list" count="10" />
         </test>
     </tests>
