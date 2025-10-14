@@ -13,15 +13,15 @@
             description="The sink file is empty or not found" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
-        #if str($sink.emptysink) == 'empty':
+        #if str($sink.cond) == 'empty'
             echo '"Name","InChI"' > empty_sink.csv &&
-            #set sinkfile = "empty_sink.csv"
+            #set sinkfile='empty_sink.csv'
         #elif
-            #set sinkfile = $sink.sinkfile
+            #set sinkfile=$sink.sinkfile
         #end if
         python -m rptools.rpcompletion
         '$rp2_pathways'
-        '$sinkfile'
+        $sinkfile
         '$rp2paths_compounds'
         '$rp2paths_pathways'
         completed_pathways
@@ -41,7 +41,7 @@
         <param name="rp2paths_compounds" type="data" format="tabular" label="RP2paths compounds" />
         <param name="rp2_pathways" type="data" format="csv" label="RetroPath2.0 metabolic network" />
         <conditional name="sink">
-            <param name="emptysink" type="select" label="Empty sink">
+            <param name="cond" type="select" label="Empty sink">
                 <option value="provided" selected="True">Provided</option>
                 <option value="empty">Empty</option>
             </param>
@@ -86,7 +86,7 @@
             <param name="rp2paths_compounds" value="3-rp2paths_compounds.tsv" />
             <param name="rp2_pathways" value="1-rp2_metnet.csv" />
             <conditional name="sink">
-                <param name="emptysink" value="provided" />
+                <param name="cond" value="provided" />
                 <param name="sinkfile" value="2-sink.csv" />
             </conditional>
             <output_collection name="pathways" type="list" count="10" />

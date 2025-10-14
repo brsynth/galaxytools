@@ -15,7 +15,7 @@
             --compartment-id '$compartment_id'
             $adv.remove_dead_end
             $adv.standalone
-            --data-type '$adv.datatype'
+            --chemical-space '$adv.datatype'
     ]]></command>
     <inputs>
         <param name="input" type="data" format="sbml" optional="false" label="Strain"
