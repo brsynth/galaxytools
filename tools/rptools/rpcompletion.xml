@@ -16,7 +16,7 @@
         #if str($sink.cond) == 'empty'
             echo '"Name","InChI"' > empty_sink.csv &&
             #set sinkfile='empty_sink.csv'
-        #elif
+        #else
             #set sinkfile=$sink.sinkfile
         #end if
         python -m rptools.rpcompletion
