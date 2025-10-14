@@ -32,7 +32,7 @@
         #if $adv.cofile
             --cofactors '$adv.cofile'
         #end if
-        #if not $sink.error_codes:
+        #if not $sink.error_codes
             --silent
         #end if
     ]]></command>
