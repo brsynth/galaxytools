@@ -70,7 +70,8 @@
                 <option value="mnx4.4" selected="True">mnx4.4</option>
                 <option value="mnx3.1">mnx3.1</option>
             </param>
-            <param name="cofile" type="data" format="txt" optional="True" label="Cofactor file" />
+            <param name="cofile" type="data" format="txt,tsv,tabular" optional="True"
+                label="Cofactor file" />
         </section>
     </inputs>
     <outputs>
