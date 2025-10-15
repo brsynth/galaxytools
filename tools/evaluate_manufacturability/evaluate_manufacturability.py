@@ -44,14 +44,14 @@ def evaluate_manufacturability(files_to_evaluate, file_name_mapping, output_tsv,
         folder=None,
         use_file_names_as_ids=use_file_names_as_id
     )
- #   #try:
- #       #if not records_to_evaluate:
- #           #print('records to evaluate: is empty')
- #       #else:
- #           #for record in records_to_evaluate:
- #               #print(f'records to evaluate: {record}')
- #   #except Exception as e:
- #       #print(f'An error occurred: {e}')
+ #   try:
+ #       if not records_to_evaluate:
+ #           print('records to evaluate: is empty')
+ #       else:
+ #           for record in records_to_evaluate:
+ #               print(f'records to evaluate: {record}')
+ #   except Exception as e:
+ #       print(f'An error occurred: {e}')
 
     length_cutoff = 100
     for part in records_to_evaluate:
@@ -117,7 +117,7 @@ def evaluate_manufacturability(files_to_evaluate, file_name_mapping, output_tsv,
         except ValueError:
             print(f"Skipping invalid k-mer size: {k_size}")
 
-    print(f'constraint_list is{constraint_list}')
+ #   print(f'constraint_list is{constraint_list}')
 
  # constraint_list apply
     dataframe = cr.constraints_breaches_dataframe(constraint_list, records_to_evaluate)
@@ -190,10 +190,12 @@ def evaluate_manufacturability(files_to_evaluate, file_name_mapping, output_tsv,
 def parse_command_line_args():
     parser = argparse.ArgumentParser(description="Evaluate manufacturability of DNA sequences.")
 
-    parser.add_argument("--files_to_evaluate", required=True,
+    parser.add_argument("--files_to_evaluate", required=False,
                         help="List of GenBank files (Comma-separated)")
     parser.add_argument('--file_name_mapping', type=str,
                         help='Mapping of Galaxy filenames to original filenames')
+    parser.add_argument('--DB_file_name_mapping', type=str,
+                        help='Mapping of Galaxy filenames to original DB filenames')
     parser.add_argument("--output_tsv", required=True, help="Excel file name")
     parser.add_argument("--output_pdf", required=True, help="PDF file name")
     parser.add_argument("--outdir_gb", required=True, help="DIR for annotated GenBank files")
@@ -211,6 +213,13 @@ def parse_command_line_args():
                         help="JSON params for the tool")
     parser.add_argument("--use_json_param", required=True,
                             help="If use JSON as param source")
+    parser.add_argument("--mode", required=True,
+                            help="mode d'utilisation: standard ou workflow")
+    parser.add_argument("--DB_report", required=False,
+                            help="In wkf mode")
+    parser.add_argument("--DB_genbank_files", required=False,
+                            help="IN wkf mode")
+
 
     return parser.parse_args()
 
@@ -268,6 +277,67 @@ if __name__ == "__main__":
 
     args = parse_command_line_args()
 
+    ###
+    if "--mode" in sys.argv:
+        mode_index = sys.argv.index("--mode") + 1
+        mode = sys.argv[mode_index].strip()
+
+    skip_evaluation = False
+    use_DB_files = False
+    DB_genbank_files = []
+
+    if mode == "wkf":
+
+        if "--DB_report" not in sys.argv:
+            print("ERROR: --DB_report is required in wkf mode.")
+            sys.exit(1)
+        db_index = sys.argv.index("--DB_report") + 1
+        db_report_path = sys.argv[db_index]
+
+        if "--DB_genbank_files" in sys.argv:
+            db_gb_index = sys.argv.index("--DB_genbank_files") + 1
+            DB_genbank_files = sys.argv[db_gb_index].split(",")
+        else:
+            DB_genbank_files = []
+
+        if not os.path.isfile(db_report_path):
+            print(f"ERROR: DB report file not found at {db_report_path}")
+            sys.exit(1)
+
+        with open(db_report_path, 'r') as f:
+            lines = [line.strip() for line in f.readlines() if line.strip()]
+
+        if not lines:
+            skip_evaluation = True
+            
+        else:
+
+            missing_fragments = lines[0:]
+
+           # Parse file_name_mapping
+            if isinstance(args.file_name_mapping, str):
+                mapping_dict = dict(item.split(":") for item in args.file_name_mapping.split(","))
+            else:
+                mapping_dict = {}
+
+            # Logical names
+            provided_filenames = [os.path.splitext(v)[0] for v in mapping_dict.values()]
+
+            # print(f'provided_filenames is : {provided_filenames}')
+
+            unmatched = [
+                frag for frag in missing_fragments
+                if os.path.splitext(frag)[0] not in provided_filenames
+            ]
+
+            if unmatched:
+                print(f"ERROR: The following missing fragment(s) must be provided as .gb files: {', '.join(unmatched)}")
+                sys.exit(1)
+            else:
+                use_DB_files = True  # Append after evaluation
+
+    ###
+
     # Default values from command-line
     avoid_patterns, hairpin_constraints, gc_constraints, kmer_size = extract_constraints_from_args(args)
 
@@ -304,10 +374,47 @@ if __name__ == "__main__":
         "kmer_size": kmer_size
     }
 
-    evaluate_manufacturability(
-        params["files_to_evaluate"], params["file_name_mapping"],
-        params["output_tsv"], params["output_pdf"], params["outdir_gb"],
-        params["use_file_names_as_id"], params["avoid_patterns"],
-        params["hairpin_constraints"], params["gc_constraints"],
-        params["kmer_size"]
-    )
+    if not skip_evaluation:
+        evaluate_manufacturability(
+            params["files_to_evaluate"], params["file_name_mapping"],
+            params["output_tsv"], params["output_pdf"], params["outdir_gb"],
+            params["use_file_names_as_id"], params["avoid_patterns"],
+            params["hairpin_constraints"], params["gc_constraints"],
+            params["kmer_size"]
+        )
+
+    if mode == "wkf" and (skip_evaluation or use_DB_files):
+        if DB_genbank_files:
+            print(f"DB_genbank_files is: {DB_genbank_files}")
+            print("Adding DB GenBank files to output collection using DB_file_name_mapping...")
+
+            os.makedirs(params["outdir_gb"], exist_ok=True)
+
+            # mapping real DB gb file name
+            if isinstance(args.DB_file_name_mapping, str):
+                print (f'DB_file_name_mapping is: {args.DB_file_name_mapping}')
+                DB_mapping_dict = dict(item.split(":") for item in args.DB_file_name_mapping.split(","))
+            else:
+                DB_mapping_dict={}
+
+            for path in DB_genbank_files:
+                basename = os.path.basename(path)
+                logical_name = DB_mapping_dict.get(path) or DB_mapping_dict.get(basename)
+
+                if not logical_name:
+                    print(f"WARNING: No mapping found for DB GenBank file: {path}. Skipping.")
+                    continue
+
+                output_filename = os.path.splitext(logical_name)[0] + ".gb"
+                dest_path = os.path.join(params["outdir_gb"], output_filename)
+
+                try:
+                    with open(path, 'r') as src, open(dest_path, 'w') as dst:
+                        dst.write(src.read())
+                    print(f"Copied and renamed: {path} → {dest_path}")
+                except Exception as e:
+                    print(f"ERROR: Failed to copy {path} → {dest_path}: {e}")
+        else:
+            print("No DB GenBank files to append, continuing without error.")
+
+
