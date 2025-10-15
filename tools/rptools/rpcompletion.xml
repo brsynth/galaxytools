@@ -57,7 +57,7 @@
             </when>
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="max_subpaths_filter" type="integer" value="10" min="1" max="1000"
+            <param argument="max_subpaths_filter" type="integer" value="10" min="0"
                 label="Max subpaths generated per pathway"
                 help="Maximal number of subpaths to be created per master pathway." />
             <param argument="upper_flux_bound" type="integer" value="10000" min="-10000" max="10000"
