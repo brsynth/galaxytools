@@ -1,0 +1,93 @@
+LOCUS       .                       2523 bp    DNA              UNK 01-JAN-1980
+DEFINITION  .
+ACCESSION   <unknown id>
+VERSION     <unknown id>
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     terminator      392..419
+                     /note="T7Te terminator"
+                     /note="phage T7 early transcription terminator"
+     rep_origin      complement(431..1018)
+                     /direction=LEFT
+                     /note="ori"
+                     /note="high-copy-number ColE1/pMB1/pBR322/pUC origin of
+                     replication"
+     terminator      1040..1069
+                     /note="T3Te terminator"
+                     /note="phage T3 early transcription terminator"
+     misc_feature    1143..1148
+                     /note="BsmBI"
+     source          5..1149
+                     /source="Exported"
+     CDS             1154..1861
+                     /codon_start=1
+                     /note="mRuby2"
+                     /product="monomeric red fluorescent protein derived from
+                     mRuby, with improved photophysical properties (Lam et al.,
+                     2012)"
+                     /translation="VSKGEELIKENMRMKVVMEGSVNGHQFKCTGEGEGNPYMGTQTMR
+                     IKVIEGGPLPFAFDILATSFMYGSRTFIKYPKGIPDFFKQSFPEGFTWERVTRYEDGGV
+                     VTVMQDTSLEDGCLVYHVQVRGVNFPSNGPVMQKKTKGWEPNTEMMYPADGGLRGYTHM
+                     ALKVDGGGHLSCSFVTTYRSKKTVGNIKMPGIHAVDHRLERLEESDNEMFVVQREHAVA
+                     KFAGLGGGMDELYK"
+     source          1154..1863
+                     /source="Exported"
+     misc_feature    complement(1869..1874)
+                     /note="BsmBI"
+     terminator      1941..1972
+                     /note="tonB terminator"
+                     /note="bidirectional E. coli tonB-P14 transcription
+                     terminator"
+     promoter        1973..2075
+                     /note="cat promoter"
+                     /note="promoter of the E. coli cat gene"
+     source          1868..2523
+                     /source="Exported"
+ORIGIN
+        1 ctcaggcgca atcacgaatg aataacggtt tggttggtgc gagtgatttt gatgacgagc
+       61 gtaatggctg gcctgttgaa caagtctgga aagaaatgca taagcttttg ccattctcac
+      121 cggattcagt cgtcactcat ggtgatttct cacttgataa ccttattttt gacgagggga
+      181 aattaatagg ttgtattgat gttggacgag tcggaatcgc agaccgatac caggatcttg
+      241 ccatcctatg gaactgcctc ggtgagtttt ctccttcatt acagaaacgg ctttttcaaa
+      301 aatatggtat tgataatcct gatatgaata aattgcagtt tcacttgatg ctcgatgagt
+      361 ttttctaatg agggcccaaa tgtaatcacc tggctcacct tcgggtgggc ctttctgcgt
+      421 tgctggcgtt tttccatagg ctccgccccc ctgacgagca tcacaaaaat cgatgctcaa
+      481 gtcagaggtg gcgaaacccg acaggactat aaagatacca ggcgtttccc cctggaagct
+      541 ccctcgtgcg ctctcctgtt ccgaccctgc cgcttaccgg atacctgtcc gcctttctcc
+      601 cttcgggaag cgtggcgctt tctcatagct cacgctgtag gtatctcagt tcggtgtagg
+      661 tcgttcgctc caagctgggc tgtgtgcacg aaccccccgt tcagcccgac cgctgcgcct
+      721 tatccggtaa ctatcgtctt gagtccaacc cggtaagaca cgacttatcg ccactggcag
+      781 cagccactgg taacaggatt agcagagcga ggtatgtagg cggtgctaca gagttcttga
+      841 agtggtggcc taactacggc tacactagaa gaacagtatt tggtatctgc gctctgctga
+      901 agccagttac ctcggaaaaa gagttggtag ctcttgatcc ggcaaacaaa ccaccgctgg
+      961 tagcggtggt ttttttgttt gcaagcagca gattacgcgc agaaaaaaag gatctcaaga
+     1021 agatcctttg attttctacc gaagaaaggc ccacccgtga aggtgagcca gtgagttgat
+     1081 tgcagtccag ttacgctgga gtctgaggct cgtcctgaat gatatcaagc ttgaattcgt
+     1141 tacgtctcgc agcgtgtcta agggcgaaga gctgatcaag gaaaatatgc gtatgaaggt
+     1201 ggtcatggaa ggttcggtca acggccacca attcaaatgc acaggtgaag gagaaggcaa
+     1261 tccgtacatg ggaactcaaa ccatgaggat caaagtcatc gagggaggac ccctgccatt
+     1321 tgcctttgac attcttgcca cgtcgttcat gtatggcagc cgtactttta tcaagtaccc
+     1381 gaaaggcatt cctgatttct ttaaacagtc ctttcctgag ggttttactt gggaaagagt
+     1441 tacgagatac gaagatggtg gagtcgtcac cgtcatgcag gacaccagcc ttgaggatgg
+     1501 ctgtctcgtt taccacgtcc aagtcagagg ggtaaacttt ccctccaatg gtcccgtgat
+     1561 gcagaagaag accaagggtt gggagcctaa tacagagatg atgtatccag cagatggtgg
+     1621 tctgagggga tacactcata tggcactgaa agttgatggt ggtggccatc tgtcttgctc
+     1681 tttcgtaaca acttacaggt caaaaaagac cgtcgggaac atcaagatgc ccggtatcca
+     1741 tgccgttgat caccgcctgg aaaggttaga ggaaagtgac aatgaaatgt tcgtagtaca
+     1801 acgcgaacac gcagttgcca agttcgccgg gcttggtggt gggatggacg agctgtacaa
+     1861 gtcaggccga gacgaagacg aattctctag atatcgctca atactgacca tttaaatcat
+     1921 acctgacctc catagcagaa agtcaaaagc ctccgaccgg aggcttttga cttgatcggc
+     1981 acgtaagagg ttccaacttt caccataatg aaataagatc actaccgggc gtattttttg
+     2041 agttatcgag attttcagga gctaaggaag ctaaaatgag ccatattcaa cgggaaacgt
+     2101 cttgctcgag gccgcgatta aattccaaca tggatgctga tttatatggg tataaatggg
+     2161 ctcgcgataa tgtcgggcaa tcaggtgcga caatctatcg attgtatggg aagcccgatg
+     2221 cgccagagtt gtttctgaaa catggcaaag gtagcgttgc caatgatgtt acagatgaga
+     2281 tggtcaggct aaactggctg acggaattta tgcctcttcc gaccatcaag cattttatcc
+     2341 gtactcctga tgatgcatgg ttactcacca ctgcgatccc agggaaaaca gcattccagg
+     2401 tattagaaga atatcctgat tcaggtgaaa atattgttga tgcgctggca gtgttcctgc
+     2461 gccggttgca ttcgattcct gtttgtaatt gtccttttaa cggcgatcgc gtatttcgtc
+     2521 tcg
+//
