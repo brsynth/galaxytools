@@ -1,9 +1,10 @@
-<tool id="rptools_rpextractsink" name="Sink from SBML" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+<tool id="rptools_rpextractsink" name="Sink from SBML"
+    version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Generate the RetroPath2.0 sink file from an SBML input</description>
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements"/>
+    <expand macro="requirements" />
     <stdio>
         <regex match="Could not retreive any species in the compartment" level="fatal" />
     </stdio>
@@ -14,16 +15,27 @@
             --compartment-id '$compartment_id'
             $adv.remove_dead_end
             $adv.standalone
-            --cache-dir "\${TMPDIR:-.}"
+            --chemical-space '$adv.datatype'
     ]]></command>
     <inputs>
-        <param name="input" type="data" format="sbml" optional="false" label="Strain" help="The structure of metabolites present in the chosen chassis strain in SBML format" />
-        <param name="compartment_id" type="text" value="c" label="SBML compartment ID" help="Specify the compartment from which to extract the sink molecules. The default are for BiGG models (cytosol)" >
-            <validator type="empty_field" message="SBML compartment ID is required"/>
+        <param name="input" type="data" format="sbml" optional="false" label="Strain"
+            help="The structure of metabolites present in the chosen chassis strain in SBML format" />
+        <param name="compartment_id" type="text" value="c" label="SBML compartment ID"
+            help="Specify the compartment from which to extract the sink molecules. The default are for BiGG models (cytosol)">
+            <validator type="empty_field" message="SBML compartment ID is required" />
         </param>
         <section name="adv" title="Advanced Options" expanded="false">
-            <param argument="--remove_dead_end" type="boolean" truevalue="--remove-dead-end" falsevalue="" checked="true" label="Remove dead-end metabolites using FVA evaluation?" help="Perform FVA (Flux Variability Analysis) evaluation to remove dead end metabolites" />
-            <param argument="--standalone" type="boolean" truevalue="--standalone" falsevalue="" checked="true" label="Do not connect to Internet" help="If True, do not retrieve InChI from Internet" />
+            <param argument="--remove_dead_end" type="boolean" truevalue="--remove-dead-end"
+                falsevalue="" checked="true"
+                label="Remove dead-end metabolites using FVA evaluation?"
+                help="Perform FVA (Flux Variability Analysis) evaluation to remove dead end metabolites" />
+            <param argument="--standalone" type="boolean" truevalue="--standalone" falsevalue=""
+                checked="true" label="Do not connect to Internet"
+                help="If True, do not retrieve InChI from Internet" />
+            <param name="datatype" type="select" label="Cache data">
+                <option value="mnx4.4" selected="True">mnx4.4</option>
+                <option value="mnx3.1">mnx3.1</option>
+            </param>
         </section>
     </inputs>
     <outputs>
@@ -31,9 +43,9 @@
     </outputs>
     <tests>
         <test>
-        <!-- test 1: check if identical outputs are produced with iCN718 model input  -->
+            <!-- test 1: check if identical outputs are produced with iCN718 model input  -->
             <param name="input" value="iCN718.xml.gz" />
-            <output name="sink" md5="5ff3987609142e828ec8e3c97b8dab12" />
+            <output name="sink" md5="1d2b85cd23e2237483b5d41f854eda98" />
         </test>
     </tests>
     <help><![CDATA[
@@ -64,7 +76,7 @@ Output
 
 * **Sink**\ : CSV file containing a collection of chemical species used by the restrosynthesis algorithm of `RetroPath2.0 <https://doi.org/10.1016/j.ymben.2017.12.002>`_.
     ]]></help>
-    <expand macro="creator"/>
+    <expand macro="creator" />
     <citations>
         <citation type="doi">10.1038/nbt1156</citation>
         <citation type="doi">10.1016/j.ymben.2017.12.002</citation>
