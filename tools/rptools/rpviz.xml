@@ -6,25 +6,25 @@
     </macros>
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
-        #set input_folder="input_folder"
-        mkdir -p '$input_folder' &&
+	#set input='indir'
+        mkdir -p '$input' &&
         #if str($input_type_conditional.input_type) == "sbml":
-            #for $input in $input_type_conditional.input_sbml.keys():
-                ln -sf $input_type_conditional.input_sbml[$input] '$input_folder/${input}.xml' &&
-            #end for
-            python -m rptools.rpviz '$input_folder'
+	    #for $file in $input_type_conditional.input_sbml
+            	cp '$file.file_name' '$input/$file.name' &&
+	    #end for
         #elif str($input_type_conditional.input_type) == "tar":
-            python -m rptools.rpviz '${input_type_conditional.input_tar}'
+	    #set input=$input_type_conditional.input_tar
         #elif str($input_type_conditional.input_type) == "single_sbml":
-            ln -sf '$input_type_conditional.input_single_sbml' '$input_folder/${input_type_conditional.input_single_sbml.name}' &&
-            python -m rptools.rpviz '$input_folder'
+            cp '$input_type_conditional.input_single_sbml' '$input/${input_type_conditional.input_single_sbml.name}' &&
         #end if
-        'out'
-        #if $adv.cofactor_file
-            --cofactor '$adv.cofactor_file'
-        #end if
-        --autonomous_html '$html_file' &&
-        rm -fr '$input_folder'
+
+        python -m rptools.rpviz '$input'
+            'out'
+            #if $adv.cofactor_file
+                --cofactor '$adv.cofactor_file'
+       	    #end if
+            --autonomous_html '$html_file' &&
+        rm -rf '$input'
     ]]></command>
     <inputs>
         <conditional name="input_type_conditional">
@@ -65,9 +65,26 @@
                     <has_size value="1297905" delta="10000" />
                 </assert_contents>
             </output>
+    	</test>
+	<test>
+            <!-- test 2: check if identical html output is produced (sbml input) -->
+            <conditional name="input_type_conditional">
+                <param name="input_type" value="sbml" />
+                <param name="input_sbml">
+                    <collection type="list">
+			<element name="one" value="lycopene_CrtEBI_from_selenzy.xml" />
+			<element name="two" value="lycopene_CrtEBI_from_selenzy.xml" />
+                    </collection>
+		</param>
+            </conditional>
+            <output name="html_file">
+                <assert_contents>
+                    <has_size value="1297905" delta="10000" />
+                </assert_contents>
+            </output>
         </test>
         <test>
-            <!-- test 2: check if identical html output is produced (tar input) -->
+            <!-- test 3: check if identical html output is produced (tar input) -->
             <conditional name="input_type_conditional">
                 <param name="input_type" value="tar" />
                 <param name="input_tar" value="as_tar_inputs.tgz" />
