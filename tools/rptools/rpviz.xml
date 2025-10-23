@@ -24,7 +24,7 @@
                 --cofactor '$adv.cofactor_file'
        	    #end if
             --autonomous_html '$html_file' &&
-        [[ -d '$input' ]] && rm -rf '$input'
+        if [[ '$input' == 'indir' ]]; then rm -rf '$input'; fi
     ]]></command>
     <inputs>
         <conditional name="input_type_conditional">
