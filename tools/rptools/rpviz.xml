@@ -6,14 +6,14 @@
     </macros>
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
-	#set input='indir'
+	    #set input='indir'
         mkdir -p '$input' &&
         #if str($input_type_conditional.input_type) == "sbml":
-	    #for $file in $input_type_conditional.input_sbml
+	        #for $file in $input_type_conditional.input_sbml
             	cp '$file.file_name' '$input/$file.name' &&
-	    #end for
+	        #end for
         #elif str($input_type_conditional.input_type) == "tar":
-	    #set input=$input_type_conditional.input_tar
+	        #set input=$input_type_conditional.input_tar
         #elif str($input_type_conditional.input_type) == "single_sbml":
             cp '$input_type_conditional.input_single_sbml' '$input/${input_type_conditional.input_single_sbml.name}' &&
         #end if
@@ -24,7 +24,7 @@
                 --cofactor '$adv.cofactor_file'
        	    #end if
             --autonomous_html '$html_file' &&
-        rm -rf '$input'
+        [[ -d '$input' ]] && rm -rf '$input'
     ]]></command>
     <inputs>
         <conditional name="input_type_conditional">
@@ -65,17 +65,17 @@
                     <has_size value="1297905" delta="10000" />
                 </assert_contents>
             </output>
-    	</test>
-	<test>
+        </test>
+        <test>
             <!-- test 2: check if identical html output is produced (sbml input) -->
             <conditional name="input_type_conditional">
                 <param name="input_type" value="sbml" />
                 <param name="input_sbml">
                     <collection type="list">
-			<element name="one" value="lycopene_CrtEBI_from_selenzy.xml" />
-			<element name="two" value="lycopene_CrtEBI_from_selenzy.xml" />
+                        <element name="one" value="lycopene_CrtEBI_from_selenzy.xml" />
+                        <element name="two" value="lycopene_CrtEBI_from_selenzy.xml" />
                     </collection>
-		</param>
+                </param>
             </conditional>
             <output name="html_file">
                 <assert_contents>
