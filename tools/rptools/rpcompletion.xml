@@ -13,28 +13,38 @@
             description="The sink file is empty or not found" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
+        #import os
+        #if "TMPDIR" in os.environ
+            #set tmpdir=os.environ["TMPDIR"]/rr_cache
+            mkdir -p '$tmpdir' &&
+        #else
+            #set tmpdir="."
+        #end if
+
         #if str($sink.cond) == 'empty'
             echo '"Name","InChI"' > empty_sink.csv &&
             #set sinkfile='empty_sink.csv'
         #else
             #set sinkfile=$sink.sinkfile
         #end if
+
         python -m rptools.rpcompletion
-        '$rp2_pathways'
-        $sinkfile
-        '$rp2paths_compounds'
-        '$rp2paths_pathways'
-        completed_pathways
-        --upper_flux_bound '$adv.upper_flux_bound'
-        --lower_flux_bound '$adv.lower_flux_bound'
-        --max_subpaths_filter '$adv.max_subpaths_filter'
-        --chemical-space '$adv.chemical_space'
-        #if $adv.cofile
-            --cofactors '$adv.cofile'
-        #end if
-        #if not $sink.error_codes
-            --silent
-        #end if
+            '$rp2_pathways'
+            $sinkfile
+            '$rp2paths_compounds'
+            '$rp2paths_pathways'
+            completed_pathways
+            --upper_flux_bound '$adv.upper_flux_bound'
+            --lower_flux_bound '$adv.lower_flux_bound'
+            --max_subpaths_filter '$adv.max_subpaths_filter'
+            --chemical-space '$adv.chemical_space'
+            #if $adv.cofile
+                --cofactors '$adv.cofile'
+            #end if
+            #if not $sink.error_codes
+                --silent
+            #end if
+            --cache-dir '$tmpdir'
     ]]></command>
     <inputs>
         <param name="rp2paths_pathways" type="data" format="csv" label="RP2paths pathways" />
