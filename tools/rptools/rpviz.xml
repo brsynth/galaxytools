@@ -37,11 +37,12 @@
                 <param name="input_tar" type="data" format="tar" label="Source SBML" />
             </when>
             <when value="sbml">
-                <param name="input_sbml" type="data_collection" format="sbml" collection_type="list"
+                <param name="input_sbml" type="data_collection" format="sbml,xml"
+                    collection_type="list"
                     label="Source SBML" />
             </when>
             <when value="single_sbml">
-                <param name="input_single_sbml" type="data" format="sbml" label="Source SBML" />
+                <param name="input_single_sbml" type="data" format="sbml,xml" label="Source SBML" />
             </when>
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
@@ -83,17 +84,6 @@ RPVIZ
 =====
 
 Visualize pathways from the `RetroPath Suite <https://www.doi.org/10.1016/j.ymben.2017.12.002>`_.
-
-Input
------
-
-Required:
-
-* **Source SBML**\ : Input file containing rpSBML files in a tar archive, collection or single file.
-
-Optional:
-
-* **Cofactor file**\ : File listing structures to consider as cofactors.
 
 Output
 ------
