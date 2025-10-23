@@ -6,25 +6,25 @@
     </macros>
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
-        #set input_folder="input_folder"
-        mkdir -p '$input_folder' &&
+	    #set input='indir'
+        mkdir -p '$input' &&
         #if str($input_type_conditional.input_type) == "sbml":
-            #for $input in $input_type_conditional.input_sbml.keys():
-                ln -sf $input_type_conditional.input_sbml[$input] '$input_folder/${input}.xml' &&
-            #end for
-            python -m rptools.rpviz '$input_folder'
+	        #for $file in $input_type_conditional.input_sbml
+            	cp '$file.file_name' '$input/$file.name' &&
+	        #end for
         #elif str($input_type_conditional.input_type) == "tar":
-            python -m rptools.rpviz '${input_type_conditional.input_tar}'
+	        #set input=$input_type_conditional.input_tar
         #elif str($input_type_conditional.input_type) == "single_sbml":
-            ln -sf '$input_type_conditional.input_single_sbml' '$input_folder/${input_type_conditional.input_single_sbml.name}' &&
-            python -m rptools.rpviz '$input_folder'
+            cp '$input_type_conditional.input_single_sbml' '$input/${input_type_conditional.input_single_sbml.name}' &&
         #end if
-        'out'
-        #if $adv.cofactor_file
-            --cofactor '$adv.cofactor_file'
-        #end if
-        --autonomous_html '$html_file' &&
-        rm -fr '$input_folder'
+
+        python -m rptools.rpviz '$input'
+            'out'
+            #if $adv.cofactor_file
+                --cofactor '$adv.cofactor_file'
+       	    #end if
+            --autonomous_html '$html_file' &&
+        if [[ '$input' == 'indir' ]]; then rm -rf '$input'; fi
     ]]></command>
     <inputs>
         <conditional name="input_type_conditional">
@@ -37,11 +37,12 @@
                 <param name="input_tar" type="data" format="tar" label="Source SBML" />
             </when>
             <when value="sbml">
-                <param name="input_sbml" type="data_collection" format="sbml" collection_type="list"
+                <param name="input_sbml" type="data_collection" format="sbml,xml"
+                    collection_type="list"
                     label="Source SBML" />
             </when>
             <when value="single_sbml">
-                <param name="input_single_sbml" type="data" format="sbml" label="Source SBML" />
+                <param name="input_single_sbml" type="data" format="sbml,xml" label="Source SBML" />
             </when>
         </conditional>
         <section name="adv" title="Advanced Options" expanded="false">
@@ -66,7 +67,24 @@
             </output>
         </test>
         <test>
-            <!-- test 2: check if identical html output is produced (tar input) -->
+            <!-- test 2: check if identical html output is produced (sbml input) -->
+            <conditional name="input_type_conditional">
+                <param name="input_type" value="sbml" />
+                <param name="input_sbml">
+                    <collection type="list">
+                        <element name="one" value="lycopene_CrtEBI_from_selenzy.xml" />
+                        <element name="two" value="lycopene_CrtEBI_from_selenzy.xml" />
+                    </collection>
+                </param>
+            </conditional>
+            <output name="html_file">
+                <assert_contents>
+                    <has_size value="1297905" delta="10000" />
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <!-- test 3: check if identical html output is produced (tar input) -->
             <conditional name="input_type_conditional">
                 <param name="input_type" value="tar" />
                 <param name="input_tar" value="as_tar_inputs.tgz" />
@@ -83,17 +101,6 @@ RPVIZ
 =====
 
 Visualize pathways from the `RetroPath Suite <https://www.doi.org/10.1016/j.ymben.2017.12.002>`_.
-
-Input
------
-
-Required:
-
-* **Source SBML**\ : Input file containing rpSBML files in a tar archive, collection or single file.
-
-Optional:
-
-* **Cofactor file**\ : File listing structures to consider as cofactors.
 
 Output
 ------

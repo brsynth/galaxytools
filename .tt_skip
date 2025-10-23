@@ -1,7 +1,6 @@
 tools/neo4jsbml
 tools/retropath2
 tools/rpbasicdesign
-tools/rptools
 tools/partsgenie
 workflows/retrosynthesis_workflow
 workflows/genetic_assembly_workflow
