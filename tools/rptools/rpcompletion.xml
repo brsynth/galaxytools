@@ -15,7 +15,6 @@
     <command detect_errors="exit_code"><![CDATA[
         TMPDIR="\${TMPDIR:-.}/rr_cache" &&
         mkdir -p "\${TMPDIR}" &&
-        echo "TMPDIR: \${TMPDIR}" &&
         #if str($sink.cond) == 'empty'
             echo '"Name","InChI"' > empty_sink.csv &&
             #set sinkfile='empty_sink.csv'
@@ -41,9 +40,6 @@
             #end if
             --cache-dir "\${TMPDIR:-.}"
     ]]></command>
-    <environment_variables>
-        <environment_variable name="TMPDIR">/tmp</environment_variable>
-    </environment_variables>
     <inputs>
         <param name="rp2paths_pathways" type="data" format="csv" label="RP2paths pathways" />
         <param name="rp2paths_compounds" type="data" format="tabular" label="RP2paths compounds" />
