@@ -1,9 +1,11 @@
-<tool id="rptools_rpthermo" name="Thermo" version="@TOOL_VERSION@" profile="21.09">
-    <description>Calculate the formation energy of chemical species and the Gibbs free energy of their reactions and pathways in an SBML</description>
+<tool id="rptools_rpthermo" name="Thermo" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@"
+    profile="21.09">
+    <description>Calculate the formation energy of chemical species and the Gibbs free energy of
+        their reactions and pathways in an SBML</description>
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements"/>
+    <expand macro="requirements" />
     <stdio>
         <regex match="WARNING:" level="warning" />
         <regex match="ERROR:" level="fatal" />
@@ -22,11 +24,15 @@
         <environment_variable name="XDG_CACHE_HOME">\$TMPDIR</environment_variable>
     </environment_variables> -->
     <inputs>
-        <param name="input" type="data" format="sbml" label="SBML Input File" help="Pathways in SBML format" />
+        <param name="input" type="data" format="sbml" label="SBML Input File"
+            help="Pathways in SBML format" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="ph" type="float" value="7.5" min="0" max="14" label="Compartment pH of the pathway" />
-            <param name="ionic_strength" type="float" value="0.25" min="0" max="500" label="Compartment ionic strength of the pathway" />
-            <param name="pMg" type="float" value="3.0" label="Compartment pMg (Magnesium vapor pressure) of the pathway" />
+            <param name="ph" type="float" value="7.5" min="0" max="14"
+                label="Compartment pH of the pathway" />
+            <param name="ionic_strength" type="float" value="0.25" min="0" max="500"
+                label="Compartment ionic strength of the pathway" />
+            <param name="pMg" type="float" value="3.0"
+                label="Compartment pMg (Magnesium vapor pressure) of the pathway" />
         </section>
     </inputs>
     <outputs>
@@ -34,14 +40,16 @@
     </outputs>
     <tests>
         <test>
-        <!-- test 1: check if identical outputs are produced with default parameters  -->
+            <!-- test 1: check if identical outputs are produced with default parameters  -->
             <param name="input" value="rp_013_0001.xml" />
             <output name="pathway_with_thermo">
                 <assert_contents>
                     <is_valid_xml />
-                    <!--check thermo_dG0_prime value-->
+                    <!--check
+                    thermo_dG0_prime value-->
                     <has_text text="-2308.11630" />
-                    <!--check thermo_dG value-->
+                    <!--check
+                    thermo_dG value-->
                     <has_text text="-2151.84763" />
                     <has_n_lines n="522" />
                 </assert_contents>
@@ -83,7 +91,7 @@ Output
 
 * **Pathway with thermo**\ : annotated pathways (with thermodynamics information for each reaction) in SBML(Systems Biology Markup Language) format.
     ]]></help>
-    <expand macro="creator"/>
+    <expand macro="creator" />
     <citations>
         <citation type="doi">10.1371/journal.pcbi.1003098</citation>
         <citation type="doi">10.1038/s41467-022-32661-x</citation>
