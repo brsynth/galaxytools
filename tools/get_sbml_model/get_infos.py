@@ -65,7 +65,7 @@ def get_organism_from_bigg_model(model_id):
             return organism
     except Exception as e:
         print(f"Error querying BiGG: {e}")
-    return None
+    return -1
 
 
 def get_taxonid(organism_name: str) -> str:
@@ -81,10 +81,10 @@ def get_taxonid(organism_name: str) -> str:
         response.raise_for_status()
         data = response.json()
         ids = data.get("esearchresult", {}).get("idlist", [])
-        return ids[0] if ids else None
+        return ids[0] if ids else -1
     except RequestException as e:
         print(f"Error querying NCBI for '{organism_name}': {e}")
-        return None
+        return -1
 
 
 def get_taxon_id(input_name: str) -> str:
