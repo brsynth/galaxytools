@@ -12,6 +12,9 @@
         <regex match="Continuing without sink molecule" source="both" level="warning"
             description="The sink file is empty or not found" />
     </stdio>
+    <environment_variables>
+        <environment_variable name="TMPDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
     <command detect_errors="exit_code"><![CDATA[
         #import os
         #if "TMPDIR" in os.environ
