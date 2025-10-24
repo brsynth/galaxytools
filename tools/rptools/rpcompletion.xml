@@ -12,9 +12,6 @@
         <regex match="Continuing without sink molecule" source="both" level="warning"
             description="The sink file is empty or not found" />
     </stdio>
-    <environment_variables>
-        <environment_variable name="TMPDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
-    </environment_variables>
     <command detect_errors="exit_code"><![CDATA[
         #import os
         #if "TMPDIR" in os.environ
@@ -49,6 +46,9 @@
             #end if
             --cache-dir '$tmpdir'
     ]]></command>
+    <environment_variables>
+        <environment_variable name="TMPDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
     <inputs>
         <param name="rp2paths_pathways" type="data" format="csv" label="RP2paths pathways" />
         <param name="rp2paths_compounds" type="data" format="tabular" label="RP2paths compounds" />
