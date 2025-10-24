@@ -19,7 +19,7 @@
             $adv.remove_dead_end
             $adv.standalone
             --chemical-space '$adv.datatype'
-            --cache-dir "\${TMPDIR:-.}"
+            --cache-dir "\${TMPDIR}"
     ]]></command>
     <inputs>
         <param name="input" type="data" format="sbml" optional="false" label="Strain"

@@ -38,7 +38,7 @@
             #if not $sink.error_codes
                 --silent
             #end if
-            --cache-dir "\${TMPDIR:-.}"
+            --cache-dir "\${TMPDIR}"
     ]]></command>
     <inputs>
         <param name="rp2paths_pathways" type="data" format="csv" label="RP2paths pathways" />
