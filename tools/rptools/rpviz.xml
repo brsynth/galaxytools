@@ -12,7 +12,7 @@
         #if str($input_type_conditional.input_type) == "sbml":
 	        #for $file in $input_type_conditional.input_sbml
                 #set identifier = re.sub('[^\s\w\-]', '_', str($file.element_identifier))
-                #set file_name = $identifier + '.' + $file.ext
+                #set file_name = $identifier + '.xml'
             	cp '$file.file_name' '$input/${file_name}' &&
 	        #end for
         #elif str($input_type_conditional.input_type) == "tar":
