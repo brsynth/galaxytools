@@ -5,7 +5,6 @@
         <requirement type="package" version="1.11">gzip</requirement>
         <requirement type="package" version="5.19.2">python-libsbml</requirement>
         <requirement type="package" version="2.31">requests</requirement>
-        <requirement type="package" version="0.1.1">taxonid</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #import re

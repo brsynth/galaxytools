@@ -1,6 +1,5 @@
 from argparse import ArgumentParser
 from libsbml import readSBMLFromFile
-from taxonid import get_taxonid
 from requests import (
     get as r_get,
     RequestException
