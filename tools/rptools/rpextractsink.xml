@@ -9,13 +9,8 @@
         <regex match="Could not retreive any species in the compartment" level="fatal" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
-        #import os
-        #if "TMPDIR" in os.environ
-            #set tmpdir=os.environ["TMPDIR"]/rr_cache
-            mkdir -p '$tmpdir' &&
-        #else
-            #set tmpdir="."
-        #end if
+        TMPDIR="\${TMPDIR:-.}/rr_cache" &&
+        mkdir -p "\${TMPDIR}" &&
 
         python -m rptools.rpextractsink
             '$input'
@@ -24,7 +19,7 @@
             $adv.remove_dead_end
             $adv.standalone
             --chemical-space '$adv.datatype'
-            --cache-dir '$tmpdir'
+            --cache-dir "\${TMPDIR}"
     ]]></command>
     <inputs>
         <param name="input" type="data" format="sbml" optional="false" label="Strain"
