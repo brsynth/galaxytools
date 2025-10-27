@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 from libsbml import readSBMLFromFile
-from taxonid import get_taxonid
-from requests import get as r_get
+from requests import RequestException, get as r_get
 
 
 def get_biomass_rxn(sbml_doc):
@@ -62,12 +61,32 @@ def get_organism_from_bigg_model(model_id):
             return organism
     except Exception as e:
         print(f"Error querying BiGG: {e}")
-    return None
+    return -1
 
-def get_taxon_id(input_name):
+
+def get_taxonid(organism_name: str) -> str:
+    """Query NCBI Taxonomy for a given organism name and return its Taxon ID."""
+    url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
+    params = {
+        "db": "taxonomy",
+        "term": organism_name,
+        "retmode": "json"
+    }
+    try:
+        response = r_get(url, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        ids = data.get("esearchresult", {}).get("idlist", [])
+        return ids[0] if ids else -1
+    except RequestException as e:
+        print(f"Error querying NCBI for '{organism_name}': {e}")
+        return -1
+
+
+def get_taxon_id(input_name: str) -> str:
     """Try BiGG model name first, then NCBI directly."""
     print(f"Trying input: {input_name}")
-    
+
     # Try resolving as a BiGG model
     organism = get_organism_from_bigg_model(input_name)
     if organism:
