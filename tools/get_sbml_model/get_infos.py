@@ -1,9 +1,6 @@
 from argparse import ArgumentParser
 from libsbml import readSBMLFromFile
-from requests import (
-    get as r_get,
-    RequestException
-)
+from requests import RequestException, get as r_get
 
 
 def get_biomass_rxn(sbml_doc):
