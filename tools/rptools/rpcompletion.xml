@@ -71,8 +71,7 @@
                 max="10000" label="Lower flux bound"
                 help="Lower flux bound value to be used in outputted SBML models (fbc SBML package) for new reactions created." />
             <param name="chemical_space" type="select" label="Chemical space">
-                <option value="mnx4.4" selected="True">mnx4.4</option>
-                <option value="mnx3.1">mnx3.1</option>
+                <option value="mnx3.1" selected="True">mnx3.1</option>
             </param>
             <param name="cofile" type="data" format="txt,tsv,tabular" optional="True"
                 label="Cofactor file" />
