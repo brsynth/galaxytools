@@ -2,7 +2,7 @@
     profile="21.09" license="MIT">
     <description>Build a reaction network from a set of source compounds to a set of sink compounds</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
         <token name="@TOOL_VERSION@">3.6.0</token>
     </macros>
     <requirements>
@@ -84,7 +84,7 @@
                 <option value="r20220224">r20220224</option>
                 <option value="r20250728" selected="true">r20250728</option>
             </param>
-            <param name="topx" type="integer" value="100" min="1" max="1000" label="TopX"
+            <param name="topx" type="integer" value="100" min="1" max="1000000" label="TopX"
                 help="The maximal number of intermediate compounds to use as new starting points for a next iteration of the retrosynthesis algorithm." />
             <param name="dmin" type="integer" value="0" min="0" max="1000"
                 label="Minimum rule diameter"
