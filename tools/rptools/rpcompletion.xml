@@ -94,7 +94,7 @@
                 <param name="cond" value="provided" />
                 <param name="sinkfile" value="2-sink.csv" />
             </conditional>
-            <output_collection name="pathways" type="list" count="10" />
+            <output_collection name="pathways" type="list" count="38" />
         </test>
     </tests>
     <help><![CDATA[
