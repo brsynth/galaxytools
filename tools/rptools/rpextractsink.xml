@@ -37,8 +37,7 @@
                 checked="true" label="Do not connect to Internet"
                 help="If True, do not retrieve InChI from Internet" />
             <param name="datatype" type="select" label="Cache data">
-                <option value="mnx4.4" selected="True">mnx4.4</option>
-                <option value="mnx3.1">mnx3.1</option>
+                <option value="mnx3.1" selected="True">mnx3.1</option>
             </param>
         </section>
     </inputs>
