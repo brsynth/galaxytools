@@ -77,7 +77,7 @@ jobs:
           echo "$USER $PROJECT"
           github_changelog_generator --user "$USER" --project "$PROJECT" --no-unreleased
       - name: 'Upload Artifact Changelog'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: changelog-artifact
           path: CHANGELOG.md
