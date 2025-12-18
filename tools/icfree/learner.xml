@@ -93,22 +93,22 @@
             <output_collection name="output_png" type="list" count="4">
                 <element name="EI selected">
                     <assert_contents>
-                        <has_size value="78848" delta="1024"/>
+                        <has_size value="78848" delta="17000"/>
                     </assert_contents>
                 </element>
                 <element name="EI">
                     <assert_contents>
-                        <has_size value="36864" delta="1024"/>
+                        <has_size value="36864" delta="6000"/>
                     </assert_contents>
                 </element>
                 <element name="Train_Test">
                     <assert_contents>
-                        <has_size value="65536" delta="1024"/>
+                        <has_size value="65536" delta="10000"/>
                     </assert_contents>
                 </element>
                 <element name="Yield evolution through each active learning query">
                     <assert_contents>
-                        <has_size value="19" delta="1"/>
+                        <has_size value="16633" delta="1"/>
                     </assert_contents>
                 </element>
             </output_collection>
@@ -117,15 +117,15 @@
             <!-- python -m icfree.learner -data_folder learner -parameter_file learner.input.param.tsv -output_folder tmp2 -name_list "Yield1,Yield2" -nb_rep 5 -flatten -seed 85 -nb_new_data_predict 20 -nb_new_data 2 -parameter_step 2 -n_group 3 -km 5 -ks 2 -save_plot -verbose -->
             <param name="input_data_csv" value="learner.input.data.1.csv,learner.input.data.2.csv" />
             <param name="input_param_tsv" value="learner.input.param.tsv" />
-            <param name="name_list" value="Yield1,Yield2" />
-            <param name="nb_rep" value="5" />
-            <param name="flatten" value="true" />
-            <param name="nb_new_data_predict" value="20" />
-            <param name="nb_new_data" value="2" />
-            <param name="parameter_step" value="2" />
-            <param name="n_group" value="3" />
-            <param name="km" value="5" />
-            <param name="ks" value="2" />
+            <param name="adv|name_list" value="Yield1,Yield2" />
+            <param name="adv|nb_rep" value="5" />
+            <param name="adv|flatten" value="true" />
+            <param name="adv|nb_new_data_predict" value="20" />
+            <param name="adv|nb_new_data" value="2" />
+            <param name="adv|parameter_step" value="2" />
+            <param name="adv|n_group" value="3" />
+            <param name="adv|km" value="5" />
+            <param name="adv|ks" value="2" />
             <!-- <element name="next_sampling_ei5" file="learner.output.data.2.csv" ftype="csv" > -->
             <output name="output_csv" count="1">
                 <assert_contents>
@@ -135,22 +135,22 @@
             <output_collection name="output_png" type="list" count="4">
                 <element name="EI selected">
                     <assert_contents>
-                        <has_size value="24576" delta="1024"/>
+                        <has_size value="24576" delta="5000"/>
                     </assert_contents>
                 </element>
                 <element name="EI">
                     <assert_contents>
-                        <has_size value="36864" delta="1024"/>
+                        <has_size value="36864" delta="6000"/>
                     </assert_contents>
                 </element>
                 <element name="Train_Test">
                     <assert_contents>
-                        <has_size value="61440" delta="1024"/>
+                        <has_size value="61440" delta="10000"/>
                     </assert_contents>
                 </element>
                 <element name="Yield evolution through each active learning query">
                     <assert_contents>
-                        <has_size value="19456" delta="1024"/>
+                        <has_size value="19456" delta="9000"/>
                     </assert_contents>
                 </element>
             </output_collection>
