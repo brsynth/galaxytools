@@ -81,31 +81,31 @@
         <test>
             <param name="input_file" value="sampler/input/components.tsv" />
             <param name="num_samples" value="3" />
-            <param name="seed_param" value="not_random" />
-            <param name="seed" value="0" />
+            <param name="adv|seed_cond|seed_param" value="not_random" />
+            <param name="adv|seed_cond|seed" value="0" />
             <output name="output_sampling" file="sampler/output/sampling.test-1.csv" ftype="csv" compare="diff" />
         </test>
         <!-- test 2: with specific step  -->
         <test>
             <param name="input_file" value="sampler/input/components.tsv" />
             <param name="num_samples" value="4" />
-            <param name="range_param" value="step" />
-            <param name="by_step" value="3.1" />
-            <param name="seed_param" value="not_random" />
-            <param name="seed" value="0" />
+            <param name="adv|range_cond|range_param" value="step" />
+            <param name="adv|range_cond|by_step" value="3.1" />
+            <param name="adv|seed_cond|seed_param" value="not_random" />
+            <param name="adv|seed_cond|seed" value="0" />
             <output name="output_sampling" file="sampler/output/sampling.test-2.csv" ftype="csv" compare="diff" />
         </test>
         <!-- test 3: with fixed values  -->
         <test>
             <param name="input_file" value="sampler/input/components.tsv" />
             <param name="num_samples" value="3" />
-            <param name="seed_param" value="not_random" />
-            <param name="seed" value="0" />
-            <repeat name="rep">
+            <param name="adv|seed_cond|seed_param" value="not_random" />
+            <param name="adv|seed_cond|seed" value="0" />
+            <repeat name="adv|rep">
                 <param name="component_name" value="Hela lysate" />
                 <param name="component_value" value="10" />
             </repeat>
-            <repeat name="rep">
+            <repeat name="adv|rep">
                 <param name="component_name" value="RNA 1ug/uL" />
                 <param name="component_value" value="20" />
             </repeat>
@@ -115,10 +115,10 @@
         <test>
             <param name="input_file" value="sampler/input/components.tsv" />
             <param name="num_samples" value="4" />
-            <param name="seed_param" value="not_random" />
-            <param name="seed" value="0" />
-            <param name="range_param" value="ratios" />
-            <param name="by_ratios" value="0.5,0.1,0.3,0.2" />
+            <param name="adv|seed_cond|seed_param" value="not_random" />
+            <param name="adv|seed_cond|seed" value="0" />
+            <param name="adv|range_cond|range_param" value="ratios" />
+            <param name="adv|range_cond|by_ratios" value="0.5,0.1,0.3,0.2" />
             <output name="output_sampling" file="sampler/output/sampling.test-4.csv" ftype="csv" compare="diff" />
         </test>
     </tests>

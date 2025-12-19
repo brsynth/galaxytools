@@ -47,8 +47,8 @@
             <!-- python -m icfree.instructor ../plate_designer.source_plate.test-2.csv ../plate_designer.destination_plate.test-2.csv 'instructor.test-1.csv' -source_plate_type 'default:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -->
             <param name="source_plate_file" value="plate_designer.source_plate.test-2.csv" />
             <param name="destination_plate_file" value="plate_designer.destination_plate.test-2.csv" />
-            <param name="max_transfer_volume" value="500" />
-            <param name="split_threshold" value="500" />
+            <param name="adv|max_transfer_volume" value="500" />
+            <param name="adv|split_threshold" value="500" />
             <output_collection name="output_instructor" type="list" count="1">
                 <element name="instructions" file="instructor.test-1.csv" ftype="csv" compare="diff" />
             </output_collection>
@@ -57,10 +57,10 @@
             <!-- python -m icfree.instructor plate_designer.source_plate.test-2.csv plate_designer.destination_plate.test-2.csv 'instructor.csv' -source_plate_type 'Hela lysate:384PP_AQ_CP,Access prot 50X:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3' -max_transfer_volume '500' -split_threshold '500' -split_components 'Hela lysate,Access prot 50X' -dispense_order 'Access prot 50X,Hela lysate' -->
             <param name="source_plate_file" value="plate_designer.source_plate.test-2.csv" />
             <param name="destination_plate_file" value="plate_designer.destination_plate.test-2.csv" />
-            <param name="max_transfer_volume" value="500" />
-            <param name="split_threshold" value="500" />
-            <param name="source_plate_type" value="Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" />
-            <param name="split_components" value="Hela lysate,Access prot 50%" />
+            <param name="adv|max_transfer_volume" value="500" />
+            <param name="adv|split_threshold" value="500" />
+            <param name="adv|source_plate_type" value="Hela lysate:384PP_AQ_CP,Access prot 50%:384PP_AQ_GP3,Reaction mix:384PP_AQ_GP3,RNA 1ug/uL:384PP_AQ_GP3" />
+            <param name="adv|split_components" value="Hela lysate,Access prot 50%" />
             <output_collection name="output_instructor" type="list" count="3">
                 <element name="instructions" file="instructor.test-2.csv" ftype="csv" compare="diff" />
                 <element name="instructions_Hela lysate" file="instructor.hela.test-2.csv" ftype="csv" compare="diff" />

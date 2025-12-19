@@ -78,9 +78,9 @@
             <!-- python -m icfree.plate_designer sampling.test-1.csv 6000 -default_well_capacity 60000 -default_dead_volume 20000 -num_replicates 1 -->
             <param name="sampling_file" value="sampling.test-1.csv" />
             <param name="sample_volume" value="6000" />
-            <param name="default_well_capacity" value="60000" />
-            <param name="default_dead_volume" value="20000" />
-            <param name="num_replicates" value="1" />
+            <param name="adv|default_well_capacity" value="60000" />
+            <param name="adv|default_dead_volume" value="20000" />
+            <param name="adv|num_replicates" value="1" />
             <output name="output_source_plate" file="plate_designer.source_plate.test-1.csv" ftype="csv" compare="diff" />
             <output name="output_destination_plate" file="plate_designer.destination_plate.test-1.csv" ftype="csv" compare="diff" />
         </test>
@@ -88,28 +88,28 @@
             <!-- mkdir output ; python -m icfree.plate_designer sampling.test-1.csv '5000' -start_well_src_plt 'A1' -start_well_dst_plt 'A1' -plate_dims '16x24' -well_capacity 'Hela lysate=3000,Access prot 50X=4000,Reaction mix=3000,RNA 1ug/uL=2000' -default_well_capacity '60000' -dead_volumes 'Hela lysate=30,Access prot 50X=5,Reaction mix=10,RNA 1ug/uL=20' -default_dead_volume '20000' -num_replicates '2' -extra_wells 'Hela lysate=1,Access prot 50X=0,Reaction mix=1,RNA 1ug/uL=2' -num_replicates 2 -output_folder output -->
             <param name="sampling_file" value="sampling.test-1.csv" />
             <param name="sample_volume" value="5000" />
-            <param name="default_well_capacity" value="60000" />
-            <param name="default_dead_volume" value="20000" />
-            <param name="num_replicates" value="2" />
-            <repeat name="rep">
+            <param name="adv|default_well_capacity" value="60000" />
+            <param name="adv|default_dead_volume" value="20000" />
+            <param name="adv|num_replicates" value="2" />
+            <repeat name="adv|rep">
                 <param name="component_name" value="Hela lysate" />
                 <param name="well_capacity" value="3000" />
                 <param name="dead_volume" value="30" />
                 <param name="extra_well" value="1" />
             </repeat>
-            <repeat name="rep">
+            <repeat name="adv|rep">
                 <param name="component_name" value="Access prot 50%" />
                 <param name="well_capacity" value="4000" />
                 <param name="dead_volume" value="5" />
                 <param name="extra_well" value="0" />
             </repeat>
-            <repeat name="rep">
+            <repeat name="adv|rep">
                 <param name="component_name" value="Reaction mix" />
                 <param name="well_capacity" value="3000" />
                 <param name="dead_volume" value="10" />
                 <param name="extra_well" value="1" />
             </repeat>
-            <repeat name="rep">
+            <repeat name="adv|rep">
                 <param name="component_name" value="RNA 1ug/uL" />
                 <param name="well_capacity" value="2000" />
                 <param name="dead_volume" value="20" />
