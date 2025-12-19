@@ -339,7 +339,7 @@ if __name__ == "__main__":
     ###
 
     # Default values from command-line
-    avoid_patterns, hairpin_constraints, gc_constraints, kmer_size = extract_constraints_from_args(args)
+    #avoid_patterns, hairpin_constraints, gc_constraints, kmer_size = extract_constraints_from_args(args)
 
     
     # Check if the flag --use_json_param is present and set to true
@@ -360,6 +360,8 @@ if __name__ == "__main__":
                 hairpin_constraints = json_constraints["hairpin_constraints"]
                 gc_constraints = json_constraints["gc_constraints"]
                 kmer_size = json_constraints["kmer_size"]
+    else:
+        avoid_patterns, hairpin_constraints, gc_constraints, kmer_size = extract_constraints_from_args(args)
 
     params = {
         "files_to_evaluate": args.files_to_evaluate,
