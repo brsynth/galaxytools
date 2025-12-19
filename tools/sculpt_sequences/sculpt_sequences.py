@@ -244,7 +244,7 @@ def load_constraints_from_json(json_path):
 if __name__ == "__main__":
     args = parse_command_line_args()
 
-    avoid_patterns, hairpin_constraints, gc_constraints, kmer_size, DnaOptimizationProblemClass = extract_constraints_from_args(args)
+    #avoid_patterns, hairpin_constraints, gc_constraints, kmer_size, DnaOptimizationProblemClass = extract_constraints_from_args(args)
 
     # Check if the flag --use_json_param is present and set to true
     if "--use_json_param" in sys.argv:
@@ -265,6 +265,8 @@ if __name__ == "__main__":
                 gc_constraints = json_constraints["gc_constraints"]
                 kmer_size = json_constraints["kmer_size"]
                 DnaOptimizationProblemClass = json_constraints["DnaOptimizationProblemClass"]
+    else: 
+        avoid_patterns, hairpin_constraints, gc_constraints, kmer_size, DnaOptimizationProblemClass = extract_constraints_from_args(args)
 
     params = {
         "files_to_sculpt": args.files_to_sculpt,

@@ -49,21 +49,24 @@
             --outdir_scul 'outdir_scul' 
             --outdir_unscul 'outdir_unscul' 
             --use_file_names_as_id '$use_file_names_as_ids' 
-            --avoid_patterns '$avoid_patterns'
-            --gc_constraints '$gc_constraints'
-            --kmer_size '$kmer_size'
-            --hairpin_constraints '$hairpin_constraints'
-            #if $json_use.use_json_param:
-                --json_params '$json_use.json_params'
-            #else:
+            #if $json_use.use_json_param=='false':
+                --avoid_patterns '$avoid_patterns'
+                --gc_constraints '$gc_constraints'
+                --kmer_size '$kmer_size'
+                --hairpin_constraints '$hairpin_constraints'
                 --json_params ''
                 --DnaOptimizationProblemClass '$json_use.DnaOptimizationProblemClass'
+            #else:
+                --json_params '$json_use.json_params'
             #end if
     ]]></command>
     <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank" label="GenBank File(s)"/>
         <conditional name='json_use'>
-            <param name="use_json_param" type="boolean" checked="false" label="Use parameter from a JSON file" />
+            <param name="use_json_param" type="select" checked="false" label="Use parameter from a JSON file">
+                <option value="true">Get Parameters From JSON</option>
+                <option value="false" selected="true">Set Parameters Manually</option>
+            </param>
             <when value="false">
                 <param name="DnaOptimizationProblemClass" type="select" label="DnaOptimizationProblem Calss" help="select the assambly class">
                     <option value="DnaOptimizationProblem" selected="True">DnaOptimizationProblem</option>
