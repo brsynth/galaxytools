@@ -30,6 +30,8 @@
         <test>
             <param name="input_file_sbml" value="e_coli_core.xml.gz" />
             <param name="input_arrows_json" value="PathwayModelisation-2.0.3.json" />
+            <param name="input_auradb_txt" value="test_auradb.txt" />
+            <param name="parameter_tag_property_str" value="parameter" />
             <output name="output" ftype="txt" >
                 <assert_contents>
                     <has_size value="1000" delta="500" />
