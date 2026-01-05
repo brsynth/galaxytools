@@ -15,7 +15,7 @@
         python '$__tool_directory__/save_to_db.py'
             --input '$genbank_file_paths'
             --use_json_paramers '$json_use.use_json_paramers'
-            #if not $json_use.use_json_paramers:
+            #if $json_use.use_json_paramers=='false':
                 --sequence_column '$json_use.sequence_column'
                 --annotation_column '$json_use.annotation_column'
                 --db_uri '$json_use.db_uri' 
@@ -33,7 +33,10 @@
         <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank" label="GenBank File(s)"/>
         <conditional name="json_use">
-            <param name="use_json_paramers" type="boolean" checked='false' label="Use parameters from JSON" help="extract parameters from json file" />
+            <param name="use_json_paramers" type="select" checked='false' label="Use parameters from JSON" help="extract parameters from json file">
+                <option value="true">Get Parameters From JSON</option>
+                <option value="false" selected="true">Set Parameters Manually</option>
+            </param>
             <when value="false">
                 <param name="execution_enable" type="boolean" checked='true' label="Send Requenst to DB" help="enable or desable the interaction with the DB (can be usefull in workflows)" />
                 <param name="table" type="text" label="DB Table Name" optional="true" help="It can be extracted from JSON file -key:'table'-" />
@@ -58,13 +61,13 @@
         <!--test tool blocking from galaxy. It is commented because it should faild as it is a test to validate that the tool can be blocked from json file -->
         <test expect_num_outputs="2"> 
             <param name="genbank_files">
-                <conditional type="list">
+                <collection type="list">
                     <element name="p7_L7Ae-Weiss" value="p7_L7Ae-Weiss.gb" />
                     <element name="p7_gfp_sequence" value="p6_Nt-IgKLsequence.gb" />
                     <element name="p14_CMVp" value="p6_Kozak-ATG.gb" />
                     <element name="p16_bGHpolyA" value="p4_Kt-L7Ae-Weiss.gb" />
                     <element name="p18_CMVp" value="HC_Amp_ccdB.gb" />
-                </conditional>
+                </collection>
             </param>
             <conditional name="json_use">
                 <param name='use_json_paramers' value='false' />
@@ -75,7 +78,6 @@
                 <param name="db_uri" value="postgresql://postgres:RK17@localhost:5432/test_fragments_db" />
                 <param name="execution_enable" value="false" />
             </conditional>
-            <param name="use_json_paramers" value='true'/>
             <output name="output" file="test_raport.txt" ftype="txt" >
                 <assert_contents>
                      <has_n_lines n="0" />
@@ -103,7 +105,6 @@
                 <param name="json_conf" value="test-JSON_arg_block.json" />
             </conditional>
             <param name="json_generating" value='false'/>
-            <param name="json_conf" value="test-JSON_arg_block.json" />
             <output name="output" file="test_raport.txt" ftype="txt" >
                 <assert_contents>
                      <has_n_lines n="0" />
@@ -131,7 +132,6 @@
                 <param name="db_uri" value="postgresql://postgres:RK17@localhost:5432/test_fragments_db" />
                 <param name="execution_enable" value="true" />
             </conditional>
-            <param name="use_json_paramers" value='true'/>
             <output name="output" file="test_raport.txt" ftype="txt" >
                 <assert_contents>
                      <has_n_lines n="5" />
@@ -163,7 +163,6 @@
                 <param name="use_json_paramers" value='true'/>
                 <param name="json_conf" value="test-JSON_arg.json" />
             </conditional>
-            <param name="json_generating" value='false'/>
             <output name="output" file="test_raport.txt" ftype="txt" >
                 <assert_contents>
                      <has_n_lines n="5" />
