@@ -26,6 +26,17 @@
     <outputs>
         <data name="output" format="txt" label="${tool.name} - log" />
     </outputs>
+    <tests>
+        <test>
+            <param name="input_file_sbml" value="e_coli_core.xml.gz" />
+            <param name="input_arrows_json" value="PathwayModelisation-2.0.3.json" />
+            <output name="output" ftype="txt" >
+                <assert_contents>
+                    <has_size value="1000" delta="500" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
     <help><![CDATA[
 Neo4jSbml
 =========
