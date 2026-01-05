@@ -44,7 +44,7 @@
             --mwmax_source '$adv.mwmax_source'
             --kinstall "\${TMPDIR:-.}"
             --std_hydrogen '$adv.std_hydrogen'
-            #if not $sink.error_codes:
+            #if $sink.error_codes=="false":
                 --quiet
             #end if
             --msc_timeout '$adv.timeout' &&
