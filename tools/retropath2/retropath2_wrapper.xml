@@ -44,7 +44,7 @@
             --mwmax_source '$adv.mwmax_source'
             --kinstall "\${TMPDIR:-.}"
             --std_hydrogen '$adv.std_hydrogen'
-            #if not $sink.error_codes:
+            #if $sink.error_codes=="false":
                 --quiet
             #end if
             --msc_timeout '$adv.timeout' &&
@@ -54,7 +54,10 @@
         <param name="rulesfile" type="data" format="csv,tar" label="Rules File"
             help="File containing reaction rules which reflect the enzymatic potential of the chassis organism." />
         <conditional name="sink">
-            <param name="emptysink" type="boolean" checked="false" label="Empty sink" />
+            <param name="emptysink" type="select" label="Empty sink">
+                <option value="false" selected="true">FALSE</option>
+                <option value="true">TRUE</option>
+            </param>
             <when value="false">
                 <param name="sinkfile" type="data" format="csv" label="Sink File"
                     help="Sink file which comprises all compounds that are considered as granted in your system." />
