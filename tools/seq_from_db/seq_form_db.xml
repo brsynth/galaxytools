@@ -15,7 +15,7 @@
         python '$__tool_directory__/get_db_info.py'
             --input '$input'
             --use_json_paramers '$json_use.use_json_paramers'
-            #if not $json_use.use_json_paramers:
+            #if $json_use.use_json_paramers=='false':
                 --sequence_column '$json_use.sequence_column'
                 --annotation_columns '$json_use.annotation_columns'
                 --db_uri '$json_use.db_uri' 
@@ -30,7 +30,10 @@
     <inputs> 
         <param name="input" type="data" format="csv" label="Input CSV File" />
         <conditional name="json_use">
-            <param name="use_json_paramers" type="boolean" checked='false' label="Use parameters from JSON" help="extract parameters from json file" />
+            <param name="use_json_paramers" type="select" checked='false' label="Use parameters from JSON" help="extract parameters from json file">
+                <option value="true">Get Parameters From JSON</option>
+                <option value="false" selected="true">Set Parameters Manually</option>
+            </param>
             <when value="false">
                 <param name="table" type="text" label="DB Table Name" optional="false" />
                 <param name="sequence_column" type="text" label="DB Column Contains Sequence For ganbank File" optional="false" />

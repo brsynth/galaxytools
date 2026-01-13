@@ -1,7 +1,7 @@
 <tool id="domestication_of_new_parts" name="Domestication Of New Parts" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Adding the flanking enzyme sites to each DNA part</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@VERSION_SUFFIX@">2</token>
         <token name="@TOOL_VERSION@">0.2.0</token>
     </macros>
     <requirements>
@@ -27,7 +27,7 @@
             --file_name_mapping '$file_name_mapping'
             --use_file_names_as_id '$use_file_names_as_ids'
             --allow_edits '$allow_edits'
-            #if not $json_use.use_json_paramers:
+            #if $json_use.use_json_paramers == 'false':
                 --methylation_protection '$json_use.methylation_protection'
             #else:
                 --json_conf '$json_use.json_conf'
@@ -39,7 +39,10 @@
     <inputs>
         <param name="genbank_files" type="data_collection" collection_type="list" format="genbank" label="GenBank File(s)"/>
         <conditional name="json_use">
-            <param name="use_json_paramers" type="boolean" checked='false' label="Use parameters from JSON" help="extract parameters from json file" />
+            <param name="use_json_paramers" type="select" checked='false' label="Use parameters from JSON" help="extract parameters from json file">
+                <option value="true">Get Parameters From JSON</option>
+                <option value="false" selected="true">Set Parameters Manually</option>
+            </param>
             <when value="false">
                 <param name="methylation_protection" type="boolean" checked="False" label="Enabel Methylation Protection"/>
             </when>
