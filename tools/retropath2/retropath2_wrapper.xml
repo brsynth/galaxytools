@@ -3,7 +3,7 @@
     <description>Build a reaction network from a set of source compounds to a set of sink compounds</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">3.6.1</token>
+        <token name="@TOOL_VERSION@">3.8.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">retropath2_wrapper</requirement>
@@ -42,8 +42,8 @@
             --dmin '$adv.dmin'
             --dmax '$adv.dmax'
             --mwmax_source '$adv.mwmax_source'
-            --kinstall "\${TMPDIR:-.}"
             --std_hydrogen '$adv.std_hydrogen'
+            --score_mode '$adv.score_mode'
             #if $sink.error_codes=="false":
                 --quiet
             #end if
@@ -85,7 +85,8 @@
                 <option value="r20210127">r20210127</option>
                 <option value="r20220104">r20220104</option>
                 <option value="r20220224">r20220224</option>
-                <option value="r20250728" selected="true">r20250728</option>
+                <option value="r20250728">r20250728</option>
+                <option value="r20260202" selected="true">r20260202</option>
             </param>
             <param name="topx" type="integer" value="100" min="1" max="1000000" label="TopX"
                 help="The maximal number of intermediate compounds to use as new starting points for a next iteration of the retrosynthesis algorithm." />
@@ -102,9 +103,15 @@
                 help="Maximal time of RetroPath2.0 execution (60 minutes by default)." />
             <param name="std_hydrogen" type="select" label="Hygrogens in chemical rules"
                 help="How hydrogens are represented in chemical rules, auto mode will try to guess from the chemical rules">
-                <option value="auto" selected="true">auto</option>
+                <option value="auto" selected="true">Auto</option>
                 <option value="implicit">Aromatized (no Hs added)</option>
                 <option value="explicit">H added + Aromatized</option>
+            </param>
+            <param name="score_mode" type="select"
+                label="How to consider priorize rules according to their score">
+                <option value="auto" selected="true">Auto</option>
+                <option value="maximize">Maximize</option>
+                <option value="minimize">Minimize</option>
             </param>
         </section>
     </inputs>
