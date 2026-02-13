@@ -3,7 +3,7 @@
     <description>Build a reaction network from a set of source compounds to a set of sink compounds</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">3.9.0</token>
+        <token name="@TOOL_VERSION@">3.9.1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">retropath2_wrapper</requirement>
@@ -86,7 +86,7 @@
                 <option value="r20220104">r20220104</option>
                 <option value="r20220224">r20220224</option>
                 <option value="r20250728">r20250728</option>
-                <option value="r20260206" selected="true">r20260206</option>
+                <option value="r20260212" selected="true">r20260212</option>
             </param>
             <param name="topx" type="integer" value="100" min="1" max="1000000" label="TopX"
                 help="The maximal number of intermediate compounds to use as new starting points for a next iteration of the retrosynthesis algorithm." />
