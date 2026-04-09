@@ -1,0 +1,19 @@
+name: damn
+owner: tduigou
+description: dAMN Hybrid Neural Network Framework for Dynamic Flux Balance Analysis (dFBA)
+long_description: |
+  dAMN Hybrid Neural Network Framework for Dynamic Flux Balance Analysis (dFBA)
+homepage_url: https://github.com/brsynth/damn_library
+remote_repository_url: https://github.com/brsynth/damn_library
+categories:
+  - Synthetic Biology
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the damn suite"
+suite:
+  name: suite_damn
+  description: Suite of tools that work on damn model
+  long_description: |
+    Suite of tools that work on damn model
+  type: repository_suite_definition
