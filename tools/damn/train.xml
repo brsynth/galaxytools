@@ -21,9 +21,9 @@
                 --biomass-rxn-id 'BIOMASS_Ec_iML1515_core_75p37M'
                 --train-test-split 'forecast'
             #elif $options.organism == 'custom'
-                --cobra-model-file '$cobra_model_file'
-                --biomass-rxn-id '$biomass_rxn_id'
-                --train-test-split '$train_test_split'
+                --cobra-model-file '$options.cobra_model_file'
+                --biomass-rxn-id '$options.biomass_rxn_id'
+                --train-test-split '$options.train_test_split'
             #end if
             --seed '$options.seed'
             --num-epochs '$options.num_epochs'
