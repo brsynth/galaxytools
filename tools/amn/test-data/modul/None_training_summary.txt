@@ -1,0 +1,27 @@
+None Averaged R2 = -0.0351 ± 0.0000 Best R2 = -0.0351
+
+(243, 1) (1, 4034)
+training file: /home/rkhaled/amn_library/amn/models/IJN1463EXP
+model type: AMN_QP
+model number constraints: 3
+model scaler: 1.0
+model input dim: 174
+model output dim: 1
+training set size (243, 174) (243, 1)
+training set medium 196
+training set S (2153, 4034)
+training set Pin (174, 4034)
+training set Pko (0, 4034)
+training set Pout (1, 4034)
+nbr hidden layer: 1
+hidden layer size: 500
+activation function: relu
+training epochs: 500
+scoring function: r2_score
+training learn rate: 0.001
+training dropout: 0.25
+training batch size: 10
+training validation iter: 0
+training xfold: 5
+X shape: (243, 174), Y shape: (243, 4)
+Final R2: 0.8515

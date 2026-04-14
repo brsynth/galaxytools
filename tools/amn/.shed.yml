@@ -1,0 +1,19 @@
+name: amn
+owner: tduigou
+description: Build, Training & Prediction with Artificial Metabolic Networks (AMN)
+long_description: |
+  Build, Training & Prediction with Artificial Metabolic Networks (AMN)
+homepage_url: https://github.com/brsynth/amn_library
+remote_repository_url: https://github.com/brsynth/amn_library
+categories:
+  - Synthetic Biology
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the amn suite"
+suite:
+  name: suite_amn
+  description: Suite of tools that work on amn model
+  long_description: |
+    Suite of tools that work on amn model
+  type: repository_suite_definition

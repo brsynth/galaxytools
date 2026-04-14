@@ -1,0 +1,181 @@
+<tool id="amn_train" name="AMN Train Model" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Build, Training with Artificial Metabolic Networks (AMN)</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">0.1.6</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="0.1.6">amn</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir 'modul_dir' &&
+        #if $ex_mode.mode == 'build'
+            cp '$ex_mode.medium_file' '$ex_mode.medium_file.name' &&
+            python -m amn train_build
+                --organism '$ex_mode.options.organism'
+                --medium-file '$ex_mode.medium_file.name'
+                #if $ex_mode.options.organism == 'custom'
+                    --cobra-file '$ex_mode.options.cobra_model_file'
+                #end if
+                --method '$ex_mode.method'
+                --reduce '$ex_mode.reduce'
+                --seed '$ex_mode.seed'
+                --modul-dir 'modul_dir' &&
+            cp 'modul_dir/training_results.txt' '$build_output'
+        #elif $ex_mode.mode == 'train'
+            cp '$ex_mode.trainingfile' '$ex_mode.trainingfile.name' &&
+            python -m amn train_gr
+                --organism '$ex_mode.options.organism'
+                --trainingfile '$ex_mode.trainingfile.name'
+                #if $ex_mode.options.organism == 'custom'
+                    --cobraname-override '$ex_mode.options.cobra_model_file'
+                #end if
+                --model-type '$ex_mode.model_type'
+                --n-hidden '$ex_mode.options.n_hidden'
+                --hidden-dim '$ex_mode.options.hidden_dim'
+                --maxloop '$ex_mode.maxloop'
+                --epochs '$ex_mode.options.epochs'
+                --xfold '$ex_mode.xfold'
+                --niter '$ex_mode.niter'
+                --batch-size '$ex_mode.options.batch_size'
+                --seed '$ex_mode.seed' &&
+            cp 'modul.zip' '$modul_zip'
+        #end if 
+    ]]></command>
+    <inputs>
+        <conditional name="ex_mode">
+            <param name='mode' type="select" label="Execution Mode">
+                <option value="build">Build</option>
+                <option value="train" selected="true">Train</option>
+            </param>
+            <when value='build'>
+                <conditional name="options">
+                    <param name='organism' type="select" label="Model Selection">
+                        <option value="putida" selected="true">Putida</option>
+                        <option value="ecoli">E.Coli</option>
+                        <option value="biolog">Biolog</option>
+                        <option value="custom">Other</option>
+                    </param>
+                    <when value='putida'/>
+                    <when value='ecoli'/>
+                    <when value='biolog'/>
+                    <when value='custom'>
+                        <param name='cobra_model_file' type="data" format="xml" label="Cutomased Model"/>
+                    </when>
+                </conditional>
+                <param name='medium_file' type="data" format='csv' label="Medium File (CSV)"/>
+                <param name='method' type="select" label="Method">
+                    <option value="EXP" selected="true">EXP</option>
+                    <option value="FBA">FBA</option>
+                    <option value="pFBA">pFBA</option>
+                </param>
+                <param name='reduce' type="boolean" label="Reduce" value="false"/>
+                <param name='seed' type="integer" value='1' label="Seed"/>
+            </when>
+            <when value='train'>
+                <param name='trainingfile' type="data" format='npz' label="Training File (NPZ)"/>
+                <param name='model_type' type="select" label="Model Type">
+                    <option value="AMN_QP" selected="true">AMN_QP</option>
+                </param>
+                <conditional name="options">
+                    <param name='organism' type="select" label="Model Selection">
+                        <option value="putida" selected="true">Putida</option>
+                        <option value="ecoli">E.Coli</option>
+                        <option value="biolog">Biolog</option>
+                        <option value="custom">Other</option>
+                    </param>
+                    <when value='putida'>
+                        <param name='n_hidden' type="integer" value='1' label="N Hidden"/>
+                        <param name='hidden_dim' type="integer" value='500' label="Hidden Dimention"/>
+                        <param name='epochs' type="integer" value='500' label="Epochs"/>
+                        <param name='batch_size' type="integer" value='10' label="Batch Size"/>
+                    </when>
+                    <when value='ecoli'>
+                        <param name='n_hidden' type="integer" value='1' label="N Hidden"/>
+                        <param name='hidden_dim' type="integer" value='1000' label="Hidden Dimention"/>
+                        <param name='epochs' type="integer" value='1000' label="Epochs"/>
+                        <param name='batch_size' type="integer" value='10' label="Batch Size"/>
+                    </when>
+                    <when value='biolog'>
+                        <param name='n_hidden' type="integer" value='1' label="N Hidden"/>
+                        <param name='hidden_dim' type="integer" value='1000' label="Hidden Dimention"/>
+                        <param name='epochs' type="integer" value='1000' label="Epochs"/>
+                        <param name='batch_size' type="integer" value='100' label="Batch Size"/>
+                    </when>
+                    <when value='custom'>
+                        <param name='cobra_model_file' type="data" format="xml" label="Cutomased Model"/>
+                        <param name='n_hidden' type="integer" label="N Hidden"/>
+                        <param name='hidden_dim' type="integer" label="Hidden Dimention"/>
+                        <param name='epochs' type="integer" label="Epochs"/>
+                        <param name='batch_size' type="integer" label="Batch Size"/>
+                    </when>
+                </conditional>
+                <param name='method' type="select" label="Method">
+                    <option value="EXP" selected="true">EXP</option>
+                    <option value="FBA">FBA</option>
+                    <option value="pFBA">pFBA</option>
+                </param>
+                <param name='maxloop' type="integer" value='3' label="Loop Max"/>
+                <param name='xfold' type="integer" value='5' label="X Fold"/>
+                <param name='niter' type="integer" value='0' label="N Iter"/>
+                <param name='reduce' type="boolean" value="false" label="Reduce" />
+                <param name='seed' type="integer" value='1' label="Seed"/>
+            </when>
+        </conditional>
+        
+    </inputs>
+    <outputs>
+        <data format="zip" name="modul_zip" label="Train results (zip)">
+            <filter>ex_mode['mode'] == 'train'</filter>
+        </data>
+        <data name="build_output" format="txt" label="Build results (zip)">
+            <filter>ex_mode['mode'] == 'build'</filter>
+        </data>
+    </outputs>
+    <tests>
+        <!--python -m amn train_build -organism "putida" 
+                                      -medium-file "/home/rkhaled/amn_library/docs/Putida/IJN1463EXP.csv" 
+                                      -modul-dir "toto" -->
+        <!--test build-->
+        <test expect_num_outputs='1'>
+            <param name="ex_mode|mode" value="build"/>
+            <param name='ex_mode|medium_file' value="IJN1463EXP.csv"/>
+            <param name="ex_mode|options|organism" value="putida"/>
+            <output name="build_output">
+                <assert_contents>
+                    <has_n_lines n="17" delta="1"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!--python -m amn train_gr -organism "putida" 
+                                      -medium-file "/home/rkhaled/amn_library/docs/Putida/IJN1463EXP.csv" 
+                                      -modul-dir "toto" -->
+        <!--test train-->
+        <test expect_num_outputs='1'>
+            <param name="ex_mode|mode" value="train"/>
+            <param name='ex_mode|trainingfile' value="IJN1463EXP.npz"/>
+            <param name="ex_mode|options|organism" value="putida"/>
+            <output name="modul_zip">
+                <assert_contents>
+                    <has_archive_member path=".*" n="6" delta="1"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    
+    <help><![CDATA[
+amn_train
+==========
+
+Build, Training modes with Artificial Metabolic Networks (AMN)
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{amn_tarin
+                author = {Ramiz Khaled},
+                title = {{amn_tarin}},
+                url = {https://github.com/brsynth/amn_library},
+            }
+        </citation>
+    </citations>
+</tool>
