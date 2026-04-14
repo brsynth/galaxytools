@@ -1,0 +1,139 @@
+<tool id="amn_predict" name="AMN Prediction Model" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Prediction with Artificial Metabolic Networks (AMN)</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">0.1.6</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="0.1.6">amn</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        #if $ex_mode.mode == 'str'
+            cp '$ex_mode.trainingfile' '$ex_mode.trainingfile.name' && 
+            cp '$ex_mode.modelfile' '$ex_mode.modelfile.name' &&
+            cp '$ex_mode.fileparam' '$ex_mode.fileparam.name' &&
+        #elif $ex_mode.mode == 'wkf'
+            cp '$ex_mode.zipInput' '$ex_mode.zipInput.name' &&
+        #end if
+        cp '$predfile' '$predfile.name' &&
+        python -m amn predict 
+            --organism '$options.organism'
+            #if $ex_mode.mode == 'wkf'
+                --zipInput '$ex_mode.zipInput.name'
+            #elif $ex_mode.mode == 'str'
+                --modelfile '$ex_mode.modelfile.name'
+                --trainingfile '$ex_mode.trainingfile.name'
+                --fileparam '$ex_mode.fileparam.name'
+            #end if
+            #if $options.organism == 'custom'
+                --cobraname-override '$options.cobraname_override'
+            #end if
+            --predfile '$predfile.name'
+            --objective '$objective'
+            --model-type '$model_type'
+            --n-hidden '$n_hidden'
+            --hidden-dim '$hidden_dim'
+            --metric '$options.metric'
+            --seed '$seed' &&
+        cp 'prediction_results.txt' '$pred_output'
+    ]]></command>
+    <inputs>
+        <conditional name="options">
+            <param name='organism' type="select" label="Model Selection">
+                <option value="putida" selected="true">Putida</option>
+                <option value="ecoli">E.Coli</option>
+                <option value="biolog">Biolog</option>
+                <option value="custom">Other</option>
+            </param>
+            <when value='putida'>
+                <param name='metric' type="text" value="accuracy_score" label="Matric"/>
+            </when>
+            <when value='ecoli'>
+                <param name='metric' type="text" value="r2_score" label="Matric"/>
+            </when>
+            <when value='biolog'>
+                <param name='metric' type="text" value="r2_score" label="Matric"/>
+            </when>
+            <when value='custom'>
+                <param name='cobraname_override' type="data" format="xml" label="Cutomased Model (XML)"/>
+                <param name='metric' type="text" label="Matric"/>
+            </when>
+        </conditional>
+        <param name='predfile' type="data" format='csv' label="Prediction Files (csv)"/>
+        <conditional name="ex_mode">
+            <param name="mode" type="select" label="Mode">
+                <option value="str" selected="true">Stendard Input Files</option>
+                <option value="wkf">Input ZIP File</option>
+            </param>
+            <when value="str">
+                <param name='modelfile' type="data" format='h5' label="Model File (h5)"/>
+                <param name='trainingfile' type="data" format='npz' label="Train File (npz)"/>
+                <param name='fileparam' type="data" format='csv' label="Parameters Files (csv)"/>
+            </when>
+            <when value="wkf">
+                <param name='zipInput' type="data" format='zip' label="Zip File contains all input files"/>
+            </when>
+        </conditional>
+        <param name='objective' type="boolean" label="Objective" value="true"/>
+        <param name='model_type' type="select" label="Model Type">
+            <option value="AMN_QP" selected='true'>AMN_QP</option>
+        </param>
+        <param name='n_hidden' type="integer" label="N Hidden" value="1"/>
+        <param name='hidden_dim' type="integer" label="Hidden dimention" value="1000"/>
+        <param name='seed' type="integer" label="Seed" value="1"/>
+    </inputs>
+    <outputs>
+        <data name="pred_output" format="txt" label="Prediction Result"/>
+    </outputs> 
+    <tests>
+        <!--python -m amn predict -organism "putida" 
+                                -zip 'modul.zip' -->
+        <!--test prediction putida-->
+        <test>
+            <param name="options|organism" value="putida"/>
+            <param name="predfile" value="IJN1463VAL.csv"/>
+            <param name="ex_mode|mode" value="wkf"/>
+            <param name="ex_mode|zipInput" value="modul.zip"/>
+            <output name="pred_output" ftype="txt">
+                <assert_contents> 
+                    <has_n_lines n="19" delta="1"/>
+                </assert_contents> 
+            </output>
+        </test>
+        <!--test prediction custom-->
+        <test>
+            <param name="options|organism" value="custom"/>
+            <param name="options|cobraname_override" value="IJN1463EXP.xml"/>
+            <param name="options|metric" value="r2_score"/>
+            <param name="predfile" value="IJN1463VAL.csv"/>
+            <param name="ex_mode|mode" value="wkf"/>
+            <param name="ex_mode|zipInput" value="modul.zip"/>
+            <output name="pred_output" ftype="txt">
+                <assert_contents> 
+                    <has_n_lines n="19" delta="1"/>
+                </assert_contents> 
+            </output>
+        </test>
+    </tests>
+    
+    <help><![CDATA[
+AMN Prediction
+====================
+
+Prediction mode with Artificial Metabolic Networks (AMN)
+
+**Demo data**:
+---------------
+`Zip Putida <https://github.com/brsynth/amn_library/blob/main/docs/putida/modul.zip>`_ (file name: putida_OD_81)
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{amn_predict
+                author = {Ramiz Khaled},
+                title = {{amn_predict}},
+                url = {https://github.com/brsynth/amn_library},
+            }
+        </citation>
+    </citations>
+</tool>
