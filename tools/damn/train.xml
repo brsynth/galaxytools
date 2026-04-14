@@ -1,0 +1,189 @@
+<tool id="damn_train" name="dAMN Train Model" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>dAMN Hybrid Neural Network Framework for Dynamic Flux Balance Analysis (dFBA)</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">0.1.4</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="0.1.4">damn</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir 'modul_dir' && mkdir 'figure_dir' &&
+        python -m damn train 
+            --organism '$options.organism'
+            --file-name '$file_name'
+            --media-file '$media_file'
+            --od-file '$od_file'
+            #if $options.organism == 'putida'
+                --biomass-rxn-id 'BIOMASS_KT2440_WT3'
+                --train-test-split 'medium'
+            #elif $options.organism == 'ecoli'
+                --biomass-rxn-id 'BIOMASS_Ec_iML1515_core_75p37M'
+                --train-test-split 'forecast'
+            #elif $options.organism == 'custom'
+                --cobra-model-file '$options.cobra_model_file'
+                --biomass-rxn-id '$options.biomass_rxn_id'
+                --train-test-split '$options.train_test_split'
+            #end if
+            --seed '$options.seed'
+            --num-epochs '$options.num_epochs'
+            --loss-weight 
+                $options.loss_weight_sect.sv 
+                $options.loss_weight_sect.negv 
+                $options.loss_weight_sect.c 
+                $options.loss_weight_sect.dropc
+            --loss-decay 
+                $options.loss_decay_sect.dsv 
+                $options.loss_decay_sect.dnegv 
+                $options.loss_decay_sect.dc 
+                $options.loss_decay_sect.ddropc
+            --hidden-layers-lag '$hidden_layers_lag'
+            --hidden-layers-flux '$hidden_layers_flux'
+            --dropout-rate '$dropout_rate'
+            --x-fold '$x_fold'
+            --batch-size '$batch_size'
+            --patience '$patience'
+            --n-iter '$n_iter'
+            --figure-dir 'figure_dir'
+            --modul-dir 'modul_dir' &&
+        echo "DEBUG: modul_dir" &&
+        ls modul_dir &&
+        echo "DEBUG: figure_dir" &&
+        ls figure_dir &&
+        echo "DEBUG: working directory" &&
+        pwd &&
+        ls -l &&
+        echo "DEBUG: modul_dir.zip existence" &&
+        ls -l modul_dir.zip || echo "modul_dir.zip NOT FOUND" &&
+        cp 'modul_dir.zip' '$modul_zip'
+    ]]></command>
+    <inputs>
+        <conditional name="options">
+            <param name='organism' type="select" label="Model Selection">
+                <option value="putida" selected="true">Putida</option>
+                <option value="ecoli">E.Coli</option>
+                <option value="custom">Other</option>
+            </param>
+            <when value='putida'>
+                <param name='seed' type="integer" label="Seed" value="1"/>
+                <param name='num_epochs' type="integer" label="Num Epochs" value="500"/>
+                <section name="loss_weight_sect" title="Loss Weight" >
+                    <param name='sv' type="float" label="SV" value="0.1"/>
+                    <param name='negv' type="float" label="negV" value="0.1"/>
+                    <param name='c' type="float" label="C" value="1"/>
+                    <param name='dropc' type="float" label="dropC" value="0.1"/>
+                </section>
+                <section name="loss_decay_sect" title="Loss Weight" >
+                    <param name='dsv' type="float" label="SV" value="0"/>
+                    <param name='dnegv' type="float" label="negV" value="1"/>
+                    <param name='dc' type="float" label="C" value="0"/>
+                    <param name='ddropc' type="float" label="dropC" value="0.5"/>
+                </section>
+            </when>
+            <when value='ecoli'>
+                <param name='seed' type="integer" label="Seed" value="30"/>
+                <param name='num_epochs' type="integer" label="Num Epochs" value="1000"/>
+                <section name="loss_weight_sect" title="Loss Weight" >
+                    <param name='sv' type="float" label="CV" value="0.1"/>
+                    <param name='negv' type="float" label="negV" value="1"/>
+                    <param name='c' type="float" label="C" value="1"/>
+                    <param name='dropc' type="float" label="dropC" value="1"/>
+                </section>
+                <section name="loss_decay_sect" title="Loss Weight" >
+                    <param name='dsv' type="float" label="CV" value="0"/>
+                    <param name='dnegv' type="float" label="negV" value="1"/>
+                    <param name='dc' type="float" label="C" value="0"/>
+                    <param name='ddropc' type="float" label="dropC" value="0"/>
+                </section>
+            </when>
+            <when value='custom'>
+                <param name='cobra_model_file' type="data" format="xml" label="Customased Model"/>
+                <param name='biomass_rxn_id' type="text" label="RXM Biomass ID" help="BIOMASS_KT2440_WT3"/>
+                <param name='train_test_split' type="select" label="Train-Test Split">
+                    <option value="medium" selected="true">Medium</option>
+                    <option value="forecast">Forecast</option>
+                </param>
+                <param name='seed' type="integer" label="Seed"/>
+                <param name='num_epochs' type="integer" label="Num Epochs" value="500"/>
+                <section name="loss_weight_sect" title="Loss Weight" >
+                    <param name='sv' type="float" label="CV"/>
+                    <param name='negv' type="float" label="negV" />
+                    <param name='c' type="float" label="C"/>
+                    <param name='dropc' type="float" label="dropC"/>
+                </section>
+                <section name="loss_decay_sect" title="Loss Weight" >
+                    <param name='dsv' type="float" label="CV"/>
+                    <param name='dnegv' type="float" label="negV"/>
+                    <param name='dc' type="float" label="C"/>
+                    <param name='ddropc' type="float" label="dropC"/>
+                </section>
+            </when>
+        </conditional>
+        <param name='file_name' type="text" label="File name" help="File name to be save as run name"/>
+        <param name='media_file' type="data" format='csv' label="Media (CSV)"/>
+        <param name='od_file' type="data" format='csv' label="ODs (CSV)"/>
+        <param name='hidden_layers_lag' type="text" label="Hidden layers lag" value="50" help="It can be multiple layer (ex. 50 500...)"/>
+        <param name='hidden_layers_flux' type="text" label="Hidden layers flux" value="500" help="It can be multiple layer (ex. 50 500...)"/>
+        <param name='dropout_rate' type="float" label="Dropout Rate" value="0.2"/>
+        <param name='x_fold' type="integer" label="X Fold" value="3"/>
+        <param name='batch_size' type="integer" label="Batch Size" value="10"/>
+        <param name='patience' type="integer" label="Patience" value="100"/>
+        <param name='n_iter' type="integer" label="N iteration" value="3"/>
+    </inputs>
+    <outputs>
+        <data format="zip" name="modul_zip" label="simulation results (zip)"/>
+        <collection name="figure_col" type="list" label="plots">
+                <discover_datasets pattern="(?P&lt;name&gt;.*).png" format="png" directory="figure_dir" />
+        </collection>
+    </outputs> 
+    <tests>
+        <!--python -m damn train -organism "putida" 
+                                -file-name "putida_OD_81" 
+                                -od-file "/docs/putida/putida_OD_81.csv" 
+                                -media-file "/docs/putida/putida_media_81.csv" 
+                                -loss-weight 0.1 0.1 1 1.0 
+                                -loss-decay 0 1 0 0.5 
+                                -patience 100 
+                                -num-epochs 500 
+                                -train-test-split 'medium' 
+                                -biomass-rxn-id 'BIOMASS_KT2440_WT3' 
+                                -seed 1 
+                                -hidden-layers-lag 50 
+                                -hidden-layers-flux 500 
+                                -dropout-rate 0.2 
+                                -x-fold 3 
+                                -batch-size 10 
+                                -n-iter 3-->
+        <!--test putida-->
+        <test>
+            <conditional name="options">
+                <param name='organism' value="putida"/>
+            </conditional>
+            <param name="file_name" value="putida_OD_81"/>
+            <param name='media_file' value="putida_media_81.csv"/>
+            <param name='od_file' value="putida_OD_81.csv"/>
+            <output_collection name="figure_col" type="list" count="8"/>
+            <output name="modul_zip" ftype='zip'>
+                <assert_contents>
+                    <has_archive_member path=".*" n="9"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    
+    <help><![CDATA[
+damn_train
+==========
+
+dAMN Hybrid Neural Network Framework for Dynamic Flux Balance Analysis (dFBA). This tool train Putida ans E.Coli models add to the option of a costumed model.
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{damn_tarin
+                author = {Ramiz Khaled},
+                title = {{damn_tarin}},
+                url = {https://github.com/brsynth/damn_library},
+            }
+        </citation>
+    </citations>
+</tool>

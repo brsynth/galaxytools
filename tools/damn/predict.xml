@@ -1,0 +1,143 @@
+<tool id="damn_predict" name="dAMN Prediction Model" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>dAMN Hybrid Neural Network Framework for Dynamic Flux Balance Analysis (dFBA)</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">0.1.4</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="0.1.4">damn</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir 'figure_dir' &&
+        python -m damn predict 
+            --organism '$options.organism'
+            --file-name '$file_name'
+            --metabolite-ids
+            #for $m in $options.metabolite_ids.splitlines()
+                $m
+            #end for
+            --train-test-split '$train_test_split'
+            --ods '$ods'
+            --plot-type '$options.plot_type'
+            --r2min '$r2min'
+            --r2max '$r2max'
+            --n-iter '$n_iter'
+            --figure-dir 'figure_dir'
+            --model-dir '$input_zip' && echo '$train_test_split' '$r2min' '$r2max' '$n_iter'
+    ]]></command>
+    <inputs>
+        <param name="input_zip" type="data" format="zip" label="model (zip)"/>
+        <conditional name="options">
+            <param name='organism' type="select" label="Model Selection">
+                <option value="putida" selected="true">Putida</option>
+                <option value="ecoli">E.Coli</option>
+                <option value="custom">Other</option>
+            </param>
+            <when value='putida'>
+                <param name='metabolite_ids' type="text" label="Metabolite IDs" area="true" value="glc__D_e
+                xyl__D_e
+                succ_e
+                ala__L_e
+                arg__L_e
+                asn__L_e
+                asp__L_e
+                cys__L_e
+                glu__L_e
+                gln__L_e
+                gly_e
+                his__L_e
+                ile__L_e
+                leu__L_e
+                lys__L_e
+                met__L_e
+                phe__L_e
+                pro__L_e
+                ser__L_e
+                thr__L_e
+                trp__L_e
+                tyr__L_e
+                val__L_e
+                ade_e
+                gua_e
+                csn_e
+                ura_e
+                thymd_e
+                BIOMASS" help="List of metabolite IDs (Each ID on a line)"/>
+                <param name='plot_type' type="select" label="Train-Test Split">
+                    <option value="growth" selected="true">Growth</option>
+                    <option value="substrate">Substrate</option>
+                </param>
+            </when>
+            <when value='ecoli'>
+                <param name='metabolite_ids' type="text" label="Metabolite IDs" multiple="true" value="" help="List of metabolite IDs (Each ID on a line)"/>
+                <param name='plot_type' type="select" label="Train-Test Split">
+                    <option value="growth">Growth</option>
+                    <option value="substrate" selected="true">Substrate</option>
+                </param>
+            </when>
+            <when value='custom'>
+                <param name='metabolite_ids' type="text" label="Metabolite IDs" multiple="true" value="" help="List of metabolite IDs (Each ID on a line)"/>
+                <param name='plot_type' type="select" label="Train-Test Split">
+                    <option value="growth" selected="true">Growth</option>
+                    <option value="substrate">Substrate</option>
+                </param>
+            </when>
+        </conditional>
+        <param name='file_name' type="text" label="File name" help="File name in the zip file (ex. 'putida_OD_81' for putida_OD_81_medium_val_ids.*) they sould all start by the same file name"/>
+        <param name='train_test_split' type="select" label="Train-Test Split">
+            <option value="medium" selected="true">Medium</option>
+            <option value="forecast">Forecast</option>
+        </param>
+        <param name='ods' type="boolean" label="Biomass concentration to OD" checked="True" help="when True biomass concentration transformed in OD"/>
+        <param name='r2min' type="float" label="R2 min" value="0"/>
+        <param name='r2max' type="float" label="R2 max" value="0.5"/>
+        <param name='n_iter' type="integer" label="Iteration num" value="3"/>
+    </inputs>
+    <outputs>
+        <collection name="figure_col" type="list" label="Prediction plots">
+            <discover_datasets pattern="(?P&lt;name&gt;.*).png" format="png" directory="figure_dir" />
+        </collection>
+    </outputs> 
+    <tests>
+        <!--python -m damn predict -organism 'putida' 
+                                    -file-name 'putida_OD_81' 
+                                    -metabolite-ids 'glc__D_e                 xyl__D_e                 succ_e                 ala__L_e                 arg__L_e                 asn__L_e                 asp__L_e                 cys__L_e                 glu__L_e                 gln__L_e                 gly_e                 his__L_e                 ile__L_e                 leu__L_e                 lys__L_e                 met__L_e                 phe__L_e                 pro__L_e                 ser__L_e                 thr__L_e                 trp__L_e                 tyr__L_e                 val__L_e                 ade_e                 gua_e                 csn_e                 ura_e                 thymd_e                 BIOMASS' 
+                                    -train-test-split 'medium' 
+                                    -ods 'true' 
+                                    -plot-type 'growth' 
+                                    -r2min '0.0' 
+                                    -r2max '0.5' 
+                                    -n-iter '3' 
+                                    -figure-dir 'toto' 
+                                    -model-dir 'modul.zip'-->
+        <!--test prediction putida-->
+        <test> 
+            <param name="input_zip" value="modul.zip"/>
+            <conditional name="options">
+                <param name="organism" value="putida" />
+            </conditional>
+            <param name="file_name" value="putida_OD_81" />
+            <output_collection name="figure_col" type="list" count="6"/>
+        </test>
+    </tests>
+    
+    <help><![CDATA[
+dAMN Prediction
+====================
+dAMN Hybrid Neural Network Framework for Dynamic Flux Balance Analysis (dFBA). This tool predict using Putida ans E.Coli models add to the option of a costumed model.
+
+**Demo data**:
+---------------
+`Zip Putida <https://github.com/brsynth/damn_library/blob/main/docs/putida/modul.zip>`_ (file name: putida_OD_81)
+
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @unpublished{damn_predict
+                author = {Ramiz Khaled},
+                title = {{damn_predict}},
+                url = {https://github.com/brsynth/damn_library},
+            }
+        </citation>
+    </citations>
+</tool>
