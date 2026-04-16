@@ -5,7 +5,9 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements" />
+    <requirements>
+        <requirement type="package" version="6.8.4">rpthermo</requirement>
+    </requirements>
     <stdio>
         <regex match="WARNING:" level="warning" />
         <regex match="ERROR:" level="fatal" />
@@ -13,7 +15,7 @@
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
         export XDG_CACHE_HOME="\${TMPDIR:-.}" ;
-        python -m rptools.rpthermo
+        python -m rpthermo
         '$input'
         '$pathway_with_thermo'
         --pH '$adv.ph'
