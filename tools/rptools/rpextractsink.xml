@@ -4,7 +4,9 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="requirements" />
+    <requirements>
+        <requirement type="package" version="6.8.2">rpextractsink</requirement>
+    </requirements>
     <stdio>
         <regex match="Could not retreive any species in the compartment" level="fatal" />
     </stdio>
@@ -12,7 +14,7 @@
         TMPDIR="\${TMPDIR:-.}/rr_cache" &&
         mkdir -p "\${TMPDIR}" &&
 
-        python -m rptools.rpextractsink
+        python -m rpextractsink
             '$input'
             '$sink'
             --compartment-id '$compartment_id'
