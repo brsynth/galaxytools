@@ -1,0 +1,11 @@
+categories:
+- Synthetic Biology
+description: Calculate the formation energy of chemical species and the Gibbs free energy of
+        their reactions and pathways in an SBML
+homepage_url: ''
+long_description: Calculate the formation energy of chemical species and the Gibbs free energy of
+        their reactions and pathways in an SBML
+name: rpthermo
+owner: tduigou
+homepage_url: https://github.com/brsynth/rpthermo
+remote_repository_url: https://github.com/brsynth/rpthermo
