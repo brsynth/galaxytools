@@ -1,0 +1,11 @@
+categories:
+- Synthetic Biology
+description: Completes mono-component reactions output by RetroPath2.0 with the appropriate
+        cofactors
+homepage_url: ''
+long_description: Completes mono-component reactions output by RetroPath2.0 with the appropriate
+        cofactors
+name: rpcompletion
+owner: tduigou
+homepage_url: https://github.com/brsynth/rpcompletion
+remote_repository_url: https://github.com/brsynth/rpcompletion

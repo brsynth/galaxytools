@@ -1,0 +1,9 @@
+categories:
+- Synthetic Biology
+description: Generate the RetroPath2.0 sink file from an SBML input
+homepage_url: ''
+long_description: RetroPath2 sink generator. From a given SBML file, the tool will extract all the sink molecules and generate a csv file with the InChI structures.
+name: rpextractsink
+owner: tduigou
+homepage_url: https://github.com/brsynth/rpextractsink
+remote_repository_url: https://github.com/brsynth/rpextractsink
