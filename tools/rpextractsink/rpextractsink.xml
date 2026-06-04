@@ -1,7 +1,7 @@
 <tool id="rpextractsink" name="Sink from SBML" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Generate the RetroPath2.0 sink file from an SBML input</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
         <token name="@TOOL_VERSION@">6.8.2</token>
     </macros>
     <requirements>
@@ -39,7 +39,7 @@
                 checked="true" label="Do not connect to Internet"
                 help="If True, do not retrieve InChI from Internet" />
             <param name="datatype" type="select" label="Cache data">
-                <option value="mnx3.1" selected="True">mnx3.1</option>
+                <option value="mnx4.4" selected="True">mnx4.4</option>
             </param>
         </section>
     </inputs>
@@ -50,7 +50,7 @@
         <test>
             <!-- test 1: check if identical outputs are produced with iCN718 model input  -->
             <param name="input" value="iCN718.xml.gz" />
-            <output name="sink" md5="428a331da7284d9975c8770cedf0b079" />
+            <output name="sink" md5="1d2b85cd23e2237483b5d41f854eda98" />
         </test>
     </tests>
     <help><![CDATA[
