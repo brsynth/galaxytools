@@ -1,0 +1,122 @@
+<tool id="rpviz" name="Visualize pathways" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@"
+    profile="21.09">
+    <description>Visualize pathways from the RetroPath Suite</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">2</token>
+        <token name="@TOOL_VERSION@">6.8.1</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="6.8.1">rpviz</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        #import re
+	    #set input='indir'
+        mkdir -p '$input' &&
+        #if str($input_type_conditional.input_type) == "sbml":
+	        #for $file in $input_type_conditional.input_sbml
+                #set identifier = re.sub('[^\s\w\-]', '_', str($file.element_identifier))
+                #set file_name = $identifier + '.xml'
+            	cp '$file.file_name' '$input/${file_name}' &&
+	        #end for
+        #elif str($input_type_conditional.input_type) == "tar":
+	        #set input=$input_type_conditional.input_tar
+        #elif str($input_type_conditional.input_type) == "single_sbml":
+            cp '$input_type_conditional.input_single_sbml' '$input/${input_type_conditional.input_single_sbml.name}' &&
+        #end if
+
+        python -m rpviz '$input'
+            'out'
+            #if $adv.cofactor_file
+                --cofactor '$adv.cofactor_file'
+       	    #end if
+            --autonomous_html '$html_file' &&
+        if [[ '$input' == 'indir' ]]; then rm -rf '$input'; fi
+    ]]></command>
+    <inputs>
+        <conditional name="input_type_conditional">
+            <param name="input_type" type="select" label="Source SBML format">
+                <option value="sbml" selected="True">Collection</option>
+                <option value="tar">TAR</option>
+                <option value="single_sbml">single SBML</option>
+            </param>
+            <when value="tar">
+                <param name="input_tar" type="data" format="tar" label="Source SBML" />
+            </when>
+            <when value="sbml">
+                <param name="input_sbml" type="data_collection" format="sbml,xml"
+                    collection_type="list"
+                    label="Source SBML" />
+            </when>
+            <when value="single_sbml">
+                <param name="input_single_sbml" type="data" format="sbml,xml" label="Source SBML" />
+            </when>
+        </conditional>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="cofactor_file" type="data" format="tsv" optional="true"
+                label="Cofactor file" help="File listing structures to consider as cofactors." />
+        </section>
+    </inputs>
+    <outputs>
+        <data name="html_file" format="html" label="Rpviz: Pathways Visualization" />
+    </outputs>
+    <tests>
+        <test>
+            <!-- test 1: check if identical html output is produced (single sbml input) -->
+            <conditional name="input_type_conditional">
+                <param name="input_type" value="single_sbml" />
+                <param name="input_single_sbml" value="lycopene_CrtEBI_from_selenzy.xml" />
+            </conditional>
+            <output name="html_file">
+                <assert_contents>
+                    <has_size value="1297905" delta="10000" />
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <!-- test 2: check if identical html output is produced (sbml input) -->
+            <conditional name="input_type_conditional">
+                <param name="input_type" value="sbml" />
+                <param name="input_sbml">
+                    <collection type="list">
+                        <element name="one" value="lycopene_CrtEBI_from_selenzy.xml" />
+                        <element name="two" value="lycopene_CrtEBI_from_selenzy.xml" />
+                    </collection>
+                </param>
+            </conditional>
+            <output name="html_file">
+                <assert_contents>
+                    <has_size value="1297905" delta="10000" />
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <!-- test 3: check if identical html output is produced (tar input) -->
+            <conditional name="input_type_conditional">
+                <param name="input_type" value="tar" />
+                <param name="input_tar" value="as_tar_inputs.tgz" />
+            </conditional>
+            <output name="html_file">
+                <assert_contents>
+                    <has_size value="1607200" delta="10000" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+RPVIZ
+=====
+
+Visualize pathways from the `RetroPath Suite <https://www.doi.org/10.1016/j.ymben.2017.12.002>`_.
+
+Output
+------
+
+* **Pathways Visualization**\ : HTML output for pathway's visualization.
+    ]]></help>
+    <creator>
+        <organization name="BioRetroSynth" url="https://github.com/brsynth" />
+    </creator>
+    <citations>
+        <citation type="doi">10.1038/s41467-022-32661-x</citation>
+    </citations>
+</tool>
