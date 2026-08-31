@@ -1,0 +1,9 @@
+categories:
+- Synthetic Biology
+description: Visualize pathways from the RetroPath Suite
+homepage_url: ''
+long_description: Visualize pathways from the RetroPath Suite
+name: rpviz
+owner: tduigou
+homepage_url: https://github.com/brsynth/rpviz
+remote_repository_url: https://github.com/brsynth/rpviz
