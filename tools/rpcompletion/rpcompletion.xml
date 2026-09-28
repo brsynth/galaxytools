@@ -3,7 +3,7 @@
     <description>Completes mono-component reactions output by RetroPath2.0 with the appropriate
         cofactors</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">2</token>
         <token name="@TOOL_VERSION@">6.8.4</token>
     </macros>
     <requirements>
@@ -74,7 +74,10 @@
                 max="10000" label="Lower flux bound"
                 help="Lower flux bound value to be used in outputted SBML models (fbc SBML package) for new reactions created." />
             <param name="chemical_space" type="select" label="Chemical space">
-                <option value="mnx3.1" selected="True">mnx3.1</option>
+                <option value="rr2026" selected="True">rr2026-v3.1.0</option>
+                <option value="rr2026">rr2026-v3.0</option>
+                <option value="mnx3.1">mnx3.1</option>
+                <option value="mnx4.4">mnx4.4</option>
             </param>
             <param name="cofile" type="data" format="txt,tsv,tabular" optional="True"
                 label="Cofactor file" />
@@ -88,15 +91,39 @@
     </outputs>
     <tests>
         <test>
-            <!-- test 1: check if outputs are represented in an expected number  -->
+            <!-- test 1: check if outputs are represented in an expected number chemical_space=mnx4.4  -->
             <param name="rp2paths_pathways" value="4-rp2paths_pathways.csv" />
             <param name="rp2paths_compounds" value="3-rp2paths_compounds.tsv" />
             <param name="rp2_pathways" value="1-rp2_metnet.csv" />
+            <param name="chemical_space" value="mnx4.4"/>
             <conditional name="sink">
                 <param name="cond" value="provided" />
                 <param name="sinkfile" value="2-sink.csv" />
             </conditional>
             <output_collection name="pathways" type="list" count="38" />
+        </test>
+        <test>
+            <!-- test 2: check for chemical_space=rr2026-v3.0  -->
+            <param name="rp2paths_pathways" value="44-rp2paths_pathways.csv" />
+            <param name="rp2paths_compounds" value="33-rp2paths_compounds.tsv" />
+            <param name="rp2_pathways" value="11-rp2_metnet.csv" />
+            <param name="chemical_space" value="rr2026-v3.0"/>
+            <conditional name="sink">
+                <param name="cond" value="provided" />
+                <param name="sinkfile" value="2-sink.csv" />
+            </conditional>
+            <output_collection name="pathways" type="list" count="383" />
+        </test>
+        <test>
+            <!-- test 3: check for chemical_space=rr2026-v3.1.0  -->
+            <param name="rp2paths_pathways" value="44-rp2paths_pathways.csv" />
+            <param name="rp2paths_compounds" value="33-rp2paths_compounds.tsv" />
+            <param name="rp2_pathways" value="11-rp2_metnet.csv" />
+            <conditional name="sink">
+                <param name="cond" value="provided" />
+                <param name="sinkfile" value="2-sink.csv" />
+            </conditional>
+            <output_collection name="pathways" type="list" count="383" />
         </test>
     </tests>
     <help><![CDATA[
