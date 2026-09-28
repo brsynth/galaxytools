@@ -3,11 +3,12 @@
     <description>Completes mono-component reactions output by RetroPath2.0 with the appropriate
         cofactors</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">2</token>
+        <token name="@VERSION_SUFFIX@">3</token>
         <token name="@TOOL_VERSION@">6.8.4</token>
     </macros>
     <requirements>
         <requirement type="package" version="6.8.4">rpcompletion</requirement>
+        <requirement type="package" version="3.7.1">rr_cache</requirement>
     </requirements>
     <stdio>
         <exit_code range="1" level="fatal" description="Could not Xref compartment_id" />
@@ -74,8 +75,8 @@
                 max="10000" label="Lower flux bound"
                 help="Lower flux bound value to be used in outputted SBML models (fbc SBML package) for new reactions created." />
             <param name="chemical_space" type="select" label="Chemical space">
-                <option value="rr2026" selected="True">rr2026-v3.1.0</option>
-                <option value="rr2026">rr2026-v3.0</option>
+                <option value="rr2026-v3.1.0" selected="True">rr2026 V3.1.0</option>
+                <option value="rr2026-v3.0">rr2026 V3.0</option>
                 <option value="mnx3.1">mnx3.1</option>
                 <option value="mnx4.4">mnx4.4</option>
             </param>
@@ -123,7 +124,7 @@
                 <param name="cond" value="provided" />
                 <param name="sinkfile" value="2-sink.csv" />
             </conditional>
-            <output_collection name="pathways" type="list" count="383" />
+            <output_collection name="pathways" type="list" count="403" />
         </test>
     </tests>
     <help><![CDATA[
