@@ -1,7 +1,7 @@
 <tool id="rpextractsink" name="Sink from SBML" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>Generate the RetroPath2.0 sink file from an SBML input</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@VERSION_SUFFIX@">2</token>
         <token name="@TOOL_VERSION@">6.8.2</token>
     </macros>
     <requirements>
@@ -40,6 +40,9 @@
                 help="If True, do not retrieve InChI from Internet" />
             <param name="datatype" type="select" label="Cache data">
                 <option value="mnx4.4" selected="True">mnx4.4</option>
+                <option value="rr2026-v3.1.0" selected="True">rr2026 V3.1.0</option>
+                <option value="rr2026-v3.0">rr2026 V3.0</option>
+                <option value="mnx3.1">mnx3.1</option>
             </param>
         </section>
     </inputs>
