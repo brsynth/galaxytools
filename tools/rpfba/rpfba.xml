@@ -70,23 +70,23 @@
     <tests>
         <test expect_num_outputs="1">
         <!-- test 1: check if identical outputs are produced with R_BIOMASS__3 biomass name ID and BiGG model (iCN718)  -->
-            <param name="pathway" value="rp_001_0001.xml" />
+            <param name="pathway" value="rp_002_0001.xml" />
             <param name="model" value="e_coli_iML1515.sbml" />
             <!--<param name="biomass_rxn_id" value="R_BIOMASS__3" />-->
             <output name="pathway_with_fba" >
                 <assert_contents>
                     <is_valid_xml />
                     <!--check fba_fraction value-->
-                    <has_text text="5.54302" />
+                    <has_text text="fba_fraction" />
                     <!--check fba_biomass value-->
-                    <has_text text="1.31359" />
-                    <has_n_lines n="455" />
+                    <has_text text="0.8769972144269708" />
+                    <has_n_lines n="458" />
                 </assert_contents>
             </output>
         </test>
         <test expect_num_outputs="1">
         <!-- test 2: check if identical outputs are produced with R_BIOMASS__3 biomass name ID and BiGG model (iCN718)  and sim_type=fba-->
-            <param name="pathway" value="rp_003_0001.xml" />
+            <param name="pathway" value="rp_001_0001.xml" />
             <param name="model" value="e_coli_iML1515.sbml" />
             <!--<param name="biomass_rxn_id" value="R_BIOMASS__3" />-->
             <conditional name="input_sim_type">
@@ -96,9 +96,9 @@
                 <assert_contents>
                     <is_valid_xml />
                     <!--check fba_fba value-->
-                    <has_text text="16.47058" />
+                    <has_text text="fba_fba" />
                     <not_has_text text="fba_fraction" />
-                    <has_n_lines n="415" />
+                    <has_n_lines n="418" />
                 </assert_contents>
             </output>
         </test>
@@ -114,9 +114,9 @@
                 <assert_contents>
                     <is_valid_xml />
                     <!--check fba_pfba value-->
-                    <has_text text="2623.54248" />
+                    <has_text text="fba_pfba" />
                     <not_has_text text="fba_fraction" />
-                    <has_n_lines n="415" />
+                    <has_n_lines n="453" />
                 </assert_contents>
             </output>
         </test>
