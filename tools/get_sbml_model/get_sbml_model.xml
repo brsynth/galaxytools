@@ -1,19 +1,19 @@
-<tool id="get_sbml_model" name="Pick SBML Model" version="0.4.1" profile="21.09" license="MIT">
+<tool id="get_sbml_model" name="Pick SBML Model" version="0.4.2" profile="21.09" license="MIT">
     <description>Get an SBML model (BiGG)</description>
     <requirements>
-        <requirement type="package" version="7.81.0">curl</requirement>
-        <requirement type="package" version="1.11">gzip</requirement>
-        <requirement type="package" version="5.19.2">python-libsbml</requirement>
-        <requirement type="package" version="2.31">requests</requirement>
+        <requirement type="package" version="8.22.0">curl</requirement>
+        <requirement type="package" version="1.14">gzip</requirement>
+        <requirement type="package" version="5.21.2">python-libsbml</requirement>
+        <requirement type="package" version="2.34.2">requests</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        #import re
         #if str($cond_src.from_src) == 'from_bigg'
-            curl -o - 'http://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
+            set -o pipefail &&
+            curl -fLsS --retry 3 'https://bigg.ucsd.edu/static/models/${cond_src.hostid}.xml.gz' | gunzip > '$model' &&
         #else
             #set model=$cond_src.input_file
         #end if
-        python '$__tool_directory__/'get_infos.py
+        python '$__tool_directory__/get_infos.py'
             '$model'
         #if str($cond_src.from_src) == 'from_bigg'
             --taxonid-outfile '$taxid_bigg'
