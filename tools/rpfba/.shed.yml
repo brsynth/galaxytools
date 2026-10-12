@@ -7,4 +7,4 @@ long_description: 1) it merges a user defined GEM SBML model to a given heterolo
 name: rpfba
 owner: tduigou
 homepage_url: https://github.com/brsynth/rpFBA
-remote_repository_url: https://github.com/brsynth/galaxytools/tree/rpfba/tools/rpfba
+remote_repository_url: https://github.com/brsynth/galaxytools/tree/main/tools/rpfba
