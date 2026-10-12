@@ -1,0 +1,10 @@
+categories:
+- Synthetic Biology
+description: Perform FBA on a single or collection of SBML files containing heterologous pathways, as tar.xz archives. 
+homepage_url: ''
+long_description: 1) it merges a user defined GEM SBML model to a given heterologous pathway. 
+                  2) it performs FBA using the cobrapy package using a user defined method that includes FBA, parsimonious FBA or fraction of optimum of another reaction
+name: rpfba
+owner: tduigou
+homepage_url: https://github.com/brsynth/rpFBA
+remote_repository_url: https://github.com/brsynth/rpFBA
