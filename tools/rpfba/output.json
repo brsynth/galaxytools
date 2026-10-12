@@ -1,0 +1,408 @@
+{
+    "exit_code": null,
+    "summary": {
+        "num_errors": 0,
+        "num_failures": 0,
+        "num_skips": 0,
+        "num_tests": 3
+    },
+    "tests": [
+        {
+            "data": {
+                "end_datetime": null,
+                "execution_problem": null,
+                "inputs": {
+                    "model": {
+                        "id": "4dced96346260a85",
+                        "src": "hda"
+                    },
+                    "pathway": {
+                        "id": "bf2537967739fc5e",
+                        "src": "hda"
+                    }
+                },
+                "invocation_details": null,
+                "job": {
+                    "command_line": "python -m rpfba '/tmp/tmpf9n0sklm/files/c/d/f/dataset_cdf4f023-49e6-45e6-9416-08391c5c5131.dat' '/tmp/tmpf9n0sklm/files/c/a/4/dataset_ca4db08f-670b-4b48-bb5d-9ba544491998.dat' 'c' '/tmp/tmpf9n0sklm/job_working_directory/000/3/outputs/dataset_2105a29b-c3ae-4d41-9dc2-2af0e007b3dc.dat' --objective_rxn_id 'rxn_target' --sim 'fraction' --log \"error\" --fraction_of '0.75' --biomass_rxn_id 'biomass'",
+                    "command_version": "",
+                    "copied_from_job_id": null,
+                    "create_time": "2026-10-12T08:30:43.309185",
+                    "dependencies": [],
+                    "exit_code": 0,
+                    "external_id": "46276",
+                    "galaxy_version": "26.1",
+                    "handler": null,
+                    "history_id": "bf2537967739fc5e",
+                    "id": "725f2e0c52ae54cb",
+                    "inputs": {
+                        "model": {
+                            "id": "4dced96346260a85",
+                            "src": "hda",
+                            "uuid": "ca4db08f-670b-4b48-bb5d-9ba544491998"
+                        },
+                        "pathway": {
+                            "id": "bf2537967739fc5e",
+                            "src": "hda",
+                            "uuid": "cdf4f023-49e6-45e6-9416-08391c5c5131"
+                        }
+                    },
+                    "job_messages": [],
+                    "job_metrics": [
+                        {
+                            "name": "galaxy_slots",
+                            "plugin": "core",
+                            "raw_value": "1.0000000",
+                            "title": "Cores Allocated",
+                            "value": "1"
+                        },
+                        {
+                            "name": "start_epoch",
+                            "plugin": "core",
+                            "raw_value": "1791793844.0000000",
+                            "title": "Job Start Time",
+                            "value": "2026-10-12 10:30:44"
+                        },
+                        {
+                            "name": "end_epoch",
+                            "plugin": "core",
+                            "raw_value": "1791793903.0000000",
+                            "title": "Job End Time",
+                            "value": "2026-10-12 10:31:43"
+                        },
+                        {
+                            "name": "runtime_seconds",
+                            "plugin": "core",
+                            "raw_value": "59.0000000",
+                            "title": "Job Runtime (Wall Clock)",
+                            "value": "59 seconds"
+                        }
+                    ],
+                    "job_runner_name": null,
+                    "job_stderr": "",
+                    "job_stdout": "",
+                    "model_class": "Job",
+                    "output_collections": {},
+                    "outputs": {
+                        "pathway_with_fba": {
+                            "id": "725f2e0c52ae54cb",
+                            "src": "hda",
+                            "uuid": "2105a29b-c3ae-4d41-9dc2-2af0e007b3dc"
+                        }
+                    },
+                    "params": {
+                        "__input_ext": "\"input\"",
+                        "adv": "{\"merge\": false, \"with_orphan_species\": false}",
+                        "biomass_rxn_id": "\"biomass\"",
+                        "chromInfo": "\"/tmp/tmpf9n0sklm/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\"",
+                        "compartment_id": "\"c\"",
+                        "dbkey": "\"?\"",
+                        "input_sim_type": "{\"__current_case__\": 0, \"fraction_of\": \"0.75\", \"sim_type\": \"fraction\"}",
+                        "objective_rxn_id": "\"rxn_target\""
+                    },
+                    "state": "ok",
+                    "stderr": "Compartment 'c' has been replaced by MNXC3\nCompound MNXM8975 has no smiles\nCompound MNXM24 has no smiles\n",
+                    "stdout": "",
+                    "tool_id": "rpfba",
+                    "tool_stderr": "Compartment 'c' has been replaced by MNXC3\nCompound MNXM8975 has no smiles\nCompound MNXM24 has no smiles\n",
+                    "tool_stdout": "",
+                    "update_time": "2026-10-12T08:31:43.204241",
+                    "user_email": "planemo@galaxyproject.org",
+                    "user_id": "bf2537967739fc5e"
+                },
+                "output_problems": null,
+                "problem_log": null,
+                "start_datetime": null,
+                "status": "success",
+                "test_index": 0,
+                "time_seconds": 77.26550936698914,
+                "tool_id": "rpfba",
+                "tool_version": "6.8.2+galaxy1"
+            },
+            "doc": null,
+            "has_data": true,
+            "id": "rpfba-0",
+            "test_type": null
+        },
+        {
+            "data": {
+                "end_datetime": null,
+                "execution_problem": null,
+                "inputs": {
+                    "input_sim_type|sim_type": "fba",
+                    "model": {
+                        "id": "22865f23e92c773e",
+                        "src": "hda"
+                    },
+                    "pathway": {
+                        "id": "195688e34ea8fa22",
+                        "src": "hda"
+                    }
+                },
+                "invocation_details": null,
+                "job": {
+                    "command_line": "python -m rpfba '/tmp/tmpf9n0sklm/files/8/0/3/dataset_80363b0c-2518-462b-81c8-a306b03c15b2.dat' '/tmp/tmpf9n0sklm/files/5/e/d/dataset_5ed81d52-4ed0-43b7-91cc-0b71a3a69741.dat' 'c' '/tmp/tmpf9n0sklm/job_working_directory/000/6/outputs/dataset_2fecd1af-3b8a-4658-8b65-f1e8ef48721b.dat' --objective_rxn_id 'rxn_target' --sim 'fba' --log \"error\" --fraction_of 0.0 --biomass_rxn_id 'biomass'",
+                    "command_version": "",
+                    "copied_from_job_id": null,
+                    "create_time": "2026-10-12T08:31:47.726019",
+                    "dependencies": [
+                        {
+                            "cacheable": false,
+                            "dependency_resolver": {
+                                "auto_init": true,
+                                "auto_install": true,
+                                "can_uninstall_dependencies": true,
+                                "ensure_channels": "conda-forge,bioconda",
+                                "model_class": "CondaDependencyResolver",
+                                "prefix": "/home/rkhaled/miniconda3",
+                                "read_only": false,
+                                "resolver_type": "conda",
+                                "resolves_simple_dependencies": true,
+                                "use_local": false,
+                                "versionless": false
+                            },
+                            "dependency_type": "conda",
+                            "environment_path": "/home/rkhaled/miniconda3/envs/__rpfba@6.8.2",
+                            "exact": true,
+                            "model_class": "MergedCondaDependency",
+                            "name": "rpfba",
+                            "version": "6.8.2"
+                        }
+                    ],
+                    "exit_code": 0,
+                    "external_id": "46876",
+                    "galaxy_version": "26.1",
+                    "handler": null,
+                    "history_id": "4dced96346260a85",
+                    "id": "b81bce69efb4b28b",
+                    "inputs": {
+                        "model": {
+                            "id": "22865f23e92c773e",
+                            "src": "hda",
+                            "uuid": "5ed81d52-4ed0-43b7-91cc-0b71a3a69741"
+                        },
+                        "pathway": {
+                            "id": "195688e34ea8fa22",
+                            "src": "hda",
+                            "uuid": "80363b0c-2518-462b-81c8-a306b03c15b2"
+                        }
+                    },
+                    "job_messages": [],
+                    "job_metrics": [
+                        {
+                            "name": "galaxy_slots",
+                            "plugin": "core",
+                            "raw_value": "1.0000000",
+                            "title": "Cores Allocated",
+                            "value": "1"
+                        },
+                        {
+                            "name": "start_epoch",
+                            "plugin": "core",
+                            "raw_value": "1791793907.0000000",
+                            "title": "Job Start Time",
+                            "value": "2026-10-12 10:31:47"
+                        },
+                        {
+                            "name": "end_epoch",
+                            "plugin": "core",
+                            "raw_value": "1791793962.0000000",
+                            "title": "Job End Time",
+                            "value": "2026-10-12 10:32:42"
+                        },
+                        {
+                            "name": "runtime_seconds",
+                            "plugin": "core",
+                            "raw_value": "55.0000000",
+                            "title": "Job Runtime (Wall Clock)",
+                            "value": "55 seconds"
+                        }
+                    ],
+                    "job_runner_name": null,
+                    "job_stderr": "",
+                    "job_stdout": "",
+                    "model_class": "Job",
+                    "output_collections": {},
+                    "outputs": {
+                        "pathway_with_fba": {
+                            "id": "b81bce69efb4b28b",
+                            "src": "hda",
+                            "uuid": "2fecd1af-3b8a-4658-8b65-f1e8ef48721b"
+                        }
+                    },
+                    "params": {
+                        "__input_ext": "\"input\"",
+                        "adv": "{\"merge\": false, \"with_orphan_species\": false}",
+                        "biomass_rxn_id": "\"biomass\"",
+                        "chromInfo": "\"/tmp/tmpf9n0sklm/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\"",
+                        "compartment_id": "\"c\"",
+                        "dbkey": "\"?\"",
+                        "input_sim_type": "{\"__current_case__\": 2, \"sim_type\": \"fba\"}",
+                        "objective_rxn_id": "\"rxn_target\""
+                    },
+                    "state": "ok",
+                    "stderr": "Compartment 'c' has been replaced by MNXC3\nCompound MNXM8975 has no smiles\nCompound MNXM24 has no smiles\n",
+                    "stdout": "",
+                    "tool_id": "rpfba",
+                    "tool_stderr": "Compartment 'c' has been replaced by MNXC3\nCompound MNXM8975 has no smiles\nCompound MNXM24 has no smiles\n",
+                    "tool_stdout": "",
+                    "update_time": "2026-10-12T08:32:42.834848",
+                    "user_email": "planemo@galaxyproject.org",
+                    "user_id": "bf2537967739fc5e"
+                },
+                "output_problems": null,
+                "problem_log": null,
+                "start_datetime": null,
+                "status": "success",
+                "test_index": 1,
+                "time_seconds": 59.333908796310425,
+                "tool_id": "rpfba",
+                "tool_version": "6.8.2+galaxy1"
+            },
+            "doc": null,
+            "has_data": true,
+            "id": "rpfba-1",
+            "test_type": null
+        },
+        {
+            "data": {
+                "end_datetime": null,
+                "execution_problem": null,
+                "inputs": {
+                    "input_sim_type|sim_type": "pfba",
+                    "model": {
+                        "id": "00e33bcf3940f562",
+                        "src": "hda"
+                    },
+                    "pathway": {
+                        "id": "3adaaa17c70ca67c",
+                        "src": "hda"
+                    }
+                },
+                "invocation_details": null,
+                "job": {
+                    "command_line": "python -m rpfba '/tmp/tmpf9n0sklm/files/c/0/b/dataset_c0b8925c-a435-4382-92f0-776d1f6ddabe.dat' '/tmp/tmpf9n0sklm/files/9/5/1/dataset_951b3f66-546f-468d-a798-f119a35544fa.dat' 'c' '/tmp/tmpf9n0sklm/job_working_directory/000/9/outputs/dataset_d7c8ca05-3b4d-49bb-b78f-627cdf1e6522.dat' --objective_rxn_id 'rxn_target' --sim 'pfba' --log \"error\" --fraction_of '0.95' --biomass_rxn_id 'biomass'",
+                    "command_version": "",
+                    "copied_from_job_id": null,
+                    "create_time": "2026-10-12T08:32:47.340393",
+                    "dependencies": [
+                        {
+                            "cacheable": false,
+                            "dependency_resolver": {
+                                "auto_init": true,
+                                "auto_install": true,
+                                "can_uninstall_dependencies": true,
+                                "ensure_channels": "conda-forge,bioconda",
+                                "model_class": "CondaDependencyResolver",
+                                "prefix": "/home/rkhaled/miniconda3",
+                                "read_only": false,
+                                "resolver_type": "conda",
+                                "resolves_simple_dependencies": true,
+                                "use_local": false,
+                                "versionless": false
+                            },
+                            "dependency_type": "conda",
+                            "environment_path": "/home/rkhaled/miniconda3/envs/__rpfba@6.8.2",
+                            "exact": true,
+                            "model_class": "MergedCondaDependency",
+                            "name": "rpfba",
+                            "version": "6.8.2"
+                        }
+                    ],
+                    "exit_code": 0,
+                    "external_id": "47320",
+                    "galaxy_version": "26.1",
+                    "handler": null,
+                    "history_id": "725f2e0c52ae54cb",
+                    "id": "af215353437dc6ae",
+                    "inputs": {
+                        "model": {
+                            "id": "00e33bcf3940f562",
+                            "src": "hda",
+                            "uuid": "951b3f66-546f-468d-a798-f119a35544fa"
+                        },
+                        "pathway": {
+                            "id": "3adaaa17c70ca67c",
+                            "src": "hda",
+                            "uuid": "c0b8925c-a435-4382-92f0-776d1f6ddabe"
+                        }
+                    },
+                    "job_messages": [],
+                    "job_metrics": [
+                        {
+                            "name": "galaxy_slots",
+                            "plugin": "core",
+                            "raw_value": "1.0000000",
+                            "title": "Cores Allocated",
+                            "value": "1"
+                        },
+                        {
+                            "name": "start_epoch",
+                            "plugin": "core",
+                            "raw_value": "1791793967.0000000",
+                            "title": "Job Start Time",
+                            "value": "2026-10-12 10:32:47"
+                        },
+                        {
+                            "name": "end_epoch",
+                            "plugin": "core",
+                            "raw_value": "1791794025.0000000",
+                            "title": "Job End Time",
+                            "value": "2026-10-12 10:33:45"
+                        },
+                        {
+                            "name": "runtime_seconds",
+                            "plugin": "core",
+                            "raw_value": "58.0000000",
+                            "title": "Job Runtime (Wall Clock)",
+                            "value": "58 seconds"
+                        }
+                    ],
+                    "job_runner_name": null,
+                    "job_stderr": "",
+                    "job_stdout": "",
+                    "model_class": "Job",
+                    "output_collections": {},
+                    "outputs": {
+                        "pathway_with_fba": {
+                            "id": "af215353437dc6ae",
+                            "src": "hda",
+                            "uuid": "d7c8ca05-3b4d-49bb-b78f-627cdf1e6522"
+                        }
+                    },
+                    "params": {
+                        "__input_ext": "\"input\"",
+                        "adv": "{\"merge\": false, \"with_orphan_species\": false}",
+                        "biomass_rxn_id": "\"biomass\"",
+                        "chromInfo": "\"/tmp/tmpf9n0sklm/galaxy-dev/tool-data/shared/ucsc/chrom/?.len\"",
+                        "compartment_id": "\"c\"",
+                        "dbkey": "\"?\"",
+                        "input_sim_type": "{\"__current_case__\": 1, \"fraction_of\": \"0.95\", \"sim_type\": \"pfba\"}",
+                        "objective_rxn_id": "\"rxn_target\""
+                    },
+                    "state": "ok",
+                    "stderr": "Compartment 'c' has been replaced by MNXC3\nCompound MNXM8975 has no smiles\nCompound MNXM24 has no smiles\n",
+                    "stdout": "",
+                    "tool_id": "rpfba",
+                    "tool_stderr": "Compartment 'c' has been replaced by MNXC3\nCompound MNXM8975 has no smiles\nCompound MNXM24 has no smiles\n",
+                    "tool_stdout": "",
+                    "update_time": "2026-10-12T08:33:45.510121",
+                    "user_email": "planemo@galaxyproject.org",
+                    "user_id": "bf2537967739fc5e"
+                },
+                "output_problems": null,
+                "problem_log": null,
+                "start_datetime": null,
+                "status": "success",
+                "test_index": 2,
+                "time_seconds": 62.582287549972534,
+                "tool_id": "rpfba",
+                "tool_version": "6.8.2+galaxy1"
+            },
+            "doc": null,
+            "has_data": true,
+            "id": "rpfba-2",
+            "test_type": null
+        }
+    ],
+    "version": "0.1"
+}
