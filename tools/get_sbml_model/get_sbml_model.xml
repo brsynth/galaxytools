@@ -1,4 +1,4 @@
-<tool id="get_sbml_model" name="Pick SBML Model" version="0.4.1" profile="21.09" license="MIT">
+<tool id="get_sbml_model" name="Pick SBML Model" version="0.4.2" profile="21.09" license="MIT">
     <description>Get an SBML model (BiGG)</description>
     <requirements>
         <requirement type="package" version="8.22.0">curl</requirement>
