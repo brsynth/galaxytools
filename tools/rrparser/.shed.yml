@@ -6,4 +6,4 @@ long_description: 'RRParser (Reaction Rules Parser) retrieves the reaction rules
 name: rrparser
 owner: tduigou
 homepage_url: https://github.com/brsynth/rrparser
-remote_repository_url: https://github.com/brsynth/rrparser
+remote_repository_url: https://github.com/brsynth/galaxytools/tree/main/tools/rrparser

@@ -1,183 +1,1176 @@
 <tool id="rrparser" name="RRules Parser" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="24.2" license="MIT">
-    <description>Retrieve the reaction rules from RetroRules</description>
+    <description>Download and filter RetroRules releases or local reaction rules</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">4</token>
-        <token name="@TOOL_VERSION@">2.7.0</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">2.7.4</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rrparser</requirement>
     </requirements>
-    <stdio>
-        <regex match="WARNING:" level="warning" />
-        <regex match="ERROR:" level="fatal" />
-    </stdio>
     <command detect_errors="exit_code"><![CDATA[
-        python -m rrparser
-        #if str($rules.type) != "rules-file":
-            --rules_file retrorules
-            --rule-type '$rules.type'
-        #else:
-            --rules_file '$rules.file'
-            --input-format '$rules.input_format'
-        #end if
-        --diameters '$adv.diameters'
-        --output-format csv
-        --rules-dir "\${TMPDIR:-.}"
-        #if str($adv.compress) == "true":
-            --outfile '$out_rules'.csv.gz
-            && mv '$out_rules'.csv.gz '$out_rules'
-        #else:
-            --outfile '$out_rules'
-        #end if
-        #if str($adv.input_conditional_ec.input_type) == "in"
-            --ec '$adv.input_conditional_ec.input_ec_in'
-        #end if
-        #if str($adv.input_conditional_ec.input_type) == "out"
-            --ecx '$adv.input_conditional_ec.input_ec_out'
-        #end if
-        #if $adv.input_scores_file
-            --scores '$adv.input_scores_file'
-        #end if
-    ]]></command>
+python -m rrparser
+#if str($rules.source) == 'retrorules':
+    --rules_file retrorules
+    --cache-dir './rrparser-cache'
+    --release '$rules.release.kind'
+    #if str($rules.release.kind) == 'rr02':
+        --dataset metanetx
+        --rule-type '$rules.release.rule_type'
+    #else:
+        --dataset '$rules.release.dataset'
+        --rule-type all
+    #end if
+#else:
+    --rules_file '$rules.file'
+    --input-format '$rules.input_format'
+    #if str($rules.input_schema.kind) == 'legacy':
+        --rule-type '$rules.input_schema.rule_type'
+    #else:
+        --rule-type all
+    #end if
+#end if
+#if str($adv.size.mode) == 'list':
+    --radii '$adv.size.radii'
+#else:
+    --radii '$adv.size.expression'
+#end if
+#if str($adv.ec.mode) == 'in':
+    --ec '$adv.ec.file'
+#elif str($adv.ec.mode) == 'out':
+    --ecx '$adv.ec.file'
+#end if
+#if $adv.scores:
+    --scores '$adv.scores'
+#end if
+--output-format csv
+#if $adv.compress:
+    --outfile './rules.csv.gz'
+    && mv './rules.csv.gz' '$out_rules'
+#else:
+    --outfile '$out_rules'
+#end if
+]]></command>
     <inputs>
         <conditional name="rules">
-            <param name="type" type="select" label="Rule Type" help="Return the rules that are in reverse, forward, both direction or from an input user file">
-                <option value="retro" selected="True">RetroRules (retro)</option>
-                <option value="forward">RetroRules (forward)</option>
-                <option value="all">RetroRules (all)</option>
-                <option value="rules-file">Other reaction rules...</option>
+            <param name="source" type="select" label="Rules source">
+                <option value="retrorules" selected="true">Download from RetroRules</option>
+                <option value="file">Rules file from history</option>
             </param>
-            <when value="retro"/>
-            <when value="forward"/>
-            <when value="all"/>
-            <when value="rules-file">
-                <param name="file" type="data" format="csv" optional="False" label="Rules File" help="Filename of reaction rules"/>
-                <param name="input_format" type="select" optional="False" label="File format" help="Input file format (default: csv)">
-                    <option value="csv" selected="True">csv</option>
-                    <option value="tsv">tsv</option>
+            <when value="retrorules">
+                <conditional name="release">
+                    <param name="kind" type="select" label="RetroRules release">
+                        <option value="latest" selected="true">RetroRules 3.1.0</option>
+                        <option value="3.0">RetroRules 3.0</option>
+                        <option value="rr02">RetroRules rr02 — historical rules</option>
+                    </param>
+                    <when value="latest">
+                        <param name="dataset" type="select" label="Datasets" multiple="true" optional="false" help="Select one or more datasets. Select all three to combine MetaNetX, Rhea and USPTO within one release.">
+                            <option value="metanetx" selected="true">MetaNetX</option>
+                            <option value="rhea">Rhea</option>
+                            <option value="uspto">USPTO</option>
+                        </param>
+                    </when>
+                    <when value="3.0">
+                        <param name="dataset" type="select" label="Datasets" multiple="true" optional="false" help="Select one or more datasets. Select all three to combine MetaNetX, Rhea and USPTO within one release.">
+                            <option value="metanetx" selected="true">MetaNetX</option>
+                            <option value="rhea">Rhea</option>
+                            <option value="uspto">USPTO</option>
+                        </param>
+                    </when>
+                    <when value="rr02">
+                        <param name="rule_type" type="select" label="Rule usage">
+                            <option value="all" selected="true">All</option>
+                            <option value="retro">Retro</option>
+                            <option value="forward">Forward</option>
+                        </param>
+                    </when>
+                </conditional>
+            </when>
+            <when value="file">
+                <param name="file" type="data" format="csv,tabular" label="Rules file"/>
+                <param name="input_format" type="select" label="Input file format">
+                    <option value="csv" selected="true">CSV</option>
+                    <option value="tsv">TSV</option>
                 </param>
+                <conditional name="input_schema">
+                    <param name="kind" type="select" label="Rules schema">
+                        <option value="legacy" selected="true">Legacy rules (Diameter and Rule usage columns)</option>
+                        <option value="templates">Templates (TEMPLATE_ID and RADII columns)</option>
+                    </param>
+                    <when value="legacy">
+                        <param name="rule_type" type="select" label="Rule usage">
+                            <option value="all" selected="true">All</option>
+                            <option value="retro">Retro</option>
+                            <option value="forward">Forward</option>
+                        </param>
+                    </when>
+                    <when value="templates"/>
+                </conditional>
             </when>
         </conditional>
-        <section name="adv" title="Advanced Options" expanded="false" >
-            <param name="compress" type="boolean" checked="false" label="Compress output" />
-            <param name="input_scores_file" type="data" format="csv" optional="True" label="Score File" help="Filename containing rules names and scores" />
-            <conditional name="input_conditional_ec">
-                <param name="input_type" type="select" label="Filter based on EC number">
-                    <option value="no" selected="True">No</option>
-                    <option value="in">EC numbers to keep</option>
-                    <option value="out">EC numbers to remove</option>
+        <section name="adv" title="Advanced Options" expanded="false">
+            <conditional name="size">
+                <param name="mode" type="select" label="Select rule specificity by">
+                    <option value="list" selected="true">Radius values</option>
+                    <option value="expression">Radius expression</option>
                 </param>
-                <when value="no" />
-                <when value="in">
-                    <param name="input_ec_in" type="data" format="txt" label="File containing EC numbers" help="EC numbers on one line separted by a comma" />
+                <when value="list">
+                    <param name="radii" type="select" display="checkboxes" multiple="true" label="Radii" help="Select radii from 0 to 10. Diameter equals twice the radius; rr02 supplies radii 1–8." optional="true">
+                        <option value="0" selected="true">0</option>
+                        <option value="1" selected="true">1</option>
+                        <option value="2" selected="true">2</option>
+                        <option value="3" selected="true">3</option>
+                        <option value="4" selected="true">4</option>
+                        <option value="5" selected="true">5</option>
+                        <option value="6" selected="true">6</option>
+                        <option value="7" selected="true">7</option>
+                        <option value="8" selected="true">8</option>
+                        <option value="9" selected="true">9</option>
+                        <option value="10" selected="true">10</option>
+                        <validator type="expression" message="Select at least one radius.">value is not None and len(value) &gt; 0</validator>
+                    </param>
                 </when>
-                <when value="out">
-                    <param name="input_ec_out" type="data" format="txt" label="File containing EC numbers" help="EC numbers on one line separted by a comma" />
+                <when value="expression">
+                    <param name="expression" type="text" value="0-10" label="Radius expression" help="Examples: 0-8, &gt;8, &gt;=8, &lt;=8, or 0-4,9,10. Radii are integers 0–10; &gt;8 selects 9 and 10. Expressions are passed directly to RRParser.">
+                        <sanitizer>
+                            <valid initial="default">
+                                <add value="&lt;"/>
+                                <add value="&gt;"/>
+                            </valid>
+                        </sanitizer>
+                        <validator type="regex" message="Use radii 0–10, ranges, or comparisons such as &gt;8. Ascending ranges are required.">^\s*(?:[&lt;&gt;]=?\s*(?:10|[0-9])|(?:10|[0-9])(?:\s*-\s*(?:10|[0-9]))?)(?:\s*,\s*(?:[&lt;&gt;]=?\s*(?:10|[0-9])|(?:10|[0-9])(?:\s*-\s*(?:10|[0-9]))?))*\s*$</validator>
+                    </param>
                 </when>
             </conditional>
-            <param argument="--diameters" type="select" display="checkboxes" multiple="True" label="Select the diameters of the reactions rules" help=" Diameter of the sphere including the atoms around the reacting center (default is including all values: 2,4,6,8,10,12,14,16). The higher is the diameter, the more specific are the rules">
-                <option selected="true" value="2">2</option>
-                <option selected="true" value="4">4</option>
-                <option selected="true" value="6">6</option>
-                <option selected="true" value="8">8</option>
-                <option selected="true" value="10">10</option>
-                <option selected="true" value="12">12</option>
-                <option selected="true" value="14">14</option>
-                <option selected="true" value="16">16</option>
-            </param>
+            <conditional name="ec">
+                <param name="mode" type="select" label="Filter by EC number">
+                    <option value="no" selected="true">No EC filter</option>
+                    <option value="in">Keep matching EC prefixes</option>
+                    <option value="out">Remove matching EC prefixes</option>
+                </param>
+                <when value="no"/>
+                <when value="in">
+                    <param name="file" type="data" format="txt" label="EC prefixes file" help="Comma-separated EC prefixes on one line, e.g. 1.1,2.7."/>
+                </when>
+                <when value="out">
+                    <param name="file" type="data" format="txt" label="EC prefixes file" help="Comma-separated EC prefixes on one line, e.g. 1.1,2.7."/>
+                </when>
+            </conditional>
+            <param name="scores" type="data" format="csv,tabular" optional="true" label="Replacement scores file" help="Required columns: Rule ID and Score. Use CSV for downloaded rules; for local rules, use the same delimiter as the input file."/>
+            <param name="compress" type="boolean" checked="false" label="Compress output with gzip"/>
         </section>
-        
     </inputs>
     <outputs>
-        <data name="out_rules" format="csv" label="${tool.name}(${rules.type}, d=$diameters)" >
+        <data name="out_rules" format="csv" label="${tool.name}: extracted rules">
             <change_format>
-                <when input="compress" format="tar" value="true"/>
+                <when input="adv.compress" value="true" format="gz"/>
             </change_format>
         </data>
     </outputs>
     <tests>
-        <test>
-        <!-- test 1: check if identical outputs are produced with default parameters-->
-            <output name="out_rules" md5="54806bd44f7a8414e78439e3bb99e6d8"/>
-        </test>
-        <test>
-        <!-- test 2: check if identical outputs are produced with diameters=2,4,6-->
-            <section name="adv">   
-                <param name="diameters" value="2,4,6"/>
-            </section>
-            <output name="out_rules" md5="12a55e1a3c7822a35ed799afa59b2aa2"/>
-        </test>
-        <test>
-        <!-- test 3: check if identical outputs are produced with csv input rules file-->
+        <test expect_num_outputs="1">
             <conditional name="rules">
-                <param name="type" value="rules-file"/>
-                <param name="file" value="rules_in.csv" />
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
             </conditional>
-            <output name="out_rules" file="rules_out.csv" ftype="csv" compare="diff"/>
+            <section name="adv"/>
+            <output name="out_rules" ftype="csv" file="rules_out.csv" compare="diff"/>
         </test>
-        <test>
-        <!-- test 4 -->
+        <test expect_num_outputs="1">
             <conditional name="rules">
-                <param name="type" value="rules-file"/>
-                <param name="file" value="rules_in.csv" />
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
             </conditional>
             <section name="adv">
-                <conditional name="input_conditional_ec">
-                    <param name="input_type" value="in"/>
-                    <param name="input_ec_in" value="ec.txt"/>
+                <conditional name="ec">
+                    <param name="mode" value="in"/>
+                    <param name="file" value="ec.txt"/>
                 </conditional>
             </section>
-            <output name="out_rules" file="test.4.output.csv" ftype="csv" compare="diff"/>
+            <output name="out_rules" ftype="csv" file="test.4.output.csv" compare="diff"/>
         </test>
-        <test>
-            <!-- python -m rrparser -rules_file rules_in.csv -input-format csv -ecx ec.txt -diameters 2,4,6,8,10,12,14,16 -output-format csv -outfile test.5.output.csv -->
+        <test expect_num_outputs="1">
             <conditional name="rules">
-                <param name="type" value="rules-file"/>
-                <param name="file" value="rules_in.csv" />
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
             </conditional>
             <section name="adv">
-                <conditional name="input_conditional_ec">
-                    <param name="input_type" value="out"/>
-                    <param name="input_ec_out" value="ec.txt"/>
+                <conditional name="ec">
+                    <param name="mode" value="out"/>
+                    <param name="file" value="ec.txt"/>
                 </conditional>
             </section>
-            <output name="out_rules" file="test.5.output.csv" ftype="csv" compare="diff"/>
+            <output name="out_rules" ftype="csv" file="test.5.output.csv" compare="diff"/>
         </test>
-        <test>
-            <!-- python -m rrparser -rules_file rules_in.csv -input-format csv -diameters 2,4,6,8,10,12,14,16 -output-format csv -outfile rules_scores.csv -scores scores.csv -->
+        <test expect_num_outputs="1">
             <conditional name="rules">
-                <param name="type" value="rules-file"/>
-                <param name="file" value="rules_in.csv" />
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
             </conditional>
-            <section name="adv" >
-                <param name="input_scores_file" value="scores.csv" />
+            <section name="adv">
+                <param name="scores" value="scores.csv"/>
             </section>
-            <output name="out_rules" file="rules_scores.csv" ftype="csv" compare="diff"/>
+            <output name="out_rules" ftype="csv" file="rules_scores.csv" compare="diff"/>
+        </test>
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&lt;=4"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="rules_out.csv" compare="diff"/>
+        </test>
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2,3,4"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="rules_out.csv" compare="diff"/>
+        </test>
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <param name="scores" value="scores.csv"/>
+                <param name="compress" value="true"/>
+            </section>
+            <output name="out_rules" ftype="gz" file="rules_scores.csv" decompress="true" compare="diff"/>
+        </test>
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="ec">
+                    <param name="mode" value="in"/>
+                    <param name="file" value="ec.txt"/>
+                </conditional>
+                <param name="compress" value="true"/>
+            </section>
+            <output name="out_rules" ftype="gz" file="test.4.output.csv" decompress="true" compare="diff"/>
+        </test>
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&lt;=4"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="templates_out.csv" compare="diff"/>
+        </test>
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="0,1,2,3,4"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="templates_out.csv" compare="diff"/>
+        </test>
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="forward"/>
+                </conditional>
+            </conditional>
+            <section name="adv"/>
+            <output name="out_rules" ftype="csv" file="rules_forward.csv" compare="diff"/>
+        </test>
+        <!-- Download 3.0: metanetx -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="3.0"/>
+                    <param name="dataset" value="metanetx"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="metanetx"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download 3.0: rhea -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="3.0"/>
+                    <param name="dataset" value="rhea"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="rhea"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download 3.0: uspto -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="3.0"/>
+                    <param name="dataset" value="uspto"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="uspto"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download 3.0: metanetx, rhea -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="3.0"/>
+                    <param name="dataset" value="metanetx,rhea"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="metanetx"/>
+                    <has_text text="rhea"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download 3.0: metanetx, uspto -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="3.0"/>
+                    <param name="dataset" value="metanetx,uspto"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="metanetx"/>
+                    <has_text text="uspto"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download 3.0: rhea, uspto -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="3.0"/>
+                    <param name="dataset" value="rhea,uspto"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="rhea"/>
+                    <has_text text="uspto"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download 3.0: metanetx, rhea, uspto -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="3.0"/>
+                    <param name="dataset" value="metanetx,rhea,uspto"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="metanetx"/>
+                    <has_text text="rhea"/>
+                    <has_text text="uspto"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download latest: metanetx -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="latest"/>
+                    <param name="dataset" value="metanetx"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="metanetx"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download latest: rhea -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="latest"/>
+                    <param name="dataset" value="rhea"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="rhea"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download latest: uspto -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="latest"/>
+                    <param name="dataset" value="uspto"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="uspto"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download latest: metanetx, rhea -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="latest"/>
+                    <param name="dataset" value="metanetx,rhea"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="metanetx"/>
+                    <has_text text="rhea"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download latest: metanetx, uspto -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="latest"/>
+                    <param name="dataset" value="metanetx,uspto"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="metanetx"/>
+                    <has_text text="uspto"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download latest: rhea, uspto -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="latest"/>
+                    <param name="dataset" value="rhea,uspto"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="rhea"/>
+                    <has_text text="uspto"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download latest: metanetx, rhea, uspto -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="latest"/>
+                    <param name="dataset" value="metanetx,rhea,uspto"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="RADII"/>
+                    <has_text text="DATASETS"/>
+                    <has_text text="metanetx"/>
+                    <has_text text="rhea"/>
+                    <has_text text="uspto"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download rr02: all -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="rr02"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="Diameter"/>
+                    <has_text text="Rule usage"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download rr02: retro -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="rr02"/>
+                    <param name="rule_type" value="retro"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="Diameter"/>
+                    <has_text text="Rule usage"/>
+                    <has_text_matching expression=",(retro|both),"/>
+                    <has_text text=",forward," negate="true"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Download rr02: forward -->
+        <test expect_num_outputs="1" maxseconds="3600">
+            <conditional name="rules">
+                <param name="source" value="retrorules"/>
+                <conditional name="release">
+                    <param name="kind" value="rr02"/>
+                    <param name="rule_type" value="forward"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="1,2"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv">
+                <assert_contents>
+                    <has_n_lines min="2"/>
+                    <has_text text="Rule ID"/>
+                    <has_text text="Rule"/>
+                    <has_text text="EC number"/>
+                    <has_text text="Score"/>
+                    <has_text text="Diameter"/>
+                    <has_text text="Rule usage"/>
+                    <has_text_matching expression=",(forward|both),"/>
+                    <has_text text=",retro," negate="true"/>
+                </assert_contents>
+            </output>
+        </test>
+        <!-- Radius >8 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&gt;8"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_gt8.csv" compare="diff"/>
+        </test>
+        <!-- Radius >=8 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&gt;=8"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_ge8.csv" compare="diff"/>
+        </test>
+        <!-- Radius <8 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&lt;8"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_lt8.csv" compare="diff"/>
+        </test>
+        <!-- Radius <=8 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&lt;=8"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_le8.csv" compare="diff"/>
+        </test>
+        <!-- Radius 8-10 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="8-10"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_range8_10.csv" compare="diff"/>
+        </test>
+        <!-- Radius 0,9-10 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="0,9-10"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_union.csv" compare="diff"/>
+        </test>
+        <!-- Radius 0-4,>8 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="0-4,&gt;8"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_union_comparison.csv" compare="diff"/>
+        </test>
+        <!-- Radius 9,10 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="9,10"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_list9_10.csv" compare="diff"/>
+        </test>
+        <!-- Radius 8 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="list"/>
+                    <param name="radii" value="8"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_list8.csv" compare="diff"/>
+        </test>
+        <!-- Radius >10 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&gt;10"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_empty_gt10.csv" compare="diff"/>
+        </test>
+        <!-- Radius <0 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&lt;0"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_empty_lt0.csv" compare="diff"/>
+        </test>
+        <!-- Compressed radius >8 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&gt;8"/>
+                </conditional>
+                <param name="compress" value="true"/>
+            </section>
+            <output name="out_rules" ftype="gz" file="radius_gt8.csv" compare="diff" decompress="true"/>
+        </test>
+        <!-- Legacy radius >8 maps to diameters 18/20 -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_legacy_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&gt;8"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_legacy_gt8.csv" compare="diff"/>
+        </test>
+        <!-- rr02-like local rules: radius >8 produces a header-only CSV -->
+        <test expect_num_outputs="1">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="rules_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="legacy"/>
+                    <param name="rule_type" value="all"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="&gt;8"/>
+                </conditional>
+            </section>
+            <output name="out_rules" ftype="csv" file="radius_rr02_gt8_empty.csv" compare="diff"/>
+        </test>
+        <test expect_failure="true" expect_exit_code="2">
+            <conditional name="rules">
+                <param name="source" value="file"/>
+                <param name="file" value="radius_templates_in.csv"/>
+                <conditional name="input_schema">
+                    <param name="kind" value="templates"/>
+                </conditional>
+            </conditional>
+            <section name="adv">
+                <conditional name="size">
+                    <param name="mode" value="expression"/>
+                    <param name="expression" value="10-8"/>
+                </conditional>
+            </section>
+            <assert_stderr>
+                <has_text text="invalid parse_radii value: '10-8'"/>
+            </assert_stderr>
         </test>
     </tests>
     <help><![CDATA[
-RRulesParser
-============
+RRules Parser
+=============
 
-Retrieve the reaction rules from `RetroRules <https://retrorules.org/>`_ extracted from public databases and expressed in the community-standard SMARTS (SMILES arbitrary target specification) format, augmented by a rule representation at different levels of specificity (the atomic environment around the reaction center).
+Download RetroRules datasets or filter a CSV/TSV rules file from your history.
+Choose the rules source directly. Every run produces a CSV dataset in your
+Galaxy history, ready to inspect, use in another tool, or download.
 
-The generated output is a file containing reaction rules which are generic descriptions of chemical reactions that can be used in retrosynthesis workflows (e.g. `Retrosynthesis KNIME Workflow <https://www.myexperiment.org/workflows/4987.html>`_) in order to enumerate all possible biosynthetic routes connecting a target molecule to its precursors.
+Rules source
+------------
 
-Input
------
+**Download from RetroRules** offers three releases:
 
-* **Rule Type**: (string) Return the rules that are in reverse, forward, both direction or from an input user file
-* **rules-file**: (string) Filename of reaction rules provided in csv or tsv format.
-* **input_format**: (string) input file format (csv: default, tsv)
-* **diameters**: (integer list) diameter of the sphere including the atoms around the reacting center (default is including all values: 2,4,6,8,10,12,14,16). The higher is the diameter, the more specific are the rules
-* **EC numbers to filter**: retain or remove some EC numbers. A file is expected containing EC numbers separated by a comma on the first line.
-* **Scores file**: file containing rules names and scores
+* **Latest available release** (default): selects the newest template release
+  compatible with all selected datasets. It is not permanently tied to 3.1.0.
+* **RetroRules 3.0**: selects the explicit release identifier ``3.0``.
+* **RetroRules rr02 — historical rules**: selects legacy RetroPath 2.0 rules.
 
-Ouput
------
+For Latest and 3.0, the **Datasets** list allows selecting one or more of
+**MetaNetX**, **Rhea**, and **USPTO**. Select all three to combine them all.
+Selected datasets are merged within one release; versions are never mixed.
+With Latest, the package selects the newest release containing every requested
+dataset. Templates automatically use rule usage **All**.
 
-* **out_rules**: (string): file containing the parsed reactions rules (default=csv). It will be zipped if *Compress output* is set to yes.
-    ]]></help>
+Historical rr02 supports **MetaNetX only** and exposes **All**, **Retro**, and
+**Forward** usage filters. It does not display a dataset selector.
+
+Downloading requires network access from the Galaxy execution host. Source
+archives are cached in the job working directory, without a shared cache
+between jobs. Select 3.0 rather than Latest for a fixed release.
+
+**Rules file from history** accepts a local CSV or TSV file. Select its input
+format and schema. Legacy rules contain ``Diameter`` and ``Rule usage`` columns
+and support All/Retro/Forward. Templates contain ``TEMPLATE_ID`` and ``RADII``
+and automatically use All. Release and dataset selectors do not apply to files
+from history.
+
+Advanced Options
+----------------
+
+Choose a list of radius values or a radius expression. Valid radii are the
+integers 0–10, all selected by default. Expressions support inclusive ranges,
+comparisons, and unions, for example ``0-8``, ``>8``, ``>=8``, or ``0-4,9,10``.
+Ranges include odd and even radii. Lower bounds must not exceed upper bounds.
+
+Lists and expressions are passed directly through ``--radii``. RRParser 2.7.3
+expands them into normalized integer radii before parsing the rules. For example,
+``>8`` selects radii 9/10, and ``>=8`` includes radius 8 as well. The wrapper
+does not pass ``--diameters`` and does not use an external conversion helper.
+
+A template is retained when at least one of its source radii matches. Its RADII
+column keeps all original radii, so a row marked ``8;9`` is retained by ``>8``.
+
+rr02 supplies diameters 2–16, equivalent to radii 1–8. Radius ``>8`` therefore
+produces a header-only output for rr02. Empty selections such as ``>10`` also
+produce a header-only CSV. The form restricts individual values and expression bounds to 0–10.
+
+EC filtering keeps or removes matching prefixes from a text file containing
+one comma-separated line, for example ``1.1,2.7``. Inclusion and exclusion
+are mutually exclusive.
+
+An optional replacement scores file must contain ``Rule ID`` and ``Score``
+columns. Use CSV for downloaded rules, or the same delimiter as a local input.
+EC filtering and score replacement apply after dataset merging.
+
+Enable **Compress output with gzip** to save the output as a gzip-compressed
+CSV dataset. Leave it unchecked to obtain an uncompressed CSV.
+
+Output and compatibility
+------------------------
+
+The extracted rules are saved automatically in your Galaxy history: CSV by
+default, or gzip-compressed CSV when compression is enabled. Compressed output
+uses the Galaxy datatype **gz** and contains a CSV file. No output filename is
+required. Download the dataset from its history panel if you want a local copy.
+
+Template outputs rename ``TEMPLATE_ID``, ``TEMPLATE``, ``ECS``, and ``SCORE`` to
+``Rule ID``, ``Rule``, ``EC number``, and ``Score``. Other source columns are
+retained. Their schema and implicit hydrogen SMARTS differ from rr02's explicit
+hydrogen RetroPath 2.0 rules. Use rr02 when downstream tools require the
+historical format.
+
+Review older saved workflows when upgrading: the conditional parameter layout
+has changed.
+]]></help>
     <creator>
         <organization name="BioRetroSynth" url="https://github.com/brsynth"/>
     </creator>
