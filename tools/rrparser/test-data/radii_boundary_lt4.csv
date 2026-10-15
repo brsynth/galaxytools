@@ -1,0 +1,5 @@
+Rule ID,Rule,EC number,Score,RADII,DATASETS
+R0,[C:1]>>[C:1],1.1.1.1,0.5,0,metanetx
+R3,[C:1]>>[C:1],1.1.1.1,0.5,3,metanetx
+R3_4,[C:1]>>[C:1],1.1.1.1,0.5,3,metanetx
+R0_10,[C:1]>>[C:1],1.1.1.1,0.5,0,metanetx
