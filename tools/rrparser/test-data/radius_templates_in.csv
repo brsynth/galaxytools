@@ -1,0 +1,8 @@
+TEMPLATE_ID,TEMPLATE,ECS,SCORE,RADII,DATASETS
+R0,[C:1]>>[C:1],1.1.1.1,0.5,0,metanetx
+R4,[C:1]>>[C:1],1.1.1.1,0.5,4,metanetx
+R8,[C:1]>>[C:1],1.1.1.1,0.5,8,metanetx
+R9,[C:1]>>[C:1],1.1.1.1,0.5,9,metanetx
+R10,[C:1]>>[C:1],1.1.1.1,0.5,10,metanetx
+R8_9,[C:1]>>[C:1],1.1.1.1,0.5,8;9,metanetx
+R9_10,[C:1]>>[C:1],1.1.1.1,0.5,9;10,metanetx
