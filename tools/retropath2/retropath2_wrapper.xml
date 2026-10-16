@@ -2,7 +2,7 @@
     profile="21.09" license="MIT">
     <description>Build a reaction network from a set of source compounds to a set of sink compounds</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
         <token name="@TOOL_VERSION@">3.9.1</token>
     </macros>
     <requirements>
@@ -26,7 +26,7 @@
             description="No solution has been found (Exit code: 11)" />
     </stdio>
     <command detect_errors="exit_code"><![CDATA[
-        #if $sink.emptysink:
+       #if $sink.emptysink == "true":
             echo '"Name","InChI"' > empty_sink.csv &&
             #set $sinkfile = "empty_sink.csv"
         #end if
