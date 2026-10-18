@@ -8,4 +8,4 @@ long_description: Completes mono-component reactions output by RetroPath2.0 with
 name: rpcompletion
 owner: tduigou
 homepage_url: https://github.com/brsynth/rpcompletion
-remote_repository_url: https://github.com/brsynth/rpcompletion
+remote_repository_url: https://github.com/brsynth/galaxytools/tree/main/tools/rpcompletion
