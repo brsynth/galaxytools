@@ -3,12 +3,12 @@
     <description>Completes mono-component reactions output by RetroPath2.0 with the appropriate
         cofactors</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">3</token>
-        <token name="@TOOL_VERSION@">6.8.4</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">6.9.0</token>
     </macros>
     <requirements>
-        <requirement type="package" version="6.8.4">rpcompletion</requirement>
-        <requirement type="package" version="3.7.1">rr_cache</requirement>
+        <requirement type="package" version="6.9.0">rpcompletion</requirement>
+        <requirement type="package" version="3.8.0">rr_cache</requirement>
     </requirements>
     <stdio>
         <exit_code range="1" level="fatal" description="Could not Xref compartment_id" />
@@ -96,7 +96,9 @@
             <param name="rp2paths_pathways" value="4-rp2paths_pathways.csv" />
             <param name="rp2paths_compounds" value="3-rp2paths_compounds.tsv" />
             <param name="rp2_pathways" value="1-rp2_metnet.csv" />
-            <param name="chemical_space" value="mnx4.4"/>
+            <section name="adv">
+                <param name="chemical_space" value="mnx4.4"/>
+            </section>
             <conditional name="sink">
                 <param name="cond" value="provided" />
                 <param name="sinkfile" value="2-sink.csv" />
@@ -108,7 +110,9 @@
             <param name="rp2paths_pathways" value="44-rp2paths_pathways.csv" />
             <param name="rp2paths_compounds" value="33-rp2paths_compounds.tsv" />
             <param name="rp2_pathways" value="11-rp2_metnet.csv" />
-            <param name="chemical_space" value="rr2026-v3.0"/>
+            <section name="adv">
+                <param name="chemical_space" value="rr2026-v3.0"/>
+            </section>
             <conditional name="sink">
                 <param name="cond" value="provided" />
                 <param name="sinkfile" value="2-sink.csv" />
