@@ -26,7 +26,7 @@
         <environment_variable name="XDG_CACHE_HOME">\$TMPDIR</environment_variable>
     </environment_variables> -->
     <inputs>
-        <param name="input" type="data" format="sbml" label="SBML Input File"
+        <param name="input" type="data" format="sbml,xml" label="SBML Input File"
             help="Pathways in SBML format" />
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="ph" type="float" value="7.5" min="0" max="14"
