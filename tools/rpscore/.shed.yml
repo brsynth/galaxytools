@@ -1,0 +1,9 @@
+categories:
+- Synthetic Biology
+description: Computes a global score for a heterologous pathway
+homepage_url: ''
+long_description: The score is calculated from a learning process based on reaction rules score, flux balance analysis and thermodynamics metrics, and the number of reactions in the pathway.
+name: rpscore
+owner: tduigou
+homepage_url: https://github.com/brsynth/rpscore
+remote_repository_url: https://github.com/brsynth/rpscore
