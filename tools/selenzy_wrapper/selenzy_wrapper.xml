@@ -1,7 +1,7 @@
 <tool id="selenzy-wrapper" name="Selenzyme" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09" license="MIT">
     <description>Performs enzyme selection from a reaction query</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
         <token name="@TOOL_VERSION@">0.3.1</token>
     </macros>
     <requirements>
@@ -25,7 +25,7 @@
         --data-path "\${TMPDIR:-.}"
     ]]></command>
     <inputs>
-        <param name="pathway" type="data" format="sbml" label="Pathway (SBML)" />
+        <param name="pathway" type="data" format="sbml,xml" label="Pathway (SBML)" />
         <conditional name="host_taxID_type_conditional">
             <param name="host_taxID_type" type="select" label="Host taxon ID type">
                 <option value="integer" selected="True">Value</option>
