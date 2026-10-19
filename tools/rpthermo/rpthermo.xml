@@ -3,7 +3,7 @@
     <description>Calculate the formation energy of chemical species and the Gibbs free energy of
         their reactions and pathways in an SBML</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
         <token name="@TOOL_VERSION@">6.8.4</token>
     </macros>
     <requirements>
