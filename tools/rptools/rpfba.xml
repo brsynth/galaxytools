@@ -27,8 +27,8 @@
                 --biomass_rxn_id '$biomass_rxn_id'
     ]]></command>
     <inputs>
-        <param name="pathway" type="data" format="sbml" label="Pathway (rpSBML)" />
-        <param name="model" type="data" format="sbml" label="Model (SBML)" />
+        <param name="pathway" type="data" format="sbml,xml" label="Pathway (rpSBML)" />
+        <param name="model" type="data" format="sbml,xml" label="Model (SBML)" />
         <param name="compartment_id" type="text" label="SBML compartment ID" value="c" >
             <validator type="empty_field" message="A compartment ID is required"/>
         </param>

@@ -1,7 +1,7 @@
 <tool id="rpfba" name="Flux balance analysis" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
     <description>for the RetroPath2.0 heterologous pathways</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@VERSION_SUFFIX@">2</token>
         <token name="@TOOL_VERSION@">6.8.2</token>
     </macros>
     <requirements>
@@ -30,8 +30,8 @@
                 --biomass_rxn_id '$biomass_rxn_id'
     ]]></command>
     <inputs>
-        <param name="pathway" type="data" format="sbml" label="Pathway (rpSBML)" />
-        <param name="model" type="data" format="sbml" label="Model (SBML)" />
+        <param name="pathway" type="data" format="sbml,xml" label="Pathway (rpSBML)" />
+        <param name="model" type="data" format="sbml,xml" label="Model (SBML)" />
         <param name="compartment_id" type="text" label="SBML compartment ID" value="c" >
             <validator type="empty_field" message="A compartment ID is required"/>
         </param>

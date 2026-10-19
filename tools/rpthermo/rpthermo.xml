@@ -3,7 +3,7 @@
     <description>Calculate the formation energy of chemical species and the Gibbs free energy of
         their reactions and pathways in an SBML</description>
     <macros>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
         <token name="@TOOL_VERSION@">6.8.4</token>
     </macros>
     <requirements>
@@ -27,7 +27,7 @@
         <environment_variable name="XDG_CACHE_HOME">\$TMPDIR</environment_variable>
     </environment_variables> -->
     <inputs>
-        <param name="input" type="data" format="sbml" label="SBML Input File"
+        <param name="input" type="data" format="sbml,xml" label="SBML Input File"
             help="Pathways in SBML format" />
         <section name="adv" title="Advanced Options" expanded="false">
             <param name="ph" type="float" value="7.5" min="0" max="14"
