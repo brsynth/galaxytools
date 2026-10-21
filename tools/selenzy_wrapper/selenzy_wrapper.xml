@@ -60,7 +60,7 @@
                     <has_n_lines n="7968" />
                 </assert_contents>
             </output>
-            <output name="uniprot_ids_csv" file="uniprod_ids_out.csv" ftype="csv" compare="diff"/>
+            <output name="uniprot_ids_csv" file="uniprot_ids_out.csv" ftype="csv" compare="diff"/>
         </test>
         <test>
         <!-- test 2: check with taxon ID from a file  -->
@@ -75,7 +75,7 @@
                     <has_n_lines n="7968" />
                 </assert_contents>
             </output>
-            <output name="uniprot_ids_csv" file="uniprod_ids_out.csv" ftype="csv" compare="diff"/>
+            <output name="uniprot_ids_csv" file="uniprot_ids_out.csv" ftype="csv" compare="diff"/>
         </test>
     </tests>
     <help><![CDATA[
