@@ -1,0 +1,65 @@
+<tool id="rpranker" name="Rank Pathways" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.09">
+    <description>Rank heterologous pathways according to their global score</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">6.8.2</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="6.8.2">rprank</requirement>
+    </requirements>
+    <stdio>
+        <regex match="WARNING" level="warning" />
+        <regex match="ERROR" level="fatal" />
+    </stdio>
+    <command detect_errors="exit_code"><![CDATA[
+        #for $file in $pathway_collection
+            ln -s '$file' '$file.element_identifier' &&
+        #end for
+
+        python -m rprank
+        --pathways
+
+        #for $file in $pathway_collection
+            '$file.element_identifier'
+        #end for
+
+        > '$sorted_pathways'
+    ]]></command>
+    <inputs>
+        <param name="pathway_collection" type="data" format="sbml" multiple="true" min="2" label="Pathways" />
+    </inputs>
+    <outputs>
+        <data name="sorted_pathways" format="csv" label="Ranked Pathways" />
+    </outputs>
+    <tests>
+        <test>
+        <!-- test 1: check if identical outputs are produced with default parameters  -->
+            <param name="pathway_collection" value="rp_003_0261.xml,rp_003_0131.xml,rp_003_0001.xml"/>
+            <output name="sorted_pathways" file="ranked_pathways.csv" ftype="csv" compare="diff" sort="true" />
+        </test>
+    </tests>
+    <help><![CDATA[
+Rank Pathways
+================
+
+Sort a list of pathways according to their global score.
+
+Input
+-----
+
+Required:
+
+* **Pathways**\ : List of pathway files (rpSBML)
+
+Output
+------
+
+* **Ranked Pathways**\ : Sorted names and scores of pathways
+    ]]></help>
+    <creator>
+        <organization name="BioRetroSynth" url="https://github.com/brsynth" />
+    </creator>
+    <citations>
+        <citation type="doi">10.1038/s41467-022-32661-x</citation>
+    </citations>
+</tool>
