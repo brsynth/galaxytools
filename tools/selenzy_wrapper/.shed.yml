@@ -9,4 +9,4 @@ long_description: 'Selenzy performs enzyme sequence selection from a reaction qu
 name: selenzy_wrapper
 owner: tduigou
 homepage_url: https://github.com/brsynth/selenzy-wrapper
-remote_repository_url: https://github.com/brsynth/selenzy-wrapper
+remote_repository_url: https://github.com/brsynth/galaxytools/tree/main/tools/selenzy_wrapper

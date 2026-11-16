@@ -2,13 +2,13 @@
     <description>Performs enzyme selection from a reaction query</description>
     <macros>
         <token name="@VERSION_SUFFIX@">0</token>
-        <token name="@TOOL_VERSION@">0.3.1</token>
+        <token name="@TOOL_VERSION@">0.3.3</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">selenzy_wrapper</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python -m selenzy_wrapper '$pathway' '$uniprot_ids'
+        python -m selenzy_wrapper '$pathway' '$pathway_selenzy'
         --nb_targets '$adv.nb_targets'
         --d '$adv.direction'
         $adv.NoMSA
@@ -21,11 +21,11 @@
             --enzyme_taxIDs '$adv.enzyme_taxIDs'
         #end if
         --nb_ids '$adv.nb_ids'
-        --to_csv '$uniprot_ids_csv'
+        --to_csv '$uniprot_ids'
         --data-path "\${TMPDIR:-.}"
     ]]></command>
     <inputs>
-        <param name="pathway" type="data" format="sbml" label="Pathway (SBML)" />
+        <param name="pathway" type="data" format="sbml,xml" label="Pathway (SBML)" />
         <conditional name="host_taxID_type_conditional">
             <param name="host_taxID_type" type="select" label="Host taxon ID type">
                 <option value="integer" selected="True">Value</option>
@@ -47,35 +47,35 @@
         </section>
     </inputs>
     <outputs>
-        <data name="uniprot_ids" format="sbml" label="Uniprot IDs (SBML)" />
-        <data name="uniprot_ids_csv" format="csv" label="Uniprot IDs (CSV)" />
+        <data name="pathway_selenzy" format="sbml" label="Uniprot IDs (SBML)" />
+        <data name="uniprot_ids" format="csv" label="Uniprot IDs (CSV)" />
     </outputs>
     <tests>
         <test>
         <!-- test 1: check if identical outputs are produced with default parameters  -->
-            <param name="pathway" value="pathway.xml" />
-            <output name="uniprot_ids">
+            <param name="pathway" value="pathway_in.xml" />
+            <output name="pathway_selenzy">
                 <assert_contents>
                     <is_valid_xml />
-                    <has_n_lines n="7968" />
+                    <has_n_lines n="8049" />
                 </assert_contents>
             </output>
-            <output name="uniprot_ids_csv" file="uniprod_ids_out.csv" ftype="csv" compare="diff"/>
+            <output name="uniprot_ids" file="uniprot_ids_out_default.csv" ftype="csv" compare="diff"/>
         </test>
         <test>
         <!-- test 2: check with taxon ID from a file  -->
-            <param name="pathway" value="pathway.xml" />
+            <param name="pathway" value="pathway_in.xml" />
             <conditional name="host_taxID_type_conditional">
                 <param name="host_taxID_type" value="tsv" />
-                <param name="host_taxID_file" value="taxID.tsv" />
+                <param name="host_taxID_file" value="taxID_in.tsv" />
             </conditional>
-            <output name="uniprot_ids">
+            <output name="pathway_selenzy">
                 <assert_contents>
                     <is_valid_xml />
-                    <has_n_lines n="7968" />
+                    <has_n_lines n="8049" />
                 </assert_contents>
             </output>
-            <output name="uniprot_ids_csv" file="uniprod_ids_out.csv" ftype="csv" compare="diff"/>
+            <output name="uniprot_ids" file="uniprot_ids_out_4932.csv" ftype="csv" compare="diff"/>
         </test>
     </tests>
     <help><![CDATA[

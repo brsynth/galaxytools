@@ -1,0 +1,8 @@
+categories:
+- Synthetic Biology
+description: Rank a list of pathways according to their global score.
+long_description: Rank a list of pathways according to their global score.
+name: rpranker
+owner: tduigou
+homepage_url: https://github.com/brsynth/rpRank
+remote_repository_url: https://github.com/brsynth/galaxytools/tree/main/tools/rpranker
